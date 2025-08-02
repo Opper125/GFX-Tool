@@ -3,96 +3,182 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Admin Panel - FPS GFX Tool</title>
+  <title>FPS GFX Tool - Admin Dashboard</title>
   <style>
+    /* Reset and Base Styles */
     * {
       margin: 0;
       padding: 0;
       box-sizing: border-box;
       font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
     }
+
+    /* Body with Myanmar Map and Waves */
     body {
-      background: linear-gradient(180deg, #1a1a1a, #2a2a2a);
-      color: #fff;
       min-height: 100vh;
       display: flex;
       justify-content: center;
       align-items: center;
       padding: 20px;
+      background: linear-gradient(180deg, #1a1a1a, #2a2a2a);
+      position: relative;
+      overflow-x: hidden;
     }
+
+    body.dashboard-active {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/48/Myanmar_map.png') no-repeat center center / cover;
+      animation: mapZoom 20s ease-in-out infinite;
+      position: relative;
+    }
+
+    body.dashboard-active::before {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: url('https://i.imgur.com/4Dwaves.png') repeat-x bottom;
+      background-size: 2000px 200px;
+      animation: waveAnimation 10s linear infinite;
+      z-index: -1;
+      filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.5));
+    }
+
+    @keyframes mapZoom {
+      0% { background-size: 100%; }
+      50% { background-size: 110%; }
+      100% { background-size: 100%; }
+    }
+
+    @keyframes waveAnimation {
+      0% { background-position-x: 0; }
+      100% { background-position-x: 2000px; }
+    }
+
+    /* Container */
     .container {
-      background: #222;
+      background: rgba(34, 34, 34, 0.9);
       padding: 24px;
       border-radius: 16px;
       width: 100%;
-      max-width: 960px;
+      max-width: 800px;
       box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
       animation: fadeIn 0.8s ease-out;
+      backdrop-filter: blur(10px);
+      z-index: 1;
     }
+
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(-16px); }
       to { opacity: 1; transform: translateY(0); }
     }
+
+    /* Typography */
     h1, h2 {
       font-size: 24px;
       font-weight: 600;
       margin-bottom: 24px;
+      text-align: center;
       color: #ffd700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
     }
+
+    h3 {
+      font-size: 18px;
+      color: #ffd700;
+      margin-bottom: 16px;
+    }
+
+    /* Form Elements */
     input, select, button, textarea {
       width: 100%;
       padding: 12px;
       margin: 12px 0;
       border: none;
       border-radius: 8px;
-      background: #333;
+      background: rgba(51, 51, 51, 0.8);
       color: #fff;
       font-size: 16px;
-      transition: background 0.3s, transform 0.2s;
+      transition: all 0.3s ease;
     }
+
     input:focus, select:focus, textarea:focus {
       outline: none;
-      background: #444;
-      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+      background: rgba(68, 68, 68, 0.9);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+      transform: scale(1.02);
     }
+
+    /* Button Styles with Myanmar Flag Animation */
     button {
+      position: relative;
       background: linear-gradient(45deg, #ffd700, #ff8c00);
       font-weight: 600;
       cursor: pointer;
+      overflow: hidden;
+      z-index: 1;
     }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg') center / contain no-repeat;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: all 0.5s ease;
+      z-index: -1;
+    }
+
+    button:hover::before {
+      width: 200px;
+      height: 200px;
+      opacity: 0.3;
+    }
+
+    button:active::before {
+      width: 300px;
+      height: 300px;
+      opacity: 0.5;
+      animation: flagBurst 0.5s ease-out;
+    }
+
+    @keyframes flagBurst {
+      0% { width: 0; height: 0; opacity: 0; }
+      50% { width: 400px; height: 400px; opacity: 0.7; }
+      100% { width: 300px; height: 300px; opacity: 0.5; }
+    }
+
     button:hover {
       transform: translateY(-2px);
-      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.6);
     }
-    .form-grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-      gap: 16px;
-      margin-bottom: 24px;
-    }
-    table {
-      width: 100%;
-      border-collapse: separate;
-      border-spacing: 0;
-      margin: 24px 0;
-      background: #333;
-      border-radius: 8px;
-      overflow: hidden;
-    }
-    th, td {
-      padding: 12px;
-      text-align: left;
-      border-bottom: 1px solid #444;
-    }
-    th {
-      background: #444;
-      font-weight: 600;
-    }
-    td button {
-      padding: 8px;
-      margin: 0 4px;
+
+    /* Admin Badge */
+    .admin-badge {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: linear-gradient(45deg, #ff4444, #ff8c00);
+      padding: 8px 16px;
+      border-radius: 20px;
       font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      animation: glow 1.5s ease-in-out infinite alternate;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
     }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+      to { box-shadow: 0 0 16px rgba(255, 215, 0, 0.9); }
+    }
+
+    /* Messages */
     .message {
       padding: 12px;
       margin: 12px 0;
@@ -101,139 +187,250 @@
       text-align: center;
       animation: slideIn 0.5s ease-out;
     }
+
     .error { background: #ff4444; }
     .success { background: #44ff44; }
+
     @keyframes slideIn {
       from { opacity: 0; transform: translateX(-16px); }
       to { opacity: 1; transform: translateX(0); }
     }
-    .device-screen {
-      background: #000;
-      width: 320px;
-      height: 560px;
-      margin: 24px auto;
-      border-radius: 16px;
-      display: none;
-      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
-    }
-    .news-card, .comment {
-      background: #333;
-      padding: 16px;
-      border-radius: 12px;
+
+    /* Table */
+    table {
+      width: 100%;
+      border-collapse: collapse;
       margin: 16px 0;
-    }
-    .news-card img, .profile-pic {
-      max-width: 100%;
+      background: rgba(51, 51, 51, 0.8);
       border-radius: 8px;
-      margin: 8px 0;
+      overflow: hidden;
     }
-    .comment.reply {
-      margin-left: 24px;
+
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+      color: #fff;
     }
-    .profile-pic {
-      width: 32px;
-      height: 32px;
-      border-radius: 50%;
-      vertical-align: middle;
+
+    th {
+      background: rgba(68, 68, 68, 0.9);
+      font-weight: 600;
     }
-    @media (max-width: 768px) {
-      .container { padding: 16px; }
-      h1, h2 { font-size: 20px; }
-      .form-grid { grid-template-columns: 1fr; }
-      .device-screen { width: 280px; height: 480px; }
+
+    tr:hover {
+      background: rgba(68, 68, 68, 0.9);
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px;
+      }
+      h1, h2 {
+        font-size: 20px;
+      }
+      input, select, button, textarea {
+        font-size: 14px;
+      }
+      table {
+        font-size: 12px;
+      }
+      body.dashboard-active::before {
+        height: 150px;
+        background-size: 1500px 150px;
+      }
     }
   </style>
 </head>
 <body>
+  <div class="admin-badge">Admin</div>
   <div class="container" id="main-container">
-    <h1>Admin Panel</h1>
+    <h1>FPS GFX Tool - Admin Dashboard</h1>
     <div id="status"></div>
-    <div id="login-section">
-      <h2>Admin Login</h2>
-      <input type="email" id="admin-email" placeholder="Admin Email">
-      <input type="password" id="admin-password" placeholder="Admin Password">
-      <button onclick="adminLogin()">Login</button>
-    </div>
+    <input type="text" id="admin-key" placeholder="Enter Admin Key" required>
+    <button onclick="adminLogin()">Login</button>
     <div id="admin-content" style="display: none;">
-      <h2>Manage About</h2>
-      <div class="form-grid">
+      <h2>Admin Panel</h2>
+      <div id="manage-about" style="display: none;">
+        <h3>Manage About</h3>
         <input type="text" id="about-telegram" placeholder="Telegram Link">
         <input type="text" id="about-viber" placeholder="Viber Link">
         <input type="text" id="about-phone" placeholder="Phone Number">
         <button onclick="updateAbout()">Update About</button>
       </div>
-      <h2>Create Key</h2>
-      <div class="form-grid">
-        <input type="text" id="key-text" placeholder="Enter Key Text">
-        <select id="duration-type">
-          <option value="hours">Hours</option>
+      <div id="manage-keys" style="display: none;">
+        <h3>Manage Keys</h3>
+        <input type="text" id="key-text" placeholder="Key Text">
+        <select id="key-duration-type">
           <option value="days">Days</option>
+          <option value="weeks">Weeks</option>
           <option value="months">Months</option>
         </select>
-        <input type="number" id="duration-value" placeholder="Duration Value" min="1">
-        <input type="number" id="max-devices" placeholder="Max Devices" min="1" value="1">
+        <input type="number" id="key-duration-value" placeholder="Duration Value">
+        <input type="number" id="key-max-devices" placeholder="Max Devices">
         <button onclick="createKey()">Create Key</button>
+        <table id="keys-table">
+          <thead>
+            <tr>
+              <th>Key</th>
+              <th>Expires At</th>
+              <th>Max Devices</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <h2>Keys</h2>
-      <table id="keys-table">
-        <tr><th>Key</th><th>Expires At</th><th>Max Devices</th><th>Actions</th></tr>
-      </table>
-      <h2>Devices</h2>
-      <table id="devices-table">
-        <tr><th>Device ID</th><th>Model</th><th>Architecture</th><th>Android Version</th><th>Actions</th></tr>
-      </table>
-      <h2>Profiles</h2>
-      <table id="profiles-table">
-        <tr><th>Username</th><th>Name</th><th>Profile Picture</th><th>Banned</th><th>Actions</th></tr>
-      </table>
-      <h2>News</h2>
-      <div class="form-grid">
-        <input type="text" id="news-title" placeholder="Title">
-        <textarea id="news-content" placeholder="Content"></textarea>
-        <input type="text" id="news-youtube" placeholder="YouTube Link">
-        <input type="file" id="news-image" accept="image/*">
+      <div id="manage-users" style="display: none;">
+        <h3>Manage Users</h3>
+        <table id="users-table">
+          <thead>
+            <tr>
+              <th>Username</th>
+              <th>Name</th>
+              <th>Banned</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
+      </div>
+      <div id="manage-news" style="display: none;">
+        <h3>Manage News</h3>
+        <input type="text" id="admin-news-title" placeholder="Title">
+        <textarea id="admin-news-content" placeholder="Content"></textarea>
+        <input type="text" id="admin-news-youtube" placeholder="YouTube Link">
+        <input type="file" id="admin-news-image" accept="image/*">
         <button onclick="postAdminNews()">Post News</button>
+        <table id="news-table">
+          <thead>
+            <tr>
+              <th>Title</th>
+              <th>Content</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody></tbody>
+        </table>
       </div>
-      <div id="news-list"></div>
-      <h2>Support Messages</h2>
-      <div id="support-messages"></div>
-      <textarea id="support-input" placeholder="Reply to user"></textarea>
-      <button onclick="sendAdminSupportMessage()">Send Reply</button>
-      <div id="device-screen" class="device-screen"></div>
+      <div id="manage-support" style="display: none;">
+        <h3>Manage Support</h3>
+        <div id="support-messages"></div>
+        <textarea id="admin-support-input" placeholder="Reply to user"></textarea>
+        <button onclick="sendAdminSupportMessage()">Send Reply</button>
+      </div>
+      <div class="menu">
+        <button onclick="showAdminSection('manage-about')">About</button>
+        <button onclick="showAdminSection('manage-keys')">Keys</button>
+        <button onclick="showAdminSection('manage-users')">Users</button>
+        <button onclick="showAdminSection('manage-news')">News</button>
+        <button onclick="showAdminSection('manage-support')">Support</button>
+      </div>
     </div>
   </div>
 
   <script>
-    // Load Supabase client dynamically to avoid CDN issues
-    function loadSupabaseScript() {
-      return new Promise((resolve, reject) => {
-        const script = document.createElement('script');
-        script.src = 'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
-        script.onload = () => resolve();
-        script.onerror = () => reject(new Error('Failed to load Supabase script'));
-        document.head.appendChild(script);
-      });
-    }
-
+    // Constants
     const SUPABASE_URL = 'https://rliwdosxsbauwxkayjoa.supabase.co';
     const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4';
     const TELEGRAM_BOT_TOKEN = '8493584268:AAEpDAPbwRDJYBf9VjlxSiELc4bTrrn_7xw';
     const TELEGRAM_GROUP_ID = '-1002863080440';
+    const ADMIN_KEY = 'admin123'; // Replace with your actual admin key
 
     let supabase = null;
 
-    async function initializeSupabase() {
+    // Load Supabase script with fallback
+    async function loadSupabaseScript() {
+      const cdnUrls = [
+        'https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js',
+        'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'
+      ];
+
+      for (const url of cdnUrls) {
+        try {
+          return await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = url;
+            script.timeout = 10000; // 10 seconds timeout
+            script.onload = () => {
+              console.log(`Supabase script loaded successfully from ${url}`);
+              resolve();
+            };
+            script.onerror = () => {
+              console.error(`Failed to load Supabase script from ${url}`);
+              reject(new Error(`Failed to load Supabase script from ${url}`));
+            };
+            document.head.appendChild(script);
+          });
+        } catch (error) {
+          console.error(error.message);
+          continue;
+        }
+      }
+      throw new Error('All Supabase CDN sources failed to load');
+    }
+
+    // Check Internet Connectivity
+    async function checkInternet() {
+      if (!navigator.onLine) {
+        console.error('No internet connection detected');
+        showMessage('No internet connection! Please check your network and try again.', 'error');
+        return false;
+      }
+      try {
+        const response = await fetch(SUPABASE_URL + '/rest/v1/', {
+          method: 'HEAD',
+          cache: 'no-store',
+          timeout: 5000
+        });
+        if (!response.ok) {
+          throw new Error('Supabase server unreachable');
+        }
+        console.log('Internet connectivity verified');
+        return true;
+      } catch (error) {
+        console.error('Internet check failed:', error);
+        showMessage(`Failed to connect to server: ${error.message}. Please check your network or use a VPN.`, 'error');
+        return false;
+      }
+    }
+
+    // Initialize Supabase with Retry Logic
+    async function initializeSupabase(attempt = 1, maxAttempts = 3) {
+      if (!(await checkInternet())) {
+        if (attempt < maxAttempts) {
+          console.log(`Retrying Supabase initialization (Attempt ${attempt + 1}/${maxAttempts})...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return initializeSupabase(attempt + 1, maxAttempts);
+        }
+        showMessage('Unable to connect to database after multiple attempts. Please try again later.', 'error');
+        return;
+      }
+
       try {
         await loadSupabaseScript();
         if (typeof Supabase === 'undefined') {
           throw new Error('Supabase library not loaded');
         }
-        supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+        supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' })
+        });
+        const { data, error } = await supabase.from('about').select('id').limit(1);
+        if (error) {
+          throw new Error(`Connection test failed: ${error.message}`);
+        }
         console.log('Supabase client initialized successfully');
         showMessage('Database connected successfully!', 'success');
         setupRealtimeSubscriptions();
       } catch (error) {
         console.error('Failed to initialize Supabase client:', error);
+        if (attempt < maxAttempts) {
+          console.log(`Retrying Supabase initialization (Attempt ${attempt + 1}/${maxAttempts})...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return initializeSupabase(attempt + 1, maxAttempts);
+        }
         showMessage(`Error initializing database: ${error.message}. Please check your network or refresh the page.`, 'error');
       }
     }
@@ -241,46 +438,72 @@
     function showMessage(message, type) {
       const status = document.getElementById('status');
       status.innerHTML = `<div class="message ${type}">${message}</div>`;
-      setTimeout(() => status.innerHTML = '', 5000);
+      setTimeout(() => status.innerHTML = '', 7000);
       console.log(`Message displayed: ${message} (${type})`);
-    }
-
-    async function checkInternet() {
-      if (!navigator.onLine) {
-        console.error('No internet connection');
-        showMessage('No internet connection!', 'error');
-        return false;
-      }
-      return true;
     }
 
     async function adminLogin() {
       if (!(await checkInternet())) return;
       if (!supabase) {
         console.error('Supabase client not initialized');
-        showMessage('Database not connected. Please try again.', 'error');
+        showMessage('Database not connected.', 'error');
         return;
       }
       try {
-        const email = document.getElementById('admin-email').value.trim();
-        const password = document.getElementById('admin-password').value.trim();
-        if (!email || !password) throw new Error('Email and password are required');
-
-        const { error } = await supabase.auth.signInWithPassword({ email, password });
-        if (error) throw new Error(`Admin login error: ${error.message}`);
-
-        document.getElementById('login-section').style.display = 'none';
+        const key = document.getElementById('admin-key').value.trim();
+        if (key !== ADMIN_KEY) {
+          throw new Error('Invalid admin key');
+        }
+        document.getElementById('admin-key').style.display = 'none';
+        document.querySelector('button[onclick="adminLogin()"]').style.display = 'none';
         document.getElementById('admin-content').style.display = 'block';
-        showMessage('Admin logged in successfully!', 'success');
+        document.body.classList.add('dashboard-active');
+        showMessage('Admin login successful!', 'success');
+        loadAbout();
         loadKeys();
-        loadDevices();
-        loadProfiles();
+        loadUsers();
         loadNews();
         loadSupportMessages();
-        console.log('Admin logged in successfully');
+        console.log('Admin login successful');
       } catch (error) {
         console.error('Admin login error:', error);
         showMessage(`Admin login failed: ${error.message}`, 'error');
+      }
+    }
+
+    function showAdminSection(section) {
+      try {
+        document.getElementById('manage-about').style.display = section === 'manage-about' ? 'block' : 'none';
+        document.getElementById('manage-keys').style.display = section === 'manage-keys' ? 'block' : 'none';
+        document.getElementById('manage-users').style.display = section === 'manage-users' ? 'block' : 'none';
+        document.getElementById('manage-news').style.display = section === 'manage-news' ? 'block' : 'none';
+        document.getElementById('manage-support').style.display = section === 'manage-support' ? 'block' : 'none';
+        console.log(`Switched to ${section} section`);
+      } catch (error) {
+        console.error('Show admin section error:', error);
+        showMessage(`Section switch failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function loadAbout() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase.from('about').select('*').single();
+        if (error) throw new Error(`About fetch error: ${error.message}`);
+        if (data) {
+          document.getElementById('about-telegram').value = data.telegram || '';
+          document.getElementById('about-viber').value = data.viber || '';
+          document.getElementById('about-phone').value = data.phone || '';
+        }
+        console.log('About data loaded');
+      } catch (error) {
+        console.error('Load about error:', error);
+        showMessage(`Failed to load about data: ${error.message}`, 'error');
       }
     }
 
@@ -295,12 +518,15 @@
         const telegram = document.getElementById('about-telegram').value.trim();
         const viber = document.getElementById('about-viber').value.trim();
         const phone = document.getElementById('about-phone').value.trim();
-
-        const { error } = await supabase.from('about').upsert({ id: 'default', telegram, viber, phone });
-        if (error) throw new Error(`About upsert error: ${error.message}`);
-
+        const { error } = await supabase.from('about').upsert({
+          id: 'main',
+          telegram: telegram || null,
+          viber: viber || null,
+          phone: phone || null,
+        });
+        if (error) throw new Error(`About update error: ${error.message}`);
         showMessage('About updated successfully!', 'success');
-        console.log('About section updated');
+        console.log('About updated');
       } catch (error) {
         console.error('Update about error:', error);
         showMessage(`About update failed: ${error.message}`, 'error');
@@ -316,16 +542,23 @@
       }
       try {
         const keyText = document.getElementById('key-text').value.trim();
-        const durationType = document.getElementById('duration-type').value;
-        const durationValue = parseInt(document.getElementById('duration-value').value);
-        const maxDevices = parseInt(document.getElementById('max-devices').value);
+        const durationType = document.getElementById('key-duration-type').value;
+        const durationValue = parseInt(document.getElementById('key-duration-value').value);
+        const maxDevices = parseInt(document.getElementById('key-max-devices').value);
 
-        if (!keyText || !durationValue || !maxDevices) throw new Error('All key fields are required');
+        if (!keyText || !durationValue || !maxDevices) {
+          throw new Error('All fields are required');
+        }
 
-        const expiresAt = new Date();
-        if (durationType === 'hours') expiresAt.setHours(expiresAt.getHours() + durationValue);
-        else if (durationType === 'days') expiresAt.setDate(expiresAt.getDate() + durationValue);
-        else expiresAt.setMonth(expiresAt.getMonth() + durationValue);
+        let expiresAt;
+        const now = new Date();
+        if (durationType === 'days') {
+          expiresAt = new Date(now.setDate(now.getDate() + durationValue));
+        } else if (durationType === 'weeks') {
+          expiresAt = new Date(now.setDate(now.getDate() + durationValue * 7));
+        } else if (durationType === 'months') {
+          expiresAt = new Date(now.setMonth(now.getMonth() + durationValue));
+        }
 
         const { error } = await supabase.from('keys').insert({
           key_text: keyText,
@@ -333,13 +566,14 @@
           duration_type: durationType,
           duration_value: durationValue,
           max_devices: maxDevices,
+          is_active: true,
         });
         if (error) throw new Error(`Key insert error: ${error.message}`);
 
         showMessage('Key created successfully!', 'success');
         document.getElementById('key-text').value = '';
-        document.getElementById('duration-value').value = '';
-        document.getElementById('max-devices').value = '1';
+        document.getElementById('key-duration-value').value = '';
+        document.getElementById('key-max-devices').value = '';
         loadKeys();
         console.log('Key created:', keyText);
       } catch (error) {
@@ -359,22 +593,16 @@
         const { data, error } = await supabase.from('keys').select('*').order('created_at', { ascending: false });
         if (error) throw new Error(`Keys fetch error: ${error.message}`);
 
-        const table = document.getElementById('keys-table');
-        table.innerHTML = '<tr><th>Key</th><th>Expires At</th><th>Max Devices</th><th>Actions</th></tr>';
-        if (data.length === 0) {
-          table.innerHTML += '<tr><td colspan="4">No keys found.</td></tr>';
-          return;
-        }
+        const tableBody = document.querySelector('#keys-table tbody');
+        tableBody.innerHTML = '';
         data.forEach(key => {
-          table.innerHTML += `
+          tableBody.innerHTML += `
             <tr>
               <td>${key.key_text}</td>
               <td>${new Date(key.expires_at).toLocaleString()}</td>
               <td>${key.max_devices}</td>
-              <td>
-                <button onclick="editKey('${key.id}', '${key.key_text.replace(/'/g, "\\'")}', '${key.expires_at}', ${key.max_devices})">Edit</button>
-                <button onclick="deleteKey('${key.id}')">Delete</button>
-              </td>
+              <td>${key.is_active ? 'Active' : 'Inactive'}</td>
+              <td><button onclick="toggleKeyStatus('${key.id}', ${key.is_active})">${key.is_active ? 'Deactivate' : 'Activate'}</button></td>
             </tr>
           `;
         });
@@ -385,7 +613,7 @@
       }
     }
 
-    async function editKey(id, keyText, expiresAt, maxDevices) {
+    async function toggleKeyStatus(keyId, isActive) {
       if (!(await checkInternet())) return;
       if (!supabase) {
         console.error('Supabase client not initialized');
@@ -393,98 +621,18 @@
         return;
       }
       try {
-        const newKeyText = prompt('Enter new key text:', keyText);
-        const newDurationValue = parseInt(prompt('Enter new duration value (hours):', new Date(expiresAt).getTime() / 1000 / 3600));
-        const newMaxDevices = parseInt(prompt('Enter new max devices:', maxDevices));
-
-        if (!newKeyText || !newDurationValue || !newMaxDevices) throw new Error('All fields are required');
-
-        const newExpiresAt = new Date();
-        newExpiresAt.setHours(newExpiresAt.getHours() + newDurationValue);
-
-        const { error } = await supabase
-          .from('keys')
-          .update({ key_text: newKeyText, expires_at: newExpiresAt.toISOString(), max_devices: newMaxDevices, is_active: true })
-          .eq('id', id);
-        if (error) throw new Error(`Key update error: ${error.message}`);
-
-        showMessage('Key updated successfully!', 'success');
+        const { error } = await supabase.from('keys').update({ is_active: !isActive }).eq('id', keyId);
+        if (error) throw new Error(`Key status update error: ${error.message}`);
+        showMessage(`Key ${isActive ? 'deactivated' : 'activated'} successfully!`, 'success');
         loadKeys();
-        console.log('Key updated:', id);
+        console.log(`Key ${keyId} status toggled to ${!isActive}`);
       } catch (error) {
-        console.error('Edit key error:', error);
-        showMessage(`Key update failed: ${error.message}`, 'error');
+        console.error('Toggle key status error:', error);
+        showMessage(`Key status update failed: ${error.message}`, 'error');
       }
     }
 
-    async function deleteKey(id) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const { error } = await supabase.from('keys').update({ is_active: false }).eq('id', id);
-        if (error) throw new Error(`Key delete error: ${error.message}`);
-
-        showMessage('Key deleted successfully!', 'success');
-        loadKeys();
-        console.log('Key deleted:', id);
-      } catch (error) {
-        console.error('Delete key error:', error);
-        showMessage(`Key deletion failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function loadDevices() {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const { data, error } = await supabase.from('devices').select('*').order('created_at', { ascending: false });
-        if (error) throw new Error(`Devices fetch error: ${error.message}`);
-
-        const table = document.getElementById('devices-table');
-        table.innerHTML = '<tr><th>Device ID</th><th>Model</th><th>Architecture</th><th>Android Version</th><th>Actions</th></tr>';
-        if (data.length === 0) {
-          table.innerHTML += '<tr><td colspan="5">No devices found.</td></tr>';
-          return;
-        }
-        data.forEach(device => {
-          table.innerHTML += `
-            <tr>
-              <td>${device.id.slice(0, 8)}...</td>
-              <td>${device.model}</td>
-              <td>${device.architecture}</td>
-              <td>${device.android_version}</td>
-              <td><button onclick="viewDeviceScreen('${device.id}')">View Screen</button></td>
-            </tr>
-          `;
-        });
-        console.log('Devices loaded:', data.length);
-      } catch (error) {
-        console.error('Load devices error:', error);
-        showMessage(`Failed to load devices: ${error.message}`, 'error');
-      }
-    }
-
-    async function viewDeviceScreen(deviceId) {
-      try {
-        const screen = document.getElementById('device-screen');
-        screen.style.display = 'block';
-        screen.innerHTML = `<p>Device Screen View for ${deviceId} (Placeholder)</p>`;
-        console.log('Viewing device screen (placeholder):', deviceId);
-      } catch (error) {
-        console.error('View device screen error:', error);
-        showMessage(`Device screen view failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function loadProfiles() {
+    async function loadUsers() {
       if (!(await checkInternet())) return;
       if (!supabase) {
         console.error('Supabase client not initialized');
@@ -493,35 +641,28 @@
       }
       try {
         const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
-        if (error) throw new Error(`Profiles fetch error: ${error.message}`);
+        if (error) throw new Error(`Users fetch error: ${error.message}`);
 
-        const table = document.getElementById('profiles-table');
-        table.innerHTML = '<tr><th>Username</th><th>Name</th><th>Profile Picture</th><th>Banned</th><th>Actions</th></tr>';
-        if (data.length === 0) {
-          table.innerHTML += '<tr><td colspan="5">No profiles found.</td></tr>';
-          return;
-        }
-        data.forEach(profile => {
-          table.innerHTML += `
+        const tableBody = document.querySelector('#users-table tbody');
+        tableBody.innerHTML = '';
+        data.forEach(user => {
+          tableBody.innerHTML += `
             <tr>
-              <td>${profile.username}</td>
-              <td>${profile.name}</td>
-              <td><img src="${profile.profile_picture || 'https://via.placeholder.com/32'}" class="profile-pic"></td>
-              <td>${profile.is_banned ? 'Yes' : 'No'}</td>
-              <td>
-                <button onclick="toggleBanProfile('${profile.id}', ${profile.is_banned})">${profile.is_banned ? 'Unban' : 'Ban'}</button>
-              </td>
+              <td>${user.username}</td>
+              <td>${user.name}</td>
+              <td>${user.is_banned ? 'Banned' : 'Active'}</td>
+              <td><button onclick="toggleUserBan('${user.id}', ${user.is_banned})">${user.is_banned ? 'Unban' : 'Ban'}</button></td>
             </tr>
           `;
         });
-        console.log('Profiles loaded:', data.length);
+        console.log('Users loaded:', data.length);
       } catch (error) {
-        console.error('Load profiles error:', error);
-        showMessage(`Failed to load profiles: ${error.message}`, 'error');
+        console.error('Load users error:', error);
+        showMessage(`Failed to load users: ${error.message}`, 'error');
       }
     }
 
-    async function toggleBanProfile(id, isBanned) {
+    async function toggleUserBan(userId, isBanned) {
       if (!(await checkInternet())) return;
       if (!supabase) {
         console.error('Supabase client not initialized');
@@ -529,15 +670,14 @@
         return;
       }
       try {
-        const { error } = await supabase.from('profiles').update({ is_banned: !isBanned }).eq('id', id);
-        if (error) throw new Error(`Profile ban error: ${error.message}`);
-
-        showMessage(`Profile ${isBanned ? 'unbanned' : 'banned'} successfully!`, 'success');
-        loadProfiles();
-        console.log('Profile ban toggled:', id);
+        const { error } = await supabase.from('profiles').update({ is_banned: !isBanned }).eq('id', userId);
+        if (error) throw new Error(`User ban update error: ${error.message}`);
+        showMessage(`User ${isBanned ? 'unbanned' : 'banned'} successfully!`, 'success');
+        loadUsers();
+        console.log(`User ${userId} ban status toggled to ${!isBanned}`);
       } catch (error) {
-        console.error('Toggle ban profile error:', error);
-        showMessage(`Profile ban/unban failed: ${error.message}`, 'error');
+        console.error('Toggle user ban error:', error);
+        showMessage(`User ban update failed: ${error.message}`, 'error');
       }
     }
 
@@ -549,16 +689,18 @@
         return;
       }
       try {
-        const title = document.getElementById('news-title').value.trim();
-        const content = document.getElementById('news-content').value.trim();
-        const youtubeLink = document.getElementById('news-youtube').value.trim();
-        const file = document.getElementById('news-image').files[0];
+        const title = document.getElementById('admin-news-title').value.trim();
+        const content = document.getElementById('admin-news-content').value.trim();
+        const youtubeLink = document.getElementById('admin-news-youtube').value.trim();
+        const file = document.getElementById('admin-news-image').files[0];
 
         if (!title || !content) throw new Error('Title and content are required');
 
         let imageUrl = null;
         if (file) {
-          const { data, error } = await supabase.storage.from('news').upload(`public/admin/${Date.now()}_${file.name}`, file);
+          const { data, error } = await supabase.storage
+            .from('news')
+            .upload(`public/admin/${Date.now()}_${file.name}`, file);
           if (error) throw new Error(`Image upload error: ${error.message}`);
           imageUrl = `${SUPABASE_URL}/storage/v1/object/public/news/${data.path}`;
         }
@@ -573,10 +715,10 @@
         if (error) throw new Error(`News insert error: ${error.message}`);
 
         showMessage('News posted successfully!', 'success');
-        document.getElementById('news-title').value = '';
-        document.getElementById('news-content').value = '';
-        document.getElementById('news-youtube').value = '';
-        document.getElementById('news-image').value = '';
+        document.getElementById('admin-news-title').value = '';
+        document.getElementById('admin-news-content').value = '';
+        document.getElementById('admin-news-youtube').value = '';
+        document.getElementById('admin-news-image').value = '';
         loadNews();
         console.log('Admin news posted:', title);
       } catch (error) {
@@ -593,35 +735,19 @@
         return;
       }
       try {
-        const { data, error } = await supabase
-          .from('news')
-          .select('*, profiles(username, name, profile_picture)')
-          .order('created_at', { ascending: false });
+        const { data, error } = await supabase.from('news').select('*').order('created_at', { ascending: false });
         if (error) throw new Error(`News fetch error: ${error.message}`);
 
-        const newsList = document.getElementById('news-list');
-        newsList.innerHTML = '';
-        if (data.length === 0) {
-          newsList.innerHTML = '<p>No news found.</p>';
-          return;
-        }
+        const tableBody = document.querySelector('#news-table tbody');
+        tableBody.innerHTML = '';
         data.forEach(news => {
-          newsList.innerHTML += `
-            <div class="news-card">
-              <p><img src="${news.profiles?.profile_picture || 'https://via.placeholder.com/32'}" class="profile-pic">${news.profiles?.username || 'Admin'} (${news.profiles?.name || 'Admin'})</p>
-              <h3>${news.title}</h3>
-              <p>${news.content}</p>
-              ${news.image_url ? `<img src="${news.image_url}" alt="News Image">` : ''}
-              ${news.youtube_link ? `<p><a href="${news.youtube_link}" target="_blank">Watch on YouTube</a></p>` : ''}
-              <p class="views">Views: ${news.views}</p>
-              <button onclick="editNews('${news.id}', '${news.title.replace(/'/g, "\\'")}', '${news.content.replace(/'/g, "\\'")}', '${news.youtube_link || ''}')">Edit</button>
-              <button onclick="deleteNews('${news.id}')">Delete</button>
-              <div id="comments-${news.id}"></div>
-              <textarea id="comment-input-${news.id}" placeholder="Add a comment"></textarea>
-              <button onclick="postComment('${news.id}')">Comment</button>
-            </div>
+          tableBody.innerHTML += `
+            <tr>
+              <td>${news.title}</td>
+              <td>${news.content.substring(0, 50)}...</td>
+              <td><button onclick="deleteNews('${news.id}')">Delete</button></td>
+            </tr>
           `;
-          loadComments(news.id);
         });
         console.log('News loaded:', data.length);
       } catch (error) {
@@ -630,7 +756,7 @@
       }
     }
 
-    async function editNews(id, title, content, youtubeLink) {
+    async function deleteNews(newsId) {
       if (!(await checkInternet())) return;
       if (!supabase) {
         console.error('Supabase client not initialized');
@@ -638,199 +764,14 @@
         return;
       }
       try {
-        const newTitle = prompt('Edit title:', title);
-        const newContent = prompt('Edit content:', content);
-        const newYoutubeLink = prompt('Edit YouTube link:', youtubeLink);
-
-        if (!newTitle || !newContent) throw new Error('Title and content are required');
-
-        const updates = { title: newTitle, content: newContent, youtube_link: newYoutubeLink || null };
-        const { error } = await supabase.from('news').update(updates).eq('id', id);
-        if (error) throw new Error(`News update error: ${error.message}`);
-
-        showMessage('News updated successfully!', 'success');
-        loadNews();
-        console.log('News updated:', id);
-      } catch (error) {
-        console.error('Edit news error:', error);
-        showMessage(`News update failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function deleteNews(id) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const { error } = await supabase.from('news').delete().eq('id', id);
+        const { error } = await supabase.from('news').delete().eq('id', newsId);
         if (error) throw new Error(`News delete error: ${error.message}`);
-
         showMessage('News deleted successfully!', 'success');
         loadNews();
-        console.log('News deleted:', id);
+        console.log('News deleted:', newsId);
       } catch (error) {
         console.error('Delete news error:', error);
         showMessage(`News deletion failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function postComment(newsId) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const content = document.getElementById(`comment-input-${newsId}`).value.trim();
-        if (!content) throw new Error('Comment content is empty');
-
-        const { error } = await supabase.from('comments').insert({
-          news_id: newsId,
-          content,
-          profile_id: 'admin',
-        });
-        if (error) throw new Error(`Comment insert error: ${error.message}`);
-
-        showMessage('Comment posted successfully!', 'success');
-        document.getElementById(`comment-input-${newsId}`).value = '';
-        loadComments(newsId);
-        console.log('Comment posted for news:', newsId);
-      } catch (error) {
-        console.error('Post comment error:', error);
-        showMessage(`Comment posting failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function loadComments(newsId) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const { data, error } = await supabase
-          .from('comments')
-          .select('*, profiles(username, name, profile_picture)')
-          .eq('news_id', newsId)
-          .order('created_at', { ascending: true });
-        if (error) throw new Error(`Comments fetch error: ${error.message}`);
-
-        const commentsDiv = document.getElementById(`comments-${newsId}`);
-        commentsDiv.innerHTML = '';
-        if (data.length === 0) {
-          commentsDiv.innerHTML = '<p>No comments found.</p>';
-          return;
-        }
-        const renderComment = (comment, isReply = false) => {
-          commentsDiv.innerHTML += `
-            <div class="comment ${isReply ? 'reply' : ''}">
-              <p><img src="${comment.profiles?.profile_picture || 'https://via.placeholder.com/32'}" class="profile-pic">${comment.profiles?.username || 'Anonymous'}</p>
-              <p>${comment.content}</p>
-              <button onclick="editComment('${comment.id}', '${comment.content.replace(/'/g, "\\'")}', '${newsId}')">Edit</button>
-              <button onclick="deleteComment('${comment.id}', '${newsId}')">Delete</button>
-              <button onclick="showReplyForm('${comment.id}', '${newsId}')">Reply</button>
-              <div id="reply-form-${comment.id}" style="display: none;">
-                <textarea id="reply-input-${comment.id}" placeholder="Reply"></textarea>
-                <button onclick="postReply('${comment.id}', '${newsId}')">Post Reply</button>
-              </div>
-            </div>
-          `;
-          const replies = data.filter(c => c.parent_id === comment.id);
-          replies.forEach(reply => renderComment(reply, true));
-        };
-        data.filter(c => !c.parent_id).forEach(comment => renderComment(comment));
-        console.log('Comments loaded for news:', newsId);
-      } catch (error) {
-        console.error('Load comments error:', error);
-        showMessage(`Failed to load comments: ${error.message}`, 'error');
-      }
-    }
-
-    function showReplyForm(commentId, newsId) {
-      try {
-        document.getElementById(`reply-form-${commentId}`).style.display = 'block';
-        console.log('Showing reply form for comment:', commentId);
-      } catch (error) {
-        console.error('Show reply form error:', error);
-        showMessage(`Reply form display failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function postReply(commentId, newsId) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const content = document.getElementById(`reply-input-${commentId}`).value.trim();
-        if (!content) throw new Error('Reply content is empty');
-
-        const { error } = await supabase.from('comments').insert({
-          news_id: newsId,
-          content,
-          parent_id: commentId,
-          profile_id: 'admin',
-        });
-        if (error) throw new Error(`Reply insert error: ${error.message}`);
-
-        showMessage('Reply posted successfully!', 'success');
-        document.getElementById(`reply-input-${commentId}`).value = '';
-        document.getElementById(`reply-form-${commentId}`).style.display = 'none';
-        loadComments(newsId);
-        console.log('Reply posted for comment:', commentId);
-      } catch (error) {
-        console.error('Post reply error:', error);
-        showMessage(`Reply posting failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function editComment(id, content, newsId) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const newContent = prompt('Edit comment:', content);
-        if (!newContent) return;
-
-        const { error } = await supabase.from('comments').update({ content: newContent }).eq('id', id);
-        if (error) throw new Error(`Comment update error: ${error.message}`);
-
-        showMessage('Comment updated successfully!', 'success');
-        loadComments(newsId);
-        console.log('Comment updated:', id);
-      } catch (error) {
-        console.error('Edit comment error:', error);
-        showMessage(`Comment update failed: ${error.message}`, 'error');
-      }
-    }
-
-    async function deleteComment(id, newsId) {
-      if (!(await checkInternet())) return;
-      if (!supabase) {
-        console.error('Supabase client not initialized');
-        showMessage('Database not connected.', 'error');
-        return;
-      }
-      try {
-        const { error } = await supabase.from('comments').delete().eq('id', id);
-        if (error) throw new Error(`Comment delete error: ${error.message}`);
-
-        showMessage('Comment deleted successfully!', 'success');
-        loadComments(newsId);
-        console.log('Comment deleted:', id);
-      } catch (error) {
-        console.error('Delete comment error:', error);
-        showMessage(`Comment deletion failed: ${error.message}`, 'error');
       }
     }
 
@@ -878,13 +819,12 @@
         return;
       }
       try {
-        const content = document.getElementById('support-input').value.trim();
+        const content = document.getElementById('admin-support-input').value.trim();
         if (!content) throw new Error('Support message is empty');
 
         const { error } = await supabase.from('support_messages').insert({
           content,
           is_from_user: false,
-          profile_id: 'admin',
         });
         if (error) throw new Error(`Support message insert error: ${error.message}`);
 
@@ -901,7 +841,7 @@
         }
 
         showMessage('Support reply sent!', 'success');
-        document.getElementById('support-input').value = '';
+        document.getElementById('admin-support-input').value = '';
         loadSupportMessages();
         console.log('Admin support message sent:', content);
       } catch (error) {
@@ -918,6 +858,18 @@
       }
 
       supabase
+        .channel('about')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'about' }, loadAbout)
+        .subscribe((status, err) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('Subscribed to about channel');
+          } else if (err) {
+            console.error('About subscription error:', err);
+            showMessage(`About subscription failed: ${err.message}`, 'error');
+          }
+        });
+
+      supabase
         .channel('keys')
         .on('postgres_changes', { event: '*', schema: 'public', table: 'keys' }, loadKeys)
         .subscribe((status, err) => {
@@ -930,20 +882,8 @@
         });
 
       supabase
-        .channel('devices')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'devices' }, loadDevices)
-        .subscribe((status, err) => {
-          if (status === 'SUBSCRIBED') {
-            console.log('Subscribed to devices channel');
-          } else if (err) {
-            console.error('Devices subscription error:', err);
-            showMessage(`Devices subscription failed: ${err.message}`, 'error');
-          }
-        });
-
-      supabase
         .channel('profiles')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadProfiles)
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadUsers)
         .subscribe((status, err) => {
           if (status === 'SUBSCRIBED') {
             console.log('Subscribed to profiles channel');
@@ -979,7 +919,7 @@
     }
 
     // Initialize Supabase client on page load
-    window.addEventListener('load', initializeSupabase);
+    window.addEventListener('load', () => initializeSupabase());
   </script>
 </body>
 </html>
