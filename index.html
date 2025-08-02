@@ -99,13 +99,14 @@
     function loadSupabaseScript() {
   return new Promise((resolve, reject) => {
     const script = document.createElement('script');
-    script.src = '/js/supabase.min.js';
+    // Alternative CDN သို့မဟုတ် တူညီသော CDN ကို အသုံးပြုပါ
+    script.src = 'https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js';
     script.onload = () => {
-      console.log('Local Supabase script loaded successfully');
+      console.log('Supabase script loaded successfully from unpkg');
       resolve();
     };
     script.onerror = () => {
-      console.error('Failed to load local Supabase script');
+      console.error('Failed to load Supabase script from unpkg');
       reject(new Error('Failed to load Supabase script'));
     };
     document.head.appendChild(script);
