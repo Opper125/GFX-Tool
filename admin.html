@@ -1,0 +1,646 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Admin Panel - FPS GFX Tool</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body {
+      background: linear-gradient(180deg, #1a1a1a, #2a2a2a);
+      color: #fff;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+    }
+    .container {
+      background: #222;
+      padding: 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 960px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.8s ease-out;
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    h1, h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      color: #ffd700;
+    }
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 8px;
+      background: #333;
+      color: #fff;
+      font-size: 16px;
+      transition: background 0.3s, transform 0.2s;
+    }
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      background: #444;
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.3);
+    }
+    button {
+      background: linear-gradient(45deg, #ffd700, #ff8c00);
+      font-weight: 600;
+      cursor: pointer;
+    }
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.4);
+    }
+    .form-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    table {
+      width: 100%;
+      border-collapse: separate;
+      border-spacing: 0;
+      margin: 24px 0;
+      background: #333;
+      border-radius: 8px;
+      overflow: hidden;
+    }
+    th, td {
+      padding: 12px;
+      text-align: left;
+      border-bottom: 1px solid #444;
+    }
+    th {
+      background: #444;
+      font-weight: 600;
+    }
+    td button {
+      padding: 8px;
+      margin: 0 4px;
+      font-size: 14px;
+    }
+    .message {
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      animation: slideIn 0.5s ease-out;
+    }
+    .error { background: #ff4444; }
+    .success { background: #44ff44; }
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+    .device-screen {
+      background: #000;
+      width: 320px;
+      height: 560px;
+      margin: 24px auto;
+      border-radius: 16px;
+      display: none;
+      box-shadow: 0 4px 16px rgba(0, 0, 0, 0.5);
+    }
+    .news-card, .comment {
+      background: #333;
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+    }
+    .news-card img, .profile-pic {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 8px 0;
+    }
+    .comment.reply {
+      margin-left: 24px;
+    }
+    .profile-pic {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      vertical-align: middle;
+    }
+    @media (max-width: 768px) {
+      .container { padding: 16px; }
+      h1, h2 { font-size: 20px; }
+      .form-grid { grid-template-columns: 1fr; }
+      .device-screen { width: 280px; height: 480px; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Admin Panel</h1>
+    <div id="status"></div>
+    <h2>Manage About</h2>
+    <div class="form-grid">
+      <input type="text" id="about-telegram" placeholder="Telegram Link">
+      <input type="text" id="about-viber" placeholder="Viber Link">
+      <input type="text" id="about-phone" placeholder="Phone Number">
+      <button onclick="updateAbout()">Update About</button>
+    </div>
+    <h2>Create Key</h2>
+    <div class="form-grid">
+      <input type="text" id="key-text" placeholder="Enter Key Text">
+      <select id="duration-type">
+        <option value="hours">Hours</option>
+        <option value="days">Days</option>
+        <option value="months">Months</option>
+      </select>
+      <input type="number" id="duration-value" placeholder="Duration Value" min="1">
+      <input type="number" id="max-devices" placeholder="Max Devices" min="1" value="1">
+      <button onclick="createKey()">Create Key</button>
+    </div>
+    <h2>Keys</h2>
+    <table id="keys-table">
+      <tr><th>Key</th><th>Expires At</th><th>Max Devices</th><th>Actions</th></tr>
+    </table>
+    <h2>Devices</h2>
+    <table id="devices-table">
+      <tr><th>Device ID</th><th>Model</th><th>Architecture</th><th>Android Version</th><th>Actions</th></tr>
+    </table>
+    <h2>Profiles</h2>
+    <table id="profiles-table">
+      <tr><th>Username</th><th>Name</th><th>Profile Picture</th><th>Banned</th><th>Actions</th></tr>
+    </table>
+    <h2>News</h2>
+    <div class="form-grid">
+      <input type="text" id="news-title" placeholder="Title">
+      <textarea id="news-content" placeholder="Content"></textarea>
+      <input type="text" id="news-youtube" placeholder="YouTube Link">
+      <input type="file" id="news-image" accept="image/*">
+      <button onclick="postAdminNews()">Post News</button>
+    </div>
+    <div id="news-list"></div>
+    <h2>Support Messages</h2>
+    <div id="support-messages"></div>
+    <textarea id="support-input" placeholder="Reply to user"></textarea>
+    <button onclick="sendAdminSupportMessage()">Send Reply</button>
+    <div id="device-screen" class="device-screen"></div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <script>
+    const SUPABASE_URL = 'https://rliwdosxsbauwxkayjoa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4';
+    const TELEGRAM_BOT_TOKEN = '8493584268:AAEpDAPbwRDJYBf9VjlxSiELc4bTrrn_7xw';
+    const TELEGRAM_GROUP_ID = '-1002863080440';
+    const supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
+    async function updateAbout() {
+      const telegram = document.getElementById('about-telegram').value.trim();
+      const viber = document.getElementById('about-viber').value.trim();
+      const phone = document.getElementById('about-phone').value.trim();
+
+      const { error } = await supabase.from('about').upsert({ id: 'default', telegram, viber, phone });
+      if (error) {
+        showMessage('About update failed!', 'error');
+        return;
+      }
+
+      showMessage('About updated successfully!', 'success');
+    }
+
+    async function createKey() {
+      const keyText = document.getElementById('key-text').value.trim();
+      const durationType = document.getElementById('duration-type').value;
+      const durationValue = parseInt(document.getElementById('duration-value').value);
+      const maxDevices = parseInt(document.getElementById('max-devices').value);
+
+      if (!keyText || !durationValue || !maxDevices) {
+        showMessage('Please fill all fields!', 'error');
+        return;
+      }
+
+      const expiresAt = new Date();
+      if (durationType === 'hours') expiresAt.setHours(expiresAt.getHours() + durationValue);
+      else if (durationType === 'days') expiresAt.setDate(expiresAt.getDate() + durationValue);
+      else expiresAt.setMonth(expiresAt.getMonth() + durationValue);
+
+      const { error } = await supabase.from('keys').insert({
+        key_text: keyText,
+        expires_at: expiresAt.toISOString(),
+        duration_type: durationType,
+        duration_value: durationValue,
+        max_devices: maxDevices,
+      });
+
+      if (error) {
+        showMessage('Key creation failed!', 'error');
+        return;
+      }
+
+      showMessage('Key created successfully!', 'success');
+      loadKeys();
+    }
+
+    async function loadKeys() {
+      const { data, error } = await supabase.from('keys').select('*').order('created_at', { ascending: false });
+      if (error) {
+        showMessage('Failed to load keys!', 'error');
+        return;
+      }
+
+      const table = document.getElementById('keys-table');
+      table.innerHTML = '<tr><th>Key</th><th>Expires At</th><th>Max Devices</th><th>Actions</th></tr>';
+      data.forEach(key => {
+        table.innerHTML += `
+          <tr>
+            <td>${key.key_text}</td>
+            <td>${new Date(key.expires_at).toLocaleString()}</td>
+            <td>${key.max_devices}</td>
+            <td>
+              <button onclick="editKey('${key.id}', '${key.key_text}', '${key.expires_at}', ${key.max_devices})">Edit</button>
+              <button onclick="deleteKey('${key.id}')">Delete</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function editKey(id, keyText, expiresAt, maxDevices) {
+      const newKeyText = prompt('Enter new key text:', keyText);
+      const newDurationValue = parseInt(prompt('Enter new duration value (hours):', new Date(expiresAt).getTime() / 1000 / 3600));
+      const newMaxDevices = parseInt(prompt('Enter new max devices:', maxDevices));
+      const newExpiresAt = new Date();
+      newExpiresAt.setHours(newExpiresAt.getHours() + newDurationValue);
+
+      const { error } = await supabase
+        .from('keys')
+        .update({ key_text: newKeyText, expires_at: newExpiresAt.toISOString(), max_devices: newMaxDevices, is_active: true })
+        .eq('id', id);
+
+      if (error) {
+        showMessage('Key update failed!', 'error');
+        return;
+      }
+
+      showMessage('Key updated successfully!', 'success');
+      loadKeys();
+    }
+
+    async function deleteKey(id) {
+      const { error } = await supabase.from('keys').update({ is_active: false }).eq('id', id);
+      if (error) {
+        showMessage('Key deletion failed!', 'error');
+        return;
+      }
+
+      showMessage('Key deleted successfully!', 'success');
+      loadKeys();
+    }
+
+    async function loadDevices() {
+      const { data, error } = await supabase.from('devices').select('*').order('created_at', { ascending: false });
+      if (error) {
+        showMessage('Failed to load devices!', 'error');
+        return;
+      }
+
+      const table = document.getElementById('devices-table');
+      table.innerHTML = '<tr><th>Device ID</th><th>Model</th><th>Architecture</th><th>Android Version</th><th>Actions</th></tr>';
+      data.forEach(device => {
+        table.innerHTML += `
+          <tr>
+            <td>${device.id.slice(0, 8)}...</td>
+            <td>${device.model}</td>
+            <td>${device.architecture}</td>
+            <td>${device.android_version}</td>
+            <td><button onclick="viewDeviceScreen('${device.id}')">View Screen</button></td>
+          </tr>
+        `;
+      });
+    }
+
+    async function loadProfiles() {
+      const { data, error } = await supabase.from('profiles').select('*').order('created_at', { ascending: false });
+      if (error) {
+        showMessage('Failed to load profiles!', 'error');
+        return;
+      }
+
+      const table = document.getElementById('profiles-table');
+      table.innerHTML = '<tr><th>Username</th><th>Name</th><th>Profile Picture</th><th>Banned</th><th>Actions</th></tr>';
+      data.forEach(profile => {
+        table.innerHTML += `
+          <tr>
+            <td>${profile.username}</td>
+            <td>${profile.name}</td>
+            <td><img src="${profile.profile_picture || 'default.png'}" class="profile-pic"></td>
+            <td>${profile.is_banned ? 'Yes' : 'No'}</td>
+            <td>
+              <button onclick="toggleBanProfile('${profile.id}', ${profile.is_banned})">${profile.is_banned ? 'Unban' : 'Ban'}</button>
+            </td>
+          </tr>
+        `;
+      });
+    }
+
+    async function toggleBanProfile(id, isBanned) {
+      const { error } = await supabase.from('profiles').update({ is_banned: !isBanned }).eq('id', id);
+      if (error) {
+        showMessage('Profile ban/unban failed!', 'error');
+        return;
+      }
+
+      showMessage(`Profile ${isBanned ? 'unbanned' : 'banned'} successfully!`, 'success');
+      loadProfiles();
+    }
+
+    async function postAdminNews() {
+      const title = document.getElementById('news-title').value.trim();
+      const content = document.getElementById('news-content').value.trim();
+      const youtubeLink = document.getElementById('news-youtube').value.trim();
+      const file = document.getElementById('news-image').files[0];
+
+      if (!title || !content) {
+        showMessage('Please fill title and content!', 'error');
+        return;
+      }
+
+      let imageUrl = null;
+      if (file) {
+        const { data, error } = await supabase.storage.from('news').upload(`public/admin/${file.name}`, file);
+        if (error) {
+          showMessage('Image upload failed!', 'error');
+          return;
+        }
+        imageUrl = `${SUPABASE_URL}/storage/v1/object/public/news/${data.path}`;
+      }
+
+      const { error } = await supabase.from('news').insert({
+        title,
+        content,
+        youtube_link: youtubeLink || null,
+        image_url: imageUrl,
+        is_admin: true,
+      });
+
+      if (error) {
+        showMessage('News posting failed!', 'error');
+        return;
+      }
+
+      showMessage('News posted successfully!', 'success');
+      loadNews();
+    }
+
+    async function loadNews() {
+      const { data, error } = await supabase
+        .from('news')
+        .select('*, profiles(username, name, profile_picture)')
+        .order('created_at', { ascending: false });
+
+      if (error) {
+        showMessage('Failed to load news!', 'error');
+        return;
+      }
+
+      const newsList = document.getElementById('news-list');
+      newsList.innerHTML = '';
+      data.forEach(news => {
+        newsList.innerHTML += `
+          <div class="news-card">
+            <p><img src="${news.profiles?.profile_picture || 'default.png'}" class="profile-pic">${news.profiles?.username || 'Admin'} (${news.profiles?.name || 'Admin'})</p>
+            <h3>${news.title}</h3>
+            <p>${news.content}</p>
+            ${news.image_url ? `<img src="${news.image_url}" alt="News Image">` : ''}
+            ${news.youtube_link ? `<p><a href="${news.youtube_link}" target="_blank">Watch on YouTube</a></p>` : ''}
+            <p class="views">Views: ${news.views}</p>
+            <button onclick="editNews('${news.id}', '${news.title}', '${news.content}', '${news.youtube_link || ''}')">Edit</button>
+            <button onclick="deleteNews('${news.id}')">Delete</button>
+            <div id="comments-${news.id}"></div>
+          </div>
+        `;
+        loadComments(news.id);
+      });
+    }
+
+    async function editNews(id, title, content, youtubeLink) {
+      const newTitle = prompt('Edit title:', title);
+      const newContent = prompt('Edit content:', content);
+      const newYoutubeLink = prompt('Edit YouTube link:', youtubeLink);
+      const file = prompt('Upload new image (not supported in prompt; use form in production):');
+
+      const updates = { title: newTitle, content: newContent, youtube_link: newYoutubeLink || null };
+      if (file) {
+        // Implement file upload logic
+      }
+
+      const { error } = await supabase.from('news').update(updates).eq('id', id);
+      if (error) {
+        showMessage('News update failed!', 'error');
+        return;
+      }
+
+      showMessage('News updated successfully!', 'success');
+      loadNews();
+    }
+
+    async function deleteNews(id) {
+      const { error } = await supabase.from('news').delete().eq('id', id);
+      if (error) {
+        showMessage('News deletion failed!', 'error');
+        return;
+      }
+
+      showMessage('News deleted successfully!', 'success');
+      loadNews();
+    }
+
+    async function loadComments(newsId) {
+      const { data, error } = await supabase
+        .from('comments')
+        .select('*, profiles(username, name, profile_picture)')
+        .eq('news_id', newsId)
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        showMessage('Failed to load comments!', 'error');
+        return;
+      }
+
+      const commentsDiv = document.getElementById(`comments-${newsId}`);
+      commentsDiv.innerHTML = '';
+      const renderComment = (comment, isReply = false) => {
+        commentsDiv.innerHTML += `
+          <div class="comment ${isReply ? 'reply' : ''}">
+            <p><img src="${comment.profiles?.profile_picture || 'default.png'}" class="profile-pic">${comment.profiles?.username || 'Anonymous'}</p>
+            <p>${comment.content}</p>
+            <button onclick="deleteComment('${comment.id}', '${newsId}')">Delete</button>
+            <button onclick="replyComment('${comment.id}', '${newsId}')">Reply</button>
+            <div id="reply-form-${comment.id}" style="display: none;">
+              <textarea id="reply-input-${comment.id}" placeholder="Reply"></textarea>
+              <button onclick="postAdminReply('${comment.id}', '${newsId}')">Post Reply</button>
+            </div>
+          </div>
+        `;
+        const replies = data.filter(c => c.parent_id === comment.id);
+        replies.forEach(reply => renderComment(reply, true));
+      };
+
+      data.filter(c => !c.parent_id).forEach(comment => renderComment(comment));
+    }
+
+    function replyComment(commentId, newsId) {
+      document.getElementById(`reply-form-${commentId}`).style.display = 'block';
+    }
+
+    async function postAdminReply(commentId, newsId) {
+      const content = document.getElementById(`reply-input-${commentId}`).value.trim();
+      if (!content) {
+        showMessage('Please enter a reply!', 'error');
+        return;
+      }
+
+      const { error } = await supabase.from('comments').insert({
+        news_id: newsId,
+        content,
+        parent_id: commentId,
+      });
+
+      if (error) {
+        showMessage('Reply posting failed!', 'error');
+        return;
+      }
+
+      showMessage('Reply posted successfully!', 'success');
+      document.getElementById(`reply-input-${commentId}`).value = '';
+      document.getElementById(`reply-form-${commentId}`).style.display = 'none';
+      loadComments(newsId);
+    }
+
+    async function deleteComment(id, newsId) {
+      const { error } = await supabase.from('comments').delete().eq('id', id);
+      if (error) {
+        showMessage('Comment deletion failed!', 'error');
+        return;
+      }
+
+      showMessage('Comment deleted successfully!', 'success');
+      loadComments(newsId);
+    }
+
+    async function loadSupportMessages() {
+      const { data, error } = await supabase
+        .from('support_messages')
+        .select('*, profiles(username)')
+        .order('created_at', { ascending: true });
+
+      if (error) {
+        showMessage('Failed to load messages!', 'error');
+        return;
+      }
+
+      const messagesDiv = document.getElementById('support-messages');
+      messagesDiv.innerHTML = '';
+      data.forEach(msg => {
+        messagesDiv.innerHTML += `
+          <div class="message ${msg.is_from_user ? 'user' : 'admin'}">
+            <p>${msg.profiles?.username || 'Admin'}: ${msg.content}</p>
+          </div>
+        `;
+      });
+      messagesDiv.scrollTop = messagesDiv.scrollHeight;
+    }
+
+    async function sendAdminSupportMessage() {
+      const content = document.getElementById('support-input').value.trim();
+      if (!content) {
+        showMessage('Please enter a message!', 'error');
+        return;
+      }
+
+      const { error } = await supabase.from('support_messages').insert({
+        content,
+        is_from_user: false,
+      });
+
+      if (error) {
+        showMessage('Message sending failed!', 'error');
+        return;
+      }
+
+      // Send to Telegram Bot
+      await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          chat_id: TELEGRAM_GROUP_ID,
+          text: `Admin Reply: ${content}`,
+        }),
+      });
+
+      showMessage('Message sent!', 'success');
+      document.getElementById('support-input').value = '';
+      loadSupportMessages();
+    }
+
+    function viewDeviceScreen(deviceId) {
+      const screen = document.getElementById('device-screen');
+      screen.style.display = 'block';
+      screen.innerHTML = `<p>Simulated screen for device ${deviceId.slice(0, 8)}...</p>`;
+    }
+
+    function showMessage(message, type) {
+      const status = document.getElementById('status');
+      status.innerHTML = `<div class="message ${type}">${message}</div>`;
+      setTimeout(() => status.innerHTML = '', 3000);
+    }
+
+    loadKeys();
+    loadDevices();
+    loadProfiles();
+    loadNews();
+    loadSupportMessages();
+
+    supabase
+      .channel('keys')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'keys' }, loadKeys)
+      .subscribe();
+
+    supabase
+      .channel('devices')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'devices' }, loadDevices)
+      .subscribe();
+
+    supabase
+      .channel('profiles')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, loadProfiles)
+      .subscribe();
+
+    supabase
+      .channel('news')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, loadNews)
+      .subscribe();
+
+    supabase
+      .channel('comments')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'comments' }, payload => {
+        if (payload.eventType !== 'DELETE') loadComments(payload.new.news_id || payload.old.news_id);
+      })
+      .subscribe();
+
+    supabase
+      .channel('support_messages')
+      .on('postgres_changes', { event: '*', schema: 'public', table: 'support_messages' }, loadSupportMessages)
+      .subscribe();
+  </script>
+</body>
+</html>
