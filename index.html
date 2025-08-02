@@ -1,0 +1,1282 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPS GFX Tool</title>
+  <style>
+    /* Reset and Base Styles */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Body with Myanmar Map and Waves */
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(180deg, #1a1a1a, #2a2a2a);
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    /* Dashboard Background with Myanmar Map and 4D Waves */
+    body.dashboard-active {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/48/Myanmar_map.png') no-repeat center center / cover;
+      animation: mapZoom 20s ease-in-out infinite;
+      position: relative;
+    }
+
+    body.dashboard-active::before {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: url('https://i.imgur.com/4Dwaves.png') repeat-x bottom;
+      background-size: 2000px 200px;
+      animation: waveAnimation 10s linear infinite;
+      z-index: -1;
+      filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.5));
+    }
+
+    @keyframes mapZoom {
+      0% { background-size: 100%; }
+      50% { background-size: 110%; }
+      100% { background-size: 100%; }
+    }
+
+    @keyframes waveAnimation {
+      0% { background-position-x: 0; }
+      100% { background-position-x: 2000px; }
+    }
+
+    /* Container */
+    .container {
+      background: rgba(34, 34, 34, 0.9);
+      padding: 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 480px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.8s ease-out;
+      backdrop-filter: blur(10px);
+      z-index: 1;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(-16px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Typography */
+    h1, h2 {
+      font-size: 24px;
+      font-weight: 600;
+      margin-bottom: 24px;
+      text-align: center;
+      color: #ffd700;
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    }
+
+    h3 {
+      font-size: 18px;
+      color: #ffd700;
+      margin-bottom: 16px;
+    }
+
+    /* Form Elements */
+    input, select, button, textarea {
+      width: 100%;
+      padding: 12px;
+      margin: 12px 0;
+      border: none;
+      border-radius: 8px;
+      background: rgba(51, 51, 51, 0.8);
+      color: #fff;
+      font-size: 16px;
+      transition: all 0.3s ease;
+    }
+
+    input:focus, select:focus, textarea:focus {
+      outline: none;
+      background: rgba(68, 68, 68, 0.9);
+      box-shadow: 0 0 0 3px rgba(255, 215, 0, 0.5);
+      transform: scale(1.02);
+    }
+
+    /* Button Styles with Myanmar Flag Animation */
+    button {
+      position: relative;
+      background: linear-gradient(45deg, #ffd700, #ff8c00);
+      font-weight: 600;
+      cursor: pointer;
+      overflow: hidden;
+      z-index: 1;
+    }
+
+    button::before {
+      content: '';
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 0;
+      height: 0;
+      background: url('https://upload.wikimedia.org/wikipedia/commons/8/8c/Flag_of_Myanmar.svg') center / contain no-repeat;
+      opacity: 0;
+      transform: translate(-50%, -50%);
+      transition: all 0.5s ease;
+      z-index: -1;
+    }
+
+    button:hover::before {
+      width: 200px;
+      height: 200px;
+      opacity: 0.3;
+    }
+
+    button:active::before {
+      width: 300px;
+      height: 300px;
+      opacity: 0.5;
+      animation: flagBurst 0.5s ease-out;
+    }
+
+    @keyframes flagBurst {
+      0% { width: 0; height: 0; opacity: 0; }
+      50% { width: 400px; height: 400px; opacity: 0.7; }
+      100% { width: 300px; height: 300px; opacity: 0.5; }
+    }
+
+    button:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.6);
+    }
+
+    /* Pro Badge */
+    .pro-badge {
+      position: fixed;
+      top: 16px;
+      right: 16px;
+      background: linear-gradient(45deg, #ffd700, #ff8c00);
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 14px;
+      font-weight: 700;
+      text-transform: uppercase;
+      animation: glow 1.5s ease-in-out infinite alternate;
+      box-shadow: 0 0 10px rgba(255, 215, 0, 0.8);
+    }
+
+    @keyframes glow {
+      from { box-shadow: 0 0 8px rgba(255, 215, 0, 0.6); }
+      to { box-shadow: 0 0 16px rgba(255, 215, 0, 0.9); }
+    }
+
+    /* Messages */
+    .message {
+      padding: 12px;
+      margin: 12px 0;
+      border-radius: 8px;
+      font-size: 14px;
+      text-align: center;
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .error { background: #ff4444; }
+    .success { background: #44ff44; }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateX(-16px); }
+      to { opacity: 1; transform: translateX(0); }
+    }
+
+    /* Game Grid */
+    .game-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+      gap: 16px;
+      margin: 16px 0;
+    }
+
+    .game-card {
+      background: rgba(51, 51, 51, 0.8);
+      padding: 12px;
+      border-radius: 12px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .game-card:hover {
+      transform: scale(1.05);
+      background: rgba(68, 68, 68, 0.9);
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.5);
+    }
+
+    .game-card img {
+      width: 80px;
+      border-radius: 8px;
+      margin-bottom: 8px;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    .game-card p {
+      font-size: 14px;
+      margin: 0;
+    }
+
+    /* Checkbox */
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin: 12px 0;
+      font-size: 14px;
+      color: #fff;
+    }
+
+    /* Menu */
+    .menu {
+      display: flex;
+      justify-content: space-around;
+      background: rgba(51, 51, 51, 0.8);
+      padding: 12px;
+      border-radius: 8px;
+      margin-top: 24px;
+    }
+
+    .menu button {
+      flex: 1;
+      margin: 0 4px;
+    }
+
+    /* News Card */
+    .news-card {
+      background: rgba(51, 51, 51, 0.8);
+      padding: 16px;
+      border-radius: 12px;
+      margin: 16px 0;
+      transition: all 0.3s ease;
+    }
+
+    .news-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 4px 16px rgba(255, 215, 0, 0.5);
+    }
+
+    .news-card img {
+      max-width: 100%;
+      border-radius: 8px;
+      margin: 8px 0;
+      filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+    }
+
+    .news-card .views {
+      font-size: 12px;
+      color: #ffd700;
+    }
+
+    /* Comments */
+    .comment {
+      background: rgba(68, 68, 68, 0.9);
+      padding: 12px;
+      border-radius: 8px;
+      margin: 8px 0;
+      font-size: 14px;
+    }
+
+    .comment.reply {
+      margin-left: 24px;
+    }
+
+    .profile-pic {
+      width: 32px;
+      height: 32px;
+      border-radius: 50%;
+      margin-right: 8px;
+      vertical-align: middle;
+      object-fit: cover;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 480px) {
+      .container {
+        padding: 16px;
+      }
+      h1, h2 {
+        font-size: 20px;
+      }
+      input, select, button, textarea {
+        font-size: 14px;
+      }
+      .menu {
+        flex-direction: column;
+      }
+      .menu button {
+        margin: 4px 0;
+      }
+      body.dashboard-active::before {
+        height: 150px;
+        background-size: 1500px 150px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="pro-badge">Pro</div>
+  <div class="container" id="main-container">
+    <h1>FPS GFX Tool</h1>
+    <div id="status"></div>
+    <button onclick="showAbout()">About</button>
+    <div id="about-section" style="display: none;">
+      <h2>About Us</h2>
+      <div id="about-content"></div>
+    </div>
+    <input type="text" id="key-input" placeholder="Enter Key" required>
+    <button onclick="login()">Login</button>
+    <div id="main-content" style="display: none;">
+      <div id="home-section">
+        <div id="game-selection">
+          <h2>Select Game</h2>
+          <div class="game-grid">
+            <div class="game-card" onclick="selectGame('korean')">
+              <img src="https://via.placeholder.com/80" alt="PUBG Korean">
+              <p>PUBG Korean</p>
+            </div>
+            <div class="game-card" onclick="selectGame('global')">
+              <img src="https://via.placeholder.com/80" alt="PUBG Global">
+              <p>PUBG Global</p>
+            </div>
+          </div>
+        </div>
+        <div id="config-form" style="display: none;">
+          <h2>Configure Settings</h2>
+          <select id="fps">
+            <option value="60">60 FPS</option>
+            <option value="90">90 FPS</option>
+            <option value="120">120 FPS</option>
+            <option value="144">144 FPS</option>
+          </select>
+          <select id="bit-type">
+            <option value="32bit">32-bit</option>
+            <option value="64bit">64-bit</option>
+          </select>
+          <label class="checkbox-label">
+            <input type="checkbox" id="ipad-view"> Enable iPad View
+          </label>
+          <input type="number" id="dpi" placeholder="DPI (e.g., 320)" disabled>
+          <input type="text" id="resolution" placeholder="Resolution (e.g., 1920x1080)" disabled>
+          <button onclick="generateFile()">Generate File</button>
+        </div>
+        <div id="files-list"></div>
+      </div>
+      <div id="news-section" style="display: none;">
+        <h2>News</h2>
+        <button onclick="showCreateProfile()">Create Profile</button>
+        <div id="create-profile" style="display: none;">
+          <h3>Create Profile</h3>
+          <input type="text" id="profile-username" placeholder="Username">
+          <input type="text" id="profile-name" placeholder="Name">
+          <input type="file" id="profile-picture" accept="image/*">
+          <button onclick="createProfile()">Save Profile</button>
+        </div>
+        <button onclick="showPostNews()" id="post-news-btn" style="display: none;">Post News</button>
+        <div id="post-news" style="display: none;">
+          <h3>Post News</h3>
+          <input type="text" id="news-title" placeholder="Title">
+          <textarea id="news-content" placeholder="Content"></textarea>
+          <input type="text" id="news-youtube" placeholder="YouTube Link">
+          <input type="file" id="news-image" accept="image/*">
+          <button onclick="postNews()">Post</button>
+        </div>
+        <div id="news-list"></div>
+      </div>
+      <div id="support-section" style="display: none;">
+        <h2>Support</h2>
+        <div id="support-messages"></div>
+        <textarea id="support-input" placeholder="Type your message"></textarea>
+        <button onclick="sendSupportMessage()">Send</button>
+      </div>
+      <div id="telegram-section" style="display: none;">
+        <h2>Telegram</h2>
+        <div id="telegram-posts"></div>
+      </div>
+      <div class="menu">
+        <button onclick="showSection('home')">Home</button>
+        <button onclick="showSection('news')">News</button>
+        <button onclick="showSection('support')">Support</button>
+        <button onclick="showSection('telegram')">Telegram</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Constants
+    const SUPABASE_URL = 'https://rliwdosxsbauwxkayjoa.supabase.co';
+    const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4';
+    const TELEGRAM_BOT_TOKEN = '8493584268:AAEpDAPbwRDJYBf9VjlxSiELc4bTrrn_7xw';
+    const TELEGRAM_GROUP_ID = '-1002863080440';
+
+    let supabase = null;
+    let deviceId = '';
+    let sessionId = '';
+    let keyExpiration = null;
+    let profileId = null;
+    let viewTimers = {};
+
+    // Load Supabase script with fallback
+    async function loadSupabaseScript() {
+      const cdnUrls = [
+        'https://unpkg.com/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js',
+        'https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js'
+      ];
+
+      for (const url of cdnUrls) {
+        try {
+          return await new Promise((resolve, reject) => {
+            const script = document.createElement('script');
+            script.src = url;
+            script.timeout = 10000; // 10 seconds timeout
+            script.onload = () => {
+              console.log(`Supabase script loaded successfully from ${url}`);
+              resolve();
+            };
+            script.onerror = () => {
+              console.error(`Failed to load Supabase script from ${url}`);
+              reject(new Error(`Failed to load Supabase script from ${url}`));
+            };
+            document.head.appendChild(script);
+          });
+        } catch (error) {
+          console.error(error.message);
+          continue;
+        }
+      }
+      throw new Error('All Supabase CDN sources failed to load');
+    }
+
+    // Check Internet Connectivity
+    async function checkInternet() {
+      if (!navigator.onLine) {
+        console.error('No internet connection detected');
+        showMessage('No internet connection! Please check your network and try again.', 'error');
+        return false;
+      }
+      try {
+        // Ping Supabase URL to verify connectivity
+        const response = await fetch(SUPABASE_URL + '/rest/v1/', {
+          method: 'HEAD',
+          cache: 'no-store',
+          timeout: 5000
+        });
+        if (!response.ok) {
+          throw new Error('Supabase server unreachable');
+        }
+        console.log('Internet connectivity verified');
+        return true;
+      } catch (error) {
+        console.error('Internet check failed:', error);
+        showMessage(`Failed to connect to server: ${error.message}. Please check your network or use a VPN.`, 'error');
+        return false;
+      }
+    }
+
+    // Initialize Supabase with Retry Logic
+    async function initializeSupabase(attempt = 1, maxAttempts = 3) {
+      if (!(await checkInternet())) {
+        if (attempt < maxAttempts) {
+          console.log(`Retrying Supabase initialization (Attempt ${attempt + 1}/${maxAttempts})...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return initializeSupabase(attempt + 1, maxAttempts);
+        }
+        showMessage('Unable to connect to database after multiple attempts. Please try again later.', 'error');
+        return;
+      }
+
+      try {
+        await loadSupabaseScript();
+        if (typeof Supabase === 'undefined') {
+          throw new Error('Supabase library not loaded');
+        }
+        supabase = Supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY, {
+          fetch: (url, options) => fetch(url, { ...options, cache: 'no-store' })
+        });
+        // Test connection
+        const { data, error } = await supabase.from('about').select('id').limit(1);
+        if (error) {
+          throw new Error(`Connection test failed: ${error.message}`);
+        }
+        console.log('Supabase client initialized successfully');
+        showMessage('Database connected successfully!', 'success');
+        setupRealtimeSubscriptions();
+      } catch (error) {
+        console.error('Failed to initialize Supabase client:', error);
+        if (attempt < maxAttempts) {
+          console.log(`Retrying Supabase initialization (Attempt ${attempt + 1}/${maxAttempts})...`);
+          await new Promise(resolve => setTimeout(resolve, 2000));
+          return initializeSupabase(attempt + 1, maxAttempts);
+        }
+        showMessage(`Error initializing database: ${error.message}. Please check your network or refresh the page.`, 'error');
+      }
+    }
+
+    function showMessage(message, type) {
+      const status = document.getElementById('status');
+      status.innerHTML = `<div class="message ${type}">${message}</div>`;
+      setTimeout(() => status.innerHTML = '', 7000);
+      console.log(`Message displayed: ${message} (${type})`);
+    }
+
+    async function showAbout() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase.from('about').select('*').single();
+        if (error) throw new Error(`About fetch error: ${error.message}`);
+        if (!data) throw new Error('No about data found');
+        const content = `
+          <p>Telegram: <a href="${data.telegram || '#'}" target="_blank">${data.telegram || 'N/A'}</a></p>
+          <p>Viber: <a href="${data.viber || '#'}" target="_blank">${data.viber || 'N/A'}</a></p>
+          <p>Phone: ${data.phone || 'N/A'}</p>
+        `;
+        document.getElementById('about-content').innerHTML = content;
+        document.getElementById('about-section').style.display = 'block';
+        document.getElementById('key-input').style.display = 'none';
+        document.querySelector('button[onclick="login()"]').style.display = 'none';
+        document.querySelector('button[onclick="showAbout()"]').style.display = 'none';
+        console.log('About section loaded successfully');
+      } catch (error) {
+        console.error('Error loading about section:', error);
+        showMessage(`Error loading about: ${error.message}`, 'error');
+      }
+    }
+
+    async function login() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const key = document.getElementById('key-input').value.trim();
+        if (!key) {
+          console.error('Key input is empty');
+          showMessage('Please enter a key!', 'error');
+          return;
+        }
+
+        const { data, error } = await supabase
+          .from('keys')
+          .select('*')
+          .eq('key_text', key)
+          .eq('is_active', true)
+          .single();
+        if (error) throw new Error(`Key fetch error: ${error.message}`);
+        if (!data) throw new Error('No key found');
+        if (new Date(data.expires_at) < new Date()) throw new Error('Key expired');
+
+        const deviceInfo = await detectDevice();
+        deviceId = deviceInfo.id;
+
+        const { data: sessionCount, error: sessionError } = await supabase
+          .from('sessions')
+          .select('id', { count: 'exact' })
+          .eq('key_id', data.id)
+          .eq('is_active', true);
+        if (sessionError) throw new Error(`Session count error: ${sessionError.message}`);
+        if (sessionCount.length >= data.max_devices) throw new Error('Device limit reached');
+
+        const { data: sessionData, error: insertError } = await supabase.from('sessions').insert({
+          key_id: data.id,
+          device_id: deviceId,
+          is_active: true,
+        }).select().single();
+        if (insertError) throw new Error(`Session insert error: ${insertError.message}`);
+
+        sessionId = sessionData.id;
+        keyExpiration = new Date(data.expires_at);
+        showMessage('Login successful!', 'success');
+        document.getElementById('key-input').style.display = 'none';
+        document.querySelector('button[onclick="login()"]').style.display = 'none';
+        document.querySelector('button[onclick="showAbout()"]').style.display = 'none';
+        document.getElementById('main-content').style.display = 'block';
+        document.body.classList.add('dashboard-active');
+        startExpirationTimer(data.expires_at);
+        requestPermissions();
+        loadUserFiles();
+        checkProfile();
+        console.log('Login successful, session ID:', sessionId);
+      } catch (error) {
+        console.error('Login error:', error);
+        showMessage(`Login failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function detectDevice() {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        throw new Error('Supabase client not initialized');
+      }
+      try {
+        const ua = navigator.userAgent;
+        const architecture = ua.includes('64') ? '64bit' : '32bit';
+        const androidMatch = ua.match(/Android\s+([\d.]+)/);
+        const modelMatch = ua.match(/\(([^;]+);/);
+        const id = btoa(ua).slice(0, 255);
+        const device = {
+          id,
+          user_agent: ua,
+          architecture,
+          android_version: androidMatch ? androidMatch[1] : 'Unknown',
+          model: modelMatch ? modelMatch[1] : 'Unknown',
+        };
+        const { error } = await supabase.from('devices').upsert(device);
+        if (error) throw new Error(`Device upsert error: ${error.message}`);
+        console.log('Device detected and saved:', device);
+        return device;
+      } catch (error) {
+        console.error('Detect device error:', error);
+        showMessage(`Device detection failed: ${error.message}`, 'error');
+        throw error;
+      }
+    }
+
+    async function requestPermissions() {
+      try {
+        showMessage('Storage permissions granted!', 'success');
+        console.log('Permissions granted (placeholder)');
+      } catch (error) {
+        console.error('Permission error:', error);
+        showMessage(`Permissions denied: ${error.message}`, 'error');
+      }
+    }
+
+    function startExpirationTimer(expiresAt) {
+      try {
+        const timer = setInterval(() => {
+          const now = new Date();
+          if (now >= new Date(expiresAt)) {
+            showMessage('Key expired! Logging out...', 'error');
+            logout();
+            clearInterval(timer);
+            return;
+          }
+          const timeLeft = new Date(expiresAt - now);
+          const days = timeLeft.getUTCDate() - 1;
+          const hours = timeLeft.getUTCHours();
+          const minutes = timeLeft.getUTCMinutes();
+          const dayName = new Date().toLocaleString('en-US', { weekday: 'long' });
+          document.getElementById('status').innerHTML = `Key expires on ${dayName} in: ${days}d ${hours}h ${minutes}m`;
+        }, 1000);
+        console.log('Expiration timer started');
+      } catch (error) {
+        console.error('Expiration timer error:', error);
+        showMessage(`Timer error: ${error.message}`, 'error');
+      }
+    }
+
+    async function logout() {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabase.from('sessions').update({ is_active: false }).eq('device_id', deviceId).eq('is_active', true);
+        if (error) throw new Error(`Logout error: ${error.message}`);
+        document.getElementById('main-container').innerHTML = `
+          <h1>FPS GFX Tool</h1>
+          <div id="status"></div>
+          <button onclick="showAbout()">About</button>
+          <div id="about-section" style="display: none;">
+            <h2>About Us</h2>
+            <div id="about-content"></div>
+          </div>
+          <input type="text" id="key-input" placeholder="Enter Key" required>
+          <button onclick="login()">Login</button>
+        `;
+        document.body.classList.remove('dashboard-active');
+        showMessage('Logged out!', 'error');
+        console.log('Logged out successfully');
+      } catch (error) {
+        console.error('Logout error:', error);
+        showMessage(`Logout failed: ${error.message}`, 'error');
+      }
+    }
+
+    function showSection(section) {
+      try {
+        document.getElementById('home-section').style.display = section === 'home' ? 'block' : 'none';
+        document.getElementById('news-section').style.display = section === 'news' ? 'block' : 'none';
+        document.getElementById('support-section').style.display = section === 'support' ? 'block' : 'none';
+        document.getElementById('telegram-section').style.display = section === 'telegram' ? 'block' : 'none';
+        if (section === 'news') loadNews();
+        if (section === 'support') loadSupportMessages();
+        if (section === 'telegram') loadTelegramPosts();
+        console.log(`Switched to ${section} section`);
+      } catch (error) {
+        console.error('Show section error:', error);
+        showMessage(`Section switch failed: ${error.message}`, 'error');
+      }
+    }
+
+    function selectGame(version) {
+      try {
+        document.getElementById('game-selection').style.display = 'none';
+        document.getElementById('config-form').style.display = 'block';
+        document.getElementById('config-form').dataset.game = version;
+        console.log(`Game selected: ${version}`);
+      } catch (error) {
+        console.error('Select game error:', error);
+        showMessage(`Game selection failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function generateFile() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const fps = document.getElementById('fps').value;
+        const bitType = document.getElementById('bit-type').value;
+        const ipadView = document.getElementById('ipad-view').checked;
+        const dpi = document.getElementById('dpi').value || null;
+        const resolution = document.getElementById('resolution').value || null;
+        const gameVersion = document.getElementById('config-form').dataset.game;
+
+        const fileContent = JSON.stringify({ fps, bitType, ipadView, dpi, resolution, gameVersion });
+        const filePath = `/FPS_OPPER/active_${Date.now()}.sav`;
+
+        const { error } = await supabase.from('generated_files').insert({
+          session_id: sessionId,
+          game_version: gameVersion,
+          fps: parseInt(fps),
+          bit_type: bitType,
+          ipad_view: ipadView,
+          dpi: dpi ? parseInt(dpi) : null,
+          resolution,
+          file_path: filePath,
+        });
+        if (error) throw new Error(`File insert error: ${error.message}`);
+
+        const blob = new Blob([fileContent], { type: 'application/octet-stream' });
+        const url = URL.createObjectURL(blob);
+        const a = document.createElement('a');
+        a.href = url;
+        a.download = `active_${Date.now()}.sav`;
+        a.click();
+        URL.revokeObjectURL(url);
+        showMessage('File generated and downloaded!', 'success');
+        loadUserFiles();
+        console.log('File generated:', filePath);
+      } catch (error) {
+        console.error('Generate file error:', error);
+        showMessage(`File generation failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function loadUserFiles() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from('generated_files')
+          .select('*')
+          .eq('session_id', sessionId)
+          .order('created_at', { ascending: false });
+        if (error) throw new Error(`Files fetch error: ${error.message}`);
+
+        const filesList = document.getElementById('files-list');
+        filesList.innerHTML = '<h2>Your Files</h2>';
+        if (data.length === 0) {
+          filesList.innerHTML += '<p>No files generated yet.</p>';
+          return;
+        }
+        data.forEach(file => {
+          filesList.innerHTML += `<p>${file.game_version} - ${file.fps} FPS - ${file.bit_type} - <a href="${file.file_path}" download>Download</a></p>`;
+        });
+        console.log('User files loaded:', data.length);
+      } catch (error) {
+        console.error('Load files error:', error);
+        showMessage(`Failed to load files: ${error.message}`, 'error');
+      }
+    }
+
+    async function checkProfile() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase.from('profiles').select('*').eq('id', sessionId).single();
+        if (error && error.code !== 'PGRST116') throw new Error(`Profile fetch error: ${error.message}`);
+        if (!data) {
+          document.getElementById('create-profile').style.display = 'block';
+          document.getElementById('post-news-btn').style.display = 'none';
+          console.log('No profile found, showing create profile form');
+        } else {
+          profileId = data.id;
+          document.getElementById('create-profile').style.display = 'none';
+          document.getElementById('post-news-btn').style.display = data.is_banned ? 'none' : 'block';
+          if (data.is_banned) showMessage('Your profile is banned!', 'error');
+          console.log('Profile loaded:', data.username);
+        }
+      } catch (error) {
+        console.error('Check profile error:', error);
+        showMessage(`Profile check failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function createProfile() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const username = document.getElementById('profile-username').value.trim();
+        const name = document.getElementById('profile-name').value.trim();
+        const file = document.getElementById('profile-picture').files[0];
+
+        if (!username || !name) throw new Error('Username and name are required');
+
+        let profilePicture = null;
+        if (file) {
+          const { data, error } = await supabase.storage
+            .from('profiles')
+            .upload(`public/${sessionId}_${Date.now()}_${file.name}`, file);
+          if (error) throw new Error(`Profile picture upload error: ${error.message}`);
+          profilePicture = `${SUPABASE_URL}/storage/v1/object/public/profiles/${data.path}`;
+        }
+
+        const { error } = await supabase.from('profiles').insert({
+          id: sessionId,
+          username,
+          name,
+          profile_picture: profilePicture,
+          is_banned: false,
+        });
+        if (error) throw new Error(`Profile insert error: ${error.message}`);
+
+        showMessage('Profile created successfully!', 'success');
+        document.getElementById('create-profile').style.display = 'none';
+        document.getElementById('post-news-btn').style.display = 'block';
+        document.getElementById('profile-username').value = '';
+        document.getElementById('profile-name').value = '';
+        document.getElementById('profile-picture').value = '';
+        checkProfile();
+        console.log('Profile created:', username);
+      } catch (error) {
+        console.error('Create profile error:', error);
+        showMessage(`Profile creation failed: ${error.message}`, 'error');
+      }
+    }
+
+    function showCreateProfile() {
+      try {
+        document.getElementById('create-profile').style.display = 'block';
+        document.getElementById('post-news').style.display = 'none';
+        console.log('Create profile form shown');
+      } catch (error) {
+        console.error('Show create profile error:', error);
+        showMessage(`Failed to show profile form: ${error.message}`, 'error');
+      }
+    }
+
+    function showPostNews() {
+      try {
+        document.getElementById('post-news').style.display = 'block';
+        document.getElementById('create-profile').style.display = 'none';
+        console.log('Post news form shown');
+      } catch (error) {
+        console.error('Show post news error:', error);
+        showMessage(`Failed to show news form: ${error.message}`, 'error');
+      }
+    }
+
+    async function postNews() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const title = document.getElementById('news-title').value.trim();
+        const content = document.getElementById('news-content').value.trim();
+        const youtubeLink = document.getElementById('news-youtube').value.trim();
+        const file = document.getElementById('news-image').files[0];
+
+        if (!title || !content) throw new Error('Title and content are required');
+
+        let imageUrl = null;
+        if (file) {
+          const { data, error } = await supabase.storage
+            .from('news')
+            .upload(`public/user/${sessionId}_${Date.now()}_${file.name}`, file);
+          if (error) throw new Error(`Image upload error: ${error.message}`);
+          imageUrl = `${SUPABASE_URL}/storage/v1/object/public/news/${data.path}`;
+        }
+
+        const { error } = await supabase.from('news').insert({
+          title,
+          content,
+          youtube_link: youtubeLink || null,
+          image_url: imageUrl,
+          profile_id: profileId,
+          is_admin: false,
+        });
+        if (error) throw new Error(`News insert error: ${error.message}`);
+
+        showMessage('News posted successfully!', 'success');
+        document.getElementById('news-title').value = '';
+        document.getElementById('news-content').value = '';
+        document.getElementById('news-youtube').value = '';
+        document.getElementById('news-image').value = '';
+        loadNews();
+        console.log('News posted:', title);
+      } catch (error) {
+        console.error('Post news error:', error);
+        showMessage(`News posting failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function loadNews() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from('news')
+          .select('*, profiles(username, name, profile_picture)')
+          .order('created_at', { ascending: false });
+        if (error) throw new Error(`News fetch error: ${error.message}`);
+
+        const newsList = document.getElementById('news-list');
+        newsList.innerHTML = '';
+        if (data.length === 0) {
+          newsList.innerHTML = '<p>No news found.</p>';
+          return;
+        }
+        data.forEach(news => {
+          if (viewTimers[news.id]) clearTimeout(viewTimers[news.id]);
+          viewTimers[news.id] = setTimeout(() => incrementViewCount(news.id), 3000);
+          newsList.innerHTML += `
+            <div class="news-card">
+              <p><img src="${news.profiles?.profile_picture || 'https://via.placeholder.com/32'}" class="profile-pic">${news.profiles?.username || 'Anonymous'} (${news.profiles?.name || 'Unknown'})</p>
+              <h3>${news.title}</h3>
+              <p>${news.content}</p>
+              ${news.image_url ? `<img src="${news.image_url}" alt="News Image">` : ''}
+              ${news.youtube_link ? `<p><a href="${news.youtube_link}" target="_blank">Watch on YouTube</a></p>` : ''}
+              <p class="views">Views: ${news.views}</p>
+              <div id="comments-${news.id}"></div>
+              <textarea id="comment-input-${news.id}" placeholder="Add a comment"></textarea>
+              <button onclick="postComment('${news.id}')">Comment</button>
+            </div>
+          `;
+          loadComments(news.id);
+        });
+        console.log('News loaded:', data.length);
+      } catch (error) {
+        console.error('Load news error:', error);
+        showMessage(`Failed to load news: ${error.message}`, 'error');
+      }
+    }
+
+    async function incrementViewCount(newsId) {
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { error } = await supabase
+          .from('news')
+          .update({ views: supabase.raw('views + 1') })
+          .eq('id', newsId);
+        if (error) throw new Error(`View count update error: ${error.message}`);
+        console.log('View count incremented for news:', newsId);
+      } catch (error) {
+        console.error('Increment view count error:', error);
+        showMessage(`Failed to update view count: ${error.message}`, 'error');
+      }
+    }
+
+    async function postComment(newsId) {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const content = document.getElementById(`comment-input-${newsId}`).value.trim();
+        if (!content) throw new Error('Comment content is empty');
+        if (!profileId) throw new Error('No profile found. Please create a profile first.');
+
+        const { error } = await supabase.from('comments').insert({
+          news_id: newsId,
+          content,
+          profile_id: profileId,
+        });
+        if (error) throw new Error(`Comment insert error: ${error.message}`);
+
+        showMessage('Comment posted successfully!', 'success');
+        document.getElementById(`comment-input-${newsId}`).value = '';
+        loadComments(newsId);
+        console.log('Comment posted for news:', newsId);
+      } catch (error) {
+        console.error('Post comment error:', error);
+        showMessage(`Comment posting failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function loadComments(newsId) {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from('comments')
+          .select('*, profiles(username, name, profile_picture)')
+          .eq('news_id', newsId)
+          .order('created_at', { ascending: true });
+        if (error) throw new Error(`Comments fetch error: ${error.message}`);
+
+        const commentsDiv = document.getElementById(`comments-${newsId}`);
+        commentsDiv.innerHTML = '';
+        if (data.length === 0) {
+          commentsDiv.innerHTML = '<p>No comments found.</p>';
+          return;
+        }
+        const renderComment = (comment, isReply = false) => {
+          commentsDiv.innerHTML += `
+            <div class="comment ${isReply ? 'reply' : ''}">
+              <p><img src="${comment.profiles?.profile_picture || 'https://via.placeholder.com/32'}" class="profile-pic">${comment.profiles?.username || 'Anonymous'}</p>
+              <p>${comment.content}</p>
+              <button onclick="showReplyForm('${comment.id}', '${newsId}')">Reply</button>
+              <div id="reply-form-${comment.id}" style="display: none;">
+                <textarea id="reply-input-${comment.id}" placeholder="Reply"></textarea>
+                <button onclick="postReply('${comment.id}', '${newsId}')">Post Reply</button>
+              </div>
+            </div>
+          `;
+          const replies = data.filter(c => c.parent_id === comment.id);
+          replies.forEach(reply => renderComment(reply, true));
+        };
+        data.filter(c => !c.parent_id).forEach(comment => renderComment(comment));
+        console.log('Comments loaded for news:', newsId);
+      } catch (error) {
+        console.error('Load comments error:', error);
+        showMessage(`Failed to load comments: ${error.message}`, 'error');
+      }
+    }
+
+    function showReplyForm(commentId, newsId) {
+      try {
+        document.getElementById(`reply-form-${commentId}`).style.display = 'block';
+        console.log('Showing reply form for comment:', commentId);
+      } catch (error) {
+        console.error('Show reply form error:', error);
+        showMessage(`Reply form display failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function postReply(commentId, newsId) {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const content = document.getElementById(`reply-input-${commentId}`).value.trim();
+        if (!content) throw new Error('Reply content is empty');
+        if (!profileId) throw new Error('No profile found. Please create a profile first.');
+
+        const { error } = await supabase.from('comments').insert({
+          news_id: newsId,
+          content,
+          parent_id: commentId,
+          profile_id: profileId,
+        });
+        if (error) throw new Error(`Reply insert error: ${error.message}`);
+
+        showMessage('Reply posted successfully!', 'success');
+        document.getElementById(`reply-input-${commentId}`).value = '';
+        document.getElementById(`reply-form-${commentId}`).style.display = 'none';
+        loadComments(newsId);
+        console.log('Reply posted for comment:', commentId);
+      } catch (error) {
+        console.error('Post reply error:', error);
+        showMessage(`Reply posting failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function loadSupportMessages() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const { data, error } = await supabase
+          .from('support_messages')
+          .select('*, profiles(username, name)')
+          .order('created_at', { ascending: true });
+        if (error) throw new Error(`Support messages fetch error: ${error.message}`);
+
+        const messagesDiv = document.getElementById('support-messages');
+        messagesDiv.innerHTML = '';
+        if (data.length === 0) {
+          messagesDiv.innerHTML = '<p>No support messages found.</p>';
+          return;
+        }
+        data.forEach(msg => {
+          messagesDiv.innerHTML += `
+            <div class="message ${msg.is_from_user ? 'user' : 'admin'}">
+              <p>${msg.profiles?.username || 'Admin'} (${msg.profiles?.name || 'Admin'}): ${msg.content}</p>
+              <p>${new Date(msg.created_at).toLocaleString()}</p>
+            </div>
+          `;
+        });
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        console.log('Support messages loaded:', data.length);
+      } catch (error) {
+        console.error('Load support messages error:', error);
+        showMessage(`Failed to load support messages: ${error.message}`, 'error');
+      }
+    }
+
+    async function sendSupportMessage() {
+      if (!(await checkInternet())) return;
+      if (!supabase) {
+        console.error('Supabase client not initialized');
+        showMessage('Database not connected.', 'error');
+        return;
+      }
+      try {
+        const content = document.getElementById('support-input').value.trim();
+        if (!content) throw new Error('Support message is empty');
+        if (!profileId) throw new Error('No profile found. Please create a profile first.');
+
+        const { error } = await supabase.from('support_messages').insert({
+          content,
+          is_from_user: true,
+          profile_id: profileId,
+        });
+        if (error) throw new Error(`Support message insert error: ${error.message}`);
+
+        const telegramResponse = await fetch(`https://api.telegram.org/bot${TELEGRAM_BOT_TOKEN}/sendMessage`, {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            chat_id: TELEGRAM_GROUP_ID,
+            text: `Support Message from ${profileId}: ${content}`,
+          }),
+        });
+        if (!telegramResponse.ok) {
+          throw new Error(`Telegram API request failed: ${telegramResponse.statusText}`);
+        }
+
+        showMessage('Support message sent!', 'success');
+        document.getElementById('support-input').value = '';
+        loadSupportMessages();
+        console.log('Support message sent:', content);
+      } catch (error) {
+        console.error('Send support message error:', error);
+        showMessage(`Support message failed: ${error.message}`, 'error');
+      }
+    }
+
+    async function loadTelegramPosts() {
+      try {
+        document.getElementById('telegram-posts').innerHTML = '<p>Telegram posts loading... (Placeholder)</p>';
+        console.log('Loading Telegram posts (placeholder)');
+      } catch (error) {
+        console.error('Load Telegram posts error:', error);
+        showMessage(`Failed to load Telegram posts: ${error.message}`, 'error');
+      }
+    }
+
+    function setupRealtimeSubscriptions() {
+      if (!supabase || typeof supabase.channel !== 'function') {
+        console.error('Cannot setup subscriptions: Supabase client or channel method not available');
+        showMessage('Realtime subscriptions failed: Database not properly initialized.', 'error');
+        return;
+      }
+
+      supabase
+        .channel('news')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, loadNews)
+        .subscribe((status, err) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('Subscribed to news channel');
+          } else if (err) {
+            console.error('News subscription error:', err);
+            showMessage(`News subscription failed: ${err.message}`, 'error');
+          }
+        });
+
+      supabase
+        .channel('support_messages')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'support_messages' }, loadSupportMessages)
+        .subscribe((status, err) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('Subscribed to support messages channel');
+          } else if (err) {
+            console.error('Support messages subscription error:', err);
+            showMessage(`Support messages subscription failed: ${err.message}`, 'error');
+          }
+        });
+
+      supabase
+        .channel('profiles')
+        .on('postgres_changes', { event: '*', schema: 'public', table: 'profiles' }, checkProfile)
+        .subscribe((status, err) => {
+          if (status === 'SUBSCRIBED') {
+            console.log('Subscribed to profiles channel');
+          } else if (err) {
+            console.error('Profiles subscription error:', err);
+            showMessage(`Profiles subscription failed: ${err.message}`, 'error');
+          }
+        });
+    }
+
+    // Initialize Supabase client on page load
+    window.addEventListener('load', () => initializeSupabase());
+  </script>
+</body>
+</html>
