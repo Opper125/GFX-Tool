@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPS GFX Tool - Admin Dashboard</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body {
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      padding: 20px;
+      background: linear-gradient(180deg, #1a1a1a, #2a2a2a);
+      position: relative;
+      overflow-x: hidden;
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+    body.dashboard-active {
+      background: url('https://upload.wikimedia.org/wikipedia/commons/4/48/Myanmar_map.png') no-repeat center center / cover;
+      animation: mapZoom 20s ease-in-out infinite;
+    }
+    @keyframes mapZoom { 0% { background-size: 100%; } 50% { background-size: 110%; } 100% { background-size: 100%; } }
+    body::before {
+      content: '';
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 200px;
+      background: url('https://i.imgur.com/4Dwaves.png') repeat-x bottom;
+      background-size: 2000px 200px;
+      animation: waveAnimation 10s linear infinite;
+      filter: drop-shadow(0 0 20px rgba(0, 191, 255, 0.5));
+    }
+    @keyframes waveAnimation { 0% { background-position-x: 0; } 100% { background-position-x: 2000px; } }
+    .container {
+      background: rgba(34, 34, 34, 0.9);
+      padding: 24px;
+      border-radius: 16px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.5);
+      animation: fadeIn 0.8s ease-out;
+      backdrop-filter: blur(10px);
+    }
+    @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+    h1, h2, h3 { color: #ffd700; margin-bottom: 16px; text-align: center; }
+    input, button { width: 100%; padding: 12px; margin: 12px 0; border-radius: 8px; }
+    #status { color: #ff4444; text-align: center; }
+    .success { color: #44ff44; }
+    .admin-badge { position: fixed; top: 16px; right: 16px; background: #ff4444; padding: 8px; border-radius: 20px; }
+    #admin-content > div { display: none; }
+  </style>
+</head>
+<body>
+  <div class="admin-badge">Admin</div>
+  <div class="container">
+    <h1>FPS GFX Tool - Admin Dashboard</h1>
+    <div id="status"></div>
+    <input type="text" id="admin-key" placeholder="Enter Admin Key" required>
+    <button onclick="adminLogin()">Login</button>
+    <div id="admin-content">
+      <h2>Admin Panel</h2>
+      <div id="manage-about">
+        <h3>Manage About</h3>
+        <input type="text" id="about-telegram" placeholder="Telegram Link">
+        <input type="text" id="about-viber" placeholder="Viber Link">
+        <input type="text" id="about-phone" placeholder="Phone Number">
+        <button onclick="updateAbout()">Update About</button>
+      </div>
+      <div id="manage-keys">
+        <h3>Manage Keys</h3>
+        <input type="text" id="key-text" placeholder="Key Text">
+        <button onclick="createKey()">Create Key</button>
+        <div id="keys-list"></div>
+      </div>
+      <div id="manage-users">
+        <h3>Manage Users</h3>
+        <div id="users-list"></div>
+      </div>
+      <div id="manage-news">
+        <h3>Manage News</h3>
+        <input type="text" id="news-title" placeholder="Title">
+        <textarea id="news-content" placeholder="Content"></textarea>
+        <button onclick="postNews()">Post News</button>
+        <div id="news-list"></div>
+      </div>
+      <div id="manage-support">
+        <h3>Manage Support</h3>
+        <div id="support-messages"></div>
+        <textarea id="support-reply" placeholder="Reply to user"></textarea>
+        <button onclick="sendSupportReply()">Send Reply</button>
+      </div>
+      <div class="menu">
+        <button onclick="showSection('manage-about')">About</button>
+        <button onclick="showSection('manage-keys')">Keys</button>
+        <button onclick="showSection('manage-users')">Users</button>
+        <button onclick="showSection('manage-news')">News</button>
+        <button onclick="showSection('manage-support')">Support</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let isOnline = navigator.onLine;
+    let cachedData = JSON.parse(localStorage.getItem('adminData') || '{}');
+
+    window.addEventListener('online', () => {
+      isOnline = true;
+      document.getElementById('status').innerText = 'Online';
+      syncCachedData();
+    });
+
+    window.addEventListener('offline', () => {
+      isOnline = false;
+      document.getElementById('status').innerText = 'Offline';
+    });
+
+    function showMessage(message, type = 'error') {
+      const status = document.getElementById('status');
+      status.innerText = message;
+      status.className = type === 'success' ? 'success' : '';
+      setTimeout(() => status.innerText = '', 5000);
+    }
+
+    function adminLogin() {
+      const key = document.getElementById('admin-key').value.trim();
+      if (key !== 'admin123') { // Replace with secure key
+        showMessage('Invalid admin key.');
+        return;
+      }
+      showMessage('Admin login successful!', 'success');
+      document.getElementById('admin-key').style.display = 'none';
+      document.querySelector('button[onclick="adminLogin()"]').style.display = 'none';
+      document.getElementById('admin-content').style.display = 'block';
+      document.body.classList.add('dashboard-active');
+      loadAllData();
+    }
+
+    function showSection(section) {
+      document.querySelectorAll('#admin-content > div').forEach(div => div.style.display = 'none');
+      document.getElementById(section).style.display = 'block';
+    }
+
+    function updateAbout() {
+      const telegram = document.getElementById('about-telegram').value.trim();
+      const viber = document.getElementById('about-viber').value.trim();
+      const phone = document.getElementById('about-phone').value.trim();
+      if (!cachedData.about) cachedData.about = {};
+      cachedData.about = { telegram, viber, phone, timestamp: Date.now() };
+      localStorage.setItem('adminData', JSON.stringify(cachedData));
+      showMessage('About updated in cache.', 'success');
+      if (isOnline) syncCachedData();
+    }
+
+    function createKey() {
+      const keyText = document.getElementById('key-text').value.trim();
+      if (!keyText) {
+        showMessage('Please enter a key.');
+        return;
+      }
+      if (!cachedData.keys) cachedData.keys = {};
+      cachedData.keys[keyText] = { isValid: true, timestamp: Date.now() };
+      localStorage.setItem('adminData', JSON.stringify(cachedData));
+      showMessage('Key created in cache.', 'success');
+      document.getElementById('key-text').value = '';
+      loadKeys();
+      if (isOnline) syncCachedData();
+    }
+
+    function loadKeys() {
+      const keysList = document.getElementById('keys-list');
+      keysList.innerHTML = '';
+      if (cachedData.keys) {
+        for (let key in cachedData.keys) {
+          keysList.innerHTML += `<p>${key} (Created: ${new Date(cachedData.keys[key].timestamp).toLocaleString()})</p>`;
+        }
+      }
+      showMessage('Keys loaded from cache.', 'success');
+    }
+
+    function loadUsers() {
+      const usersList = document.getElementById('users-list');
+      usersList.innerHTML = '';
+      if (cachedData.users) {
+        for (let user in cachedData.users) {
+          usersList.innerHTML += `<p>${user} (Status: ${cachedData.users[user].isBanned ? 'Banned' : 'Active'})</p>`;
+        }
+      }
+      showMessage('Users loaded from cache.', 'success');
+    }
+
+    function postNews() {
+      const title = document.getElementById('news-title').value.trim();
+      const content = document.getElementById('news-content').value.trim();
+      if (!title || !content) {
+        showMessage('Title and content are required.');
+        return;
+      }
+      if (!cachedData.news) cachedData.news = [];
+      cachedData.news.push({ title, content, timestamp: Date.now() });
+      localStorage.setItem('adminData', JSON.stringify(cachedData));
+      showMessage('News posted in cache.', 'success');
+      document.getElementById('news-title').value = '';
+      document.getElementById('news-content').value = '';
+      loadNews();
+      if (isOnline) syncCachedData();
+    }
+
+    function loadNews() {
+      const newsList = document.getElementById('news-list');
+      newsList.innerHTML = '';
+      if (cachedData.news) {
+        cachedData.news.forEach(news => {
+          newsList.innerHTML += `<p>${news.title} (${new Date(news.timestamp).toLocaleString()})</p>`;
+        });
+      }
+      showMessage('News loaded from cache.', 'success');
+    }
+
+    function sendSupportReply() {
+      const reply = document.getElementById('support-reply').value.trim();
+      if (!reply) {
+        showMessage('Please enter a reply.');
+        return;
+      }
+      if (!cachedData.support) cachedData.support = [];
+      cachedData.support.push({ reply, timestamp: Date.now(), isAdmin: true });
+      localStorage.setItem('adminData', JSON.stringify(cachedData));
+      showMessage('Reply sent to cache.', 'success');
+      document.getElementById('support-reply').value = '';
+      loadSupportMessages();
+      if (isOnline) syncCachedData();
+    }
+
+    function loadSupportMessages() {
+      const supportMessages = document.getElementById('support-messages');
+      supportMessages.innerHTML = '';
+      if (cachedData.support) {
+        cachedData.support.forEach(msg => {
+          supportMessages.innerHTML += `<p>${msg.isAdmin ? 'Admin' : 'User'}: ${msg.reply} (${new Date(msg.timestamp).toLocaleString()})</p>`;
+        });
+      }
+      showMessage('Support messages loaded from cache.', 'success');
+    }
+
+    function loadAllData() {
+      loadKeys();
+      loadUsers();
+      loadNews();
+      loadSupportMessages();
+      showSection('manage-keys'); // Default section
+    }
+
+    function syncCachedData() {
+      if (isOnline) {
+        fetch('/sync-admin-data', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(cachedData)
+        }).then(() => {
+          showMessage('Data synced successfully.', 'success');
+        }).catch(() => {
+          showMessage('Sync failed. Data remains cached.');
+        });
+      }
+    }
+
+    document.getElementById('status').innerText = isOnline ? 'Online' : 'Offline';
+  </script>
+</body>
+</html>
