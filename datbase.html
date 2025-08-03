@@ -1,0 +1,1117 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>FPS GFX Tool - Complete Database SQL</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/themes/prism-dark.min.css">
+    <style>
+        * {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            background: linear-gradient(135deg, #0f172a 0%, #1e293b 50%, #0f172a 100%);
+            min-height: 100vh;
+        }
+        
+        .sql-container {
+            background: rgba(15, 23, 42, 0.95);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(254, 203, 0, 0.2);
+            box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.8);
+        }
+        
+        .copy-btn {
+            background: linear-gradient(45deg, #FECB00, #34B233);
+            color: #000;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+        
+        .copy-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(254, 203, 0, 0.4);
+        }
+        
+        .sql-code {
+            background: #1e293b;
+            color: #e2e8f0;
+            font-family: 'Monaco', 'Menlo', 'Ubuntu Mono', monospace;
+            font-size: 14px;
+            line-height: 1.6;
+            border-radius: 12px;
+            overflow-x: auto;
+        }
+        
+        .keyword { color: #60a5fa; }
+        .string { color: #34d399; }
+        .comment { color: #9ca3af; }
+        .function { color: #fbbf24; }
+        
+        @media (max-width: 768px) {
+            .sql-code {
+                font-size: 12px;
+            }
+        }
+    </style>
+</head>
+<body class="text-white">
+    <div class="container mx-auto px-4 py-8 max-w-7xl">
+        <!-- Header -->
+        <div class="text-center mb-8">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4 text-yellow-400">
+                <i class="fas fa-database mr-3"></i>
+                FPS GFX Tool Database
+            </h1>
+            <p class="text-xl text-gray-300 mb-6">Complete SQL Script for Supabase Integration</p>
+            <div class="flex flex-wrap justify-center gap-4">
+                <button onclick="copyAllSQL()" class="copy-btn px-6 py-3 rounded-lg font-bold transition-all">
+                    <i class="fas fa-copy mr-2"></i>
+                    Copy Complete SQL
+                </button>
+                <button onclick="downloadSQL()" class="bg-blue-600 hover:bg-blue-700 px-6 py-3 rounded-lg font-bold transition-all">
+                    <i class="fas fa-download mr-2"></i>
+                    Download SQL File
+                </button>
+            </div>
+        </div>
+
+        <!-- Instructions -->
+        <div class="sql-container rounded-2xl p-6 mb-8">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-4">
+                <i class="fas fa-info-circle mr-2"></i>
+                Setup Instructions (အသုံးပြုပုံ)
+            </h2>
+            <div class="bg-gray-800 rounded-lg p-4 mb-4">
+                <h3 class="text-lg font-semibold text-green-400 mb-3">
+                    <i class="fas fa-list-ol mr-2"></i>
+                    Step by Step Guide:
+                </h3>
+                <ol class="text-gray-300 space-y-2 list-decimal list-inside">
+                    <li>Create a new Supabase project at <a href="https://supabase.com" class="text-blue-400 hover:underline">supabase.com</a></li>
+                    <li>Go to SQL Editor in your Supabase dashboard</li>
+                    <li>Copy the complete SQL script below</li>
+                    <li>Paste and run the SQL script in Supabase</li>
+                    <li>Update the CONFIG section in both index.html and admin.html with your:
+                        <ul class="list-disc list-inside ml-4 mt-2 space-y-1">
+                            <li>SUPABASE_URL (Your project URL)</li>
+                            <li>SUPABASE_ANON_KEY (Your anon/public key)</li>
+                        </ul>
+                    </li>
+                    <li>Deploy both HTML files to Netlify or any hosting service</li>
+                    <li>Your FPS GFX Tool is ready to use!</li>
+                </ol>
+            </div>
+            
+            <div class="bg-yellow-900 bg-opacity-50 border border-yellow-600 rounded-lg p-4">
+                <h4 class="font-bold text-yellow-400 mb-2">
+                    <i class="fas fa-exclamation-triangle mr-2"></i>
+                    Important Notes:
+                </h4>
+                <ul class="text-yellow-200 space-y-1 list-disc list-inside">
+                    <li>This SQL creates all necessary tables, policies, and functions</li>
+                    <li>Includes complete Row Level Security (RLS) setup</li>
+                    <li>Realtime features are enabled for all tables</li>
+                    <li>Storage buckets for profile pictures and news images</li>
+                    <li>Sample data is included for testing</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- SQL Script -->
+        <div class="sql-container rounded-2xl p-6">
+            <div class="flex justify-between items-center mb-4">
+                <h2 class="text-2xl font-bold text-yellow-400">
+                    <i class="fas fa-code mr-2"></i>
+                    Complete SQL Script
+                </h2>
+                <button onclick="copyAllSQL()" class="copy-btn px-4 py-2 rounded-lg font-bold text-sm">
+                    <i class="fas fa-copy mr-1"></i>
+                    Copy
+                </button>
+            </div>
+            
+            <div class="sql-code p-6 max-h-96 overflow-y-auto" id="sql-content">
+<pre><code>-- ================================
+-- FPS GFX TOOL DATABASE SETUP - COMPLETE VERSION
+-- အပြည့်အဝ Myanmar Gaming Tool အတွက် Database Setup
+-- Compatible with index.html and admin.html
+-- ================================
+
+-- Enable necessary extensions
+CREATE EXTENSION IF NOT EXISTS "uuid-ossp" WITH SCHEMA extensions;
+
+-- ================================
+-- 1. ABOUT TABLE (ဆက်သွယ်ရန် အချက်အလက်များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS about (
+    id TEXT PRIMARY KEY DEFAULT 'main',
+    telegram TEXT,
+    viber TEXT,
+    phone TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insert default about data
+INSERT INTO about (id, telegram, viber, phone) 
+VALUES ('main', 'https://t.me/fpsgfxtool', 'viber://chat?number=+959123456789', '+959123456789')
+ON CONFLICT (id) DO UPDATE SET
+    telegram = EXCLUDED.telegram,
+    viber = EXCLUDED.viber,
+    phone = EXCLUDED.phone;
+
+-- ================================
+-- 2. DEVICES TABLE (ကိရိယာများ)
+-- ================================
+CREATE TABLE IF NOT EXISTS devices (
+    id TEXT PRIMARY KEY,
+    user_agent TEXT NOT NULL,
+    architecture TEXT,
+    android_version TEXT,
+    model TEXT,
+    ip_address TEXT,
+    browser_info TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 3. KEYS TABLE (Access Keys များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS keys (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    key_text TEXT UNIQUE NOT NULL,
+    expires_at TIMESTAMP WITH TIME ZONE NOT NULL,
+    duration_type TEXT NOT NULL CHECK (duration_type IN ('days', 'weeks', 'months')),
+    duration_value INTEGER NOT NULL,
+    max_devices INTEGER NOT NULL DEFAULT 1,
+    is_active BOOLEAN DEFAULT TRUE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- Insert sample keys
+INSERT INTO keys (key_text, expires_at, duration_type, duration_value, max_devices, is_active)
+VALUES 
+    ('Opper_FPS', NOW() + INTERVAL '365 days', 'days', 365, 100, TRUE),
+    ('DEMO123', NOW() + INTERVAL '30 days', 'days', 30, 2, TRUE),
+    ('TRIAL456', NOW() + INTERVAL '7 days', 'days', 7, 1, TRUE)
+ON CONFLICT (key_text) DO UPDATE SET
+    expires_at = EXCLUDED.expires_at,
+    max_devices = EXCLUDED.max_devices;
+
+-- ================================
+-- 4. SESSIONS TABLE (Session များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS sessions (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    key_id UUID NOT NULL REFERENCES keys(id) ON DELETE CASCADE,
+    device_id TEXT NOT NULL REFERENCES devices(id) ON DELETE CASCADE,
+    is_active BOOLEAN DEFAULT TRUE,
+    last_activity TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(key_id, device_id)
+);
+
+-- ================================
+-- 5. PROFILES TABLE (အသုံးပြုသူများ၏ Profile များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS profiles (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    key_id UUID NOT NULL REFERENCES keys(id) ON DELETE CASCADE,
+    username TEXT UNIQUE NOT NULL,
+    name TEXT NOT NULL,
+    profile_picture TEXT,
+    bio TEXT,
+    is_banned BOOLEAN DEFAULT FALSE,
+    is_verified BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 6. GENERATED FILES TABLE (ဖန်တီးထားသော Files များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS generated_files (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    session_id UUID NOT NULL REFERENCES sessions(id) ON DELETE CASCADE,
+    game_version TEXT NOT NULL,
+    fps INTEGER NOT NULL,
+    bit_type TEXT NOT NULL,
+    ipad_view BOOLEAN DEFAULT FALSE,
+    dpi INTEGER,
+    resolution TEXT,
+    file_path TEXT NOT NULL,
+    download_count INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 7. NEWS TABLE (သတင်းများ)
+-- ================================
+CREATE TABLE IF NOT EXISTS news (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    title TEXT NOT NULL,
+    content TEXT NOT NULL,
+    youtube_link TEXT,
+    video_url TEXT,
+    image_url TEXT,
+    profile_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    is_admin BOOLEAN DEFAULT FALSE,
+    views INTEGER DEFAULT 0,
+    likes INTEGER DEFAULT 0,
+    is_featured BOOLEAN DEFAULT FALSE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 8. COMMENTS TABLE (မှတ်ချက်များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS comments (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    news_id UUID NOT NULL REFERENCES news(id) ON DELETE CASCADE,
+    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    parent_id UUID REFERENCES comments(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    likes INTEGER DEFAULT 0,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 9. LIKES TABLE (Like များ)
+-- ================================
+CREATE TABLE IF NOT EXISTS likes (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    news_id UUID REFERENCES news(id) ON DELETE CASCADE,
+    comment_id UUID REFERENCES comments(id) ON DELETE CASCADE,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(profile_id, news_id),
+    UNIQUE(profile_id, comment_id),
+    CHECK ((news_id IS NOT NULL AND comment_id IS NULL) OR (news_id IS NULL AND comment_id IS NOT NULL))
+);
+
+-- ================================
+-- 10. CHAT CONVERSATIONS TABLE (စကားပြောခန်းများ)
+-- ================================
+CREATE TABLE IF NOT EXISTS chat_conversations (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    participant1_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    participant2_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    last_message_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+    UNIQUE(participant1_id, participant2_id),
+    CHECK (participant1_id != participant2_id)
+);
+
+-- ================================
+-- 11. CHAT MESSAGES TABLE (စကားပြောမှတ်တမ်းများ)
+-- ================================
+CREATE TABLE IF NOT EXISTS chat_messages (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    conversation_id UUID NOT NULL REFERENCES chat_conversations(id) ON DELETE CASCADE,
+    sender_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    content TEXT NOT NULL,
+    is_read BOOLEAN DEFAULT FALSE,
+    message_type TEXT DEFAULT 'text' CHECK (message_type IN ('text', 'image', 'file')),
+    file_url TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 12. SUPPORT MESSAGES TABLE (အကူအညီတောင်းခံမှုများ)
+-- ================================
+CREATE TABLE IF NOT EXISTS support_messages (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    profile_id UUID REFERENCES profiles(id) ON DELETE SET NULL,
+    content TEXT NOT NULL,
+    is_from_user BOOLEAN DEFAULT TRUE,
+    is_read BOOLEAN DEFAULT FALSE,
+    priority TEXT DEFAULT 'normal' CHECK (priority IN ('low', 'normal', 'high', 'urgent')),
+    status TEXT DEFAULT 'open' CHECK (status IN ('open', 'in_progress', 'resolved', 'closed')),
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- 13. USER ACTIVITIES TABLE (အသုံးပြုသူ လှုပ်ရှားမှုများ)
+-- ================================
+CREATE TABLE IF NOT EXISTS user_activities (
+    id UUID PRIMARY KEY DEFAULT extensions.uuid_generate_v4(),
+    profile_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+    activity_type TEXT NOT NULL,
+    activity_data JSONB,
+    ip_address TEXT,
+    user_agent TEXT,
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
+);
+
+-- ================================
+-- TRIGGERS FOR UPDATED_AT
+-- ================================
+
+-- Function to update updated_at column
+CREATE OR REPLACE FUNCTION public.update_updated_at_column()
+RETURNS TRIGGER AS $$
+BEGIN
+    NEW.updated_at = NOW();
+    RETURN NEW;
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Apply triggers to tables with updated_at
+CREATE TRIGGER update_about_updated_at 
+BEFORE UPDATE ON about 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_devices_updated_at 
+BEFORE UPDATE ON devices 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_keys_updated_at 
+BEFORE UPDATE ON keys 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_sessions_updated_at 
+BEFORE UPDATE ON sessions 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_profiles_updated_at 
+BEFORE UPDATE ON profiles 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_news_updated_at 
+BEFORE UPDATE ON news 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+CREATE TRIGGER update_comments_updated_at 
+BEFORE UPDATE ON comments 
+FOR EACH ROW 
+EXECUTE FUNCTION public.update_updated_at_column();
+
+-- ================================
+-- ROW LEVEL SECURITY (RLS) - အပြည့်အဝ Security Setup
+-- ================================
+
+-- Enable RLS on all tables
+ALTER TABLE about ENABLE ROW LEVEL SECURITY;
+ALTER TABLE devices ENABLE ROW LEVEL SECURITY;
+ALTER TABLE keys ENABLE ROW LEVEL SECURITY;
+ALTER TABLE sessions ENABLE ROW LEVEL SECURITY;
+ALTER TABLE profiles ENABLE ROW LEVEL SECURITY;
+ALTER TABLE generated_files ENABLE ROW LEVEL SECURITY;
+ALTER TABLE news ENABLE ROW LEVEL SECURITY;
+ALTER TABLE comments ENABLE ROW LEVEL SECURITY;
+ALTER TABLE likes ENABLE ROW LEVEL SECURITY;
+ALTER TABLE chat_conversations ENABLE ROW LEVEL SECURITY;
+ALTER TABLE chat_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE support_messages ENABLE ROW LEVEL SECURITY;
+ALTER TABLE user_activities ENABLE ROW LEVEL SECURITY;
+
+-- ABOUT table policies - allow all operations
+DROP POLICY IF EXISTS "Allow all access to about" ON about;
+CREATE POLICY "Allow all access to about" ON about FOR ALL USING (true);
+
+-- DEVICES table policies
+DROP POLICY IF EXISTS "Allow all access to devices" ON devices;
+CREATE POLICY "Allow all access to devices" ON devices FOR ALL USING (true);
+
+-- KEYS table policies
+DROP POLICY IF EXISTS "Allow all access to keys" ON keys;
+CREATE POLICY "Allow all access to keys" ON keys FOR ALL USING (true);
+
+-- SESSIONS table policies
+DROP POLICY IF EXISTS "Allow all access to sessions" ON sessions;
+CREATE POLICY "Allow all access to sessions" ON sessions FOR ALL USING (true);
+
+-- PROFILES table policies
+DROP POLICY IF EXISTS "Allow all access to profiles" ON profiles;
+CREATE POLICY "Allow all access to profiles" ON profiles FOR ALL USING (true);
+
+-- GENERATED_FILES table policies
+DROP POLICY IF EXISTS "Allow all access to generated_files" ON generated_files;
+CREATE POLICY "Allow all access to generated_files" ON generated_files FOR ALL USING (true);
+
+-- NEWS table policies
+DROP POLICY IF EXISTS "Allow all access to news" ON news;
+CREATE POLICY "Allow all access to news" ON news FOR ALL USING (true);
+
+-- COMMENTS table policies
+DROP POLICY IF EXISTS "Allow all access to comments" ON comments;
+CREATE POLICY "Allow all access to comments" ON comments FOR ALL USING (true);
+
+-- LIKES table policies
+DROP POLICY IF EXISTS "Allow all access to likes" ON likes;
+CREATE POLICY "Allow all access to likes" ON likes FOR ALL USING (true);
+
+-- CHAT_CONVERSATIONS table policies
+DROP POLICY IF EXISTS "Allow all access to chat_conversations" ON chat_conversations;
+CREATE POLICY "Allow all access to chat_conversations" ON chat_conversations FOR ALL USING (true);
+
+-- CHAT_MESSAGES table policies
+DROP POLICY IF EXISTS "Allow all access to chat_messages" ON chat_messages;
+CREATE POLICY "Allow all access to chat_messages" ON chat_messages FOR ALL USING (true);
+
+-- SUPPORT_MESSAGES table policies
+DROP POLICY IF EXISTS "Allow all access to support_messages" ON support_messages;
+CREATE POLICY "Allow all access to support_messages" ON support_messages FOR ALL USING (true);
+
+-- USER_ACTIVITIES table policies
+DROP POLICY IF EXISTS "Allow all access to user_activities" ON user_activities;
+CREATE POLICY "Allow all access to user_activities" ON user_activities FOR ALL USING (true);
+
+-- ================================
+-- STORAGE BUCKETS - File Storage အတွက်
+-- ================================
+
+-- Create storage buckets
+INSERT INTO storage.buckets (id, name, public) 
+VALUES 
+    ('profiles', 'profiles', true),
+    ('news', 'news', true),
+    ('chat-files', 'chat-files', true),
+    ('generated-files', 'generated-files', true)
+ON CONFLICT (id) DO UPDATE SET
+    public = EXCLUDED.public;
+
+-- Storage policies for all buckets
+DROP POLICY IF EXISTS "Allow public uploads to profiles bucket" ON storage.objects;
+CREATE POLICY "Allow public uploads to profiles bucket" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'profiles');
+
+DROP POLICY IF EXISTS "Allow public read from profiles bucket" ON storage.objects;
+CREATE POLICY "Allow public read from profiles bucket" ON storage.objects
+    FOR SELECT USING (bucket_id = 'profiles');
+
+DROP POLICY IF EXISTS "Allow public delete from profiles bucket" ON storage.objects;
+CREATE POLICY "Allow public delete from profiles bucket" ON storage.objects
+    FOR DELETE USING (bucket_id = 'profiles');
+
+-- News bucket policies
+DROP POLICY IF EXISTS "Allow public uploads to news bucket" ON storage.objects;
+CREATE POLICY "Allow public uploads to news bucket" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'news');
+
+DROP POLICY IF EXISTS "Allow public read from news bucket" ON storage.objects;
+CREATE POLICY "Allow public read from news bucket" ON storage.objects
+    FOR SELECT USING (bucket_id = 'news');
+
+DROP POLICY IF EXISTS "Allow public delete from news bucket" ON storage.objects;
+CREATE POLICY "Allow public delete from news bucket" ON storage.objects
+    FOR DELETE USING (bucket_id = 'news');
+
+-- Chat files bucket policies
+DROP POLICY IF EXISTS "Allow public uploads to chat-files bucket" ON storage.objects;
+CREATE POLICY "Allow public uploads to chat-files bucket" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'chat-files');
+
+DROP POLICY IF EXISTS "Allow public read from chat-files bucket" ON storage.objects;
+CREATE POLICY "Allow public read from chat-files bucket" ON storage.objects
+    FOR SELECT USING (bucket_id = 'chat-files');
+
+-- Generated files bucket policies
+DROP POLICY IF EXISTS "Allow public uploads to generated-files bucket" ON storage.objects;
+CREATE POLICY "Allow public uploads to generated-files bucket" ON storage.objects
+    FOR INSERT WITH CHECK (bucket_id = 'generated-files');
+
+DROP POLICY IF EXISTS "Allow public read from generated-files bucket" ON storage.objects;
+CREATE POLICY "Allow public read from generated-files bucket" ON storage.objects
+    FOR SELECT USING (bucket_id = 'generated-files');
+
+-- ================================
+-- INDEXES FOR PERFORMANCE - မြန်ဆန်မှုအတွက်
+-- ================================
+
+CREATE INDEX IF NOT EXISTS idx_keys_active ON keys(is_active);
+CREATE INDEX IF NOT EXISTS idx_keys_expires ON keys(expires_at);
+CREATE INDEX IF NOT EXISTS idx_keys_text ON keys(key_text);
+CREATE INDEX IF NOT EXISTS idx_sessions_active ON sessions(is_active);
+CREATE INDEX IF NOT EXISTS idx_sessions_device ON sessions(device_id);
+CREATE INDEX IF NOT EXISTS idx_sessions_key ON sessions(key_id);
+CREATE INDEX IF NOT EXISTS idx_profiles_username ON profiles(username);
+CREATE INDEX IF NOT EXISTS idx_profiles_banned ON profiles(is_banned);
+CREATE INDEX IF NOT EXISTS idx_profiles_key ON profiles(key_id);
+CREATE INDEX IF NOT EXISTS idx_news_created ON news(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_news_profile ON news(profile_id);
+CREATE INDEX IF NOT EXISTS idx_news_featured ON news(is_featured);
+CREATE INDEX IF NOT EXISTS idx_comments_news ON comments(news_id);
+CREATE INDEX IF NOT EXISTS idx_comments_parent ON comments(parent_id);
+CREATE INDEX IF NOT EXISTS idx_likes_profile ON likes(profile_id);
+CREATE INDEX IF NOT EXISTS idx_likes_news ON likes(news_id);
+CREATE INDEX IF NOT EXISTS idx_chat_conversations_participants ON chat_conversations(participant1_id, participant2_id);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_conversation ON chat_messages(conversation_id);
+CREATE INDEX IF NOT EXISTS idx_chat_messages_sender ON chat_messages(sender_id);
+CREATE INDEX IF NOT EXISTS idx_support_created ON support_messages(created_at DESC);
+CREATE INDEX IF NOT EXISTS idx_support_status ON support_messages(status);
+CREATE INDEX IF NOT EXISTS idx_user_activities_profile ON user_activities(profile_id);
+CREATE INDEX IF NOT EXISTS idx_user_activities_type ON user_activities(activity_type);
+CREATE INDEX IF NOT EXISTS idx_generated_files_session ON generated_files(session_id);
+
+-- ================================
+-- UTILITY FUNCTIONS - အထောက်အကူပြု Functions များ
+-- ================================
+
+-- Function to check key validity
+CREATE OR REPLACE FUNCTION public.is_key_valid(input_key_text TEXT)
+RETURNS BOOLEAN AS $$
+BEGIN
+    RETURN EXISTS (
+        SELECT 1 FROM keys 
+        WHERE key_text = input_key_text 
+        AND is_active = true 
+        AND expires_at > NOW()
+    );
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to get active session count for a key
+CREATE OR REPLACE FUNCTION public.get_active_session_count(input_key_uuid UUID)
+RETURNS INTEGER AS $$
+BEGIN
+    RETURN COALESCE((
+        SELECT COUNT(*)::INTEGER 
+        FROM sessions 
+        WHERE key_id = input_key_uuid AND is_active = true
+    ), 0);
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to increment news views
+CREATE OR REPLACE FUNCTION public.increment_news_views(input_news_id UUID)
+RETURNS INTEGER AS $$
+DECLARE
+    updated_views INTEGER;
+BEGIN
+    UPDATE news 
+    SET views = COALESCE(views, 0) + 1 
+    WHERE id = input_news_id
+    RETURNING views INTO updated_views;
+    
+    RETURN COALESCE(updated_views, 0);
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to validate session
+CREATE OR REPLACE FUNCTION public.validate_session(session_id_param UUID)
+RETURNS BOOLEAN AS $$
+DECLARE
+    session_record RECORD;
+BEGIN
+    SELECT s.*, k.expires_at, k.is_active as key_active
+    INTO session_record
+    FROM sessions s
+    JOIN keys k ON s.key_id = k.id
+    WHERE s.id = session_id_param;
+    
+    IF NOT FOUND THEN
+        RETURN false;
+    END IF;
+    
+    -- Check if session is active
+    IF NOT session_record.is_active THEN
+        RETURN false;
+    END IF;
+    
+    -- Check if key is active
+    IF NOT session_record.key_active THEN
+        UPDATE sessions SET is_active = false WHERE id = session_id_param;
+        RETURN false;
+    END IF;
+    
+    -- Check if key is expired
+    IF session_record.expires_at < NOW() THEN
+        UPDATE sessions SET is_active = false WHERE id = session_id_param;
+        UPDATE keys SET is_active = false WHERE id = session_record.key_id;
+        RETURN false;
+    END IF;
+    
+    RETURN true;
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to toggle like
+CREATE OR REPLACE FUNCTION public.toggle_like(profile_id_param UUID, news_id_param UUID DEFAULT NULL, comment_id_param UUID DEFAULT NULL)
+RETURNS BOOLEAN AS $$
+DECLARE
+    like_exists BOOLEAN := false;
+BEGIN
+    -- Check if like exists
+    IF news_id_param IS NOT NULL THEN
+        SELECT EXISTS(SELECT 1 FROM likes WHERE profile_id = profile_id_param AND news_id = news_id_param) INTO like_exists;
+        
+        IF like_exists THEN
+            DELETE FROM likes WHERE profile_id = profile_id_param AND news_id = news_id_param;
+            UPDATE news SET likes = GREATEST(COALESCE(likes, 1) - 1, 0) WHERE id = news_id_param;
+            RETURN false;
+        ELSE
+            INSERT INTO likes (profile_id, news_id) VALUES (profile_id_param, news_id_param);
+            UPDATE news SET likes = COALESCE(likes, 0) + 1 WHERE id = news_id_param;
+            RETURN true;
+        END IF;
+    ELSIF comment_id_param IS NOT NULL THEN
+        SELECT EXISTS(SELECT 1 FROM likes WHERE profile_id = profile_id_param AND comment_id = comment_id_param) INTO like_exists;
+        
+        IF like_exists THEN
+            DELETE FROM likes WHERE profile_id = profile_id_param AND comment_id = comment_id_param;
+            UPDATE comments SET likes = GREATEST(COALESCE(likes, 1) - 1, 0) WHERE id = comment_id_param;
+            RETURN false;
+        ELSE
+            INSERT INTO likes (profile_id, comment_id) VALUES (profile_id_param, comment_id_param);
+            UPDATE comments SET likes = COALESCE(likes, 0) + 1 WHERE id = comment_id_param;
+            RETURN true;
+        END IF;
+    END IF;
+    
+    RETURN false;
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to create or get chat conversation
+CREATE OR REPLACE FUNCTION public.get_or_create_conversation(user1_id UUID, user2_id UUID)
+RETURNS UUID AS $$
+DECLARE
+    conversation_id UUID;
+    min_id UUID;
+    max_id UUID;
+BEGIN
+    -- Ensure consistent ordering
+    IF user1_id < user2_id THEN
+        min_id := user1_id;
+        max_id := user2_id;
+    ELSE
+        min_id := user2_id;
+        max_id := user1_id;
+    END IF;
+    
+    -- Try to find existing conversation
+    SELECT id INTO conversation_id
+    FROM chat_conversations
+    WHERE (participant1_id = min_id AND participant2_id = max_id);
+    
+    -- If not found, create new one
+    IF conversation_id IS NULL THEN
+        INSERT INTO chat_conversations (participant1_id, participant2_id)
+        VALUES (min_id, max_id)
+        RETURNING id INTO conversation_id;
+    END IF;
+    
+    RETURN conversation_id;
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to log user activity
+CREATE OR REPLACE FUNCTION public.log_user_activity(
+    profile_id_param UUID,
+    activity_type_param TEXT,
+    activity_data_param JSONB DEFAULT NULL,
+    ip_address_param TEXT DEFAULT NULL,
+    user_agent_param TEXT DEFAULT NULL
+)
+RETURNS UUID AS $$
+DECLARE
+    activity_id UUID;
+BEGIN
+    INSERT INTO user_activities (profile_id, activity_type, activity_data, ip_address, user_agent)
+    VALUES (profile_id_param, activity_type_param, activity_data_param, ip_address_param, user_agent_param)
+    RETURNING id INTO activity_id;
+    
+    RETURN activity_id;
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- Function to ban/unban user
+CREATE OR REPLACE FUNCTION public.toggle_user_ban(profile_id_param UUID, ban_status BOOLEAN DEFAULT NULL)
+RETURNS BOOLEAN AS $$
+DECLARE
+    current_status BOOLEAN;
+    new_status BOOLEAN;
+BEGIN
+    SELECT is_banned INTO current_status FROM profiles WHERE id = profile_id_param;
+    
+    IF NOT FOUND THEN
+        RETURN false;
+    END IF;
+    
+    IF ban_status IS NULL THEN
+        new_status := NOT current_status;
+    ELSE
+        new_status := ban_status;
+    END IF;
+    
+    UPDATE profiles SET is_banned = new_status WHERE id = profile_id_param;
+    
+    -- Log the activity
+    PERFORM log_user_activity(
+        profile_id_param,
+        CASE WHEN new_status THEN 'user_banned' ELSE 'user_unbanned' END,
+        jsonb_build_object('previous_status', current_status)
+    );
+    
+    RETURN new_status;
+END;
+
+$$ LANGUAGE plpgsql SECURITY DEFINER;
+
+-- ================================
+-- REALTIME PUBLICATIONS - Realtime အင်္ဂါရပ်များ
+-- ================================
+
+ALTER PUBLICATION supabase_realtime ADD TABLE about;
+ALTER PUBLICATION supabase_realtime ADD TABLE keys;
+ALTER PUBLICATION supabase_realtime ADD TABLE devices;
+ALTER PUBLICATION supabase_realtime ADD TABLE sessions;
+ALTER PUBLICATION supabase_realtime ADD TABLE generated_files;
+ALTER PUBLICATION supabase_realtime ADD TABLE profiles;
+ALTER PUBLICATION supabase_realtime ADD TABLE news;
+ALTER PUBLICATION supabase_realtime ADD TABLE comments;
+ALTER PUBLICATION supabase_realtime ADD TABLE likes;
+ALTER PUBLICATION supabase_realtime ADD TABLE chat_conversations;
+ALTER PUBLICATION supabase_realtime ADD TABLE chat_messages;
+ALTER PUBLICATION supabase_realtime ADD TABLE support_messages;
+ALTER PUBLICATION supabase_realtime ADD TABLE user_activities;
+
+-- ================================
+-- SAMPLE DATA FOR TESTING - စမ်းသပ်ရန် နမူနာ Data များ
+-- ================================
+
+-- Insert sample news (admin)
+INSERT INTO news (title, content, is_admin, views, is_featured)
+VALUES 
+    ('FPS GFX Tool မှ ကြိုဆိုပါသည်!', 'FPS GFX Tool တွင် ကြိုဆိုပါတယ်! ဒီ tool ကို သုံးပြီး သင့်ရဲ့ PUBG gaming experience ကို အကောင်းဆုံး လုပ်နိုင်ပါပြီ။', true, 0, true),
+    ('နောက်ဆုံး Update v2.0', 'bug fixes များနှင့် features အသစ်များ ပါဝင်သော နောက်ဆုံး version ကို download လုပ်နိုင်ပါပြီ။', true, 0, false),
+    ('Mobile သုံးစွဲသူများအတွက် အကြောင်းကြားချက်', 'Mobile တွင် အသုံးပြုရာတွင် အကောင်းဆုံး performance ရရှိရန် အကြံပြုချက်များ ဖော်ပြထားပါသည်။', true, 0, false)
+ON CONFLICT DO NOTHING;
+
+-- Insert sample support messages
+INSERT INTO support_messages (content, is_from_user, priority, status)
+VALUES 
+    ('မင်္ဂလာပါ! FPS GFX Tool အသုံးပြုရာတွင် အကူအညီလိုအပ်ပါက ဒီမှာ မေးနိုင်ပါတယ်။', false, 'normal', 'open'),
+    ('Key များ၏ သက်တမ်းတိုးရန် ဆက်သွယ်လိုပါက admin ကို ဆက်သွယ်ပါ။', false, 'normal', 'open')
+ON CONFLICT DO NOTHING;
+
+-- ================================
+-- VERIFICATION QUERIES - စစ်ဆေးရန် Queries များ
+-- ================================
+
+-- Show all tables
+SELECT table_name, table_type
+FROM information_schema.tables 
+WHERE table_schema = 'public' 
+ORDER BY table_name;
+
+-- Show all functions
+SELECT routine_name, routine_type
+FROM information_schema.routines 
+WHERE routine_schema = 'public' 
+AND routine_type = 'FUNCTION'
+ORDER BY routine_name;
+
+-- Show all storage buckets
+SELECT id, name, public, created_at FROM storage.buckets ORDER BY name;
+
+-- Show table row counts
+SELECT 
+    'about' as table_name, COUNT(*) as row_count FROM about
+UNION ALL SELECT 'keys', COUNT(*) FROM keys
+UNION ALL SELECT 'devices', COUNT(*) FROM devices
+UNION ALL SELECT 'sessions', COUNT(*) FROM sessions
+UNION ALL SELECT 'profiles', COUNT(*) FROM profiles
+UNION ALL SELECT 'news', COUNT(*) FROM news
+UNION ALL SELECT 'comments', COUNT(*) FROM comments
+UNION ALL SELECT 'support_messages', COUNT(*) FROM support_messages
+ORDER BY table_name;
+
+-- ================================
+-- SUCCESS MESSAGE
+-- ================================
+
+DO $$
+BEGIN
+    RAISE NOTICE '================================================================';
+    RAISE NOTICE 'FPS GFX Tool Database Setup လုံးဝ ပြီးစီးပါပြီ! 🎉';
+    RAISE NOTICE '================================================================';
+    RAISE NOTICE 'အောင်မြင်စွာ ဖန်တီးပြီးသော အရာများ:';
+    RAISE NOTICE '✅ 13 Tables with full relationships';
+    RAISE NOTICE '✅ Row Level Security (RLS) policies';  
+    RAISE NOTICE '✅ Storage buckets for file uploads';
+    RAISE NOTICE '✅ Realtime subscriptions enabled';
+    RAISE NOTICE '✅ Utility functions for complex operations';
+    RAISE NOTICE '✅ Performance indexes';
+    RAISE NOTICE '✅ Sample data for testing';
+    RAISE NOTICE '================================================================';
+    RAISE NOTICE 'နောက်ထပ် လုပ်ရမည့်အရာများ:';
+    RAISE NOTICE '1. Update CONFIG section in index.html and admin.html';
+    RAISE NOTICE '2. Replace SUPABASE_URL with your project URL';
+    RAISE NOTICE '3. Replace SUPABASE_ANON_KEY with your anon key';
+    RAISE NOTICE '4. Deploy both HTML files to your hosting service';
+    RAISE NOTICE '================================================================';
+    RAISE NOTICE 'သင့်ရဲ့ FPS GFX Tool အသုံးပြုရန် အဆင်သင့်ဖြစ်ပါပြီ! 🚀';
+    RAISE NOTICE '================================================================';
+END $$;</code></pre>
+            </div>
+        </div>
+
+        <!-- Configuration Guide -->
+        <div class="sql-container rounded-2xl p-6 mt-8">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-4">
+                <i class="fas fa-cog mr-2"></i>
+                Configuration Guide (အပြင်အဆင်လမ်းညွှန်)
+            </h2>
+            
+            <div class="grid md:grid-cols-2 gap-6">
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-green-400 mb-3">
+                        <i class="fas fa-file-code mr-2"></i>
+                        index.html တွင် ပြင်ရမည့်အရာများ:
+                    </h3>
+                    <div class="sql-code p-3 text-sm">
+<pre><code>const CONFIG = {
+  SUPABASE_URL: 'YOUR_SUPABASE_URL_HERE',
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY_HERE',
+  MAX_RETRY_ATTEMPTS: 3,
+  RETRY_DELAY: 2000,
+  CONNECTION_TIMEOUT: 10000
+};</code></pre>
+                    </div>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-green-400 mb-3">
+                        <i class="fas fa-shield-alt mr-2"></i>
+                        admin.html တွင် ပြင်ရမည့်အရာများ:
+                    </h3>
+                    <div class="sql-code p-3 text-sm">
+<pre><code>const CONFIG = {
+  SUPABASE_URL: 'YOUR_SUPABASE_URL_HERE',
+  SUPABASE_ANON_KEY: 'YOUR_SUPABASE_ANON_KEY_HERE',
+  ADMIN_KEY: 'Opper_FPS',
+  MAX_RETRY_ATTEMPTS: 3,
+  RETRY_DELAY: 2000
+};</code></pre>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="mt-6 bg-blue-900 bg-opacity-50 border border-blue-600 rounded-lg p-4">
+                <h4 class="font-bold text-blue-400 mb-2">
+                    <i class="fas fa-lightbulb mr-2"></i>
+                    Pro Tips:
+                </h4>
+                <ul class="text-blue-200 space-y-1 list-disc list-inside text-sm">
+                    <li>Supabase project URL နှင့် anon key ကို Settings > API section တွင် ရှာနိုင်ပါသည်</li>
+                    <li>Admin key ကို လုံခြုံအောင် ပြောင်းလဲသင့်ပါသည်</li>
+                    <li>HTML files များကို Netlify, Vercel သို့မဟုတ် GitHub Pages တွင် deploy လုပ်နိုင်ပါသည်</li>
+                    <li>Database realtime features သည် အလိုအလျောက် အလုပ်လုပ်ပါလိမ့်မည်</li>
+                    <li>Storage buckets များသည် file uploads အတွက် အဆင်သင့်ဖြစ်နေပါသည်</li>
+                </ul>
+            </div>
+        </div>
+
+        <!-- Features List -->
+        <div class="sql-container rounded-2xl p-6 mt-8">
+            <h2 class="text-2xl font-bold text-yellow-400 mb-4">
+                <i class="fas fa-star mr-2"></i>
+                အင်္ဂါရပ်များ (Features)
+            </h2>
+            
+            <div class="grid md:grid-cols-3 gap-6">
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-green-400 mb-3">
+                        <i class="fas fa-users mr-2"></i>
+                        User Management
+                    </h3>
+                    <ul class="text-gray-300 space-y-1 text-sm list-disc list-inside">
+                        <li>Key-based authentication</li>
+                        <li>Device tracking & limiting</li>
+                        <li>Profile creation & management</li>
+                        <li>User activity logging</li>
+                        <li>Ban/unban functionality</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-blue-400 mb-3">
+                        <i class="fas fa-newspaper mr-2"></i>
+                        News & Social
+                    </h3>
+                    <ul class="text-gray-300 space-y-1 text-sm list-disc list-inside">
+                        <li>News posting & viewing</li>
+                        <li>Comment system with replies</li>
+                        <li>Like/unlike functionality</li>
+                        <li>Video & image support</li>
+                        <li>View counting</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-purple-400 mb-3">
+                        <i class="fas fa-comments mr-2"></i>
+                        Chat & Communication
+                    </h3>
+                    <ul class="text-gray-300 space-y-1 text-sm list-disc list-inside">
+                        <li>Private messaging between users</li>
+                        <li>Support ticket system</li>
+                        <li>File sharing in chats</li>
+                        <li>Message read status</li>
+                        <li>Admin support monitoring</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-red-400 mb-3">
+                        <i class="fas fa-gamepad mr-2"></i>
+                        Gaming Features
+                    </h3>
+                    <ul class="text-gray-300 space-y-1 text-sm list-disc list-inside">
+                        <li>PUBG config generation</li>
+                        <li>FPS optimization settings</li>
+                        <li>File download tracking</li>
+                        <li>Game version support</li>
+                        <li>Device-specific configs</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-yellow-400 mb-3">
+                        <i class="fas fa-shield-alt mr-2"></i>
+                        Admin Features
+                    </h3>
+                    <ul class="text-gray-300 space-y-1 text-sm list-disc list-inside">
+                        <li>Key creation & management</li>
+                        <li>User monitoring & control</li>
+                        <li>News moderation</li>
+                        <li>Support ticket handling</li>
+                        <li>Analytics & statistics</li>
+                    </ul>
+                </div>
+                
+                <div class="bg-gray-800 rounded-lg p-4">
+                    <h3 class="text-lg font-semibold text-indigo-400 mb-3">
+                        <i class="fas fa-mobile-alt mr-2"></i>
+                        Technical Features
+                    </h3>
+                    <ul class="text-gray-300 space-y-1 text-sm list-disc list-inside">
+                        <li>Mobile responsive design</li>
+                        <li>Realtime updates</li>
+                        <li>File storage integration</li>
+                        <li>Security & RLS policies</li>
+                        <li>Performance optimization</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/components/prism-core.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/prismjs@1.29.0/plugins/autoloader/prism-autoloader.min.js"></script>
+    
+    <script>
+        function copyAllSQL() {
+            const sqlContent = document.getElementById('sql-content').textContent;
+            
+            if (navigator.clipboard) {
+                navigator.clipboard.writeText(sqlContent).then(() => {
+                    showNotification('SQL script copied to clipboard! ✅', 'success');
+                }).catch(err => {
+                    fallbackCopyTextToClipboard(sqlContent);
+                });
+            } else {
+                fallbackCopyTextToClipboard(sqlContent);
+            }
+        }
+        
+        function fallbackCopyTextToClipboard(text) {
+            const textArea = document.createElement("textarea");
+            textArea.value = text;
+            textArea.style.top = "0";
+            textArea.style.left = "0";
+            textArea.style.position = "fixed";
+            
+            document.body.appendChild(textArea);
+            textArea.focus();
+            textArea.select();
+            
+            try {
+                const successful = document.execCommand('copy');
+                if (successful) {
+                    showNotification('SQL script copied to clipboard! ✅', 'success');
+                } else {
+                    showNotification('Failed to copy. Please select and copy manually.', 'error');
+                }
+            } catch (err) {
+                showNotification('Failed to copy. Please select and copy manually.', 'error');
+            }
+            
+            document.body.removeChild(textArea);
+        }
+        
+        function downloadSQL() {
+            const sqlContent = document.getElementById('sql-content').textContent;
+            const blob = new Blob([sqlContent], { type: 'text/plain' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            a.download = 'fps_gfx_tool_complete_database.sql';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+            showNotification('SQL file downloaded! 📁', 'success');
+        }
+        
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `fixed top-4 right-4 px-6 py-3 rounded-lg font-semibold text-white z-50 animate-pulse`;
+            
+            switch(type) {
+                case 'success':
+                    notification.className += ' bg-green-600';
+                    break;
+                case 'error':
+                    notification.className += ' bg-red-600';
+                    break;
+                default:
+                    notification.className += ' bg-blue-600';
+            }
+            
+            notification.textContent = message;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentNode) {
+                    notification.parentNode.removeChild(notification);
+                }
+            }, 3000);
+        }
+        
+        // Auto-highlight code
+        document.addEventListener('DOMContentLoaded', function() {
+            if (typeof Prism !== 'undefined') {
+                Prism.highlightAll();
+            }
+        });
+    </script>
+</body>
+</html>
