@@ -1,0 +1,1490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>FPS GFX Tool - Admin Dashboard</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+    }
+
+    /* Myanmar Flag Colors */
+    :root {
+      --myanmar-yellow: #FECB00;
+      --myanmar-green: #34B233;
+      --myanmar-red: #EA2839;
+      --myanmar-white: #FFFFFF;
+    }
+
+    /* Custom Animations */
+    @keyframes fadeInUp {
+      from {
+        opacity: 0;
+        transform: translateY(30px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
+    }
+
+    @keyframes pulse {
+      0%, 100% {
+        transform: scale(1);
+      }
+      50% {
+        transform: scale(1.05);
+      }
+    }
+
+    @keyframes slideIn {
+      from {
+        opacity: 0;
+        transform: translateX(-100px);
+      }
+      to {
+        opacity: 1;
+        transform: translateX(0);
+      }
+    }
+
+    @keyframes patternMove {
+      0%, 100% { background-position: 0% 0%, 100% 100%; }
+      50% { background-position: 100% 100%, 0% 0%; }
+    }
+
+    @keyframes waveFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .fade-in-up {
+      animation: fadeInUp 0.6s ease-out;
+    }
+
+    .slide-in {
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .pulse-animation {
+      animation: pulse 2s infinite;
+    }
+
+    /* Myanmar Background */
+    .myanmar-bg {
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+      position: relative;
+      min-height: 100vh;
+    }
+
+    .myanmar-pattern {
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(254, 203, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(52, 178, 51, 0.1) 0%, transparent 50%);
+      animation: patternMove 20s ease-in-out infinite;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -1;
+    }
+
+    .myanmar-waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 150px;
+      background: linear-gradient(45deg, rgba(254, 203, 0, 0.3), rgba(52, 178, 51, 0.3));
+      clip-path: polygon(0 100%, 0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%);
+      animation: waveFloat 8s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    /* Custom Scrollbar */
+    ::-webkit-scrollbar {
+      width: 8px;
+    }
+
+    ::-webkit-scrollbar-track {
+      background: #1a1a2e;
+    }
+
+    ::-webkit-scrollbar-thumb {
+      background: var(--myanmar-yellow);
+      border-radius: 4px;
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--myanmar-green);
+    }
+
+    /* Status Indicators */
+    .status-active {
+      color: var(--myanmar-green);
+    }
+
+    .status-inactive {
+      color: var(--myanmar-red);
+    }
+
+    .status-banned {
+      color: var(--myanmar-red);
+    }
+
+    /* Card Hover Effects */
+    .admin-card {
+      backdrop-filter: blur(20px);
+      background: rgba(0, 0, 0, 0.7);
+      border: 1px solid rgba(254, 203, 0, 0.2);
+      box-shadow: 
+        0 25px 50px -12px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(254, 203, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 20px 40px rgba(254, 203, 0, 0.3);
+      border-color: rgba(254, 203, 0, 0.4);
+    }
+
+    /* Button Gradients */
+    .btn-myanmar {
+      background: linear-gradient(45deg, var(--myanmar-yellow), var(--myanmar-green));
+      color: #000;
+      font-weight: bold;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .btn-myanmar::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .btn-myanmar:hover::before {
+      left: 100%;
+    }
+
+    .btn-myanmar:hover {
+      background: linear-gradient(45deg, var(--myanmar-green), var(--myanmar-yellow));
+      transform: translateY(-2px);
+      box-shadow: 0 10px 20px rgba(254, 203, 0, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(45deg, var(--myanmar-red), #ff6b6b);
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(45deg, #ff6b6b, var(--myanmar-red));
+    }
+
+    /* Loading Spinner */
+    .spinner {
+      border: 3px solid #f3f3f3;
+      border-top: 3px solid var(--myanmar-yellow);
+      border-radius: 50%;
+      width: 30px;
+      height: 30px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    /* Message Styles */
+    .message-success {
+      background: linear-gradient(45deg, var(--myanmar-green), #4ade80);
+      color: white;
+    }
+
+    .message-error {
+      background: linear-gradient(45deg, var(--myanmar-red), #ef4444);
+      color: white;
+    }
+
+    .message-info {
+      background: linear-gradient(45deg, #3b82f6, #60a5fa);
+      color: white;
+    }
+
+    /* Table Styles */
+    .admin-table {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.1);
+    }
+
+    .admin-table th {
+      background: rgba(254, 203, 0, 0.2);
+      color: var(--myanmar-yellow);
+    }
+
+    .admin-table tr:hover {
+      background: rgba(254, 203, 0, 0.1);
+    }
+
+    /* Form Styles */
+    .admin-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid transparent;
+      backdrop-filter: blur(10px);
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .admin-input:focus {
+      border-color: var(--myanmar-yellow);
+      background: rgba(255, 255, 255, 0.15);
+      outline: none;
+      box-shadow: 0 0 20px rgba(254, 203, 0, 0.3);
+    }
+
+    .admin-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    /* Stats Cards */
+    .stats-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(15px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-5px) scale(1.02);
+      box-shadow: 0 20px 40px rgba(254, 203, 0, 0.2);
+    }
+
+    /* Navigation */
+    .nav-active {
+      background: var(--myanmar-yellow) !important;
+      color: #000 !important;
+    }
+
+    /* Connection Status */
+    .connection-status {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      z-index: 1000;
+      padding: 10px 15px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: bold;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+    }
+
+    .connection-online {
+      background: linear-gradient(45deg, var(--myanmar-green), #4ade80);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .connection-offline {
+      background: linear-gradient(45deg, var(--myanmar-red), #ef4444);
+      color: white;
+      animation: shake 0.5s ease-in-out;
+    }
+
+    .connection-connecting {
+      background: linear-gradient(45deg, var(--myanmar-yellow), #fbbf24);
+      color: #000;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-5px); }
+      75% { transform: translateX(5px); }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 768px) {
+      .container {
+        padding: 10px;
+      }
+      
+      .admin-table {
+        font-size: 12px;
+      }
+      
+      .btn-myanmar {
+        padding: 8px 12px;
+        font-size: 14px;
+      }
+      
+      .stats-card {
+        margin-bottom: 15px;
+      }
+    }
+
+    /* Notification styles */
+    .notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      max-width: 350px;
+      padding: 16px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      z-index: 1001;
+      animation: slideInRight 0.5s ease-out;
+      backdrop-filter: blur(10px);
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+  </style>
+</head>
+<body class="myanmar-bg text-white">
+  <div class="myanmar-pattern"></div>
+  <div class="myanmar-waves"></div>
+  
+  <!-- Connection Status -->
+  <div id="connection-status" class="connection-status connection-connecting">
+    <i class="fas fa-wifi"></i> Initializing...
+  </div>
+
+  <!-- Main Container -->
+  <div class="container mx-auto px-4 py-8">
+    <!-- Header -->
+    <div class="text-center mb-8 fade-in-up">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4 text-yellow-400">
+        <i class="fas fa-shield-alt"></i> FPS GFX Tool
+      </h1>
+      <h2 class="text-2xl md:text-3xl font-semibold text-green-400">Admin Dashboard</h2>
+      <div class="mt-4">
+        <span class="inline-block px-4 py-2 bg-gradient-to-r from-yellow-400 to-green-400 text-black rounded-full font-bold pulse-animation">
+          <i class="fas fa-crown"></i> Administrator Panel
+        </span>
+      </div>
+    </div>
+
+    <!-- Status Messages -->
+    <div id="status-container" class="mb-6"></div>
+
+    <!-- Login Section -->
+    <div id="login-section" class="max-w-md mx-auto fade-in-up">
+      <div class="admin-card rounded-2xl p-8 transition-all duration-300">
+        <h3 class="text-2xl font-bold text-center mb-6 text-yellow-400">
+          <i class="fas fa-key"></i> Admin Authentication
+        </h3>
+        <div class="space-y-4">
+          <input type="password" id="admin-key" placeholder="Enter Admin Key" 
+                 class="admin-input w-full px-4 py-3 rounded-xl transition-all duration-300">
+          <button onclick="adminLogin()" 
+                  class="btn-myanmar w-full px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+            <i class="fas fa-sign-in-alt"></i>
+            <span>Access Dashboard</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div id="admin-content" style="display: none;">
+      <!-- Stats Cards -->
+      <div id="stats-section" class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+        <div class="stats-card rounded-2xl p-6 text-center">
+          <i class="fas fa-users text-3xl text-blue-400 mb-3"></i>
+          <h3 class="text-lg font-semibold">Total Users</h3>
+          <p id="total-users" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="stats-card rounded-2xl p-6 text-center">
+          <i class="fas fa-key text-3xl text-green-400 mb-3"></i>
+          <h3 class="text-lg font-semibold">Active Keys</h3>
+          <p id="active-keys" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="stats-card rounded-2xl p-6 text-center">
+          <i class="fas fa-newspaper text-3xl text-purple-400 mb-3"></i>
+          <h3 class="text-lg font-semibold">Total News</h3>
+          <p id="total-news" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="stats-card rounded-2xl p-6 text-center">
+          <i class="fas fa-comments text-3xl text-red-400 mb-3"></i>
+          <h3 class="text-lg font-semibold">Support Messages</h3>
+          <p id="total-support" class="text-2xl font-bold text-yellow-400">0</p>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex flex-wrap justify-center gap-4 mb-8">
+        <button onclick="showAdminSection('manage-about')" 
+                class="nav-btn btn-myanmar px-6 py-3 rounded-xl transition-all duration-300 flex items-center space-x-2">
+          <i class="fas fa-info-circle"></i>
+          <span>About</span>
+        </button>
+        <button onclick="showAdminSection('manage-keys')" 
+                class="nav-btn btn-myanmar px-6 py-3 rounded-xl transition-all duration-300 flex items-center space-x-2">
+          <i class="fas fa-key"></i>
+          <span>Keys</span>
+        </button>
+        <button onclick="showAdminSection('manage-users')" 
+                class="nav-btn btn-myanmar px-6 py-3 rounded-xl transition-all duration-300 flex items-center space-x-2">
+          <i class="fas fa-users"></i>
+          <span>Users</span>
+        </button>
+        <button onclick="showAdminSection('manage-news')" 
+                class="nav-btn btn-myanmar px-6 py-3 rounded-xl transition-all duration-300 flex items-center space-x-2">
+          <i class="fas fa-newspaper"></i>
+          <span>News</span>
+        </button>
+        <button onclick="showAdminSection('manage-support')" 
+                class="nav-btn btn-myanmar px-6 py-3 rounded-xl transition-all duration-300 flex items-center space-x-2">
+          <i class="fas fa-headset"></i>
+          <span>Support</span>
+        </button>
+      </div>
+
+      <!-- About Management -->
+      <div id="manage-about" style="display: none;" class="admin-section">
+        <div class="admin-card rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-info-circle mr-3"></i>
+            Manage About Information
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Telegram Link</label>
+              <input type="url" id="about-telegram" placeholder="https://t.me/..." 
+                     class="admin-input w-full px-4 py-3 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Viber Link</label>
+              <input type="url" id="about-viber" placeholder="viber://..." 
+                     class="admin-input w-full px-4 py-3 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Phone Number</label>
+              <input type="tel" id="about-phone" placeholder="+95..." 
+                     class="admin-input w-full px-4 py-3 rounded-xl">
+            </div>
+            <div class="flex items-end">
+              <button onclick="updateAbout()" 
+                      class="btn-myanmar w-full px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                <i class="fas fa-save"></i>
+                <span>Update About</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keys Management -->
+      <div id="manage-keys" style="display: none;" class="admin-section">
+        <div class="admin-card rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-key mr-3"></i>
+            Manage Access Keys
+          </h3>
+          
+          <!-- Create Key Form -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <input type="text" id="key-text" placeholder="Key Text" 
+                   class="admin-input px-4 py-3 rounded-xl">
+            <select id="key-duration-type" class="admin-input px-4 py-3 rounded-xl">
+              <option value="days">Days</option>
+              <option value="weeks">Weeks</option>
+              <option value="months">Months</option>
+            </select>
+            <input type="number" id="key-duration-value" placeholder="Duration" min="1"
+                   class="admin-input px-4 py-3 rounded-xl">
+            <input type="number" id="key-max-devices" placeholder="Max Devices" min="1"
+                   class="admin-input px-4 py-3 rounded-xl">
+          </div>
+          <button onclick="createKey()" 
+                  class="btn-myanmar px-6 py-3 rounded-xl mb-6 transition-all duration-300 flex items-center space-x-2">
+            <i class="fas fa-plus"></i>
+            <span>Create New Key</span>
+          </button>
+
+          <!-- Keys Table -->
+          <div class="overflow-x-auto">
+            <table class="admin-table w-full rounded-xl overflow-hidden">
+              <thead>
+                <tr>
+                  <th class="px-6 py-4 text-left">Key Text</th>
+                  <th class="px-6 py-4 text-left">Expires At</th>
+                  <th class="px-6 py-4 text-left">Max Devices</th>
+                  <th class="px-6 py-4 text-left">Used</th>
+                  <th class="px-6 py-4 text-left">Status</th>
+                  <th class="px-6 py-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="keys-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Management -->
+      <div id="manage-users" style="display: none;" class="admin-section">
+        <div class="admin-card rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-users mr-3"></i>
+            Manage Users
+          </h3>
+
+          <!-- Users Table -->
+          <div class="overflow-x-auto">
+            <table class="admin-table w-full rounded-xl overflow-hidden">
+              <thead>
+                <tr>
+                  <th class="px-6 py-4 text-left">Profile</th>
+                  <th class="px-6 py-4 text-left">Username</th>
+                  <th class="px-6 py-4 text-left">Name</th>
+                  <th class="px-6 py-4 text-left">Created</th>
+                  <th class="px-6 py-4 text-left">Status</th>
+                  <th class="px-6 py-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Management -->
+      <div id="manage-news" style="display: none;" class="admin-section">
+        <div class="admin-card rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-newspaper mr-3"></i>
+            Manage News
+          </h3>
+
+          <!-- Post News Form -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Title</label>
+              <input type="text" id="admin-news-title" placeholder="News Title" 
+                     class="admin-input w-full px-4 py-3 rounded-xl">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">YouTube Link (Optional)</label>
+              <input type="url" id="admin-news-youtube" placeholder="https://youtube.com/..." 
+                     class="admin-input w-full px-4 py-3 rounded-xl">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium mb-2">Content</label>
+              <textarea id="admin-news-content" placeholder="News Content..." rows="4"
+                        class="admin-input w-full px-4 py-3 rounded-xl"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Image (Optional)</label>
+              <input type="file" id="admin-news-image" accept="image/*" 
+                     class="admin-input w-full px-4 py-3 rounded-xl">
+            </div>
+            <div class="flex items-end">
+              <button onclick="postAdminNews()" 
+                      class="btn-myanmar w-full px-6 py-3 rounded-xl transition-all duration-300 flex items-center justify-center space-x-2">
+                <i class="fas fa-paper-plane"></i>
+                <span>Post News</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- News Table -->
+          <div class="overflow-x-auto">
+            <table class="admin-table w-full rounded-xl overflow-hidden">
+              <thead>
+                <tr>
+                  <th class="px-6 py-4 text-left">Title</th>
+                  <th class="px-6 py-4 text-left">Author</th>
+                  <th class="px-6 py-4 text-left">Views</th>
+                  <th class="px-6 py-4 text-left">Created</th>
+                  <th class="px-6 py-4 text-left">Actions</th>
+                </tr>
+              </thead>
+              <tbody id="news-table-body"></tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Management -->
+      <div id="manage-support" style="display: none;" class="admin-section">
+        <div class="admin-card rounded-2xl p-8">
+          <h3 class="text-2xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-headset mr-3"></i>
+            Support Messages
+          </h3>
+
+          <!-- Support Messages -->
+          <div id="support-messages" class="bg-black bg-opacity-50 rounded-xl p-6 h-96 overflow-y-auto mb-6"></div>
+
+          <!-- Reply Form -->
+          <div class="flex space-x-4">
+            <textarea id="admin-support-input" placeholder="Type your reply..." rows="3"
+                      class="admin-input flex-1 px-4 py-3 rounded-xl resize-none"></textarea>
+            <button onclick="sendAdminSupportMessage()" 
+                    class="btn-myanmar px-6 py-3 rounded-xl transition-all duration-300 flex items-center space-x-2">
+              <i class="fas fa-paper-plane"></i>
+              <span>Send Reply</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50" style="display: none;">
+    <div class="admin-card rounded-xl p-8 text-center">
+      <div class="spinner mb-4"></div>
+      <p class="text-white font-semibold">Processing...</p>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script>
+    // Configuration - Update with your actual Supabase credentials
+    const CONFIG = {
+      SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co',
+      SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4',
+      ADMIN_KEY: 'Opper_FPS',
+      MAX_RETRY_ATTEMPTS: 3,
+      RETRY_DELAY: 2000
+    };
+
+    let supabase = null;
+    let isOnline = navigator.onLine;
+    let reconnectAttempts = 0;
+    let isAuthenticated = false;
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', function() {
+      initializeApp();
+    });
+
+    async function initializeApp() {
+      updateConnectionStatus('connecting');
+      
+      try {
+        if (typeof Supabase !== 'undefined') {
+          supabase = Supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+            auth: {
+              persistSession: false
+            },
+            realtime: {
+              params: {
+                eventsPerSecond: 10
+              }
+            }
+          });
+
+          const { data, error } = await supabase.from('about').select('id').limit(1);
+          
+          if (error && error.code !== 'PGRST116') {
+            throw new Error(`Database connection failed: ${error.message}`);
+          }
+
+          updateConnectionStatus('online');
+          showMessage('Database connected successfully! Ready for admin access.', 'success');
+          setupRealtimeSubscriptions();
+          reconnectAttempts = 0;
+          
+        } else {
+          throw new Error('Supabase library not loaded');
+        }
+      } catch (error) {
+        console.error('Initialization error:', error);
+        updateConnectionStatus('offline');
+        showMessage(`Connection failed: ${error.message}`, 'error');
+        
+        if (reconnectAttempts < CONFIG.MAX_RETRY_ATTEMPTS) {
+          reconnectAttempts++;
+          setTimeout(() => {
+            console.log(`Retrying connection (${reconnectAttempts}/${CONFIG.MAX_RETRY_ATTEMPTS})...`);
+            initializeApp();
+          }, CONFIG.RETRY_DELAY);
+        }
+      }
+    }
+
+    function updateConnectionStatus(status) {
+      const statusElement = document.getElementById('connection-status');
+      statusElement.className = 'connection-status';
+      
+      switch (status) {
+        case 'online':
+          statusElement.classList.add('connection-online');
+          statusElement.innerHTML = '<i class="fas fa-check-circle"></i> Connected';
+          break;
+        case 'offline':
+          statusElement.classList.add('connection-offline');
+          statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> Offline';
+          break;
+        case 'connecting':
+          statusElement.classList.add('connection-connecting');
+          statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Connecting...';
+          break;
+      }
+    }
+
+    function showMessage(message, type = 'info', duration = 5000) {
+      const container = document.getElementById('status-container');
+      const messageDiv = document.createElement('div');
+      
+      messageDiv.className = `message-${type} p-4 rounded-xl mb-4 flex items-center space-x-3 fade-in-up`;
+      
+      const icon = type === 'success' ? 'fa-check-circle' : 
+                   type === 'error' ? 'fa-exclamation-triangle' : 'fa-info-circle';
+      
+      messageDiv.innerHTML = `
+        <i class="fas ${icon}"></i>
+        <span>${message}</span>
+        <button onclick="this.parentElement.remove()" class="ml-auto hover:bg-white hover:bg-opacity-20 rounded p-1">
+          <i class="fas fa-times"></i>
+        </button>
+      `;
+      
+      container.appendChild(messageDiv);
+      
+      setTimeout(() => {
+        if (messageDiv.parentElement) {
+          messageDiv.remove();
+        }
+      }, duration);
+    }
+
+    function showLoading(show = true) {
+      document.getElementById('loading-overlay').style.display = show ? 'flex' : 'none';
+    }
+
+    async function adminLogin() {
+      const keyInput = document.getElementById('admin-key');
+      const key = keyInput.value.trim();
+      
+      if (!key) {
+        showMessage('Please enter admin key!', 'error');
+        return;
+      }
+      
+      if (key !== CONFIG.ADMIN_KEY) {
+        showMessage('Invalid admin key!', 'error');
+        keyInput.value = '';
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        document.getElementById('login-section').style.display = 'none';
+        document.getElementById('admin-content').style.display = 'block';
+        
+        isAuthenticated = true;
+        showMessage('Welcome to Admin Dashboard! All systems operational.', 'success');
+        
+        await loadStats();
+        showAdminSection('manage-about');
+        
+      } catch (error) {
+        console.error('Login error:', error);
+        showMessage(`Login failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    function showAdminSection(section) {
+      if (!isAuthenticated) return;
+      
+      const sections = ['manage-about', 'manage-keys', 'manage-users', 'manage-news', 'manage-support'];
+      sections.forEach(s => {
+        const element = document.getElementById(s);
+        if (element) element.style.display = 'none';
+      });
+      
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('nav-active');
+      });
+      
+      const targetSection = document.getElementById(section);
+      if (targetSection) {
+        targetSection.style.display = 'block';
+        targetSection.classList.add('fade-in-up');
+      }
+      
+      if (event && event.target) {
+        event.target.classList.add('nav-active');
+      }
+      
+      switch (section) {
+        case 'manage-about':
+          loadAbout();
+          break;
+        case 'manage-keys':
+          loadKeys();
+          break;
+        case 'manage-users':
+          loadUsers();
+          break;
+        case 'manage-news':
+          loadNews();
+          break;
+        case 'manage-support':
+          loadSupportMessages();
+          break;
+      }
+    }
+
+    function setupRealtimeSubscriptions() {
+      if (!supabase) return;
+
+      try {
+        const tables = ['about', 'keys', 'profiles', 'news', 'support_messages'];
+        
+        tables.forEach(table => {
+          supabase
+            .channel(`${table}_changes`)
+            .on('postgres_changes', { 
+              event: '*', 
+              schema: 'public', 
+              table: table 
+            }, (payload) => {
+              console.log(`${table} changed:`, payload);
+              if (isAuthenticated) {
+                loadStats();
+              }
+            })
+            .subscribe();
+        });
+
+        console.log('Realtime subscriptions setup complete');
+      } catch (error) {
+        console.error('Realtime subscription setup failed:', error);
+      }
+    }
+
+    async function loadStats() {
+      if (!supabase || !isAuthenticated) return;
+      
+      try {
+        const { count: usersCount } = await supabase
+          .from('profiles')
+          .select('*', { count: 'exact', head: true });
+        
+        const { count: keysCount } = await supabase
+          .from('keys')
+          .select('*', { count: 'exact', head: true })
+          .eq('is_active', true);
+        
+        const { count: newsCount } = await supabase
+          .from('news')
+          .select('*', { count: 'exact', head: true });
+        
+        const { count: supportCount } = await supabase
+          .from('support_messages')
+          .select('*', { count: 'exact', head: true });
+        
+        animateCounter('total-users', usersCount || 0);
+        animateCounter('active-keys', keysCount || 0);
+        animateCounter('total-news', newsCount || 0);
+        animateCounter('total-support', supportCount || 0);
+        
+      } catch (error) {
+        console.error('Stats loading error:', error);
+        showMessage('Failed to load statistics', 'error');
+      }
+    }
+
+    function animateCounter(elementId, targetValue) {
+      const element = document.getElementById(elementId);
+      if (!element) return;
+      
+      const currentValue = parseInt(element.textContent) || 0;
+      const increment = targetValue > currentValue ? 1 : -1;
+      const step = Math.abs(targetValue - currentValue) / 20;
+      
+      let current = currentValue;
+      const timer = setInterval(() => {
+        current += increment * step;
+        if ((increment > 0 && current >= targetValue) || (increment < 0 && current <= targetValue)) {
+          current = targetValue;
+          clearInterval(timer);
+        }
+        element.textContent = Math.round(current);
+      }, 50);
+    }
+
+    async function loadAbout() {
+      if (!supabase || !isAuthenticated) return;
+      
+      try {
+        const { data, error } = await supabase
+          .from('about')
+          .select('*')
+          .eq('id', 'main')
+          .single();
+        
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
+        
+        if (data) {
+          document.getElementById('about-telegram').value = data.telegram || '';
+          document.getElementById('about-viber').value = data.viber || '';
+          document.getElementById('about-phone').value = data.phone || '';
+        }
+        
+      } catch (error) {
+        console.error('About loading error:', error);
+        showMessage('Failed to load about information', 'error');
+      }
+    }
+
+    async function updateAbout() {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        const telegram = document.getElementById('about-telegram').value.trim();
+        const viber = document.getElementById('about-viber').value.trim();
+        const phone = document.getElementById('about-phone').value.trim();
+        
+        const { error } = await supabase
+          .from('about')
+          .upsert({
+            id: 'main',
+            telegram: telegram || null,
+            viber: viber || null,
+            phone: phone || null
+          });
+        
+        if (error) throw error;
+        
+        showMessage('About information updated successfully!', 'success');
+        
+      } catch (error) {
+        console.error('About update error:', error);
+        showMessage(`Update failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function createKey() {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      const keyText = document.getElementById('key-text').value.trim();
+      const durationType = document.getElementById('key-duration-type').value;
+      const durationValue = parseInt(document.getElementById('key-duration-value').value);
+      const maxDevices = parseInt(document.getElementById('key-max-devices').value);
+      
+      if (!keyText || !durationValue || !maxDevices) {
+        showMessage('All fields are required!', 'error');
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        const now = new Date();
+        let expiresAt;
+        
+        switch (durationType) {
+          case 'days':
+            expiresAt = new Date(now.setDate(now.getDate() + durationValue));
+            break;
+          case 'weeks':
+            expiresAt = new Date(now.setDate(now.getDate() + (durationValue * 7)));
+            break;
+          case 'months':
+            expiresAt = new Date(now.setMonth(now.getMonth() + durationValue));
+            break;
+        }
+        
+        const { error } = await supabase
+          .from('keys')
+          .insert({
+            key_text: keyText,
+            expires_at: expiresAt.toISOString(),
+            duration_type: durationType,
+            duration_value: durationValue,
+            max_devices: maxDevices,
+            is_active: true
+          });
+        
+        if (error) throw error;
+        
+        showMessage('Key created successfully!', 'success');
+        
+        document.getElementById('key-text').value = '';
+        document.getElementById('key-duration-value').value = '';
+        document.getElementById('key-max-devices').value = '';
+        
+        loadKeys();
+        loadStats();
+        
+      } catch (error) {
+        console.error('Key creation error:', error);
+        showMessage(`Key creation failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function loadKeys() {
+      if (!supabase || !isAuthenticated) return;
+      
+      try {
+        const { data: keys, error } = await supabase
+          .from('keys')
+          .select('*')
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+        
+        const tbody = document.getElementById('keys-table-body');
+        tbody.innerHTML = '';
+        
+        if (keys.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-400">No keys found</td></tr>';
+          return;
+        }
+
+        keys.forEach(key => {
+          const { data: sessionsData } = await supabase
+            .from('sessions')
+            .select('id')
+            .eq('key_id', key.id)
+            .eq('is_active', true);
+          
+          const usedDevices = sessionsData ? sessionsData.length : 0;
+          const isExpired = new Date(key.expires_at) < new Date();
+          const statusClass = key.is_active && !isExpired ? 'status-active' : 'status-inactive';
+          const statusText = isExpired ? 'Expired' : key.is_active ? 'Active' : 'Inactive';
+          
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-white hover:bg-opacity-5 transition-all duration-200';
+          row.innerHTML = `
+            <td class="px-6 py-4 font-mono text-sm">${key.key_text}</td>
+            <td class="px-6 py-4 text-sm">${new Date(key.expires_at).toLocaleString()}</td>
+            <td class="px-6 py-4 text-sm">${key.max_devices}</td>
+            <td class="px-6 py-4 text-sm">
+              <span class="px-2 py-1 rounded-full text-xs bg-blue-500 text-white">
+                ${usedDevices}/${key.max_devices}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusClass}">
+                <i class="fas ${key.is_active && !isExpired ? 'fa-check' : 'fa-times'}"></i>
+                ${statusText}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <button onclick="toggleKeyStatus('${key.id}', ${key.is_active})" 
+                      class="${key.is_active ? 'btn-danger' : 'btn-myanmar'} px-3 py-1 rounded-lg text-sm transition-all duration-200">
+                <i class="fas ${key.is_active ? 'fa-ban' : 'fa-check'}"></i>
+                ${key.is_active ? 'Deactivate' : 'Activate'}
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+        
+      } catch (error) {
+        console.error('Keys loading error:', error);
+        showMessage('Failed to load keys', 'error');
+      }
+    }
+
+    async function toggleKeyStatus(keyId, currentStatus) {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        const { error } = await supabase
+          .from('keys')
+          .update({ is_active: !currentStatus })
+          .eq('id', keyId);
+        
+        if (error) throw error;
+        
+        showMessage(`Key ${currentStatus ? 'deactivated' : 'activated'} successfully!`, 'success');
+        loadKeys();
+        loadStats();
+        
+      } catch (error) {
+        console.error('Key status toggle error:', error);
+        showMessage(`Status update failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function loadUsers() {
+      if (!supabase || !isAuthenticated) return;
+      
+      try {
+        const { data: users, error } = await supabase
+          .from('profiles')
+          .select('*')
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('users-table-body');
+        tbody.innerHTML = '';
+        
+        if (users.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="6" class="px-6 py-8 text-center text-gray-400">No users found</td></tr>';
+          return;
+        }
+        
+        users.forEach(user => {
+          const statusClass = user.is_banned ? 'status-banned' : 'status-active';
+          const statusText = user.is_banned ? 'Banned' : 'Active';
+          
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-white hover:bg-opacity-5 transition-all duration-200';
+          row.innerHTML = `
+            <td class="px-6 py-4">
+              <img src="${user.profile_picture || 'https://via.placeholder.com/32'}" 
+                   class="w-8 h-8 rounded-full object-cover">
+            </td>
+            <td class="px-6 py-4 text-sm">${user.username}</td>
+            <td class="px-6 py-4 text-sm">${user.name}</td>
+            <td class="px-6 py-4 text-sm">${new Date(user.created_at).toLocaleDateString()}</td>
+            <td class="px-6 py-4">
+              <span class="px-3 py-1 rounded-full text-xs font-semibold ${statusClass}">
+                <i class="fas ${user.is_banned ? 'fa-ban' : 'fa-check'}"></i>
+                ${statusText}
+              </span>
+            </td>
+            <td class="px-6 py-4">
+              <button onclick="toggleUserBan('${user.id}', ${user.is_banned})" 
+                      class="${user.is_banned ? 'btn-myanmar' : 'btn-danger'} px-3 py-1 rounded-lg text-sm transition-all duration-200">
+                <i class="fas ${user.is_banned ? 'fa-check' : 'fa-ban'}"></i>
+                ${user.is_banned ? 'Unban' : 'Ban'}
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+        
+      } catch (error) {
+        console.error('Users loading error:', error);
+        showMessage('Failed to load users', 'error');
+      }
+    }
+
+    async function toggleUserBan(userId, currentBanStatus) {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        const { error } = await supabase
+          .from('profiles')
+          .update({ is_banned: !currentBanStatus })
+          .eq('id', userId);
+        
+        if (error) throw error;
+        
+        showMessage(`User ${currentBanStatus ? 'unbanned' : 'banned'} successfully!`, 'success');
+        loadUsers();
+        
+      } catch (error) {
+        console.error('User ban toggle error:', error);
+        showMessage(`Ban status update failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function loadNews() {
+      if (!supabase || !isAuthenticated) return;
+      
+      try {
+        const { data: news, error } = await supabase
+          .from('news')
+          .select(`
+            *,
+            profiles (
+              username,
+              name,
+              profile_picture
+            )
+          `)
+          .order('created_at', { ascending: false });
+        
+        if (error) throw error;
+        
+        const tbody = document.getElementById('news-table-body');
+        tbody.innerHTML = '';
+        
+        if (news.length === 0) {
+          tbody.innerHTML = '<tr><td colspan="5" class="px-6 py-8 text-center text-gray-400">No news found</td></tr>';
+          return;
+        }
+        
+        news.forEach(item => {
+          const author = item.is_admin ? 'Admin' : (item.profiles?.username || 'Unknown');
+          
+          const row = document.createElement('tr');
+          row.className = 'hover:bg-white hover:bg-opacity-5 transition-all duration-200';
+          row.innerHTML = `
+            <td class="px-6 py-4 text-sm">${item.title}</td>
+            <td class="px-6 py-4 text-sm">${author}</td>
+            <td class="px-6 py-4 text-sm">${item.views || 0}</td>
+            <td class="px-6 py-4 text-sm">${new Date(item.created_at).toLocaleDateString()}</td>
+            <td class="px-6 py-4">
+              <button onclick="deleteNews('${item.id}')" 
+                      class="btn-danger px-3 py-1 rounded-lg text-sm transition-all duration-200">
+                <i class="fas fa-trash"></i>
+                Delete
+              </button>
+            </td>
+          `;
+          tbody.appendChild(row);
+        });
+        
+      } catch (error) {
+        console.error('News loading error:', error);
+        showMessage('Failed to load news', 'error');
+      }
+    }
+
+    async function postAdminNews() {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      const title = document.getElementById('admin-news-title').value.trim();
+      const content = document.getElementById('admin-news-content').value.trim();
+      const youtubeLink = document.getElementById('admin-news-youtube').value.trim();
+      const imageFile = document.getElementById('admin-news-image').files[0];
+      
+      if (!title || !content) {
+        showMessage('Title and content are required!', 'error');
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        let imageUrl = null;
+        
+        if (imageFile) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `admin_${Date.now()}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await supabase.storage
+            .from('news')
+            .upload(`public/${fileName}`, imageFile);
+          
+          if (uploadError) throw uploadError;
+          
+          const { data: urlData } = supabase.storage
+            .from('news')
+            .getPublicUrl(`public/${fileName}`);
+          
+          imageUrl = urlData?.publicUrl;
+        }
+        
+        const { error } = await supabase
+          .from('news')
+          .insert({
+            title,
+            content,
+            youtube_link: youtubeLink || null,
+            image_url: imageUrl,
+            is_admin: true,
+            views: 0
+          });
+        
+        if (error) throw error;
+        
+        showMessage('News posted successfully!', 'success');
+        
+        document.getElementById('admin-news-title').value = '';
+        document.getElementById('admin-news-content').value = '';
+        document.getElementById('admin-news-youtube').value = '';
+        document.getElementById('admin-news-image').value = '';
+        
+        loadNews();
+        loadStats();
+        
+      } catch (error) {
+        console.error('News posting error:', error);
+        showMessage(`News posting failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function deleteNews(newsId) {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      if (!confirm('Are you sure you want to delete this news?')) {
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        const { error } = await supabase
+          .from('news')
+          .delete()
+          .eq('id', newsId);
+        
+        if (error) throw error;
+        
+        showMessage('News deleted successfully!', 'success');
+        loadNews();
+        loadStats();
+        
+      } catch (error) {
+        console.error('News deletion error:', error);
+        showMessage(`News deletion failed: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function loadSupportMessages() {
+      if (!supabase || !isAuthenticated) return;
+      
+      try {
+        const { data: messages, error } = await supabase
+          .from('support_messages')
+          .select(`
+            *,
+            profiles (
+              username,
+              name,
+              profile_picture
+            )
+          `)
+          .order('created_at', { ascending: true });
+        
+        if (error) throw error;
+        
+        const messagesDiv = document.getElementById('support-messages');
+        messagesDiv.innerHTML = '';
+        
+        if (messages.length === 0) {
+          messagesDiv.innerHTML = '<p class="text-center text-gray-400">No support messages found</p>';
+          return;
+        }
+        
+        messages.forEach(msg => {
+          const messageDiv = document.createElement('div');
+          messageDiv.className = `mb-3 ${msg.is_from_user ? 'text-right' : 'text-left'}`;
+          messageDiv.innerHTML = `
+            <div class="inline-block max-w-xs lg:max-w-md px-4 py-2 rounded-lg ${
+              msg.is_from_user 
+                ? 'bg-yellow-600 text-white' 
+                : 'bg-gray-700 text-gray-300'
+            }">
+              <p class="text-sm">${msg.content}</p>
+              <p class="text-xs mt-1 opacity-75">
+                ${msg.profiles?.username || 'Admin'} - ${new Date(msg.created_at).toLocaleString()}
+              </p>
+            </div>
+          `;
+          messagesDiv.appendChild(messageDiv);
+        });
+        
+        messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        
+      } catch (error) {
+        console.error('Support messages loading error:', error);
+        showMessage('Failed to load support messages', 'error');
+      }
+    }
+
+    async function sendAdminSupportMessage() {
+      if (!supabase || !isAuthenticated) {
+        showMessage('Database not connected or not authenticated', 'error');
+        return;
+      }
+      
+      const input = document.getElementById('admin-support-input');
+      const content = input.value.trim();
+      
+      if (!content) {
+        showMessage('Please enter a message!', 'error');
+        return;
+      }
+      
+      showLoading(true);
+      
+      try {
+        const { error } = await supabase
+          .from('support_messages')
+          .insert({
+            content,
+            is_from_user: false,
+            profile_id: null
+          });
+        
+        if (error) throw error;
+        
+        input.value = '';
+        showMessage('Reply sent successfully!', 'success');
+        loadSupportMessages();
+        
+      } catch (error) {
+        console.error('Support message send error:', error);
+        showMessage(`Failed to send reply: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    // Network status monitoring
+    window.addEventListener('online', () => {
+      isOnline = true;
+      if (!supabase) {
+        initializeApp();
+      }
+    });
+
+    window.addEventListener('offline', () => {
+      isOnline = false;
+      updateConnectionStatus('offline');
+    });
+  </script>
+</body>
+</html>
