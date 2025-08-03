@@ -1,0 +1,2411 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>FPS GFX Tool - မြန်မာ ဂိမ်း အိုပတီမိုက်ဇာ</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Noto Sans Myanmar', 'Inter', sans-serif;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --myanmar-yellow: #FECB00;
+      --myanmar-green: #34B233;
+      --myanmar-red: #EA2839;
+      --myanmar-white: #FFFFFF;
+      --dark-bg: #0f0f23;
+      --card-bg: rgba(0, 0, 0, 0.8);
+      --border-color: rgba(254, 203, 0, 0.3);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f3460 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .myanmar-pattern {
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(254, 203, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(52, 178, 51, 0.1) 0%, transparent 50%);
+      animation: patternMove 20s ease-in-out infinite;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -2;
+    }
+
+    .myanmar-waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(45deg, rgba(254, 203, 0, 0.2), rgba(52, 178, 51, 0.2));
+      clip-path: polygon(0 100%, 0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%);
+      animation: waveFloat 8s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes patternMove {
+      0%, 100% { background-position: 0% 0%, 100% 100%; }
+      50% { background-position: 100% 100%, 0% 0%; }
+    }
+
+    @keyframes waveFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .myanmar-container {
+      backdrop-filter: blur(20px);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(254, 203, 0, 0.1);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .myanmar-container:hover {
+      border-color: rgba(254, 203, 0, 0.5);
+      box-shadow: 0 25px 50px rgba(254, 203, 0, 0.2);
+    }
+
+    .myanmar-btn {
+      background: linear-gradient(45deg, var(--myanmar-yellow), var(--myanmar-green));
+      color: #000;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .myanmar-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(254, 203, 0, 0.4);
+    }
+
+    .myanmar-btn:active {
+      transform: translateY(0);
+    }
+
+    .myanmar-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .myanmar-btn:hover::before {
+      left: 100%;
+    }
+
+    .myanmar-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--border-color);
+      color: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .myanmar-input:focus {
+      outline: none;
+      border-color: var(--myanmar-yellow);
+      box-shadow: 0 0 20px rgba(254, 203, 0, 0.3);
+    }
+
+    .myanmar-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .status-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .status-connected {
+      background: linear-gradient(45deg, var(--myanmar-green), #4ade80);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .status-connecting {
+      background: linear-gradient(45deg, var(--myanmar-yellow), #fbbf24);
+      color: #000;
+      animation: spin 1s linear infinite;
+    }
+
+    .status-error {
+      background: linear-gradient(45deg, var(--myanmar-red), #ef4444);
+      color: white;
+    }
+
+    .notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      left: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 16px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      z-index: 1001;
+      backdrop-filter: blur(15px);
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .notification-success {
+      background: linear-gradient(45deg, var(--myanmar-green), #4ade80);
+    }
+
+    .notification-error {
+      background: linear-gradient(45deg, var(--myanmar-red), #ef4444);
+    }
+
+    .notification-info {
+      background: linear-gradient(45deg, #3b82f6, #60a5fa);
+    }
+
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    .news-card:hover {
+      border-color: rgba(254, 203, 0, 0.5);
+      transform: translateY(-4px);
+    }
+
+    .chat-message {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      margin-bottom: 8px;
+      word-wrap: break-word;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .chat-message.sent {
+      background: linear-gradient(45deg, var(--myanmar-yellow), #fbbf24);
+      color: #000;
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    .chat-message.received {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      margin-right: auto;
+      margin-left: 0;
+    }
+
+    .video-container {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      padding: 12px 0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #9ca3af;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      padding: 8px;
+    }
+
+    .nav-item.active {
+      color: var(--myanmar-yellow);
+      transform: translateY(-2px);
+    }
+
+    .nav-item:hover {
+      color: var(--myanmar-yellow);
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(254, 203, 0, 0.3);
+      border-top: 3px solid var(--myanmar-yellow);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--myanmar-yellow);
+    }
+
+    .comment-thread {
+      border-left: 2px solid var(--border-color);
+      margin-left: 20px;
+      padding-left: 16px;
+    }
+
+    .like-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #9ca3af;
+      border-radius: 20px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .like-btn.liked {
+      background: var(--myanmar-red);
+      color: white;
+      border-color: var(--myanmar-red);
+    }
+
+    @media (max-width: 768px) {
+      .myanmar-container {
+        margin: 10px;
+        padding: 16px;
+      }
+      
+      .status-indicator {
+        top: 10px;
+        right: 10px;
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+      
+      .notification {
+        top: 60px;
+        right: 10px;
+        left: 10px;
+      }
+
+      .modal-content {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .chat-message {
+        max-width: 90%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .myanmar-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+
+      .profile-avatar {
+        width: 32px;
+        height: 32px;
+      }
+
+      .news-card {
+        margin: 8px;
+        padding: 12px;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .expire-warning {
+      background: linear-gradient(45deg, var(--myanmar-red), #ff6b6b);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 16px;
+      animation: pulse 2s infinite;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .search-result-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-result-item:hover {
+      background: rgba(254, 203, 0, 0.1);
+    }
+  </style>
+</head>
+<body class="myanmar-pattern text-white">
+  <div class="myanmar-waves"></div>
+  
+  <!-- Status Indicator -->
+  <div id="status-indicator" class="status-indicator status-connecting">
+    <i class="fas fa-circle-notch fa-spin"></i> ချိတ်ဆက်နေသည်...
+  </div>
+
+  <!-- Notifications Container -->
+  <div id="notifications-container"></div>
+
+  <!-- Main Container -->
+  <div class="min-h-screen pb-20">
+    <!-- Login Section -->
+    <div id="login-section" class="myanmar-container max-w-sm mx-auto mt-20 p-6">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-yellow-400 mb-2">
+          <i class="fas fa-gamepad mr-2"></i>
+          FPS GFX Tool
+        </h1>
+        <p class="text-gray-300 text-sm">မြန်မာ ဂိမ်း အိုပတီမိုက်ဇာ</p>
+      </div>
+
+      <!-- About Button -->
+      <button onclick="showAbout()" class="myanmar-btn w-full mb-4">
+        <i class="fas fa-info-circle mr-2"></i>
+        အကြောင်းအရာ & ဆက်သွယ်ရန်
+      </button>
+
+      <!-- Key Input -->
+      <div class="mb-4">
+        <input 
+          type="text" 
+          id="key-input" 
+          placeholder="သင့်ရဲ့ Key ကို ထည့်ပါ..." 
+          class="myanmar-input w-full"
+          required
+        >
+      </div>
+
+      <!-- Login Button -->
+      <button onclick="login()" id="login-btn" class="myanmar-btn w-full">
+        <i class="fas fa-sign-in-alt mr-2"></i>
+        <span id="login-text">ဝင်ရောက်ရန်</span>
+      </button>
+    </div>
+
+    <!-- About Modal -->
+    <div id="about-modal" class="modal hidden">
+      <div class="modal-content">
+        <h2 class="text-2xl font-bold text-yellow-400 mb-4">
+          <i class="fas fa-info-circle mr-2"></i>
+          ဆက်သွယ်ရန်
+        </h2>
+        <div id="about-content">
+          <div class="loading-spinner mb-4"></div>
+          <p class="text-center">Loading...</p>
+        </div>
+        <button onclick="hideAbout()" class="myanmar-btn w-full mt-4">
+          <i class="fas fa-arrow-left mr-2"></i>
+          ပြန်သွားရန်
+        </button>
+      </div>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+      <!-- Header -->
+      <div class="myanmar-container mx-auto max-w-md mt-4 p-4">
+        <div class="text-center">
+          <h1 class="text-2xl font-bold text-yellow-400 mb-2">
+            <i class="fas fa-gamepad mr-2"></i>
+            FPS GFX Tool
+          </h1>
+          <!-- Key Expiration Timer -->
+          <div id="expiration-timer" class="bg-gradient-to-r from-yellow-600 to-green-600 text-white p-3 rounded-lg text-center font-semibold">
+            <i class="fas fa-clock mr-2"></i>
+            <span id="timer-text">Key အချက်အလက် ရယူနေသည်...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Home Section -->
+      <div id="home-section" class="myanmar-container mx-auto max-w-md mt-4 p-4">
+        <!-- Game Selection -->
+        <div id="game-selection">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-gamepad mr-2"></i>
+            ဂိမ်း ဗားရှင်း ရွေးချယ်ပါ
+          </h2>
+          <div class="grid grid-cols-2 gap-4 mb-6">
+            <div class="bg-gray-800 p-4 rounded-lg cursor-pointer text-center transition-transform hover:scale-105" onclick="selectGame('korean')">
+              <div class="w-16 h-16 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                <i class="fas fa-flag text-white text-2xl"></i>
+              </div>
+              <p class="text-white font-medium">PUBG Korean</p>
+              <p class="text-gray-400 text-sm">KR ဗားရှင်း</p>
+            </div>
+            <div class="bg-gray-800 p-4 rounded-lg cursor-pointer text-center transition-transform hover:scale-105" onclick="selectGame('global')">
+              <div class="w-16 h-16 bg-gradient-to-br from-green-500 to-blue-600 rounded-lg mx-auto mb-3 flex items-center justify-center">
+                <i class="fas fa-globe text-white text-2xl"></i>
+              </div>
+              <p class="text-white font-medium">PUBG Global</p>
+              <p class="text-gray-400 text-sm">Global ဗားရှင်း</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- Configuration Form -->
+        <div id="config-form" class="hidden">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-cogs mr-2"></i>
+            Configuration
+          </h2>
+          
+          <div class="space-y-4">
+            <div>
+              <label class="block text-gray-300 text-sm font-medium mb-2">FPS Settings</label>
+              <select id="fps" class="myanmar-input w-full">
+                <option value="60">60 FPS</option>
+                <option value="90">90 FPS (အကြံပြုသည်)</option>
+                <option value="120">120 FPS</option>
+                <option value="144">144 FPS</option>
+              </select>
+            </div>
+
+            <div>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Bit Type</label>
+              <select id="bit-type" class="myanmar-input w-full">
+                <option value="32bit">32-bit</option>
+                <option value="64bit">64-bit (အကြံပြုသည်)</option>
+              </select>
+            </div>
+
+            <div class="flex items-center space-x-3">
+              <input type="checkbox" id="ipad-view" class="w-4 h-4">
+              <label for="ipad-view" class="text-gray-300 text-sm font-medium">iPad View Enable</label>
+            </div>
+
+            <div>
+              <label class="block text-gray-300 text-sm font-medium mb-2">DPI (မလိုအပ်)</label>
+              <input type="number" id="dpi" placeholder="320" class="myanmar-input w-full">
+            </div>
+
+            <div>
+              <label class="block text-gray-300 text-sm font-medium mb-2">Resolution (မလိုအပ်)</label>
+              <input type="text" id="resolution" placeholder="1920x1080" class="myanmar-input w-full">
+            </div>
+
+            <button onclick="generateFile()" class="myanmar-btn w-full">
+              <i class="fas fa-download mr-2"></i>
+              ဖန်တီး & ဒေါင်းလုဒ်
+            </button>
+
+            <button onclick="backToGameSelection()" class="bg-gray-700 hover:bg-gray-600 text-white py-2 px-4 rounded-lg transition-colors w-full">
+              <i class="fas fa-arrow-left mr-2"></i>
+              ပြန်သွားရန်
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Section -->
+      <div id="news-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-newspaper mr-2"></i>
+            သတင်းများ & ပြင်ဆင်မှုများ
+          </h2>
+
+          <!-- Profile Management -->
+          <div id="profile-management" class="myanmar-container mb-6 p-4">
+            <div id="create-profile">
+              <h3 class="text-lg font-medium text-yellow-400 mb-3">Profile ဖန်တီးရန်</h3>
+              <div class="space-y-3">
+                <input type="text" id="profile-username" placeholder="အသုံးပြုသူအမည်" class="myanmar-input w-full">
+                <input type="text" id="profile-name" placeholder="ပြသမည့်အမည်" class="myanmar-input w-full">
+                <input type="file" id="profile-picture" accept="image/*,image/gif" class="myanmar-input w-full">
+                <button onclick="createProfile()" class="myanmar-btn w-full">
+                  <i class="fas fa-user-plus mr-2"></i>
+                  Profile ဖန်တီးရန်
+                </button>
+              </div>
+            </div>
+
+            <!-- Post News Form -->
+            <div id="post-news" class="hidden mt-4">
+              <h3 class="text-lg font-medium text-yellow-400 mb-3">သတင်း တင်ရန်</h3>
+              <div class="space-y-3">
+                <input type="text" id="news-title" placeholder="သတင်း ခေါင်းစဥ်" class="myanmar-input w-full">
+                <textarea id="news-content" placeholder="သတင်း အကြောင်းအရာ" rows="3" class="myanmar-input w-full"></textarea>
+                <input type="text" id="news-youtube" placeholder="YouTube လင့် (မလိုအပ်)" class="myanmar-input w-full">
+                <input type="file" id="news-image" accept="image/*,video/*" class="myanmar-input w-full">
+                <button onclick="postNews()" class="myanmar-btn w-full">
+                  <i class="fas fa-paper-plane mr-2"></i>
+                  သတင်း တင်ရန်
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Search -->
+          <div class="myanmar-container mb-6 p-4">
+            <h3 class="text-lg font-medium text-yellow-400 mb-3">အသုံးပြုသူ ရှာရန်</h3>
+            <div class="search-container">
+              <input type="text" id="user-search" placeholder="အသုံးပြုသူအမည် ရှာရန်..." class="myanmar-input w-full" oninput="searchUsers()">
+              <div id="search-results" class="search-results hidden"></div>
+            </div>
+          </div>
+
+          <!-- News List -->
+          <div id="news-list" class="space-y-4">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center text-gray-400">သတင်းများ ရယူနေသည်...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Section -->
+      <div id="chat-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-comments mr-2"></i>
+            စကားပြောခန်း
+          </h2>
+
+          <!-- Chat List -->
+          <div id="chat-list" class="myanmar-container mb-4 p-4">
+            <h3 class="text-lg font-medium text-yellow-400 mb-3">စကားပြောသူများ</h3>
+            <div id="chat-users">
+              <p class="text-center text-gray-400">စကားပြောမှု မရှိသေးပါ</p>
+            </div>
+          </div>
+
+          <!-- Active Chat -->
+          <div id="active-chat" class="hidden">
+            <div class="myanmar-container mb-4 p-4">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <img id="chat-partner-avatar" src="" class="profile-avatar">
+                  <div>
+                    <h3 id="chat-partner-name" class="text-yellow-400 font-medium"></h3>
+                    <p id="chat-partner-username" class="text-gray-400 text-sm"></p>
+                  </div>
+                </div>
+                <button onclick="closeChatWindow()" class="text-gray-400 hover:text-red-400">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
+              <!-- Messages Container -->
+              <div id="chat-messages" class="h-64 overflow-y-auto mb-4 p-2 bg-black bg-opacity-30 rounded-lg">
+                <p class="text-center text-gray-400">စကားပြောမှု စတင်ပါ</p>
+              </div>
+
+              <!-- Message Input -->
+              <div class="flex space-x-2">
+                <textarea id="chat-input" placeholder="မက်ဆေ့ချ် ရေးပါ..." rows="1" class="myanmar-input flex-1 resize-none"></textarea>
+                <button onclick="sendChatMessage()" class="myanmar-btn px-4">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Section -->
+      <div id="support-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-headset mr-2"></i>
+            အကူအညီ စာပေးပို့
+          </h2>
+          
+          <div class="myanmar-container p-4">
+            <div id="support-messages" class="h-64 overflow-y-auto mb-4 p-2 bg-black bg-opacity-30 rounded-lg">
+              <div class="loading-spinner mb-4"></div>
+              <p class="text-center text-gray-400">မက်ဆေ့ချ် များ ရယူနေသည်...</p>
+            </div>
+            
+            <div class="flex space-x-2">
+              <textarea id="support-input" placeholder="သင့်မက်ဆေ့ချ် ရေးပါ..." rows="2" class="myanmar-input flex-1 resize-none"></textarea>
+              <button onclick="sendSupportMessage()" class="myanmar-btn px-4">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+
+            <!-- Key Expiry Support Info -->
+            <div class="mt-4 p-3 bg-red-600 bg-opacity-20 border border-red-500 rounded-lg">
+              <h4 class="text-red-400 font-medium mb-2">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Key သက်တမ်း ကုန်ဆုံးမှု
+              </h4>
+              <p class="text-sm text-gray-300">
+                သင့် Key သက်တမ်း ကုန်ဆုံးပါက အကူအညီ ဌာနမှတဆင့် Admin ကို ဆက်သွယ်ပြီး Key သက်တမ်း တိုးမြှင့်ရန် တောင်းဆိုနိုင်ပါသည်။
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile View Modal -->
+      <div id="profile-modal" class="modal hidden">
+        <div class="modal-content max-w-md">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-yellow-400">Profile</h2>
+            <button onclick="closeProfileModal()" class="text-gray-400 hover:text-red-400">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div id="profile-modal-content">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center">Loading...</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <div class="flex justify-around max-w-md mx-auto">
+        <a href="#" onclick="showSection('home')" class="nav-item active" id="nav-home">
+          <i class="fas fa-home text-lg mb-1"></i>
+          <span class="text-xs">မူလစာမျက်နှာ</span>
+        </a>
+        <a href="#" onclick="showSection('news')" class="nav-item" id="nav-news">
+          <i class="fas fa-newspaper text-lg mb-1"></i>
+          <span class="text-xs">သတင်းများ</span>
+        </a>
+        <a href="#" onclick="showSection('chat')" class="nav-item" id="nav-chat">
+          <i class="fas fa-comments text-lg mb-1"></i>
+          <span class="text-xs">စကားပြော</span>
+        </a>
+        <a href="#" onclick="showSection('support')" class="nav-item" id="nav-support">
+          <i class="fas fa-headset text-lg mb-1"></i>
+          <span class="text-xs">အကူအညី</span>
+        </a>
+        <a href="#" onclick="logout()" class="nav-item" id="nav-logout">
+          <i class="fas fa-sign-out-alt text-lg mb-1"></i>
+          <span class="text-xs">ထွက်ရန်</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  
+  <script>
+    // Configuration - ဒီနေရာမှာ သင့် Supabase credentials တွေကို ထည့်ပါ
+    const CONFIG = {
+      SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // သင့် URL ကို ထည့်ပါ
+      SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Key ကို ထည့်ပါ
+      MAX_RETRY_ATTEMPTS: 3,
+      RETRY_DELAY: 2000,
+      CONNECTION_TIMEOUT: 10000
+    };
+
+    // Global State
+    let state = {
+      supabase: null,
+      deviceId: '',
+      sessionId: '',
+      keyExpiration: null,
+      profileId: null,
+      currentProfile: null,
+      viewTimers: {},
+      reconnectAttempts: 0,
+      isConnected: false,
+      currentSection: 'home',
+      selectedGame: '',
+      activeChatPartner: null,
+      chatPartners: new Set()
+    };
+
+    // Utility Functions
+    const utils = {
+      async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      },
+
+      generateDeviceId() {
+        const ua = navigator.userAgent;
+        const canvas = document.createElement('canvas');
+        const ctx = canvas.getContext('2d');
+        ctx.textBaseline = 'top';
+        ctx.font = '14px Arial';
+        ctx.fillText('Device fingerprint', 2, 2);
+        const fingerprint = canvas.toDataURL();
+        const screen = `${screen.width}x${screen.height}`;
+        const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+        return btoa(ua + fingerprint + screen + timezone).slice(0, 255);
+      },
+
+      formatTimeRemaining(expirationDate) {
+        const now = new Date();
+        const timeLeft = new Date(expirationDate) - now;
+        
+        if (timeLeft <= 0) return 'Key သက်တမ်း ကုန်ဆုံးပြီ';
+        
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        
+        return `ကျန်ရှိချိန် ${days} ရက် ${hours} နာရီ ${minutes} မိနစ်`;
+      },
+
+      sanitizeInput(input) {
+        if (typeof input !== 'string') return '';
+        return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                   .replace(/[<>]/g, '')
+                   .trim();
+      },
+
+      formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      },
+
+      getVideoData(file) {
+        return new Promise((resolve) => {
+          const video = document.createElement('video');
+          video.preload = 'metadata';
+          video.onloadedmetadata = function() {
+            resolve({
+              duration: this.duration,
+              width: this.videoWidth,
+              height: this.videoHeight
+            });
+          };
+          video.src = URL.createObjectURL(file);
+        });
+      }
+    };
+
+    // UI Management
+    const ui = {
+      updateStatus(status, message) {
+        const indicator = document.getElementById('status-indicator');
+        indicator.className = `status-indicator status-${status}`;
+        
+        const icons = {
+          connected: 'fas fa-check-circle',
+          connecting: 'fas fa-circle-notch fa-spin',
+          error: 'fas fa-exclamation-triangle'
+        };
+        
+        const messages = {
+          connected: 'ချိတ်ဆက်ပြီး',
+          connecting: 'ချိတ်ဆက်နေသည်...',
+          error: 'ချိတ်ဆက်မှု အမှား'
+        };
+        
+        indicator.innerHTML = `<i class="${icons[status]}"></i> ${message || messages[status]}`;
+      },
+
+      showNotification(message, type = 'info', duration = 5000) {
+        const container = document.getElementById('notifications-container');
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+              <span>${message}</span>
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-4 hover:text-gray-200">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove();
+          }
+        }, duration);
+      },
+
+      showLoading(element, show = true) {
+        if (show) {
+          element.innerHTML = `
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center text-gray-400">Loading...</p>
+          `;
+        }
+      },
+
+      updateNavigationActive(section) {
+        document.querySelectorAll('.nav-item').forEach(nav => {
+          nav.classList.remove('active');
+        });
+        
+        const activeNav = document.getElementById(`nav-${section}`);
+        if (activeNav) {
+          activeNav.classList.add('active');
+        }
+      }
+    };
+
+    // Database Connection Management
+    const database = {
+      async initialize() {
+        try {
+          ui.updateStatus('connecting', 'စတင်နေသည်...');
+
+          if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+            throw new Error('ကျေးဇူးပြု၍ CONFIG အပိုင်းတွင် သင့် Supabase URL ကို ချိန်ညှိပါ');
+          }
+
+          if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY_HERE') {
+            throw new Error('ကျေးဇူးပြု၍ CONFIG အပိုင်းတွင် သင့် Supabase Anon Key ကို ချိန်ညှိပါ');
+          }
+
+          state.supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+            auth: {
+              persistSession: false
+            },
+            realtime: {
+              params: {
+                eventsPerSecond: 10
+              }
+            }
+          });
+
+          // Test connection
+          const { data, error } = await state.supabase.from('about').select('id').limit(1);
+          
+          if (error && error.code !== 'PGRST116') {
+            console.error('Database connection test failed:', error);
+            throw new Error(`Database ချိတ်ဆက်မှု မအောင်မြင်ပါ: ${error.message}`);
+          }
+
+          state.isConnected = true;
+          state.reconnectAttempts = 0;
+          ui.updateStatus('connected', 'အသင့်ဖြစ်ပြီ');
+
+          ui.showNotification('Database ချိတ်ဆက်မှု အောင်မြင်ပါသည်!', 'success');
+
+          // Setup realtime subscriptions
+          this.setupRealtimeSubscriptions();
+
+          return true;
+        } catch (error) {
+          console.error('Database initialization failed:', error);
+          state.isConnected = false;
+          ui.updateStatus('error', 'မအောင်မြင်ပါ');
+          ui.showNotification(`ချိတ်ဆက်မှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+          
+          // Retry connection
+          if (state.reconnectAttempts < CONFIG.MAX_RETRY_ATTEMPTS) {
+            state.reconnectAttempts++;
+            ui.showNotification(`ပြန်လည်ချိတ်ဆက်နေသည်... (${state.reconnectAttempts}/${CONFIG.MAX_RETRY_ATTEMPTS})`, 'info');
+            await utils.sleep(CONFIG.RETRY_DELAY);
+            return this.initialize();
+          }
+          
+          return false;
+        }
+      },
+
+      setupRealtimeSubscriptions() {
+        if (!state.supabase || !state.isConnected) return;
+
+        try {
+          // Subscribe to news updates
+          state.supabase
+            .channel('news_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, () => {
+              if (state.currentSection === 'news') {
+                this.loadNews();
+              }
+            })
+            .subscribe();
+
+          // Subscribe to support messages
+          state.supabase
+            .channel('support_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'support_messages' }, () => {
+              if (state.currentSection === 'support') {
+                this.loadSupportMessages();
+              }
+            })
+            .subscribe();
+
+          // Subscribe to chat messages
+          state.supabase
+            .channel('chat_changes')
+            .on('postgres_changes', { event: '*', schema: 'public', table: 'chat_messages' }, (payload) => {
+              if (state.currentSection === 'chat') {
+                this.handleRealtimeChat(payload);
+              }
+            })
+            .subscribe();
+
+          console.log('Realtime subscriptions setup complete');
+        } catch (error) {
+          console.error('Realtime subscription setup failed:', error);
+        }
+      },
+
+      async loadAbout() {
+        try {
+          const { data, error } = await state.supabase.from('about').select('*').single();
+          
+          if (error && error.code !== 'PGRST116') throw error;
+          
+          if (data) {
+            const content = `
+              <div class="space-y-4">
+                <div class="flex items-center space-x-3">
+                  <i class="fab fa-telegram text-blue-400 text-xl"></i>
+                  <div>
+                    <p class="text-gray-300">Telegram</p>
+                    <a href="${data.telegram || '#'}" target="_blank" class="text-yellow-400 hover:text-yellow-300">
+                      ${data.telegram || 'မသတ်မှတ်ထားပါ'}
+                    </a>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <i class="fab fa-viber text-purple-400 text-xl"></i>
+                  <div>
+                    <p class="text-gray-300">Viber</p>
+                    <a href="${data.viber || '#'}" target="_blank" class="text-yellow-400 hover:text-yellow-300">
+                      ${data.viber || 'မသတ်မှတ်ထားပါ'}
+                    </a>
+                  </div>
+                </div>
+                <div class="flex items-center space-x-3">
+                  <i class="fas fa-phone text-green-400 text-xl"></i>
+                  <div>
+                    <p class="text-gray-300">ဖုန်း</p>
+                    <p class="text-yellow-400">${data.phone || 'မသတ်မှတ်ထားပါ'}</p>
+                  </div>
+                </div>
+              </div>
+            `;
+            document.getElementById('about-content').innerHTML = content;
+          } else {
+            document.getElementById('about-content').innerHTML = '<p class="text-center text-gray-400">ဆက်သွယ်ရန် အချက်အလက် မရှိပါ</p>';
+          }
+        } catch (error) {
+          console.error('Load about error:', error);
+          document.getElementById('about-content').innerHTML = `
+            <p class="text-red-400">ဆက်သွယ်ရန် အချက်အလက် ရယူမှု မအောင်မြင်ပါ: ${error.message}</p>
+          `;
+        }
+      }
+    };
+
+    // Authentication & Session Management
+    const auth = {
+      async login() {
+        try {
+          const loginBtn = document.getElementById('login-btn');
+          const loginText = document.getElementById('login-text');
+          const keyInput = document.getElementById('key-input');
+          
+          loginBtn.disabled = true;
+          loginText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>ရယူနေသည်...';
+
+          const key = utils.sanitizeInput(keyInput.value);
+          if (!key) {
+            throw new Error('ကျေးဇူးပြု၍ Key ထည့်ပါ!');
+          }
+
+          if (!state.isConnected) {
+            throw new Error('Database မချိတ်ဆက်ထားပါ!');
+          }
+
+          // Verify key
+          const { data: keyData, error: keyError } = await state.supabase
+            .from('keys')
+            .select('*')
+            .eq('key_text', key)
+            .eq('is_active', true)
+            .single();
+
+          if (keyError || !keyData) {
+            throw new Error('မမှန်ကန်သော သို့မဟုတ် အသုံးမပြုနိုင်သော Key!');
+          }
+
+          if (new Date(keyData.expires_at) < new Date()) {
+            throw new Error('Key သက်တမ်း ကုန်ဆုံးပြီ!');
+          }
+
+          // Generate device info
+          state.deviceId = utils.generateDeviceId();
+          
+          const deviceInfo = {
+            id: state.deviceId,
+            user_agent: navigator.userAgent,
+            architecture: navigator.userAgent.includes('64') ? '64bit' : '32bit',
+            android_version: this.getAndroidVersion(),
+            model: this.getDeviceModel()
+          };
+
+          // Save device info
+          await state.supabase.from('devices').upsert(deviceInfo);
+
+          // Check device limit
+          const { data: sessions, error: sessionError } = await state.supabase
+            .from('sessions')
+            .select('id')
+            .eq('key_id', keyData.id)
+            .eq('is_active', true);
+
+          if (sessionError) throw sessionError;
+
+          if (sessions.length >= keyData.max_devices) {
+            throw new Error('ဒီ Key အတွက် အများဆုံး device အရေအတွက် ပြည့်နေပါပြီ!');
+          }
+
+          // Create session
+          const { data: sessionData, error: sessionInsertError } = await state.supabase
+            .from('sessions')
+            .insert({
+              key_id: keyData.id,
+              device_id: state.deviceId,
+              is_active: true
+            })
+            .select()
+            .single();
+
+          if (sessionInsertError) throw sessionInsertError;
+
+          state.sessionId = sessionData.id;
+          state.keyExpiration = new Date(keyData.expires_at);
+
+          // Update UI
+          document.getElementById('login-section').classList.add('hidden');
+          document.getElementById('main-content').classList.remove('hidden');
+
+          ui.showNotification('အောင်မြင်စွာ ဝင်ရောက်ပါပြီ!', 'success');
+
+          // Start expiration timer
+          this.startExpirationTimer();
+          
+          // Load initial data
+          await this.checkProfile();
+
+        } catch (error) {
+          console.error('Login error:', error);
+          ui.showNotification(`ဝင်ရောက်မှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        } finally {
+          const loginBtn = document.getElementById('login-btn');
+          const loginText = document.getElementById('login-text');
+          loginBtn.disabled = false;
+          loginText.innerHTML = 'ဝင်ရောက်ရန်';
+        }
+      },
+
+      getAndroidVersion() {
+        const match = navigator.userAgent.match(/Android\s+([\d.]+)/);
+        return match ? match[1] : 'Unknown';
+      },
+
+      getDeviceModel() {
+        const match = navigator.userAgent.match(/\(([^;]+);/);
+        return match ? match[1] : 'Unknown';
+      },
+
+      startExpirationTimer() {
+        const updateTimer = () => {
+          const timerText = document.getElementById('timer-text');
+          if (timerText && state.keyExpiration) {
+            const remaining = utils.formatTimeRemaining(state.keyExpiration);
+            timerText.textContent = remaining;
+            
+            if (remaining === 'Key သက်တမ်း ကုန်ဆုံးပြီ') {
+              this.handleKeyExpiration();
+              return;
+            }
+
+            // Show warning if less than 3 days
+            const timeLeft = new Date(state.keyExpiration) - new Date();
+            if (timeLeft < 3 * 24 * 60 * 60 * 1000 && timeLeft > 0) {
+              const timer = document.getElementById('expiration-timer');
+              timer.className = 'expire-warning';
+            }
+          }
+        };
+
+        updateTimer();
+        setInterval(updateTimer, 60000); // Update every minute
+      },
+
+      async handleKeyExpiration() {
+        // Lock all functions but keep profile data
+        document.querySelectorAll('.myanmar-btn').forEach(btn => {
+          if (!btn.id || btn.id !== 'logout-btn') {
+            btn.disabled = true;
+            btn.style.opacity = '0.5';
+          }
+        });
+
+        ui.showNotification('သင့် Key သက်တမ်း ကုန်ဆုံးပါပြီ။ Key သက်တမ်း တိုးမြှင့်ရန် အကူအညီ ဌานကို ဆက်သွယ်ပါ။', 'error', 10000);
+        
+        // Show support section
+        showSection('support');
+      },
+
+      async checkProfile() {
+        if (!state.sessionId) return;
+
+        try {
+          // Check if profile exists for this session
+          const { data: session } = await state.supabase
+            .from('sessions')
+            .select('*, keys(key_text)')
+            .eq('id', state.sessionId)
+            .single();
+
+          if (!session) return;
+
+          // Look for existing profile linked to this key
+          const { data: profile } = await state.supabase
+            .from('profiles')
+            .select('*')
+            .eq('key_text', session.keys.key_text)
+            .single();
+
+          if (profile) {
+            state.profileId = profile.id;
+            state.currentProfile = profile;
+            document.getElementById('create-profile').classList.add('hidden');
+            document.getElementById('post-news').classList.remove('hidden');
+          }
+
+        } catch (error) {
+          console.log('No existing profile found');
+        }
+      },
+
+      async logout() {
+        try {
+          if (state.sessionId && state.supabase) {
+            await state.supabase
+              .from('sessions')
+              .update({ is_active: false })
+              .eq('id', state.sessionId);
+          }
+
+          // Reset state but keep profile data
+          state.sessionId = '';
+          state.keyExpiration = null;
+          state.selectedGame = '';
+          state.activeChatPartner = null;
+
+          // Update UI
+          document.getElementById('main-content').classList.add('hidden');
+          document.getElementById('login-section').classList.remove('hidden');
+          document.getElementById('key-input').value = '';
+
+          ui.showNotification('အောင်မြင်စွာ ထွက်ခွာပါပြီ', 'info');
+
+        } catch (error) {
+          console.error('Logout error:', error);
+          ui.showNotification(`ထွက်ခွာမှု အမှား: ${error.message}`, 'error');
+        }
+      }
+    };
+
+    // Profile & News Management
+    const profiles = {
+      async create() {
+        if (!state.supabase || !state.sessionId) {
+          ui.showNotification('Database မချိတ်ဆက်ထားပါ သို့မဟုတ် Session မရှိပါ', 'error');
+          return;
+        }
+
+        try {
+          const username = utils.sanitizeInput(document.getElementById('profile-username').value);
+          const name = utils.sanitizeInput(document.getElementById('profile-name').value);
+          const pictureFile = document.getElementById('profile-picture').files[0];
+
+          if (!username || !name) {
+            ui.showNotification('အသုံးပြုသူအမည် နှင့် ပြသမည့်အမည် လိုအပ်ပါသည်!', 'error');
+            return;
+          }
+
+          // Check username uniqueness
+          const { data: existingProfile } = await state.supabase
+            .from('profiles')
+            .select('username')
+            .eq('username', username)
+            .single();
+
+          if (existingProfile) {
+            ui.showNotification('ဒီ အသုံးပြုသူအမည် ရှိနေပါပြီ!', 'error');
+            return;
+          }
+
+          let profilePictureUrl = null;
+
+          // Upload profile picture if provided
+          if (pictureFile) {
+            const fileExt = pictureFile.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            
+            const { error: uploadError } = await state.supabase.storage
+              .from('profiles')
+              .upload(fileName, pictureFile);
+
+            if (uploadError) {
+              console.error('Upload error:', uploadError);
+            } else {
+              const { data: publicURL } = state.supabase.storage
+                .from('profiles')
+                .getPublicUrl(fileName);
+              profilePictureUrl = publicURL.publicUrl;
+            }
+          }
+
+          // Get key text from session
+          const { data: session } = await state.supabase
+            .from('sessions')
+            .select('*, keys(key_text)')
+            .eq('id', state.sessionId)
+            .single();
+
+          // Create profile
+          const { data: newProfile, error } = await state.supabase
+            .from('profiles')
+            .insert({
+              id: crypto.randomUUID(),
+              username: username,
+              name: name,
+              profile_picture: profilePictureUrl,
+              key_text: session.keys.key_text,
+              is_banned: false
+            })
+            .select()
+            .single();
+
+          if (error) throw error;
+
+          state.profileId = newProfile.id;
+          state.currentProfile = newProfile;
+
+          // Update UI
+          document.getElementById('create-profile').classList.add('hidden');
+          document.getElementById('post-news').classList.remove('hidden');
+
+          ui.showNotification('Profile အောင်မြင်စွာ ဖန်တီးပါပြီ!', 'success');
+
+          // Clear form
+          document.getElementById('profile-username').value = '';
+          document.getElementById('profile-name').value = '';
+          document.getElementById('profile-picture').value = '';
+
+        } catch (error) {
+          console.error('Profile creation error:', error);
+          ui.showNotification(`Profile ဖန်တီးမှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        }
+      },
+
+      async postNews() {
+        if (!state.profileId) {
+          ui.showNotification('Profile ဖန်တီးရန် လိုအပ်ပါသည်!', 'error');
+          return;
+        }
+
+        try {
+          const title = utils.sanitizeInput(document.getElementById('news-title').value);
+          const content = utils.sanitizeInput(document.getElementById('news-content').value);
+          const youtubeLink = utils.sanitizeInput(document.getElementById('news-youtube').value);
+          const mediaFile = document.getElementById('news-image').files[0];
+
+          if (!title || !content) {
+            ui.showNotification('ခေါင်းစဥ် နှင့် အကြောင်းအရာ လိုအပ်ပါသည်!', 'error');
+            return;
+          }
+
+          let mediaUrl = null;
+          let mediaType = null;
+          let mediaDuration = null;
+
+          // Upload media if provided
+          if (mediaFile) {
+            const isVideo = mediaFile.type.startsWith('video/');
+            const fileExt = mediaFile.name.split('.').pop();
+            const fileName = `${Date.now()}_${Math.random().toString(36).substring(7)}.${fileExt}`;
+            
+            if (isVideo) {
+              const videoData = await utils.getVideoData(mediaFile);
+              mediaDuration = Math.round(videoData.duration);
+            }
+
+            const { error: uploadError } = await state.supabase.storage
+              .from('news')
+              .upload(fileName, mediaFile);
+
+            if (uploadError) {
+              console.error('Upload error:', uploadError);
+            } else {
+              const { data: publicURL } = state.supabase.storage
+                .from('news')
+                .getPublicUrl(fileName);
+              mediaUrl = publicURL.publicUrl;
+              mediaType = isVideo ? 'video' : 'image';
+            }
+          }
+
+          // Create news
+          const { error } = await state.supabase
+            .from('news')
+            .insert({
+              title: title,
+              content: content,
+              youtube_link: youtubeLink || null,
+              image_url: mediaUrl,
+              media_type: mediaType,
+              media_duration: mediaDuration,
+              profile_id: state.profileId,
+              is_admin: false,
+              views: 0
+            });
+
+          if (error) throw error;
+
+          ui.showNotification('သတင်း အောင်မြင်စွာ တင်ပါပြီ!', 'success');
+
+          // Clear form
+          document.getElementById('news-title').value = '';
+          document.getElementById('news-content').value = '';
+          document.getElementById('news-youtube').value = '';
+          document.getElementById('news-image').value = '';
+
+          // Reload news
+          if (state.currentSection === 'news') {
+            database.loadNews();
+          }
+
+        } catch (error) {
+          console.error('Post news error:', error);
+          ui.showNotification(`သတင်း တင်မှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        }
+      },
+
+      async searchUsers() {
+        const searchTerm = document.getElementById('user-search').value.trim();
+        const resultsDiv = document.getElementById('search-results');
+
+        if (!searchTerm) {
+          resultsDiv.classList.add('hidden');
+          return;
+        }
+
+        try {
+          const { data: users, error } = await state.supabase
+            .from('profiles')
+            .select('*')
+            .ilike('username', `%${searchTerm}%`)
+            .eq('is_banned', false)
+            .limit(5);
+
+          if (error) throw error;
+
+          resultsDiv.innerHTML = '';
+
+          if (users.length === 0) {
+            resultsDiv.innerHTML = '<div class="search-result-item">မတွေ့ရှိပါ</div>';
+          } else {
+            users.forEach(user => {
+              const item = document.createElement('div');
+              item.className = 'search-result-item';
+              item.innerHTML = `
+                <div class="flex items-center space-x-3">
+                  <img src="${user.profile_picture || 'https://via.placeholder.com/32'}" class="w-8 h-8 rounded-full object-cover">
+                  <div>
+                    <p class="text-yellow-400 font-medium">${user.username}</p>
+                    <p class="text-gray-400 text-sm">${user.name}</p>
+                  </div>
+                </div>
+              `;
+              item.onclick = () => this.viewProfile(user.id);
+              resultsDiv.appendChild(item);
+            });
+          }
+
+          resultsDiv.classList.remove('hidden');
+
+        } catch (error) {
+          console.error('User search error:', error);
+        }
+      },
+
+      async viewProfile(profileId) {
+        try {
+          const { data: profile, error } = await state.supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', profileId)
+            .single();
+
+          if (error) throw error;
+
+          // Get user's news
+          const { data: userNews, error: newsError } = await state.supabase
+            .from('news')
+            .select('*')
+            .eq('profile_id', profileId)
+            .order('created_at', { ascending: false });
+
+          if (newsError) throw newsError;
+
+          const modalContent = document.getElementById('profile-modal-content');
+          modalContent.innerHTML = `
+            <div class="text-center mb-6">
+              <img src="${profile.profile_picture || 'https://via.placeholder.com/80'}" 
+                   class="w-20 h-20 rounded-full object-cover mx-auto mb-4">
+              <h3 class="text-xl font-bold text-yellow-400">${profile.username}</h3>
+              <p class="text-gray-300">${profile.name}</p>
+              <p class="text-gray-400 text-sm">Member since ${new Date(profile.created_at).toLocaleDateString()}</p>
+            </div>
+
+            ${state.profileId !== profileId ? `
+              <button onclick="startChat('${profileId}')" class="myanmar-btn w-full mb-4">
+                <i class="fas fa-comment mr-2"></i>
+                စကားပြောရန်
+              </button>
+            ` : ''}
+
+            <div class="mb-4">
+              <h4 class="text-lg font-medium text-yellow-400 mb-2">သတင်းများ (${userNews.length})</h4>
+              <div class="space-y-3 max-h-64 overflow-y-auto">
+                ${userNews.length === 0 ? '<p class="text-gray-400 text-center">သတင်း မရှိပါ</p>' : 
+                  userNews.map(news => `
+                    <div class="bg-gray-800 p-3 rounded-lg">
+                      <h5 class="text-white font-medium mb-1">${news.title}</h5>
+                      <p class="text-gray-400 text-sm">${news.content.substring(0, 100)}${news.content.length > 100 ? '...' : ''}</p>
+                      <div class="flex items-center justify-between mt-2 text-xs text-gray-500">
+                        <span><i class="fas fa-eye mr-1"></i> ${news.views || 0}</span>
+                        <span>${new Date(news.created_at).toLocaleDateString()}</span>
+                      </div>
+                    </div>
+                  `).join('')
+                }
+              </div>
+            </div>
+          `;
+
+          document.getElementById('profile-modal').classList.remove('hidden');
+          document.getElementById('search-results').classList.add('hidden');
+
+        } catch (error) {
+          console.error('Profile view error:', error);
+          ui.showNotification('Profile ကြည့်ရှုမှု မအောင်မြင်ပါ', 'error');
+        }
+      }
+    };
+
+    // News System
+    const news = {
+      async load() {
+        try {
+          ui.showLoading(document.getElementById('news-list'));
+          
+          const { data, error } = await state.supabase
+            .from('news')
+            .select(`
+              *,
+              profiles (
+                username,
+                name,
+                profile_picture
+              )
+            `)
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+
+          const newsList = document.getElementById('news-list');
+          newsList.innerHTML = '';
+
+          if (data.length === 0) {
+            newsList.innerHTML = '<p class="text-center text-gray-400">သတင်း မရှိပါ</p>';
+            return;
+          }
+
+          data.forEach(newsItem => {
+            const newsCard = this.createNewsCard(newsItem);
+            newsList.appendChild(newsCard);
+
+            // Setup view timer
+            if (state.viewTimers[newsItem.id]) clearTimeout(state.viewTimers[newsItem.id]);
+            state.viewTimers[newsItem.id] = setTimeout(() => {
+              this.incrementViewCount(newsItem.id);
+            }, 3000);
+          });
+        } catch (error) {
+          console.error('Load news error:', error);
+          ui.showNotification(`သတင်း ရယူမှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        }
+      },
+
+      createNewsCard(newsItem) {
+        const newsCard = document.createElement('div');
+        newsCard.className = 'news-card p-4 mb-4';
+        
+        const isVideo = newsItem.media_type === 'video';
+        const mediaHtml = newsItem.image_url ? 
+          (isVideo ? 
+            `<div class="video-container mb-3">
+              <video controls playsinline webkit-playsinline class="w-full rounded-lg" onloadedmetadata="updateVideoDuration(this, ${newsItem.media_duration || 0})">
+                <source src="${newsItem.image_url}" type="video/mp4">
+              </video>
+              ${newsItem.media_duration ? `<div class="video-duration">${Math.floor(newsItem.media_duration / 60)}:${(newsItem.media_duration % 60).toString().padStart(2, '0')}</div>` : ''}
+            </div>` :
+            `<img src="${newsItem.image_url}" class="w-full rounded-lg mb-3 object-cover" onerror="this.style.display='none'">`) 
+          : '';
+
+        newsCard.innerHTML = `
+          <div class="flex items-center space-x-3 mb-3">
+            <img src="${newsItem.profiles?.profile_picture || 'https://via.placeholder.com/32'}" 
+                 class="profile-avatar"
+                 onerror="this.src='https://via.placeholder.com/32'">
+            <div>
+              <p class="text-white font-medium">${newsItem.profiles?.username || 'Anonymous'}</p>
+              <p class="text-gray-400 text-sm">${newsItem.profiles?.name || 'Unknown'}</p>
+            </div>
+            ${newsItem.is_admin ? '<span class="bg-red-600 text-white text-xs px-2 py-1 rounded-full">Admin</span>' : ''}
+          </div>
+          <h3 class="text-yellow-400 font-semibold mb-2">${newsItem.title}</h3>
+          <p class="text-gray-300 mb-3">${newsItem.content}</p>
+          ${mediaHtml}
+          ${newsItem.youtube_link ? `
+            <a href="${newsItem.youtube_link}" target="_blank" 
+               class="inline-flex items-center text-red-400 hover:text-red-300 mb-3">
+              <i class="fab fa-youtube mr-2"></i>
+              YouTube တွင် ကြည့်ရှုရန်
+            </a>
+          ` : ''}
+          <div class="flex items-center justify-between text-sm text-gray-400 mb-3">
+            <div class="flex items-center space-x-4">
+              <span><i class="fas fa-eye mr-1"></i> ${newsItem.views || 0} views</span>
+              <button onclick="toggleLike('${newsItem.id}')" class="like-btn" id="like-btn-${newsItem.id}">
+                <i class="fas fa-heart mr-1"></i> <span id="like-count-${newsItem.id}">0</span>
+              </button>
+            </div>
+            <span>${new Date(newsItem.created_at).toLocaleString()}</span>
+          </div>
+          <div id="comments-${newsItem.id}" class="mt-4"></div>
+          <div class="mt-3 flex space-x-2">
+            <textarea id="comment-input-${newsItem.id}" 
+                     placeholder="မှတ်ချက် ရေးပါ..." 
+                     rows="1"
+                     class="myanmar-input flex-1 resize-none"></textarea>
+            <button onclick="postComment('${newsItem.id}')" class="myanmar-btn px-4">
+              <i class="fas fa-paper-plane"></i>
+            </button>
+          </div>
+        `;
+
+        // Load comments and likes
+        this.loadComments(newsItem.id);
+        this.loadLikes(newsItem.id);
+
+        return newsCard;
+      },
+
+      async loadComments(newsId) {
+        try {
+          const { data, error } = await state.supabase
+            .from('comments')
+            .select(`
+              *,
+              profiles (
+                username,
+                name,
+                profile_picture
+              )
+            `)
+            .eq('news_id', newsId)
+            .order('created_at', { ascending: true });
+
+          if (error) throw error;
+
+          const commentsDiv = document.getElementById(`comments-${newsId}`);
+          commentsDiv.innerHTML = '';
+
+          if (data.length === 0) return;
+
+          const renderComment = (comment, isReply = false) => {
+            const commentDiv = document.createElement('div');
+            commentDiv.className = `comment-thread ${isReply ? 'ml-6' : ''} bg-gray-800 rounded-lg p-3 mb-2`;
+            commentDiv.innerHTML = `
+              <div class="flex items-center space-x-2 mb-2">
+                <img src="${comment.profiles?.profile_picture || 'https://via.placeholder.com/24'}" 
+                     class="w-6 h-6 rounded-full object-cover"
+                     onerror="this.src='https://via.placeholder.com/24'">
+                <span class="text-yellow-400 text-sm font-medium">${comment.profiles?.username || 'Anonymous'}</span>
+                <span class="text-gray-400 text-xs">${new Date(comment.created_at).toLocaleString()}</span>
+              </div>
+              <p class="text-gray-300 text-sm">${comment.content}</p>
+              ${!isReply && state.profileId ? `
+                <button onclick="replyToComment('${comment.id}', '${newsId}')" class="text-yellow-400 text-xs mt-2 hover:text-yellow-300">
+                  <i class="fas fa-reply mr-1"></i> ပြန်ကြားရန်
+                </button>
+              ` : ''}
+            `;
+            commentsDiv.appendChild(commentDiv);
+
+            // Render replies
+            const replies = data.filter(c => c.parent_id === comment.id);
+            replies.forEach(reply => renderComment(reply, true));
+          };
+
+          data.filter(c => !c.parent_id).forEach(comment => renderComment(comment));
+        } catch (error) {
+          console.error('Load comments error:', error);
+        }
+      },
+
+      async loadLikes(newsId) {
+        try {
+          const { count } = await state.supabase
+            .from('news_likes')
+            .select('*', { count: 'exact', head: true })
+            .eq('news_id', newsId);
+
+          const likeCountSpan = document.getElementById(`like-count-${newsId}`);
+          if (likeCountSpan) {
+            likeCountSpan.textContent = count || 0;
+          }
+
+          // Check if current user liked
+          if (state.profileId) {
+            const { data } = await state.supabase
+              .from('news_likes')
+              .select('id')
+              .eq('news_id', newsId)
+              .eq('profile_id', state.profileId)
+              .single();
+
+            const likeBtn = document.getElementById(`like-btn-${newsId}`);
+            if (likeBtn) {
+              if (data) {
+                likeBtn.classList.add('liked');
+              } else {
+                likeBtn.classList.remove('liked');
+              }
+            }
+          }
+        } catch (error) {
+          console.error('Load likes error:', error);
+        }
+      },
+
+      async incrementViewCount(newsId) {
+        try {
+          const { error } = await state.supabase.rpc('increment_news_views', {
+            news_id_param: newsId
+          });
+          
+          if (error) throw error;
+        } catch (error) {
+          console.error('Increment view count error:', error);
+        }
+      }
+    };
+
+    // Chat System
+    const chat = {
+      async loadChatList() {
+        try {
+          // Get all chat partners
+          const { data: sentMessages } = await state.supabase
+            .from('chat_messages')
+            .select('receiver_id')
+            .eq('sender_id', state.profileId);
+
+          const { data: receivedMessages } = await state.supabase
+            .from('chat_messages')
+            .select('sender_id')
+            .eq('receiver_id', state.profileId);
+
+          const partnerIds = new Set();
+          sentMessages?.forEach(msg => partnerIds.add(msg.receiver_id));
+          receivedMessages?.forEach(msg => partnerIds.add(msg.sender_id));
+
+          if (partnerIds.size === 0) {
+            document.getElementById('chat-users').innerHTML = '<p class="text-center text-gray-400">စကားပြောမှု မရှိသေးပါ</p>';
+            return;
+          }
+
+          // Get partner profiles
+          const { data: partners } = await state.supabase
+            .from('profiles')
+            .select('*')
+            .in('id', Array.from(partnerIds));
+
+          const chatUsersDiv = document.getElementById('chat-users');
+          chatUsersDiv.innerHTML = '';
+
+          partners?.forEach(partner => {
+            const userDiv = document.createElement('div');
+            userDiv.className = 'flex items-center space-x-3 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700 transition-colors mb-2';
+            userDiv.innerHTML = `
+              <img src="${partner.profile_picture || 'https://via.placeholder.com/40'}" class="profile-avatar">
+              <div>
+                <p class="text-white font-medium">${partner.username}</p>
+                <p class="text-gray-400 text-sm">${partner.name}</p>
+              </div>
+            `;
+            userDiv.onclick = () => this.openChat(partner);
+            chatUsersDiv.appendChild(userDiv);
+          });
+
+        } catch (error) {
+          console.error('Load chat list error:', error);
+        }
+      },
+
+      async openChat(partner) {
+        state.activeChatPartner = partner;
+
+        // Update UI
+        document.getElementById('chat-partner-avatar').src = partner.profile_picture || 'https://via.placeholder.com/40';
+        document.getElementById('chat-partner-name').textContent = partner.username;
+        document.getElementById('chat-partner-username').textContent = partner.name;
+        document.getElementById('active-chat').classList.remove('hidden');
+
+        // Load messages
+        await this.loadMessages();
+      },
+
+      async loadMessages() {
+        if (!state.activeChatPartner) return;
+
+        try {
+          const { data: messages } = await state.supabase
+            .from('chat_messages')
+            .select(`
+              *,
+              sender:profiles!sender_id(username, name, profile_picture),
+              receiver:profiles!receiver_id(username, name, profile_picture)
+            `)
+            .or(`and(sender_id.eq.${state.profileId},receiver_id.eq.${state.activeChatPartner.id}),and(sender_id.eq.${state.activeChatPartner.id},receiver_id.eq.${state.profileId})`)
+            .order('created_at', { ascending: true });
+
+          const messagesDiv = document.getElementById('chat-messages');
+          messagesDiv.innerHTML = '';
+
+          if (!messages || messages.length === 0) {
+            messagesDiv.innerHTML = '<p class="text-center text-gray-400">စကားပြောမှု စတင်ပါ</p>';
+            return;
+          }
+
+          messages.forEach(message => {
+            const messageDiv = document.createElement('div');
+            const isOwn = message.sender_id === state.profileId;
+            messageDiv.className = `chat-message ${isOwn ? 'sent' : 'received'}`;
+            
+            messageDiv.innerHTML = `
+              <div class="flex items-center space-x-2 mb-1">
+                <img src="${message.sender.profile_picture || 'https://via.placeholder.com/20'}" 
+                     class="w-5 h-5 rounded-full object-cover">
+                <span class="text-xs font-medium">${message.sender.username}</span>
+                <span class="text-xs opacity-75">${new Date(message.created_at).toLocaleTimeString()}</span>
+              </div>
+              <p>${message.content}</p>
+            `;
+            messagesDiv.appendChild(messageDiv);
+          });
+
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+
+        } catch (error) {
+          console.error('Load messages error:', error);
+        }
+      },
+
+      async sendMessage() {
+        if (!state.activeChatPartner || !state.profileId) return;
+
+        const input = document.getElementById('chat-input');
+        const content = utils.sanitizeInput(input.value.trim());
+
+        if (!content) return;
+
+        try {
+          const { error } = await state.supabase
+            .from('chat_messages')
+            .insert({
+              sender_id: state.profileId,
+              receiver_id: state.activeChatPartner.id,
+              content: content
+            });
+
+          if (error) throw error;
+
+          input.value = '';
+          await this.loadMessages();
+
+        } catch (error) {
+          console.error('Send message error:', error);
+          ui.showNotification('မက်ဆေ့ချ် ပို့မှု မအောင်မြင်ပါ', 'error');
+        }
+      },
+
+      closeChat() {
+        state.activeChatPartner = null;
+        document.getElementById('active-chat').classList.add('hidden');
+      }
+    };
+
+    // Support System
+    const support = {
+      async loadMessages() {
+        try {
+          ui.showLoading(document.getElementById('support-messages'));
+
+          const { data, error } = await state.supabase
+            .from('support_messages')
+            .select(`
+              *,
+              profiles (
+                username,
+                name,
+                profile_picture
+              )
+            `)
+            .order('created_at', { ascending: true });
+
+          if (error) throw error;
+
+          const messagesDiv = document.getElementById('support-messages');
+          messagesDiv.innerHTML = '';
+
+          if (data.length === 0) {
+            messagesDiv.innerHTML = '<p class="text-center text-gray-400">မက်ဆေ့ချ် မရှိသေးပါ</p>';
+            return;
+          }
+
+          data.forEach(msg => {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `mb-3 ${msg.is_from_user ? 'text-right' : 'text-left'}`;
+            messageDiv.innerHTML = `
+              <div class="inline-block max-w-xs px-4 py-2 rounded-lg ${
+                msg.is_from_user 
+                  ? 'bg-yellow-600 text-white' 
+                  : 'bg-gray-700 text-gray-300'
+              }">
+                <p class="text-sm">${msg.content}</p>
+                <p class="text-xs mt-1 opacity-75">
+                  ${msg.profiles?.username || 'Admin'} - ${new Date(msg.created_at).toLocaleString()}
+                </p>
+              </div>
+            `;
+            messagesDiv.appendChild(messageDiv);
+          });
+
+          messagesDiv.scrollTop = messagesDiv.scrollHeight;
+        } catch (error) {
+          console.error('Load support messages error:', error);
+          ui.showNotification(`မက်ဆေ့ချ် ရယူမှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        }
+      },
+
+      async sendMessage() {
+        if (!state.profileId) {
+          ui.showNotification('Profile ဖန်တီးရန် လိုအပ်ပါသည်!', 'error');
+          return;
+        }
+
+        const input = document.getElementById('support-input');
+        const content = utils.sanitizeInput(input.value.trim());
+
+        if (!content) {
+          ui.showNotification('မက်ဆေ့ချ် ရေးပါ!', 'error');
+          return;
+        }
+
+        try {
+          const { error } = await state.supabase
+            .from('support_messages')
+            .insert({
+              profile_id: state.profileId,
+              content: content,
+              is_from_user: true
+            });
+
+          if (error) throw error;
+
+          input.value = '';
+          ui.showNotification('မက်ဆေ့ချ် ပို့ပါပြီ!', 'success');
+          
+          // Reload messages
+          await this.loadMessages();
+
+        } catch (error) {
+          console.error('Send support message error:', error);
+          ui.showNotification(`မက်ဆေ့ချ် ပို့မှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        }
+      }
+    };
+
+    // Game Configuration
+    const game = {
+      selectGame(gameType) {
+        state.selectedGame = gameType;
+        document.getElementById('game-selection').classList.add('hidden');
+        document.getElementById('config-form').classList.remove('hidden');
+      },
+
+      backToGameSelection() {
+        document.getElementById('config-form').classList.add('hidden');
+        document.getElementById('game-selection').classList.remove('hidden');
+        state.selectedGame = '';
+      },
+
+      async generateFile() {
+        if (!state.selectedGame) {
+          ui.showNotification('ဂိမ်း ရွေးချယ်ပါ!', 'error');
+          return;
+        }
+
+        try {
+          const fps = document.getElementById('fps').value;
+          const bitType = document.getElementById('bit-type').value;
+          const ipadView = document.getElementById('ipad-view').checked;
+          const dpi = document.getElementById('dpi').value || null;
+          const resolution = document.getElementById('resolution').value || null;
+
+          // Save configuration
+          const { error } = await state.supabase
+            .from('generated_files')
+            .insert({
+              session_id: state.sessionId,
+              game_version: state.selectedGame,
+              fps: parseInt(fps),
+              bit_type: bitType,
+              ipad_view: ipadView,
+              dpi: dpi ? parseInt(dpi) : null,
+              resolution: resolution,
+              file_path: `generated/${state.sessionId}_${Date.now()}.txt`
+            });
+
+          if (error) throw error;
+
+          // Generate file content
+          const config = {
+            gameVersion: state.selectedGame,
+            fps: fps,
+            bitType: bitType,
+            ipadView: ipadView,
+            dpi: dpi,
+            resolution: resolution,
+            timestamp: new Date().toISOString()
+          };
+
+          const fileContent = `FPS GFX Tool Configuration
+==========================
+Game Version: ${config.gameVersion.toUpperCase()}
+FPS: ${config.fps}
+Bit Type: ${config.bitType}
+iPad View: ${config.ipadView ? 'Enabled' : 'Disabled'}
+${config.dpi ? `DPI: ${config.dpi}` : ''}
+${config.resolution ? `Resolution: ${config.resolution}` : ''}
+
+Generated: ${config.timestamp}
+`;
+
+          // Download file
+          const blob = new Blob([fileContent], { type: 'text/plain' });
+          const url = URL.createObjectURL(blob);
+          const a = document.createElement('a');
+          a.href = url;
+          a.download = `fps_gfx_${config.gameVersion}_${config.fps}fps.txt`;
+          document.body.appendChild(a);
+          a.click();
+          document.body.removeChild(a);
+          URL.revokeObjectURL(url);
+
+          ui.showNotification('ဖိုင် အောင်မြင်စွာ ဖန်တီးပြီး ဒေါင်းလုဒ် လုပ်ပါပြီ!', 'success');
+
+        } catch (error) {
+          console.error('Generate file error:', error);
+          ui.showNotification(`ဖိုင် ဖန်တီးမှု မအောင်မြင်ပါ: ${error.message}`, 'error');
+        }
+      }
+    };
+
+    // Event Handlers
+    function showSection(section) {
+      // Hide all sections
+      const sections = ['home-section', 'news-section', 'chat-section', 'support-section'];
+      sections.forEach(s => {
+        document.getElementById(s).classList.add('hidden');
+      });
+
+      // Show selected section
+      document.getElementById(`${section}-section`).classList.remove('hidden');
+      
+      // Update navigation
+      ui.updateNavigationActive(section);
+      state.currentSection = section;
+
+      // Load section data
+      switch (section) {
+        case 'news':
+          news.load();
+          break;
+        case 'chat':
+          if (state.profileId) {
+            chat.loadChatList();
+          }
+          break;
+        case 'support':
+          support.loadMessages();
+          break;
+      }
+    }
+
+    function showAbout() {
+      database.loadAbout();
+      document.getElementById('about-modal').classList.remove('hidden');
+    }
+
+    function hideAbout() {
+      document.getElementById('about-modal').classList.add('hidden');
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').classList.add('hidden');
+    }
+
+    function login() {
+      auth.login();
+    }
+
+    function logout() {
+      auth.logout();
+    }
+
+    function selectGame(gameType) {
+      game.selectGame(gameType);
+    }
+
+    function backToGameSelection() {
+      game.backToGameSelection();
+    }
+
+    function generateFile() {
+      game.generateFile();
+    }
+
+    function createProfile() {
+      profiles.create();
+    }
+
+    function postNews() {
+      profiles.postNews();
+    }
+
+    function searchUsers() {
+      profiles.searchUsers();
+    }
+
+    function startChat(profileId) {
+      // Find profile and start chat
+      state.supabase
+        .from('profiles')
+        .select('*')
+        .eq('id', profileId)
+        .single()
+        .then(({ data, error }) => {
+          if (!error && data) {
+            chat.openChat(data);
+            showSection('chat');
+            closeProfileModal();
+          }
+        });
+    }
+
+    function sendChatMessage() {
+      chat.sendMessage();
+    }
+
+    function closeChatWindow() {
+      chat.closeChat();
+    }
+
+    function sendSupportMessage() {
+      support.sendMessage();
+    }
+
+    async function postComment(newsId) {
+      if (!state.profileId) {
+        ui.showNotification('Profile ဖန်တီးရန် လိုအပ်ပါသည်!', 'error');
+        return;
+      }
+
+      const input = document.getElementById(`comment-input-${newsId}`);
+      const content = utils.sanitizeInput(input.value.trim());
+
+      if (!content) {
+        ui.showNotification('မှတ်ချက် ရေးပါ!', 'error');
+        return;
+      }
+
+      try {
+        const { error } = await state.supabase
+          .from('comments')
+          .insert({
+            news_id: newsId,
+            profile_id: state.profileId,
+            content: content
+          });
+
+        if (error) throw error;
+
+        input.value = '';
+        ui.showNotification('မှတ်ချက် တင်ပါပြီ!', 'success');
+        
+        // Reload comments
+        news.loadComments(newsId);
+
+      } catch (error) {
+        console.error('Post comment error:', error);
+        ui.showNotification('မှတ်ချက် တင်မှု မအောင်မြင်ပါ', 'error');
+      }
+    }
+
+    async function toggleLike(newsId) {
+      if (!state.profileId) {
+        ui.showNotification('Profile ဖန်တီးရန် လိုအပ်ပါသည်!', 'error');
+        return;
+      }
+
+      try {
+        // Check if already liked
+        const { data: existingLike } = await state.supabase
+          .from('news_likes')
+          .select('id')
+          .eq('news_id', newsId)
+          .eq('profile_id', state.profileId)
+          .single();
+
+        if (existingLike) {
+          // Unlike
+          const { error } = await state.supabase
+            .from('news_likes')
+            .delete()
+            .eq('id', existingLike.id);
+
+          if (error) throw error;
+        } else {
+          // Like
+          const { error } = await state.supabase
+            .from('news_likes')
+            .insert({
+              news_id: newsId,
+              profile_id: state.profileId
+            });
+
+          if (error) throw error;
+        }
+
+        // Reload likes
+        news.loadLikes(newsId);
+
+      } catch (error) {
+        console.error('Toggle like error:', error);
+        ui.showNotification('Like တွန်းမှု မအောင်မြင်ပါ', 'error');
+      }
+    }
+
+    function updateVideoDuration(videoElement, duration) {
+      if (duration && duration > 0) {
+        const durationElement = videoElement.parentElement.querySelector('.video-duration');
+        if (durationElement) {
+          const minutes = Math.floor(duration / 60);
+          const seconds = duration % 60;
+          durationElement.textContent = `${minutes}:${seconds.toString().padStart(2, '0')}`;
+        }
+      }
+    }
+
+    // Initialize Application
+    document.addEventListener('DOMContentLoaded', function() {
+      // Initialize database connection
+      database.initialize();
+
+      // Setup keyboard shortcuts
+      document.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter' && e.target.id === 'key-input') {
+          login();
+        }
+        if (e.key === 'Enter' && e.target.id === 'chat-input' && !e.shiftKey) {
+          e.preventDefault();
+          sendChatMessage();
+        }
+        if (e.key === 'Enter' && e.target.id === 'support-input' && !e.shiftKey) {
+          e.preventDefault();
+          sendSupportMessage();
+        }
+      });
+
+      // Handle online/offline status
+      window.addEventListener('online', () => {
+        ui.showNotification('အင်တာနက် ပြန်လည်ချိတ်ဆက်ပါပြီ', 'success');
+        if (!state.isConnected) {
+          database.initialize();
+        }
+      });
+
+      window.addEventListener('offline', () => {
+        ui.showNotification('အင်တာနက် ချိတ်ဆက်မှု ပြတ်တောက်သွားပါပြီ', 'error');
+        ui.updateStatus('error', 'Offline');
+      });
+
+      // Auto-resize textarea
+      document.addEventListener('input', function(e) {
+        if (e.target.tagName === 'TEXTAREA') {
+          e.target.style.height = 'auto';
+          e.target.style.height = e.target.scrollHeight + 'px';
+        }
+      });
+
+      // Click outside to close search results
+      document.addEventListener('click', function(e) {
+        if (!e.target.closest('.search-container')) {
+          document.getElementById('search-results').classList.add('hidden');
+        }
+      });
+
+      console.log('FPS GFX Tool initialized successfully');
+    });
+
+    // Make functions globally available
+    window.showSection = showSection;
+    window.showAbout = showAbout;
+    window.hideAbout = hideAbout;
+    window.closeProfileModal = closeProfileModal;
+    window.login = login;
+    window.logout = logout;
+    window.selectGame = selectGame;
+    window.backToGameSelection = backToGameSelection;
+    window.generateFile = generateFile;
+    window.createProfile = createProfile;
+    window.postNews = postNews;
+    window.searchUsers = searchUsers;
+    window.startChat = startChat;
+    window.sendChatMessage = sendChatMessage;
+    window.closeChatWindow = closeChatWindow;
+    window.sendSupportMessage = sendSupportMessage;
+    window.postComment = postComment;
+    window.toggleLike = toggleLike;
+    window.updateVideoDuration = updateVideoDuration;
+  </script>
+</body>
+</html>
