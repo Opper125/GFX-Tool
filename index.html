@@ -1151,8 +1151,8 @@
             throw new Error('Key သက်တမ်း ကုန်ဆုံးပြီးပါပြီ');
           }
 
-          // Register or get device
-          await this.registerDevice();
+          async login() {
+    await auth.registerDevice();
 
           // Check device limit
           const { data: activeSessions, error: sessionError } = await state.supabase
