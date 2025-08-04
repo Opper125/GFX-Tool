@@ -1,0 +1,1837 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>FPS GFX Tool - မြန်မာ အက်ဒမင် ဒက်ရှ်ဘုတ်</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Noto Sans Myanmar', 'Inter', sans-serif;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --myanmar-yellow: #FECB00;
+      --myanmar-green: #34B233;
+      --myanmar-red: #EA2839;
+      --myanmar-white: #FFFFFF;
+      --myanmar-blue: #0F4C75;
+      --dark-bg: #0F1419;
+      --darker-bg: #1A1F2E;
+      --card-bg: rgba(0, 0, 0, 0.85);
+      --border-color: rgba(254, 203, 0, 0.3);
+    }
+
+    body {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, var(--darker-bg) 50%, var(--dark-bg) 100%);
+      min-height: 100vh;
+      position: relative;
+      overflow-x: hidden;
+    }
+
+    .myanmar-pattern {
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(254, 203, 0, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(52, 178, 51, 0.15) 0%, transparent 50%),
+        radial-gradient(circle at 50% 50%, rgba(234, 40, 57, 0.1) 0%, transparent 50%);
+      animation: patternMove 25s ease-in-out infinite;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -2;
+    }
+
+    @keyframes patternMove {
+      0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+      33% { background-position: 100% 100%, 0% 0%, 75% 25%; }
+      66% { background-position: 50% 50%, 75% 25%, 25% 75%; }
+    }
+
+    .myanmar-waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 80px;
+      background: linear-gradient(45deg, 
+        rgba(254, 203, 0, 0.2), 
+        rgba(52, 178, 51, 0.2), 
+        rgba(234, 40, 57, 0.2));
+      clip-path: polygon(0 100%, 0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%);
+      animation: waveFloat 12s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes waveFloat {
+      0%, 100% { transform: translateY(0px) scaleY(1); }
+      50% { transform: translateY(-10px) scaleY(1.1); }
+    }
+
+    .admin-card {
+      backdrop-filter: blur(20px);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 
+        0 20px 40px -12px rgba(0, 0, 0, 0.8),
+        0 0 0 1px rgba(254, 203, 0, 0.1),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+      transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-radius: 16px;
+    }
+
+    .admin-card:hover {
+      transform: translateY(-2px);
+      box-shadow: 
+        0 25px 50px -12px rgba(254, 203, 0, 0.25),
+        0 0 0 1px rgba(254, 203, 0, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.15);
+      border-color: rgba(254, 203, 0, 0.5);
+    }
+
+    .myanmar-btn {
+      background: linear-gradient(135deg, var(--myanmar-yellow), var(--myanmar-green));
+      color: #000;
+      font-weight: 700;
+      position: relative;
+      overflow: hidden;
+      transition: all 0.3s ease;
+      text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+      border: none;
+      border-radius: 12px;
+      padding: 12px 20px;
+      cursor: pointer;
+    }
+
+    .myanmar-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+      transition: left 0.6s ease;
+    }
+
+    .myanmar-btn:hover::before {
+      left: 100%;
+    }
+
+    .myanmar-btn:hover {
+      background: linear-gradient(135deg, var(--myanmar-green), var(--myanmar-yellow));
+      transform: translateY(-1px);
+      box-shadow: 0 10px 25px rgba(254, 203, 0, 0.4);
+    }
+
+    .btn-danger {
+      background: linear-gradient(135deg, var(--myanmar-red), #FF6B6B);
+      color: white;
+    }
+
+    .btn-danger:hover {
+      background: linear-gradient(135deg, #FF6B6B, var(--myanmar-red));
+      box-shadow: 0 10px 25px rgba(234, 40, 57, 0.4);
+    }
+
+    .connection-status {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      z-index: 1000;
+      padding: 8px 16px;
+      border-radius: 20px;
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      backdrop-filter: blur(10px);
+      animation: statusPulse 2s infinite;
+    }
+
+    .status-online {
+      background: linear-gradient(135deg, var(--myanmar-green), #4ADE80);
+      color: white;
+      box-shadow: 0 0 20px rgba(52, 178, 51, 0.5);
+    }
+
+    .status-offline {
+      background: linear-gradient(135deg, var(--myanmar-red), #EF4444);
+      color: white;
+      animation: statusShake 0.5s ease-in-out;
+    }
+
+    .status-connecting {
+      background: linear-gradient(135deg, var(--myanmar-yellow), #FCD34D);
+      color: #000;
+      animation: statusSpin 1s linear infinite;
+    }
+
+    @keyframes statusPulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    @keyframes statusShake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-3px); }
+      75% { transform: translateX(3px); }
+    }
+
+    @keyframes statusSpin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .stats-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+      border-radius: 12px;
+    }
+
+    .stats-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 3px;
+      background: linear-gradient(90deg, var(--myanmar-yellow), var(--myanmar-green), var(--myanmar-red));
+      opacity: 0;
+      transition: opacity 0.3s ease;
+    }
+
+    .stats-card:hover::before {
+      opacity: 1;
+    }
+
+    .stats-card:hover {
+      transform: translateY(-3px) scale(1.02);
+      box-shadow: 0 15px 35px rgba(254, 203, 0, 0.2);
+      border-color: rgba(254, 203, 0, 0.3);
+    }
+
+    .admin-input {
+      background: rgba(255, 255, 255, 0.08);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      color: white;
+      transition: all 0.3s ease;
+      border-radius: 12px;
+      padding: 12px 16px;
+    }
+
+    .admin-input:focus {
+      border-color: var(--myanmar-yellow);
+      background: rgba(255, 255, 255, 0.12);
+      outline: none;
+      box-shadow: 0 0 25px rgba(254, 203, 0, 0.3);
+    }
+
+    .admin-input::placeholder {
+      color: rgba(255, 255, 255, 0.5);
+    }
+
+    .admin-table {
+      backdrop-filter: blur(10px);
+      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      overflow: hidden;
+    }
+
+    .admin-table th {
+      background: rgba(254, 203, 0, 0.15);
+      color: var(--myanmar-yellow);
+      font-weight: 700;
+      text-transform: uppercase;
+      font-size: 12px;
+      letter-spacing: 0.5px;
+      padding: 12px 8px;
+    }
+
+    .admin-table td {
+      padding: 12px 8px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .admin-table tr:hover {
+      background: rgba(254, 203, 0, 0.08);
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(254, 203, 0, 0.3);
+      border-top: 3px solid var(--myanmar-yellow);
+      border-radius: 50%;
+      width: 24px;
+      height: 24px;
+      animation: spin 1s linear infinite;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .notification {
+      position: fixed;
+      top: 70px;
+      right: 15px;
+      left: 15px;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 12px 16px;
+      border-radius: 10px;
+      color: white;
+      font-weight: 600;
+      z-index: 1001;
+      animation: slideInRight 0.4s ease-out;
+      backdrop-filter: blur(15px);
+      box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+    }
+
+    @keyframes slideInRight {
+      from { transform: translateX(100%); opacity: 0; }
+      to { transform: translateX(0); opacity: 1; }
+    }
+
+    .nav-btn {
+      transition: all 0.3s ease;
+      position: relative;
+      border-radius: 8px;
+      padding: 8px 12px;
+      font-size: 14px;
+    }
+
+    .nav-btn.active {
+      background: var(--myanmar-yellow) !important;
+      color: #000 !important;
+      box-shadow: 0 5px 15px rgba(254, 203, 0, 0.4);
+    }
+
+    .nav-btn:not(.active):hover {
+      background: rgba(254, 203, 0, 0.1);
+      color: var(--myanmar-yellow);
+    }
+
+    .fade-in {
+      animation: fadeInUp 0.6s ease-out forwards;
+    }
+
+    @keyframes fadeInUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .status-active { color: var(--myanmar-green); }
+    .status-inactive { color: var(--myanmar-red); }
+    .status-banned { color: var(--myanmar-red); }
+
+    .news-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      margin-bottom: 16px;
+    }
+
+    .news-card:hover {
+      border-color: rgba(254, 203, 0, 0.3);
+      transform: translateY(-2px);
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    /* Mobile optimizations */
+    @media (max-width: 768px) {
+      .container { padding: 8px; }
+      .admin-card { padding: 16px; margin: 8px; }
+      .connection-status { top: 10px; right: 10px; font-size: 9px; padding: 6px 12px; }
+      .notification { top: 50px; right: 10px; left: 10px; max-width: none; }
+      .stats-card { margin-bottom: 12px; }
+      .myanmar-btn { padding: 10px 16px; font-size: 14px; }
+      .admin-table { font-size: 12px; }
+      .admin-table th, .admin-table td { padding: 8px 4px; }
+      h1 { font-size: 20px; }
+      h2 { font-size: 18px; }
+      h3 { font-size: 16px; }
+      .nav-btn { padding: 6px 10px; font-size: 12px; margin: 2px; }
+      .modal-content { padding: 16px; max-width: 95vw; }
+    }
+
+    @media (max-width: 480px) {
+      .myanmar-pattern { opacity: 0.7; }
+      .myanmar-waves { height: 60px; }
+      .admin-card { padding: 12px; margin: 4px; }
+      .grid { gap: 8px; }
+      .stats-card { padding: 12px; }
+      .admin-table th, .admin-table td { padding: 6px 2px; font-size: 11px; }
+    }
+
+    /* Scrollbar styling */
+    ::-webkit-scrollbar { width: 6px; }
+    ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+    ::-webkit-scrollbar-thumb { background: var(--myanmar-yellow); border-radius: 3px; }
+    ::-webkit-scrollbar-thumb:hover { background: var(--myanmar-green); }
+
+    /* Loading overlay */
+    .loading-overlay {
+      backdrop-filter: blur(8px);
+      background: rgba(0,0,0,0.7);
+    }
+
+    .btn-small {
+      padding: 6px 12px;
+      font-size: 12px;
+      border-radius: 8px;
+    }
+
+    .table-actions {
+      display: flex;
+      gap: 4px;
+      flex-wrap: wrap;
+    }
+
+    .hidden { display: none !important; }
+  </style>
+</head>
+<body class="text-white">
+  <div class="myanmar-pattern"></div>
+  <div class="myanmar-waves"></div>
+  
+  <!-- Connection Status -->
+  <div id="connection-status" class="connection-status status-connecting">
+    <i class="fas fa-wifi"></i> ချိတ်ဆက်နေသည်...
+  </div>
+
+  <!-- Main Container -->
+  <div class="container mx-auto px-2 py-4 max-w-6xl">
+    <!-- Header -->
+    <div class="text-center mb-6 fade-in">
+      <h1 class="text-2xl md:text-3xl lg:text-4xl font-bold mb-2 text-yellow-400">
+        <i class="fas fa-shield-alt mr-2"></i>
+        FPS GFX Tool
+      </h1>
+      <h2 class="text-lg md:text-xl lg:text-2xl font-semibold text-green-400 mb-2">
+        မြန်မာ အက်ဒမင် ဒက်ရှ်ဘုတ်
+      </h2>
+      <div class="inline-block px-4 py-2 bg-gradient-to-r from-yellow-400 to-green-400 text-black rounded-full font-bold text-sm">
+        <i class="fas fa-crown mr-1"></i> Administrator Panel
+      </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notification-container"></div>
+
+    <!-- Login Section -->
+    <div id="login-section" class="max-w-md mx-auto fade-in">
+      <div class="admin-card p-6">
+        <h3 class="text-xl md:text-2xl font-bold text-center mb-6 text-yellow-400">
+          <i class="fas fa-key mr-2"></i>
+          အက်ဒမင် စစ်မှန်ရေး
+        </h3>
+        <div class="space-y-4">
+          <div class="relative">
+            <input 
+              type="password" 
+              id="admin-key" 
+              placeholder="အက်ဒမင် Key ထည့်ပါ..." 
+              class="admin-input w-full pl-12"
+            >
+            <i class="fas fa-key absolute left-4 top-1/2 transform -translate-y-1/2 text-yellow-400"></i>
+          </div>
+          <button 
+            onclick="adminLogin()" 
+            id="login-btn"
+            class="myanmar-btn w-full flex items-center justify-center space-x-2"
+          >
+            <i class="fas fa-sign-in-alt"></i>
+            <span id="login-text">ဒက်ရှ်ဘုတ်သို့ ဝင်ရောက်ပါ</span>
+          </button>
+        </div>
+      </div>
+    </div>
+
+    <!-- Admin Content -->
+    <div id="admin-content" class="hidden">
+      <!-- Stats Section -->
+      <div id="stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
+        <div class="stats-card p-4 text-center">
+          <i class="fas fa-users text-2xl md:text-3xl text-blue-400 mb-2"></i>
+          <h3 class="text-xs md:text-sm font-semibold">စုစုပေါင်း အသုံးပြုသူ</h3>
+          <p id="total-users" class="text-lg md:text-xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="stats-card p-4 text-center">
+          <i class="fas fa-key text-2xl md:text-3xl text-green-400 mb-2"></i>
+          <h3 class="text-xs md:text-sm font-semibold">အသုံးပြုနိုင်သည့် Key များ</h3>
+          <p id="active-keys" class="text-lg md:text-xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="stats-card p-4 text-center">
+          <i class="fas fa-newspaper text-2xl md:text-3xl text-purple-400 mb-2"></i>
+          <h3 class="text-xs md:text-sm font-semibold">စုစုပေါင်း သတင်းများ</h3>
+          <p id="total-news" class="text-lg md:text-xl font-bold text-yellow-400">0</p>
+        </div>
+        <div class="stats-card p-4 text-center">
+          <i class="fas fa-comments text-2xl md:text-3xl text-red-400 mb-2"></i>
+          <h3 class="text-xs md:text-sm font-semibold">အကူအညီ မက်ဆေ့ချ်များ</h3>
+          <p id="total-support" class="text-lg md:text-xl font-bold text-yellow-400">0</p>
+        </div>
+      </div>
+
+      <!-- Navigation -->
+      <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
+        <button onclick="showSection('about')" class="nav-btn myanmar-btn" id="nav-btn-about">
+          <i class="fas fa-info-circle mr-1"></i>
+          <span class="hidden sm:inline">အကြောင်းအရာ</span>
+          <span class="sm:hidden">About</span>
+        </button>
+        <button onclick="showSection('keys')" class="nav-btn myanmar-btn" id="nav-btn-keys">
+          <i class="fas fa-key mr-1"></i>
+          <span class="hidden sm:inline">Key များ</span>
+          <span class="sm:hidden">Keys</span>
+        </button>
+        <button onclick="showSection('users')" class="nav-btn myanmar-btn" id="nav-btn-users">
+          <i class="fas fa-users mr-1"></i>
+          <span class="hidden sm:inline">အသုံးပြုသူများ</span>
+          <span class="sm:hidden">Users</span>
+        </button>
+        <button onclick="showSection('news')" class="nav-btn myanmar-btn" id="nav-btn-news">
+          <i class="fas fa-newspaper mr-1"></i>
+          <span class="hidden sm:inline">သတင်းများ</span>
+          <span class="sm:hidden">News</span>
+        </button>
+        <button onclick="showSection('support')" class="nav-btn myanmar-btn" id="nav-btn-support">
+          <i class="fas fa-headset mr-1"></i>
+          <span class="hidden sm:inline">အကူအညီ</span>
+          <span class="sm:hidden">Support</span>
+        </button>
+      </div>
+
+      <!-- About Management -->
+      <div id="about-section" class="admin-section hidden">
+        <div class="admin-card p-4 md:p-8">
+          <h3 class="text-lg md:text-xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-info-circle mr-3"></i>
+            အကြောင်းအရာ စီမံခန့်ခွဲမှု
+          </h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">Telegram လင့်</label>
+              <input type="url" id="about-telegram" placeholder="https://t.me/..." 
+                     class="admin-input w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">Viber လင့်</label>
+              <input type="url" id="about-viber" placeholder="viber://..." 
+                     class="admin-input w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">ဖုန်းနံပါတ်</label>
+              <input type="tel" id="about-phone" placeholder="+95..." 
+                     class="admin-input w-full">
+            </div>
+            <div class="flex items-end">
+              <button onclick="updateAbout()" 
+                      class="myanmar-btn w-full flex items-center justify-center space-x-2">
+                <i class="fas fa-save"></i>
+                <span>အကြောင်းအရာ အပ်ဒိတ်လုပ်ပါ</span>
+              </button>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Keys Management -->
+      <div id="keys-section" class="admin-section hidden">
+        <div class="admin-card p-4 md:p-8">
+          <h3 class="text-lg md:text-xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-key mr-3"></i>
+            Access Key များ စီမံခန့်ခွဲမှု
+          </h3>
+          
+          <!-- Create Key Form -->
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+            <input type="text" id="key-text" placeholder="Key စာသား" 
+                   class="admin-input">
+            <select id="key-duration-type" class="admin-input">
+              <option value="days">ရက်</option>
+              <option value="weeks">ပတ်</option>
+              <option value="months">လ</option>
+            </select>
+            <input type="number" id="key-duration-value" placeholder="ကြာမြင့်မှု" min="1"
+                   class="admin-input">
+            <input type="number" id="key-max-devices" placeholder="မြင့်ဆုံး ကိရိယာများ" min="1"
+                   class="admin-input">
+          </div>
+          <button onclick="createKey()" 
+                  class="myanmar-btn mb-6 flex items-center space-x-2">
+            <i class="fas fa-plus"></i>
+            <span>Key အသစ် ဖန်တီးပါ</span>
+          </button>
+
+          <!-- Keys Table -->
+          <div class="overflow-x-auto">
+            <table class="admin-table w-full">
+              <thead>
+                <tr>
+                  <th class="text-left">Key စာသား</th>
+                  <th class="text-left">သက်တမ်းကုန်ဆုံးရက်</th>
+                  <th class="text-left">မြင့်ဆုံး ကိရိယာများ</th>
+                  <th class="text-left">အသုံးပြုပြီး</th>
+                  <th class="text-left">အခြေအနေ</th>
+                  <th class="text-left">လုပ်ဆောင်ချက်များ</th>
+                </tr>
+              </thead>
+              <tbody id="keys-table-body">
+                <tr>
+                  <td colspan="6" class="text-center text-gray-400 py-8">
+                    <div class="loading-spinner mx-auto mb-2"></div>
+                    Loading keys...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- Users Management -->
+      <div id="users-section" class="admin-section hidden">
+        <div class="admin-card p-4 md:p-8">
+          <h3 class="text-lg md:text-xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-users mr-3"></i>
+            အသုံးပြုသူများ စီမံခန့်ခွဲမှု
+          </h3>
+
+          <!-- Users Table -->
+          <div class="overflow-x-auto">
+            <table class="admin-table w-full">
+              <thead>
+                <tr>
+                  <th class="text-left">ပရိုဖိုင်</th>
+                  <th class="text-left">အသုံးပြုသူအမည်</th>
+                  <th class="text-left">နာမည်</th>
+                  <th class="text-left">ဖန်တီးရက်</th>
+                  <th class="text-left">အခြေအနေ</th>
+                  <th class="text-left">လုပ်ဆောင်ချက်များ</th>
+                </tr>
+              </thead>
+              <tbody id="users-table-body">
+                <tr>
+                  <td colspan="6" class="text-center text-gray-400 py-8">
+                    <div class="loading-spinner mx-auto mb-2"></div>
+                    Loading users...
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Management -->
+      <div id="news-section" class="admin-section hidden">
+        <div class="admin-card p-4 md:p-8">
+          <h3 class="text-lg md:text-xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-newspaper mr-3"></i>
+            သတင်းများ စီမံခန့်ခွဲမှု
+          </h3>
+
+          <!-- Post News Form -->
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+            <div>
+              <label class="block text-sm font-medium mb-2">ခေါင်းစဉ်</label>
+              <input type="text" id="admin-news-title" placeholder="သတင်း ခေါင်းစဉ်" 
+                     class="admin-input w-full">
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">YouTube လင့် (ရွေးချယ်ခွင့်ရှိ)</label>
+              <input type="url" id="admin-news-youtube" placeholder="https://youtube.com/..." 
+                     class="admin-input w-full">
+            </div>
+            <div class="md:col-span-2">
+              <label class="block text-sm font-medium mb-2">အကြောင်းအရာ</label>
+              <textarea id="admin-news-content" placeholder="သတင်း အကြောင်းအရာ..." rows="4"
+                        class="admin-input w-full resize-none"></textarea>
+            </div>
+            <div>
+              <label class="block text-sm font-medium mb-2">ပုံ (ရွေးချယ်ခွင့်ရှိ)</label>
+              <input type="file" id="admin-news-image" accept="image/*" 
+                     class="admin-input w-full">
+            </div>
+            <div class="flex items-end">
+              <button onclick="postAdminNews()" 
+                      class="myanmar-btn w-full flex items-center justify-center space-x-2">
+                <i class="fas fa-paper-plane"></i>
+                <span>သတင်း ပို့စ်လုပ်ပါ</span>
+              </button>
+            </div>
+          </div>
+
+          <!-- News List -->
+          <div id="news-list" class="space-y-4">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-center text-gray-400">သတင်းများ ရယူနေသည်...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Management -->
+      <div id="support-section" class="admin-section hidden">
+        <div class="admin-card p-4 md:p-8">
+          <h3 class="text-lg md:text-xl font-bold mb-6 text-yellow-400 flex items-center">
+            <i class="fas fa-headset mr-3"></i>
+            အကူအညီ မက်ဆေ့ချ်များ
+          </h3>
+
+          <!-- Support Messages -->
+          <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-center text-gray-400">Loading messages...</p>
+          </div>
+
+          <!-- Reply Form -->
+          <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+            <textarea id="admin-support-input" placeholder="သင့်ရဲ့ အကူအညီ စာကို ရေးပါ..." rows="3"
+                      class="admin-input flex-1 resize-none"></textarea>
+            <button onclick="sendAdminSupportMessage()" 
+                    class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
+              <i class="fas fa-paper-plane"></i>
+              <span>အကူအညီ ပို့ပါ</span>
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- News Detail Modal -->
+  <div id="news-modal" class="modal hidden">
+    <div class="modal-content max-w-2xl">
+      <div class="flex justify-between items-center mb-4">
+        <h2 class="text-xl font-bold text-yellow-400">သတင်း အသေးစိတ်</h2>
+        <button onclick="closeNewsModal()" class="text-gray-400 hover:text-red-400">
+          <i class="fas fa-times"></i>
+        </button>
+      </div>
+      <div id="news-modal-content">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-center">Loading...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Confirm Delete Modal -->
+  <div id="confirm-modal" class="modal hidden">
+    <div class="modal-content max-w-md">
+      <div class="text-center">
+        <i class="fas fa-exclamation-triangle text-4xl text-red-400 mb-4"></i>
+        <h3 class="text-xl font-bold text-white mb-4">သေချာပါသလား?</h3>
+        <p id="confirm-message" class="text-gray-300 mb-6">ဒီလုပ်ဆောင်ချက်ကို ပြန်ပြင်လို့မရပါ။</p>
+        <div class="flex space-x-4">
+          <button onclick="closeConfirmModal()" class="myanmar-btn flex-1">
+            <i class="fas fa-times mr-2"></i>
+            မလုပ်တော့ပါ
+          </button>
+          <button onclick="confirmAction()" class="btn-danger myanmar-btn flex-1">
+            <i class="fas fa-trash mr-2"></i>
+            ဖျက်ပါ
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Loading Overlay -->
+  <div id="loading-overlay" class="fixed inset-0 loading-overlay flex items-center justify-center z-50 hidden">
+    <div class="admin-card p-8 text-center">
+      <div class="loading-spinner mx-auto mb-4" style="width: 40px; height: 40px;"></div>
+      <p class="text-white font-semibold">လုပ်ဆောင်နေသည်...</p>
+    </div>
+  </div>
+
+  
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  <script>
+    // Configuration
+    const CONFIG = {
+      SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // သင့် Supabase URL ကို ထည့်ပါ
+      SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
+      ADMIN_KEY: 'Opper_FPS',
+      MAX_RETRY_ATTEMPTS: 3,
+      RETRY_DELAY: 2000
+    };
+
+    // State
+    let state = {
+      supabase: null,
+      isAuthenticated: false,
+      currentSection: 'about',
+      reconnectAttempts: 0,
+      isConnected: false,
+      confirmCallback: null,
+      newsRealtime: null,
+      supportRealtime: null
+    };
+
+    // Initialize
+    document.addEventListener('DOMContentLoaded', initializeApp);
+
+    async function initializeApp() {
+      updateConnectionStatus('connecting');
+      
+      try {
+        // Check if Supabase config is set
+        if (!CONFIG.SUPABASE_URL) {
+          throw new Error('NEXT_PUBLIC_SUPABASE_URL environment variable is not set.');
+        }
+        if (!CONFIG.SUPABASE_ANON_KEY) {
+          throw new Error('NEXT_PUBLIC_SUPABASE_ANON_KEY environment variable is not set.');
+        }
+        if (!CONFIG.ADMIN_KEY) {
+          console.warn('NEXT_PUBLIC_ADMIN_KEY environment variable is not set. Admin login will not work. For security, consider server-side validation for ADMIN_KEY.');
+          // Allow app to proceed but admin login will fail
+        }
+
+        // Initialize Supabase
+        if (typeof supabase !== 'undefined') {
+          state.supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+            auth: { persistSession: false },
+            realtime: { params: { eventsPerSecond: 10 } }
+          });
+
+          // Test connection
+          const { data, error } = await state.supabase.from('about').select('id').limit(1);
+          
+          if (error && error.code !== 'PGRST116') {
+            throw new Error(`Database connection failed: ${error.message}`);
+          }
+
+          updateConnectionStatus('online');
+          showNotification('Database connected successfully! အက်ဒမင် ဝင်ရောက်ရန် အသင့်ဖြစ်ပါတယ်။', 'success');
+          
+          state.isConnected = true;
+          state.reconnectAttempts = 0;
+          
+        } else {
+          throw new Error('Supabase library မတင်လို့ရပါ');
+        }
+      } catch (error) {
+        console.error('Initialization error:', error);
+        updateConnectionStatus('offline');
+        showNotification(`Connection failed: ${error.message}`, 'error');
+        
+        // Retry connection
+        if (state.reconnectAttempts < CONFIG.MAX_RETRY_ATTEMPTS) {
+          state.reconnectAttempts++;
+          setTimeout(() => {
+            console.log(`Retrying connection (${state.reconnectAttempts}/${CONFIG.MAX_RETRY_ATTEMPTS})...`);
+            initializeApp();
+          }, CONFIG.RETRY_DELAY);
+        }
+      }
+
+      // Add enter key listener for admin key input
+      document.getElementById('admin-key').addEventListener('keypress', function(event) {
+        if (event.key === 'Enter') {
+          adminLogin();
+        }
+      });
+    }
+
+    function updateConnectionStatus(status) {
+      const statusElement = document.getElementById('connection-status');
+      statusElement.className = 'connection-status';
+      
+      switch (status) {
+        case 'online':
+          statusElement.classList.add('status-online');
+          statusElement.innerHTML = '<i class="fas fa-check-circle"></i> ချိတ်ဆက်ပြီး';
+          break;
+        case 'offline':
+          statusElement.classList.add('status-offline');
+          statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> အော့်ဖ်လိုင်း';
+          break;
+        case 'connecting':
+          statusElement.classList.add('status-connecting');
+          statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ချိတ်ဆက်နေသည်...';
+          break;
+      }
+    }
+
+    function showNotification(message, type = 'info', duration = 5000) {
+      const container = document.getElementById('notification-container');
+      const notification = document.createElement('div');
+      
+      const bgColors = {
+        success: 'bg-green-600',
+        error: 'bg-red-600',
+        info: 'bg-blue-600',
+        warning: 'bg-yellow-600'
+      };
+      
+      const icons = {
+        success: 'fa-check-circle',
+        error: 'fa-exclamation-triangle',
+        info: 'fa-info-circle',
+        warning: 'fa-exclamation-circle'
+      };
+      
+      notification.className = `notification ${bgColors[type]}`;
+      notification.innerHTML = `
+        <div class="flex items-center justify-between">
+          <div class="flex items-center">
+            <i class="fas ${icons[type]} mr-2"></i>
+            <span>${message}</span>
+          </div>
+          <button onclick="this.parentElement.parentElement.remove()" class="ml-4 hover:text-gray-200">
+            <i class="fas fa-times"></i>
+          </button>
+        </div>
+      `;
+      
+      container.appendChild(notification);
+      
+      setTimeout(() => {
+        if (notification.parentElement) {
+          notification.remove();
+        }
+      }, duration);
+    }
+
+    async function adminLogin() {
+      if (!state.isConnected) {
+        showNotification('Database နှင့် ချိတ်ဆက်ရန် စောင့်ပါ...', 'warning');
+        return;
+      }
+
+      const adminKey = document.getElementById('admin-key').value.trim();
+      const loginBtn = document.getElementById('login-btn');
+      const loginText = document.getElementById('login-text');
+
+      if (!adminKey) {
+        showNotification('ကျေးဇူးပြုပြီး အက်ဒမင် Key ကို ထည့်ပါ', 'warning');
+        return;
+      }
+
+      try {
+        loginBtn.disabled = true;
+        loginText.textContent = 'စစ်ဆေးနေသည်...';
+
+        // Check if the key matches admin key from environment variable
+        if (adminKey === CONFIG.ADMIN_KEY) {
+          // Verify admin key exists in database
+          const { data: keyData, error: keyError } = await state.supabase
+            .from('keys')
+            .select('*')
+            .eq('key_text', CONFIG.ADMIN_KEY)
+            .eq('is_active', true)
+            .gte('expires_at', new Date().toISOString())
+            .single();
+
+          if (keyError) {
+            throw new Error('အက်ဒမင် Key ကို database မှာ ရှာမတွေ့ပါ။ Key ကို ပထမဦးစွာ database မှာ ဖန်တီးပါ။');
+          }
+
+          state.isAuthenticated = true;
+          document.getElementById('login-section').classList.add('hidden');
+          document.getElementById('admin-content').classList.remove('hidden');
+          
+          showNotification('အက်ဒမင် အကောင့်သို့ အောင်မြင်စွာ ဝင်ရောက်ပြီး!', 'success');
+          
+          // Load initial data
+          await loadDashboardData();
+          setupRealtimeSubscriptions();
+          showSection('about'); // Show default section
+          
+        } else {
+          throw new Error('အက်ဒမင် Key မှားနေပါသည်');
+        }
+
+      } catch (error) {
+        console.error('Login error:', error);
+        showNotification(error.message, 'error');
+      } finally {
+        loginBtn.disabled = false;
+        loginText.textContent = 'ဒက်ရှ်ဘုတ်သို့ ဝင်ရောက်ပါ';
+      }
+    }
+
+    async function loadDashboardData() {
+      try {
+        // Load stats
+        const [usersResult, keysResult, newsResult, supportResult] = await Promise.all([
+          state.supabase.from('profiles').select('id', { count: 'exact' }),
+          state.supabase.from('keys').select('id', { count: 'exact' }).eq('is_active', true),
+          state.supabase.from('news').select('id', { count: 'exact' }),
+          state.supabase.from('support_messages').select('id', { count: 'exact' })
+        ]);
+
+        document.getElementById('total-users').textContent = usersResult.count || 0;
+        document.getElementById('active-keys').textContent = keysResult.count || 0;
+        document.getElementById('total-news').textContent = newsResult.count || 0;
+        document.getElementById('total-support').textContent = supportResult.count || 0;
+
+      } catch (error) {
+        console.error('Error loading dashboard data:', error);
+        showNotification('Dashboard data ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    function setupRealtimeSubscriptions() {
+      // News realtime updates
+      state.newsRealtime = state.supabase
+        .channel('news_changes')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'news' }, 
+          (payload) => {
+            if (state.currentSection === 'news') {
+              loadNewsData();
+            }
+            loadDashboardData(); // Update stats
+          }
+        )
+        .subscribe();
+
+      // Support messages realtime
+      state.supportRealtime = state.supabase
+        .channel('support_changes')
+        .on('postgres_changes', 
+          { event: '*', schema: 'public', table: 'support_messages' }, 
+          (payload) => {
+            if (state.currentSection === 'support') {
+              loadSupportMessages();
+            }
+            loadDashboardData(); // Update stats
+          }
+        )
+        .subscribe();
+    }
+
+    function showSection(section) {
+      // Hide all sections
+      document.querySelectorAll('.admin-section').forEach(sec => {
+        sec.classList.add('hidden');
+      });
+      
+      // Update navigation
+      document.querySelectorAll('.nav-btn').forEach(btn => {
+        btn.classList.remove('active');
+      });
+      
+      // Show selected section
+      const sectionElement = document.getElementById(`${section}-section`);
+      if (sectionElement) {
+        sectionElement.classList.remove('hidden');
+        sectionElement.classList.add('fade-in');
+      }
+      
+      // Update active nav
+      const activeNavButton = document.getElementById(`nav-btn-${section}`);
+      if (activeNavButton) {
+        activeNavButton.classList.add('active');
+      }
+
+      state.currentSection = section;
+      
+      // Load section data
+      switch (section) {
+        case 'about':
+          loadAboutData();
+          break;
+        case 'keys':
+          loadKeysData();
+          break;
+        case 'users':
+          loadUsersData();
+          break;
+        case 'news':
+          loadNewsData();
+          break;
+        case 'support':
+          loadSupportMessages();
+          break;
+      }
+    }
+
+    async function loadAboutData() {
+      try {
+        const { data, error } = await state.supabase
+          .from('about')
+          .select('*')
+          .eq('id', 'main')
+          .single();
+
+        if (error && error.code !== 'PGRST116') {
+          throw error;
+        }
+
+        if (data) {
+          document.getElementById('about-telegram').value = data.telegram || '';
+          document.getElementById('about-viber').value = data.viber || '';
+          document.getElementById('about-phone').value = data.phone || '';
+        }
+      } catch (error) {
+        console.error('Error loading about data:', error);
+        showNotification('အကြောင်းအရာ ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    async function updateAbout() {
+      try {
+        const telegram = document.getElementById('about-telegram').value.trim();
+        const viber = document.getElementById('about-viber').value.trim();
+        const phone = document.getElementById('about-phone').value.trim();
+
+        const { error } = await state.supabase
+          .from('about')
+          .upsert({
+            id: 'main',
+            telegram,
+            viber,
+            phone,
+            updated_at: new Date().toISOString()
+          });
+
+        if (error) throw error;
+
+        showNotification('အကြောင်းအရာ အောင်မြင်စွာ အပ်ဒိတ် လုပ်ပြီးပါပြီ!', 'success');
+      } catch (error) {
+        console.error('Error updating about:', error);
+        showNotification('အကြောင်းအရာ အပ်ဒိတ် လုပ်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    async function loadKeysData() {
+      const tbody = document.getElementById('keys-table-body');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-gray-400 py-8">
+            <div class="loading-spinner mx-auto mb-2"></div>
+            Loading keys...
+          </td>
+        </tr>
+      `;
+
+      try {
+        const { data, error } = await state.supabase
+          .from('keys')
+          .select(`
+            *,
+            sessions(id, is_active)
+          `)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          tbody.innerHTML = data.map(key => {
+            const activeSessions = key.sessions?.filter(s => s.is_active).length || 0;
+            const isExpired = new Date(key.expires_at) < new Date();
+            const statusClass = key.is_active && !isExpired ? 'status-active' : 'status-inactive';
+            const statusText = key.is_active && !isExpired ? 'အသုံးပြုနိုင်' : 'အသုံးမပြုနိုင်';
+
+            return `
+              <tr>
+                <td class="font-mono text-sm">${key.key_text}</td>
+                <td class="text-sm">${new Date(key.expires_at).toLocaleDateString('my-MM')}</td>
+                <td class="text-center">${key.max_devices}</td>
+                <td class="text-center">${activeSessions}</td>
+                <td class="text-center">
+                  <span class="${statusClass} font-semibold">${statusText}</span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button onclick="extendKey('${key.id}')" class="myanmar-btn btn-small">
+                      <i class="fas fa-clock mr-1"></i>
+                      <span class="hidden sm:inline">သက်တမ်းတိုး</span>
+                    </button>
+                    <button onclick="toggleKey('${key.id}', ${!key.is_active})" 
+                            class="myanmar-btn btn-small ${key.is_active ? 'btn-danger' : ''}">
+                      <i class="fas fa-${key.is_active ? 'ban' : 'check'} mr-1"></i>
+                      <span class="hidden sm:inline">${key.is_active ? 'ပိတ်ရန်' : 'ဖွင့်ရန်'}</span>
+                    </button>
+                    <button onclick="deleteKey('${key.id}')" class="btn-danger myanmar-btn btn-small">
+                      <i class="fas fa-trash mr-1"></i>
+                      <span class="hidden sm:inline">ဖျက်ရန်</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center text-gray-400 py-8">
+                မည်သည့် Key မှ မတွေ့ပါ
+              </td>
+            </tr>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading keys:', error);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center text-red-400 py-8">
+              Keys ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    async function createKey() {
+      try {
+        const keyText = document.getElementById('key-text').value.trim();
+        const durationType = document.getElementById('key-duration-type').value;
+        const durationValue = parseInt(document.getElementById('key-duration-value').value);
+        const maxDevices = parseInt(document.getElementById('key-max-devices').value);
+
+        if (!keyText || !durationValue || !maxDevices) {
+          showNotification('ကျေးဇူးပြုပြီး လိုအပ်သော အချက်အလက်များ အားလုံး ထည့်ပါ', 'warning');
+          return;
+        }
+
+        // Calculate expiration date
+        const now = new Date();
+        let expiresAt;
+        
+        switch (durationType) {
+          case 'days':
+            expiresAt = new Date(now.getTime() + (durationValue * 24 * 60 * 60 * 1000));
+            break;
+          case 'weeks':
+            expiresAt = new Date(now.getTime() + (durationValue * 7 * 24 * 60 * 60 * 1000));
+            break;
+          case 'months':
+            expiresAt = new Date(now.getTime() + (durationValue * 30 * 24 * 60 * 60 * 1000));
+            break;
+        }
+
+        const { error } = await state.supabase
+          .from('keys')
+          .insert({
+            key_text: keyText,
+            expires_at: expiresAt.toISOString(),
+            duration_type: durationType,
+            duration_value: durationValue,
+            max_devices: maxDevices,
+            is_active: true
+          });
+
+        if (error) throw error;
+
+        // Clear form
+        document.getElementById('key-text').value = '';
+        document.getElementById('key-duration-value').value = '';
+        document.getElementById('key-max-devices').value = '';
+
+        showNotification('Key အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ!', 'success');
+        loadKeysData();
+        loadDashboardData();
+
+      } catch (error) {
+        console.error('Error creating key:', error);
+        if (error.code === '23505') {
+          showNotification('ဒီ Key နာမည် ရှိနေပြီးပါပြီ။ အခြား နာမည် ရွေးချယ်ပါ', 'error');
+        } else {
+          showNotification('Key ဖန်တီးရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+        }
+      }
+    }
+
+    async function extendKey(keyId) {
+      try {
+        const durationValue = prompt('ဘယ်နှစ်ရက် သက်တမ်းတိုးမလဲ?', '30');
+        if (!durationValue || isNaN(durationValue)) return;
+
+        const days = parseInt(durationValue);
+        const extensionTime = days * 24 * 60 * 60 * 1000;
+
+        const { data: keyData, error: fetchError } = await state.supabase
+          .from('keys')
+          .select('expires_at')
+          .eq('id', keyId)
+          .single();
+
+        if (fetchError) throw fetchError;
+
+        const currentExpiry = new Date(keyData.expires_at);
+        const newExpiry = new Date(currentExpiry.getTime() + extensionTime);
+
+        const { error } = await state.supabase
+          .from('keys')
+          .update({ 
+            expires_at: newExpiry.toISOString(),
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', keyId);
+
+        if (error) throw error;
+
+        showNotification(`Key သက်တမ်း ${days} ရက် တိုးပြီးပါပြီ!`, 'success');
+        loadKeysData();
+
+      } catch (error) {
+        console.error('Error extending key:', error);
+        showNotification('Key သက်တမ်းတိုးရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    async function toggleKey(keyId, newStatus) {
+      try {
+        const { error } = await state.supabase
+          .from('keys')
+          .update({ 
+            is_active: newStatus,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', keyId);
+
+        if (error) throw error;
+
+        showNotification(`Key ကို ${newStatus ? 'ဖွင့်' : 'ပိတ်'}ပြီးပါပြီ!`, 'success');
+        loadKeysData();
+        loadDashboardData();
+
+      } catch (error) {
+        console.error('Error toggling key:', error);
+        showNotification('Key အခြေအနေ ပြောင်းရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    function deleteKey(keyId) {
+      showConfirmModal(
+        'ဒီ Key ကို ဖျက်လိုက်ရင် ၎င်းနှင့်ဆက်စပ်နေသော session များ အားလုံး ပျက်သွားပါလိမ့်မည်။',
+        async () => {
+          try {
+            const { error } = await state.supabase
+              .from('keys')
+              .delete()
+              .eq('id', keyId);
+
+            if (error) throw error;
+
+            showNotification('Key ကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ!', 'success');
+            loadKeysData();
+            loadDashboardData();
+
+          } catch (error) {
+            console.error('Error deleting key:', error);
+            showNotification('Key ဖျက်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+          }
+        }
+      );
+    }
+
+    async function loadUsersData() {
+      const tbody = document.getElementById('users-table-body');
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-gray-400 py-8">
+            <div class="loading-spinner mx-auto mb-2"></div>
+            Loading users...
+          </td>
+        </tr>
+      `;
+
+      try {
+        const { data, error } = await state.supabase
+          .from('profiles')
+          .select(`
+            *,
+            keys(key_text, expires_at, is_active)
+          `)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          tbody.innerHTML = data.map(profile => {
+            const statusClass = profile.is_banned ? 'status-banned' : 'status-active';
+            const statusText = profile.is_banned ? 'ပိတ်ပင်ခံရ' : 'အသုံးပြုနေ';
+            const avatar = profile.profile_picture || 'https://via.placeholder.com/40x40?text=👤';
+
+            return `
+              <tr>
+                <td>
+                  <img src="${avatar}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+                </td>
+                <td class="font-medium">${profile.username}</td>
+                <td>${profile.name}</td>
+                <td class="text-sm">${new Date(profile.created_at).toLocaleDateString('my-MM')}</td>
+                <td>
+                  <span class="${statusClass} font-semibold">${statusText}</span>
+                </td>
+                <td>
+                  <div class="table-actions">
+                    <button onclick="toggleUserBan('${profile.id}', ${!profile.is_banned})" 
+                            class="myanmar-btn btn-small ${profile.is_banned ? '' : 'btn-danger'}">
+                      <i class="fas fa-${profile.is_banned ? 'unlock' : 'ban'} mr-1"></i>
+                      <span class="hidden sm:inline">${profile.is_banned ? 'ပြန်ဖွင့်' : 'ပိတ်ပင်'}</span>
+                    </button>
+                    <button onclick="viewUserDetails('${profile.id}')" class="myanmar-btn btn-small">
+                      <i class="fas fa-eye mr-1"></i>
+                      <span class="hidden sm:inline">ကြည့်ရန်</span>
+                    </button>
+                  </div>
+                </td>
+              </tr>
+            `;
+          }).join('');
+        } else {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="6" class="text-center text-gray-400 py-8">
+                မည်သည့် အသုံးပြုသူ မှ မတွေ့ပါ
+              </td>
+            </tr>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading users:', error);
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="text-center text-red-400 py-8">
+              အသုံးပြုသူများ ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်
+            </td>
+          </tr>
+        `;
+      }
+    }
+
+    async function toggleUserBan(profileId, banStatus) {
+      try {
+        const { error } = await state.supabase
+          .from('profiles')
+          .update({ 
+            is_banned: banStatus,
+            updated_at: new Date().toISOString()
+          })
+          .eq('id', profileId);
+
+        if (error) throw error;
+
+        showNotification(`အသုံးပြုသူကို ${banStatus ? 'ပိတ်ပင်' : 'ပြန်ဖွင့်'}ပြီးပါပြီ!`, 'success');
+        loadUsersData();
+
+      } catch (error) {
+        console.error('Error toggling user ban:', error);
+        showNotification('အသုံးပြုသူ အခြေအနေ ပြောင်းရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    async function viewUserDetails(profileId) {
+      // Implementation for viewing user details
+      showNotification('User details feature ကို မကြာမီ ထည့်သွင်းပါမည်', 'info');
+    }
+
+    async function loadNewsData() {
+      const newsContainer = document.getElementById('news-list');
+      newsContainer.innerHTML = `
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-center text-gray-400">သတင်းများ ရယူနေသည်...</p>
+      `;
+
+      try {
+        const { data, error } = await state.supabase
+          .from('news')
+          .select(`
+            *,
+            profiles(username, name, profile_picture)
+          `)
+          .order('created_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          newsContainer.innerHTML = data.map(news => {
+            const authorName = news.is_admin ? 'Admin' : (news.profiles?.name || 'Unknown');
+            const authorUsername = news.is_admin ? 'admin' : (news.profiles?.username || 'unknown');
+            const newsImage = news.image_url || '';
+            
+            return `
+              <div class="news-card p-4">
+                <div class="flex justify-between items-start mb-3">
+                  <div>
+                    <h4 class="text-lg font-semibold text-yellow-400 mb-1">${news.title}</h4>
+                    <p class="text-sm text-gray-400">
+                      <i class="fas fa-user mr-1"></i> ${authorName} (@${authorUsername})
+                      <span class="ml-3">
+                        <i class="fas fa-calendar mr-1"></i> ${new Date(news.created_at).toLocaleDateString('my-MM')}
+                      </span>
+                    </p>
+                  </div>
+                  <div class="flex space-x-2">
+                    <button onclick="viewNews('${news.id}')" class="myanmar-btn btn-small">
+                      <i class="fas fa-eye"></i>
+                    </button>
+                    <button onclick="deleteNews('${news.id}')" class="btn-danger myanmar-btn btn-small">
+                      <i class="fas fa-trash"></i>
+                    </button>
+                  </div>
+                </div>
+                
+                ${newsImage ? `<img src="${newsImage}" class="w-full h-40 object-cover rounded-lg mb-3">` : ''}
+                
+                <p class="text-gray-300 text-sm mb-3">${news.content.substring(0, 150)}${news.content.length > 150 ? '...' : ''}</p>
+                
+                <div class="flex items-center justify-between text-sm text-gray-400">
+                  <div class="flex space-x-4">
+                    <span><i class="fas fa-eye mr-1"></i> ${news.views || 0}</span>
+                    <span><i class="fas fa-heart mr-1"></i> ${news.likes || 0}</span>
+                  </div>
+                  ${news.youtube_link ? '<i class="fab fa-youtube text-red-500"></i>' : ''}
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          newsContainer.innerHTML = `
+            <div class="text-center text-gray-400 py-8">
+              <i class="fas fa-newspaper text-4xl mb-4"></i>
+              <p>မည်သည့် သတင်း မှ မတွေ့ပါ</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading news:', error);
+        newsContainer.innerHTML = `
+          <div class="text-center text-red-400 py-8">
+            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+            <p>သတင်းများ ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်</p>
+          </div>
+        `;
+      }
+    }
+
+    async function postAdminNews() {
+      try {
+        const title = document.getElementById('admin-news-title').value.trim();
+        const content = document.getElementById('admin-news-content').value.trim();
+        const youtubeLink = document.getElementById('admin-news-youtube').value.trim();
+        const imageFile = document.getElementById('admin-news-image').files[0];
+
+        if (!title || !content) {
+          showNotification('ကျေးဇူးပြုပြီး ခေါင်းစဉ် နှင့် အကြောင်းအရာ ထည့်ပါ', 'warning');
+          return;
+        }
+
+        showLoading(true);
+
+        let imageUrl = null;
+        
+        // Upload image if provided
+        if (imageFile) {
+          const fileExt = imageFile.name.split('.').pop();
+          const fileName = `news/${Date.now()}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await state.supabase.storage
+            .from('news')
+            .upload(fileName, imageFile);
+
+          if (uploadError) throw uploadError;
+
+          const { data: { publicUrl } } = state.supabase.storage
+            .from('news')
+            .getPublicUrl(fileName);
+          
+          imageUrl = publicUrl;
+        }
+
+        // Insert news
+        const { error } = await state.supabase
+          .from('news')
+          .insert({
+            title,
+            content,
+            youtube_link: youtubeLink || null,
+            image_url: imageUrl,
+            is_admin: true,
+            is_featured: false
+          });
+
+        if (error) throw error;
+
+        // Clear form
+        document.getElementById('admin-news-title').value = '';
+        document.getElementById('admin-news-content').value = '';
+        document.getElementById('admin-news-youtube').value = '';
+        document.getElementById('admin-news-image').value = '';
+
+        showNotification('Admin သတင်း အောင်မြင်စွာ ပို့စ်လုပ်ပြီးပါပြီ!', 'success');
+        loadNewsData();
+        loadDashboardData();
+
+      } catch (error) {
+        console.error('Error posting admin news:', error);
+        showNotification('သတင်း ပို့စ်လုပ်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+
+    async function viewNews(newsId) {
+      try {
+        const { data, error } = await state.supabase
+          .from('news')
+          .select(`
+            *,
+            profiles(username, name, profile_picture)
+          `)
+          .eq('id', newsId)
+          .single();
+
+        if (error) throw error;
+
+        const authorName = data.is_admin ? 'Admin' : (data.profiles?.name || 'Unknown');
+        const authorUsername = data.is_admin ? 'admin' : (data.profiles?.username || 'unknown');
+        const newsImage = data.image_url || '';
+        
+        document.getElementById('news-modal-content').innerHTML = `
+          <div class="space-y-4">
+            <div class="flex items-center space-x-3">
+              <img src="${data.profiles?.profile_picture || 'https://via.placeholder.com/40x40?text=👤'}" 
+                   alt="Author" class="w-10 h-10 rounded-full object-cover">
+              <div>
+                <h4 class="font-semibold text-white">${authorName}</h4>
+                <p class="text-sm text-gray-400">@${authorUsername}</p>
+              </div>
+            </div>
+            
+            <h3 class="text-xl font-bold text-yellow-400">${data.title}</h3>
+            
+            ${newsImage ? `<img src="${newsImage}" alt="News" class="w-full rounded-lg">` : ''}
+            
+            <div class="prose prose-invert max-w-none">
+              <p class="text-gray-300 whitespace-pre-wrap">${data.content}</p>
+            </div>
+            
+            ${data.youtube_link ? `
+              <div class="aspect-w-16 aspect-h-9">
+                <iframe src="${data.youtube_link.replace('watch?v=', 'embed/')}" 
+                        class="w-full h-64 rounded-lg" frameborder="0" allowfullscreen></iframe>
+              </div>
+            ` : ''}
+            
+            <div class="flex items-center justify-between text-sm text-gray-400 pt-4 border-t border-gray-700">
+              <div class="flex space-x-4">
+                <span><i class="fas fa-eye mr-1"></i> ${data.views || 0} ကြည့်ရှုမှု</span>
+                <span><i class="fas fa-heart mr-1"></i> ${data.likes || 0} နှစ်သက်မှု</span>
+              </div>
+              <span><i class="fas fa-calendar mr-1"></i> ${new Date(data.created_at).toLocaleString('my-MM')}</span>
+            </div>
+          </div>
+        `;
+
+        document.getElementById('news-modal').classList.remove('hidden');
+
+      } catch (error) {
+        console.error('Error viewing news:', error);
+        showNotification('သတင်း ကြည့်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    function closeNewsModal() {
+      document.getElementById('news-modal').classList.add('hidden');
+    }
+
+    function deleteNews(newsId) {
+      showConfirmModal(
+        'ဒီသတင်းကို ဖျက်လိုက်ရင် ၎င်းနှင့်ဆက်စပ်နေသော မှတ်ချက်များ နှင့် နှစ်သက်မှုများ အားလုံး ပျက်သွားပါလိမ့်မည်။',
+        async () => {
+          try {
+            const { error } = await state.supabase
+              .from('news')
+              .delete()
+              .eq('id', newsId);
+
+            if (error) throw error;
+
+            showNotification('သတင်းကို အောင်မြင်စွာ ဖျက်ပြီးပါပြီ!', 'success');
+            loadNewsData();
+            loadDashboardData();
+
+          } catch (error) {
+            console.error('Error deleting news:', error);
+            showNotification('သတင်း ဖျက်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+          }
+        }
+      );
+    }
+
+    async function loadSupportMessages() {
+      const container = document.getElementById('support-messages');
+      container.innerHTML = `
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-center text-gray-400">မက်ဆေ့ချ်များ ရယူနေသည်...</p>
+      `;
+
+      try {
+        const { data, error } = await state.supabase
+          .from('support_messages')
+          .select(`
+            *,
+            profiles(username, name, profile_picture)
+          `)
+          .order('created_at', { ascending: true });
+
+        if (error) throw error;
+
+        if (data && data.length > 0) {
+          container.innerHTML = data.map(message => {
+            const isFromUser = message.is_from_user;
+            const senderName = isFromUser ? (message.profiles?.name || 'User') : 'Admin';
+            const messageClass = isFromUser ? 'bg-blue-600 bg-opacity-20 border-blue-500' : 'bg-green-600 bg-opacity-20 border-green-500';
+            
+            return `
+              <div class="mb-4 p-3 rounded-lg border ${messageClass}">
+                <div class="flex items-center justify-between mb-2">
+                  <div class="flex items-center space-x-2">
+                    <i class="fas fa-${isFromUser ? 'user' : 'headset'} text-sm"></i>
+                    <span class="font-semibold text-sm">${senderName}</span>
+                  </div>
+                  <span class="text-xs text-gray-400">${new Date(message.created_at).toLocaleString('my-MM')}</span>
+                </div>
+                <p class="text-sm text-gray-300 whitespace-pre-wrap">${message.content}</p>
+              </div>
+            `;
+          }).join('');
+          
+          // Scroll to bottom
+          container.scrollTop = container.scrollHeight;
+        } else {
+          container.innerHTML = `
+            <div class="text-center text-gray-400 py-8">
+              <i class="fas fa-comments text-4xl mb-4"></i>
+              <p>မည်သည့် မက်ဆေ့ချ် မှ မရှိသေးပါ</p>
+            </div>
+          `;
+        }
+      } catch (error) {
+        console.error('Error loading support messages:', error);
+        container.innerHTML = `
+          <div class="text-center text-red-400">
+            <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+            <p>မက်ဆေ့ချ်များ ရယူရာတွင် အမှား ဖြစ်ပွားခဲ့သည်</p>
+          </div>
+        `;
+      }
+    }
+
+    async function sendAdminSupportMessage() {
+      try {
+        const content = document.getElementById('admin-support-input').value.trim();
+        
+        if (!content) {
+          showNotification('ကျေးဇူးပြုပြီး မက်ဆေ့ချ် ရေးပါ', 'warning');
+          return;
+        }
+
+        const { error } = await state.supabase
+          .from('support_messages')
+          .insert({
+            content,
+            is_from_user: false,
+            is_read: true,
+            priority: 'normal',
+            status: 'in_progress'
+          });
+
+        if (error) throw error;
+
+        document.getElementById('admin-support-input').value = '';
+        showNotification('အကူအညီ မက်ဆေ့ချ် ပို့ပြီးပါပြီ!', 'success');
+        loadSupportMessages();
+        loadDashboardData();
+
+      } catch (error) {
+        console.error('Error sending support message:', error);
+        showNotification('မက်ဆေ့ချ် ပို့ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      }
+    }
+
+    function showConfirmModal(message, callback) {
+      document.getElementById('confirm-message').textContent = message;
+      state.confirmCallback = callback;
+      document.getElementById('confirm-modal').classList.remove('hidden');
+    }
+
+    function closeConfirmModal() {
+      document.getElementById('confirm-modal').classList.add('hidden');
+      state.confirmCallback = null;
+    }
+
+    function confirmAction() {
+      if (state.confirmCallback) {
+        state.confirmCallback();
+      }
+      closeConfirmModal();
+    }
+
+    function showLoading(show) {
+      const overlay = document.getElementById('loading-overlay');
+      if (show) {
+        overlay.classList.remove('hidden');
+      } else {
+        overlay.classList.add('hidden');
+      }
+    }
+
+    // Error handling
+    window.onerror = function(msg, url, lineNo, columnNo, error) {
+      console.error('Global error:', { msg, url, lineNo, columnNo, error });
+      showNotification('စနစ်တွင် အမှား ဖြစ်ပွားခဲ့သည်', 'error');
+      return false;
+    };
+
+    // Mobile optimizations
+    if ('ontouchstart' in window) {
+      document.addEventListener('touchstart', function() {}, true);
+    }
+
+    // Prevent zoom on double tap for iOS
+    document.addEventListener('touchend', function(event) {
+      const now = (new Date()).getTime();
+      if (now - lastTouchEnd <= 300) {
+        event.preventDefault();
+      }
+      lastTouchEnd = now;
+    }, false);
+
+    let lastTouchEnd = 0;
+  </script>
+</body>
+</html>
