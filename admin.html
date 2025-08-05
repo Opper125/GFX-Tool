@@ -1,0 +1,2556 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+  <title>FPS GFX Tool - မြန်မာ ဂိမ်း အိုပတီမိုက်ဇာ</title>
+  <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    * {
+      font-family: 'Noto Sans Myanmar', 'Inter', sans-serif;
+      box-sizing: border-box;
+    }
+
+    :root {
+      --myanmar-yellow: #FECB00;
+      --myanmar-green: #34B233;
+      --myanmar-red: #EA2839;
+      --myanmar-white: #FFFFFF;
+      --dark-bg: #0f0f23;
+      --card-bg: rgba(0, 0, 0, 0.8);
+      --border-color: rgba(254, 203, 0, 0.3);
+    }
+
+    body {
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f3460 100%);
+      min-height: 100vh;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    .myanmar-pattern {
+      background-image: 
+        radial-gradient(circle at 25% 25%, rgba(254, 203, 0, 0.1) 0%, transparent 50%),
+        radial-gradient(circle at 75% 75%, rgba(52, 178, 51, 0.1) 0%, transparent 50%);
+      animation: patternMove 20s ease-in-out infinite;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      z-index: -2;
+    }
+
+    .myanmar-waves {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      height: 100px;
+      background: linear-gradient(45deg, rgba(254, 203, 0, 0.2), rgba(52, 178, 51, 0.2));
+      clip-path: polygon(0 100%, 0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%);
+      animation: waveFloat 8s ease-in-out infinite;
+      z-index: -1;
+    }
+
+    @keyframes patternMove {
+      0%, 100% { background-position: 0% 0%, 100% 100%; }
+      50% { background-position: 100% 100%, 0% 0%; }
+    }
+
+    @keyframes waveFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-15px); }
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; transform: scale(1); }
+      50% { opacity: 0.8; transform: scale(1.05); }
+    }
+
+    @keyframes slideIn {
+      from { opacity: 0; transform: translateY(30px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    @keyframes spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .myanmar-container {
+      backdrop-filter: blur(20px);
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.8), 0 0 0 1px rgba(254, 203, 0, 0.1);
+      border-radius: 16px;
+      transition: all 0.3s ease;
+    }
+
+    .myanmar-container:hover {
+      border-color: rgba(254, 203, 0, 0.5);
+      box-shadow: 0 25px 50px rgba(254, 203, 0, 0.2);
+    }
+
+    .myanmar-btn {
+      background: linear-gradient(45deg, var(--myanmar-yellow), var(--myanmar-green));
+      color: #000;
+      font-weight: 600;
+      border: none;
+      border-radius: 12px;
+      padding: 12px 24px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .myanmar-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 10px 25px rgba(254, 203, 0, 0.4);
+    }
+
+    .myanmar-btn:active {
+      transform: translateY(0);
+    }
+
+    .myanmar-btn::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: -100%;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+      transition: left 0.5s;
+    }
+
+    .myanmar-btn:hover::before {
+      left: 100%;
+    }
+
+    .myanmar-input {
+      background: rgba(255, 255, 255, 0.1);
+      border: 2px solid var(--border-color);
+      color: white;
+      border-radius: 12px;
+      padding: 12px 16px;
+      transition: all 0.3s ease;
+      backdrop-filter: blur(10px);
+    }
+
+    .myanmar-input:focus {
+      outline: none;
+      border-color: var(--myanmar-yellow);
+      box-shadow: 0 0 20px rgba(254, 203, 0, 0.3);
+    }
+
+    .myanmar-input::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .status-indicator {
+      position: fixed;
+      top: 20px;
+      right: 20px;
+      padding: 8px 16px;
+      border-radius: 25px;
+      font-size: 12px;
+      font-weight: 600;
+      z-index: 1000;
+      backdrop-filter: blur(10px);
+    }
+
+    .status-connected {
+      background: linear-gradient(45deg, var(--myanmar-green), #4ade80);
+      color: white;
+      animation: pulse 2s infinite;
+    }
+
+    .status-connecting {
+      background: linear-gradient(45deg, var(--myanmar-yellow), #fbbf24);
+      color: #000;
+      animation: spin 1s linear infinite;
+    }
+
+    .status-error {
+      background: linear-gradient(45deg, var(--myanmar-red), #ef4444);
+      color: white;
+    }
+
+    .notification {
+      position: fixed;
+      top: 80px;
+      right: 20px;
+      left: 20px;
+      max-width: 400px;
+      margin: 0 auto;
+      padding: 16px;
+      border-radius: 12px;
+      color: white;
+      font-weight: 500;
+      z-index: 1001;
+      backdrop-filter: blur(15px);
+      animation: slideIn 0.5s ease-out;
+    }
+
+    .notification-success {
+      background: linear-gradient(45deg, var(--myanmar-green), #4ade80);
+    }
+
+    .notification-error {
+      background: linear-gradient(45deg, var(--myanmar-red), #ef4444);
+    }
+
+    .notification-info {
+      background: linear-gradient(45deg, #3b82f6, #60a5fa);
+    }
+
+    .news-card {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 12px;
+      transition: all 0.3s ease;
+      animation: slideIn 0.6s ease-out;
+    }
+
+    .news-card:hover {
+      border-color: rgba(254, 203, 0, 0.5);
+      transform: translateY(-4px);
+    }
+
+    .chat-message {
+      max-width: 85%;
+      padding: 12px 16px;
+      border-radius: 18px;
+      margin-bottom: 8px;
+      word-wrap: break-word;
+      animation: slideIn 0.3s ease-out;
+    }
+
+    .chat-message.sent {
+      background: linear-gradient(45deg, var(--myanmar-yellow), #fbbf24);
+      color: #000;
+      margin-left: auto;
+      margin-right: 0;
+    }
+
+    .chat-message.received {
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      margin-right: auto;
+      margin-left: 0;
+    }
+
+    .video-container {
+      position: relative;
+      border-radius: 12px;
+      overflow: hidden;
+      background: #000;
+    }
+
+    .video-duration {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background: rgba(0, 0, 0, 0.7);
+      color: white;
+      padding: 4px 8px;
+      border-radius: 4px;
+      font-size: 12px;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(0, 0, 0, 0.9);
+      backdrop-filter: blur(20px);
+      border-top: 1px solid var(--border-color);
+      padding: 12px 0;
+      z-index: 100;
+    }
+
+    .nav-item {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      color: #9ca3af;
+      text-decoration: none;
+      transition: all 0.3s ease;
+      padding: 8px;
+    }
+
+    .nav-item.active {
+      color: var(--myanmar-yellow);
+      transform: translateY(-2px);
+    }
+
+    .nav-item:hover {
+      color: var(--myanmar-yellow);
+    }
+
+    .loading-spinner {
+      border: 3px solid rgba(254, 203, 0, 0.3);
+      border-top: 3px solid var(--myanmar-yellow);
+      border-radius: 50%;
+      width: 32px;
+      height: 32px;
+      animation: spin 1s linear infinite;
+      margin: 0 auto;
+    }
+
+    .modal {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: rgba(0, 0, 0, 0.8);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 2000;
+      padding: 20px;
+    }
+
+    .modal-content {
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 16px;
+      padding: 24px;
+      max-width: 90vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      backdrop-filter: blur(20px);
+    }
+
+    .profile-avatar {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      object-fit: cover;
+      border: 2px solid var(--myanmar-yellow);
+    }
+
+    .comment-thread {
+      border-left: 2px solid var(--border-color);
+      margin-left: 20px;
+      padding-left: 16px;
+    }
+
+    .like-btn {
+      background: transparent;
+      border: 1px solid var(--border-color);
+      color: #9ca3af;
+      border-radius: 20px;
+      padding: 6px 12px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .like-btn.liked {
+      background: var(--myanmar-red);
+      color: white;
+      border-color: var(--myanmar-red);
+    }
+
+    @media (max-width: 768px) {
+      .myanmar-container {
+        margin: 10px;
+        padding: 16px;
+      }
+      
+      .status-indicator {
+        top: 10px;
+        right: 10px;
+        font-size: 11px;
+        padding: 6px 12px;
+      }
+      
+      .notification {
+        top: 60px;
+        right: 10px;
+        left: 10px;
+      }
+
+      .modal-content {
+        padding: 16px;
+        border-radius: 12px;
+      }
+
+      .chat-message {
+        max-width: 90%;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .myanmar-btn {
+        padding: 10px 16px;
+        font-size: 14px;
+      }
+
+      .profile-avatar {
+        width: 32px;
+        height: 32px;
+      }
+
+      .news-card {
+        margin: 8px;
+        padding: 12px;
+      }
+    }
+
+    .hidden {
+      display: none !important;
+    }
+
+    .expire-warning {
+      background: linear-gradient(45deg, var(--myanmar-red), #ff6b6b);
+      color: white;
+      padding: 12px;
+      border-radius: 8px;
+      text-align: center;
+      margin-bottom: 16px;
+      animation: pulse 2s infinite;
+    }
+
+    .search-container {
+      position: relative;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: var(--card-bg);
+      border: 1px solid var(--border-color);
+      border-radius: 8px;
+      max-height: 200px;
+      overflow-y: auto;
+      z-index: 100;
+    }
+
+    .search-result-item {
+      padding: 12px;
+      border-bottom: 1px solid var(--border-color);
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-result-item:hover {
+      background: rgba(254, 203, 0, 0.1);
+    }
+
+    .product-card {
+      background: rgba(255, 255, 255, 0.05);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      transition: all 0.3s ease;
+    }
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 10px 20px rgba(0,0,0,0.4);
+      border-color: var(--myanmar-yellow);
+    }
+    .product-icon {
+      width: 64px;
+      height: 64px;
+      object-fit: contain;
+      margin: 0 auto 12px;
+    }
+    .product-price {
+      font-size: 1.25rem;
+      font-weight: bold;
+      color: var(--myanmar-yellow);
+      margin-top: 8px;
+    }
+    .social-link-item {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 10px 15px;
+      border-radius: 8px;
+      background: rgba(255, 255, 255, 0.1);
+      color: white;
+      text-decoration: none;
+      transition: background 0.3s ease;
+    }
+    .social-link-item:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    .social-link-item img {
+      width: 24px;
+      height: 24px;
+      margin-right: 8px;
+    }
+    .loading-map-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #0a0a1a 0%, #1a1a2e 50%, #0f3460 100%);
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      z-index: 3000;
+    }
+    .myanmar-map-svg {
+      width: 150px;
+      height: 150px;
+      animation: mapPulse 2s infinite alternate;
+    }
+    @keyframes mapPulse {
+      0% { transform: scale(1); opacity: 0.8; }
+      100% { transform: scale(1.1); opacity: 1; }
+    }
+    .loading-text {
+      margin-top: 20px;
+      font-size: 1.2rem;
+      color: var(--myanmar-yellow);
+      animation: fadeInOut 2s infinite;
+    }
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0.5; }
+      50% { opacity: 1; }
+    }
+  </style>
+</head>
+<body class="myanmar-pattern text-white">
+  <div class="myanmar-waves"></div>
+  
+  <!-- Loading Overlay with Myanmar Map -->
+  <div id="loading-overlay" class="loading-map-container">
+    <svg class="myanmar-map-svg" viewBox="0 0 256 256" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <path fill-rule="evenodd" clip-rule="evenodd" d="M128 0C57.308 0 0 57.308 0 128s57.308 128 128 128 128-57.308 128-128S198.692 0 128 0zm0 240c-61.856 0-112-50.144-112-112S66.144 16 128 16s112 50.144 112 112-50.144 112-112 112z" fill="#FECB00"/>
+      <path d="M128 16c-30.928 0-59.088 12.536-79.592 32.904L128 128l79.592-79.096C187.088 28.536 158.928 16 128 16z" fill="#34B233"/>
+      <path d="M128 128L48.408 207.096C68.912 227.464 97.072 240 128 240s59.088-12.536 79.592-32.904L128 128z" fill="#EA2839"/>
+    </svg>
+    <p class="loading-text">စတင်နေသည်...</p>
+  </div>
+
+  <!-- Status Indicator -->
+  <div id="status-indicator" class="status-indicator status-connecting">
+    <i class="fas fa-circle-notch fa-spin"></i> ချိတ်ဆက်နေသည်...
+  </div>
+
+  <!-- Notifications Container -->
+  <div id="notifications-container"></div>
+
+  <!-- Main Container -->
+  <div class="min-h-screen pb-20">
+    <!-- Login Section -->
+    <div id="login-section" class="myanmar-container max-w-sm mx-auto mt-20 p-6">
+      <div class="text-center mb-8">
+        <h1 class="text-3xl font-bold text-yellow-400 mb-2">
+          <i class="fas fa-gamepad mr-2"></i>
+          FPS GFX Tool
+        </h1>
+        <p class="text-gray-300 text-sm">မြန်မာ ဂိမ်း အိုပတီမိုက်ဇာ</p>
+      </div>
+
+      <!-- About Button -->
+      <button onclick="showSection('about')" class="myanmar-btn w-full mb-4">
+        <i class="fas fa-info-circle mr-2"></i>
+        အကြောင်းအရာ & ဆက်သွယ်ရန်
+      </button>
+
+      <!-- Key Input -->
+      <div class="mb-4">
+        <input 
+          type="text" 
+          id="key-input" 
+          placeholder="သင့်ရဲ့ Key ကို ထည့်ပါ..." 
+          class="myanmar-input w-full"
+          required
+        >
+      </div>
+
+      <!-- Login Button -->
+      <button onclick="login()" id="login-btn" class="myanmar-btn w-full">
+        <i class="fas fa-sign-in-alt mr-2"></i>
+        <span id="login-text">ဝင်ရောက်ရန်</span>
+      </button>
+    </div>
+
+    <!-- Main Content -->
+    <div id="main-content" class="hidden">
+      <!-- Header -->
+      <div class="myanmar-container mx-auto max-w-md mt-4 p-4">
+        <div class="text-center">
+          <h1 class="text-2xl font-bold text-yellow-400 mb-2">
+            <i class="fas fa-gamepad mr-2"></i>
+            FPS GFX Tool
+          </h1>
+          <!-- Key Expiration Timer -->
+          <div id="expiration-timer" class="bg-gradient-to-r from-yellow-600 to-green-600 text-white p-3 rounded-lg text-center font-semibold">
+            <i class="fas fa-clock mr-2"></i>
+            <span id="timer-text">Key အချက်အလက် ရယူနေသည်...</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Home Section -->
+      <div id="home-section" class="myanmar-container mx-auto max-w-md mt-4 p-4">
+        <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+          <i class="fas fa-box-open mr-2"></i>
+          Products & APKs
+        </h2>
+        <div id="products-list" class="grid grid-cols-2 gap-4">
+          <div class="loading-spinner col-span-2 mb-4"></div>
+          <p class="text-center col-span-2 text-gray-400">Products များ ရယူနေသည်...</p>
+        </div>
+      </div>
+
+      <!-- News Section -->
+      <div id="news-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-newspaper mr-2"></i>
+            သတင်းများ & ပြင်ဆင်မှုများ
+          </h2>
+
+          <!-- Profile Management -->
+          <div id="profile-management" class="myanmar-container mb-6 p-4">
+            <div id="create-profile">
+              <h3 class="text-lg font-medium text-yellow-400 mb-3">Profile ဖန်တီးရန်</h3>
+              <div class="space-y-3">
+                <input type="text" id="profile-username" placeholder="အသုံးပြုသူအမည်" class="myanmar-input w-full">
+                <input type="text" id="profile-name" placeholder="ပြသမည့်အမည်" class="myanmar-input w-full">
+                <input type="file" id="profile-picture" accept="image/*,image/gif" class="myanmar-input w-full">
+                <button onclick="createProfile()" class="myanmar-btn w-full">
+                  <i class="fas fa-user-plus mr-2"></i>
+                  Profile ဖန်တီးရန်
+                </button>
+              </div>
+            </div>
+
+            <!-- Post News Form -->
+            <div id="post-news" class="hidden mt-4">
+              <h3 class="text-lg font-medium text-yellow-400 mb-3">သတင်း တင်ရန်</h3>
+              <div class="space-y-3">
+                <input type="text" id="news-title" placeholder="သတင်း ခေါင်းစဥ်" class="myanmar-input w-full">
+                <textarea id="news-content" placeholder="သတင်း အကြောင်းအရာ" rows="3" class="myanmar-input w-full"></textarea>
+                <input type="file" id="news-media" accept="image/*,video/*,audio/*" multiple class="myanmar-input w-full">
+                <button onclick="postNews()" class="myanmar-btn w-full">
+                  <i class="fas fa-paper-plane mr-2"></i>
+                  သတင်း တင်ရန်
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- User Search -->
+          <div class="myanmar-container mb-6 p-4">
+            <h3 class="text-lg font-medium text-yellow-400 mb-3">အသုံးပြုသူ ရှာရန်</h3>
+            <div class="search-container">
+              <input type="text" id="user-search" placeholder="အသုံးပြုသူအမည် ရှာရန်..." class="myanmar-input w-full" oninput="searchUsers()">
+              <div id="search-results" class="search-results hidden"></div>
+            </div>
+          </div>
+
+          <!-- News List -->
+          <div id="news-list" class="space-y-4">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center text-gray-400">သတင်းများ ရယူနေသည်...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Chat Section -->
+      <div id="chat-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-comments mr-2"></i>
+            စကားပြောခန်း
+          </h2>
+
+          <!-- Chat List -->
+          <div id="chat-list" class="myanmar-container mb-4 p-4">
+            <h3 class="text-lg font-medium text-yellow-400 mb-3">စကားပြောသူများ</h3>
+            <div id="chat-users">
+              <p class="text-center text-gray-400">စကားပြောမှု မရှိသေးပါ</p>
+            </div>
+          </div>
+
+          <!-- Active Chat -->
+          <div id="active-chat" class="hidden">
+            <div class="myanmar-container mb-4 p-4">
+              <div class="flex items-center justify-between mb-4">
+                <div class="flex items-center space-x-3">
+                  <img id="chat-partner-avatar" src="/placeholder.svg" class="profile-avatar">
+                  <div>
+                    <h3 id="chat-partner-name" class="text-yellow-400 font-medium"></h3>
+                    <p id="chat-partner-username" class="text-gray-400 text-sm"></p>
+                  </div>
+                </div>
+                <button onclick="closeChatWindow()" class="text-gray-400 hover:text-red-400">
+                  <i class="fas fa-times"></i>
+                </button>
+              </div>
+
+              <!-- Messages Container -->
+              <div id="chat-messages" class="h-64 overflow-y-auto mb-4 p-2 bg-black bg-opacity-30 rounded-lg">
+                <p class="text-center text-gray-400">စကားပြောမှု စတင်ပါ</p>
+              </div>
+
+              <!-- Message Input -->
+              <div class="flex space-x-2">
+                <textarea id="chat-input" placeholder="မက်ဆေ့ချ် ရေးပါ..." rows="1" class="myanmar-input flex-1 resize-none"></textarea>
+                <button onclick="sendChatMessage()" class="myanmar-btn px-4">
+                  <i class="fas fa-paper-plane"></i>
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- News Detail Modal -->
+      <div id="news-detail-modal" class="modal hidden">
+        <div class="modal-content max-w-2xl">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-yellow-400">သတင်း အသေးစိတ်</h2>
+            <button onclick="closeNewsDetailModal()" class="text-gray-400 hover:text-red-400">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div id="news-detail-content">
+            <div class="loading-spinner mx-auto mb-4"></div>
+            <p class="text-center">Loading...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Support Section -->
+      <div id="support-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-headset mr-2"></i>
+            အကူအညီ စာပေးပို့
+          </h2>
+          
+          <div class="myanmar-container p-4">
+            <div id="support-messages" class="h-64 overflow-y-auto mb-4 p-2 bg-black bg-opacity-30 rounded-lg">
+              <div class="loading-spinner mb-4"></div>
+              <p class="text-center text-gray-400">မက်ဆေ့ချ် များ ရယူနေသည်...</p>
+            </div>
+            
+            <div class="flex space-x-2">
+              <textarea id="support-input" placeholder="သင့်မက်ဆေ့ချ် ရေးပါ..." rows="2" class="myanmar-input flex-1 resize-none"></textarea>
+              <button onclick="sendSupportMessage()" class="myanmar-btn px-4">
+                <i class="fas fa-paper-plane"></i>
+              </button>
+            </div>
+
+            <!-- Key Expiry Support Info -->
+            <div class="mt-4 p-3 bg-red-600 bg-opacity-20 border border-red-500 rounded-lg">
+              <h4 class="text-red-400 font-medium mb-2">
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                Key သက်တမ်း ကုန်ဆုံးမှု
+              </h4>
+              <p class="text-sm text-gray-300">
+                သင့် Key သက်တမ်း ကုန်ဆုံးပါက အကူအညီ ဌာနမှတဆင့် Admin ကို ဆက်သွယ်ပြီး Key သက်တမ်း တိုးမြှင့်ရန် တောင်းဆိုနိုင်ပါသည်။
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- About Section -->
+      <div id="about-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-info-circle mr-2"></i>
+            အကြောင်းအရာ & ဆက်သွယ်ရန်
+          </h2>
+          <div id="about-content" class="myanmar-container p-4">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center">Loading...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mi Page (User Profile) -->
+      <div id="mi-section" class="hidden">
+        <div class="mx-auto max-w-md px-4">
+          <h2 class="text-xl font-semibold text-yellow-400 mb-4">
+            <i class="fas fa-user-circle mr-2"></i>
+            ကျွန်ုပ်၏ Profile
+          </h2>
+          <div id="mi-profile-content" class="myanmar-container p-4">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center">Loading...</p>
+          </div>
+          <h3 class="text-lg font-semibold text-yellow-400 mt-6 mb-4">
+            <i class="fas fa-newspaper mr-2"></i>
+            ကျွန်ုပ်၏ သတင်းများ
+          </h3>
+          <div id="mi-news-list" class="space-y-4">
+            <p class="text-center text-gray-400">Loading news...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile View Modal -->
+      <div id="profile-modal" class="modal hidden">
+        <div class="modal-content max-w-md">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-yellow-400">Profile</h2>
+            <button onclick="closeProfileModal()" class="text-gray-400 hover:text-red-400">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div id="profile-modal-content">
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center">Loading...</p>
+          </div>
+        </div>
+      </div>
+
+      <!-- Product Purchase Modal -->
+      <div id="purchase-modal" class="modal hidden">
+        <div class="modal-content max-w-md">
+          <div class="flex justify-between items-center mb-4">
+            <h2 class="text-xl font-bold text-yellow-400">Product ဝယ်ယူရန်</h2>
+            <button onclick="closePurchaseModal()" class="text-gray-400 hover:text-red-400">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+          <div id="purchase-modal-content">
+            <h3 class="text-lg font-semibold text-white mb-2" id="purchase-product-name"></h3>
+            <p class="text-gray-400 mb-4" id="purchase-product-price"></p>
+            
+            <h4 class="text-md font-semibold text-yellow-400 mb-2">ငွေပေးချေမှု နည်းလမ်းများ</h4>
+            <div id="payment-methods-list" class="space-y-3 mb-4">
+              <div class="loading-spinner mb-2"></div>
+              <p class="text-center text-gray-400">Loading payment methods...</p>
+            </div>
+
+            <div class="space-y-3">
+              <label class="block text-sm font-medium text-gray-300">ငွေလွှဲပြေစာ ပုံတင်ပါ</label>
+              <input type="file" id="receipt-upload" accept="image/*" class="myanmar-input w-full">
+              <button onclick="submitPurchase()" class="myanmar-btn w-full">
+                <i class="fas fa-paper-plane mr-2"></i>
+                ငွေပေးချေမှု အတည်ပြုရန်
+              </button>
+            </div>
+            <p class="text-sm text-gray-500 mt-4">
+              <i class="fas fa-info-circle mr-1"></i>
+              ငွေပေးချေမှု အတည်ပြုပြီးပါက Admin မှ စစ်ဆေးပြီး Download ပြုလုပ်နိုင်ပါမည်။
+            </p>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Bottom Navigation -->
+    <div class="bottom-nav">
+      <div class="flex justify-around max-w-md mx-auto">
+        <a href="#" onclick="showSection('home')" class="nav-item active" id="nav-home">
+          <i class="fas fa-home text-lg mb-1"></i>
+          <span class="text-xs">မူလစာမျက်နှာ</span>
+        </a>
+        <a href="#" onclick="showSection('news')" class="nav-item" id="nav-news">
+          <i class="fas fa-newspaper text-lg mb-1"></i>
+          <span class="text-xs">သတင်းများ</span>
+        </a>
+        <a href="#" onclick="showSection('chat')" class="nav-item" id="nav-chat">
+          <i class="fas fa-comments text-lg mb-1"></i>
+          <span class="text-xs">စကားပြော</span>
+        </a>
+        <a href="#" onclick="showSection('support')" class="nav-item" id="nav-support">
+          <i class="fas fa-headset text-lg mb-1"></i>
+          <span class="text-xs">အကူအညီ</span>
+        </a>
+        <a href="#" onclick="showSection('mi')" class="nav-item" id="nav-mi">
+          <i class="fas fa-user-circle text-lg mb-1"></i>
+          <span class="text-xs">ကျွန်ုပ်</span>
+        </a>
+        <a href="#" onclick="logout()" class="nav-item" id="nav-logout">
+          <i class="fas fa-sign-out-alt text-lg mb-1"></i>
+          <span class="text-xs">ထွက်ရန်</span>
+        </a>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+  
+  <script>
+    // Configuration
+    const CONFIG = {
+      SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co',
+      SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4',
+      MAX_RETRY_ATTEMPTS: 3,
+      RETRY_DELAY: 2000,
+      CONNECTION_TIMEOUT: 10000
+    };
+
+    // Global State
+    let state = {
+      supabase: null,
+      deviceId: '',
+      sessionId: '',
+      keyExpiration: null,
+      profileId: null,
+      currentProfile: null,
+      isConnected: false,
+      currentSection: 'home',
+      activeChatPartner: null,
+      chatRealtimeChannel: null,
+      supportRealtimeChannel: null,
+      newsRealtimeChannel: null,
+      loginData: null,
+      selectedProductForPurchase: null,
+      selectedPaymentMethod: null
+    };
+
+    // Utility Functions
+    const utils = {
+      async sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+      },
+
+      generateDeviceId() {
+        try {
+          const ua = navigator.userAgent;
+          const canvas = document.createElement('canvas');
+          const ctx = canvas.getContext('2d');
+          ctx.textBaseline = 'top';
+          ctx.font = '14px Arial';
+          ctx.fillText('Device fingerprint', 2, 2);
+          const fingerprint = canvas.toDataURL();
+          const screenStr = `${window.screen.width}x${window.screen.height}`;
+          const timezone = Intl.DateTimeFormat().resolvedOptions().timeZone;
+          return btoa(ua + fingerprint + screenStr + timezone).slice(0, 255);
+        } catch (error) {
+          console.warn('Error generating device ID:', error);
+          return btoa(navigator.userAgent + Date.now()).slice(0, 255);
+        }
+      },
+
+      formatTimeRemaining(expirationDate) {
+        const now = new Date();
+        const timeLeft = new Date(expirationDate) - now;
+        
+        if (timeLeft <= 0) return 'Key သက်တမ်း ကုန်ဆုံးပြီ';
+        
+        const days = Math.floor(timeLeft / (1000 * 60 * 60 * 24));
+        const hours = Math.floor((timeLeft % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+        const minutes = Math.floor((timeLeft % (1000 * 60 * 60)) / (1000 * 60));
+        
+        return `ကျန်ရှိချိန် ${days} ရက် ${hours} နာရီ ${minutes} မိနစ်`;
+      },
+
+      sanitizeInput(input) {
+        if (typeof input !== 'string') return '';
+        return input.replace(/<script\b[^<]*(?:(?!<\/script>)<[^<]*)*<\/script>/gi, '')
+                   .replace(/[<>]/g, '')
+                   .trim();
+      },
+
+      formatFileSize(bytes) {
+        if (bytes === 0) return '0 Bytes';
+        const k = 1024;
+        const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+        const i = Math.floor(Math.log(bytes) / Math.log(k));
+        return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+      },
+
+      getMediaType(fileType) {
+        if (fileType.startsWith('image/')) return 'image';
+        if (fileType.startsWith('video/')) return 'video';
+        if (fileType.startsWith('audio/')) return 'audio';
+        return 'file';
+      }
+    };
+
+    // UI Management
+    const ui = {
+      updateStatus(status, message) {
+        const indicator = document.getElementById('status-indicator');
+        indicator.className = `status-indicator status-${status}`;
+        
+        const icons = {
+          connected: 'fas fa-check-circle',
+          connecting: 'fas fa-circle-notch fa-spin',
+          error: 'fas fa-exclamation-triangle'
+        };
+        
+        const messages = {
+          connected: 'ချိတ်ဆက်ပြီး',
+          connecting: 'ချိတ်ဆက်နေသည်...',
+          error: 'ချိတ်ဆက်မှု အမှား'
+        };
+        
+        indicator.innerHTML = `<i class="${icons[status]}"></i> ${message || messages[status]}`;
+      },
+
+      showNotification(message, type = 'info', duration = 5000) {
+        const container = document.getElementById('notifications-container');
+        const notification = document.createElement('div');
+        notification.className = `notification notification-${type}`;
+        notification.innerHTML = `
+          <div class="flex items-center justify-between">
+            <div class="flex items-center">
+              <i class="fas fa-${type === 'error' ? 'exclamation-circle' : type === 'success' ? 'check-circle' : 'info-circle'} mr-2"></i>
+              <span>${message}</span>
+            </div>
+            <button onclick="this.parentElement.parentElement.remove()" class="ml-4 hover:text-gray-200">
+              <i class="fas fa-times"></i>
+            </button>
+          </div>
+        `;
+        
+        container.appendChild(notification);
+        
+        setTimeout(() => {
+          if (notification.parentElement) {
+            notification.remove();
+          }
+        }, duration);
+      },
+
+      showLoading(element, show = true) {
+        if (show) {
+          element.innerHTML = `
+            <div class="loading-spinner mb-4"></div>
+            <p class="text-center text-gray-400">Loading...</p>
+          `;
+        }
+      },
+
+      updateNavigationActive(section) {
+        document.querySelectorAll('.nav-item').forEach(nav => {
+          nav.classList.remove('active');
+        });
+        
+        const activeNav = document.getElementById(`nav-${section}`);
+        if (activeNav) {
+          activeNav.classList.add('active');
+        }
+      },
+      
+      showGlobalLoading(show) {
+        const overlay = document.getElementById('loading-overlay');
+        if (show) {
+          overlay.classList.remove('hidden');
+        } else {
+          overlay.classList.add('hidden');
+        }
+      }
+    };
+
+    // Database Connection Management
+    const database = {
+      async initialize() {
+        ui.showGlobalLoading(true);
+        ui.updateStatus('connecting', 'စတင်နေသည်...');
+
+        try {
+          if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+            throw new Error('ကျေးဇူးပြု၍ CONFIG အပိုင်းတွင် သင့် Supabase URL ကို ချိန်ညှိပါ');
+          }
+
+          if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY_HERE') {
+            throw new Error('ကျေးဇူးပြု၍ CONFIG အပိုင်းတွင် သင့် Supabase Anon Key ကို ချိန်ညှိပါ');
+          }
+
+          state.supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+            auth: { persistSession: false },
+            realtime: { params: { eventsPerSecond: 10 } }
+          });
+
+          // Test connection
+          const { data, error } = await state.supabase.from('about').select('id').limit(1);
+          
+          if (error && error.code !== 'PGRST116') { // PGRST116 means table not found, which is fine for initial setup
+            throw new Error(`Database connection failed: ${error.message}`);
+          }
+
+          ui.updateStatus('connected', 'ချိတ်ဆက်ပြီး');
+          ui.showNotification('Database သို့ အောင်မြင်စွာ ချိတ်ဆက်ပြီး!', 'success');
+          
+          state.isConnected = true;
+          state.reconnectAttempts = 0;
+          
+          // Initialize device ID
+          state.deviceId = utils.generateDeviceId();
+          
+          // Check for stored login data
+          await this.checkStoredLogin();
+          
+        } catch (error) {
+          console.error('Database initialization error:', error);
+          ui.updateStatus('error', 'ချိတ်ဆက်မှု မအောင်မြင်');
+          ui.showNotification(`Connection error: ${error.message}`, 'error');
+          
+          if (state.reconnectAttempts < CONFIG.MAX_RETRY_ATTEMPTS) {
+            state.reconnectAttempts++;
+            setTimeout(() => {
+              console.log(`Retrying connection (${state.reconnectAttempts}/${CONFIG.MAX_RETRY_ATTEMPTS})...`);
+              this.initialize();
+            }, CONFIG.RETRY_DELAY);
+          } else {
+            ui.showGlobalLoading(false); // Hide loading if max retries reached
+          }
+        }
+      },
+
+      async checkStoredLogin() {
+        try {
+          const storedLogin = localStorage.getItem('fps_gfx_login');
+          if (storedLogin) {
+            const loginData = JSON.parse(storedLogin);
+            if (loginData && loginData.sessionId && loginData.deviceId === state.deviceId) {
+              // Validate stored session
+              await auth.validateStoredSession(loginData);
+            } else {
+              ui.showGlobalLoading(false);
+            }
+          } else {
+            ui.showGlobalLoading(false);
+          }
+        } catch (error) {
+          console.error('Error checking stored login:', error);
+          localStorage.removeItem('fps_gfx_login');
+          ui.showGlobalLoading(false);
+        }
+      },
+
+      async loadUserProfile() {
+        try {
+          const { data: profiles, error } = await state.supabase
+            .from('profiles')
+            .select('*')
+            .eq('key_id', (await auth.getKeyFromSession()).id)
+            .limit(1);
+
+          if (!error && profiles && profiles.length > 0) {
+            state.currentProfile = profiles[0];
+            state.profileId = profiles[0].id;
+            
+            // Show profile-dependent sections
+            document.getElementById('create-profile').classList.add('hidden');
+            document.getElementById('post-news').classList.remove('hidden');
+          } else {
+            // If no profile, show create profile form
+            document.getElementById('create-profile').classList.remove('hidden');
+            document.getElementById('post-news').classList.add('hidden');
+          }
+        } catch (error) {
+          console.error('Error loading user profile:', error);
+          ui.showNotification('Profile အချက်အလက် ရယူရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+        }
+      },
+
+      async loadProducts() {
+        const productsList = document.getElementById('products-list');
+        ui.showLoading(productsList);
+        try {
+          const { data: products, error } = await state.supabase
+            .from('products')
+            .select('*')
+            .eq('is_active', true)
+            .order('created_at', { ascending: false });
+
+          if (error) throw error;
+
+          if (products && products.length > 0) {
+            productsList.innerHTML = ''; // Clear loading
+            for (const product of products) {
+              const { data: purchasedData, error: purchasedError } = await state.supabase
+                .from('purchased_products')
+                .select('id')
+                .eq('profile_id', state.profileId)
+                .eq('product_id', product.id)
+                .limit(1);
+
+              const isPurchased = !purchasedError && purchasedData && purchasedData.length > 0;
+
+              productsList.innerHTML += `
+                <div class="product-card">
+                  <img src="${product.apk_icon_url || '/placeholder.svg?height=64&width=64'}" alt="${product.name} icon" class="product-icon">
+                  <h3 class="text-lg font-semibold text-white mb-1">${product.name}</h3>
+                  <p class="text-gray-400 text-sm mb-2">${product.description || 'No description'}</p>
+                  ${product.price > 0 ? `<p class="product-price">${product.price} MMK</p>` : '<p class="product-price text-green-400">အခမဲ့</p>'}
+                  ${product.price > 0 && !isPurchased ? `
+                    <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-3">
+                      <i class="fas fa-shopping-cart mr-2"></i> ဝယ်ယူရန်
+                    </button>
+                  ` : `
+                    <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-3">
+                      <i class="fas fa-download mr-2"></i> Download
+                    </a>
+                  `}
+                </div>
+              `;
+            }
+          } else {
+            productsList.innerHTML = '<p class="text-center col-span-2 text-gray-400">Products များ မရှိသေးပါ</p>';
+          }
+        } catch (error) {
+          console.error('Error loading products:', error);
+          productsList.innerHTML = '<p class="text-center col-span-2 text-red-400">Products များ ရယူ၍ မရပါ</p>';
+        }
+      },
+
+      async loadNews() {
+        const newsList = document.getElementById('news-list');
+        ui.showLoading(newsList);
+        
+        try {
+          const { data: news, error } = await state.supabase
+            .from('news')
+            .select(`
+              *,
+              profiles(username, name, profile_picture),
+              admin_profiles(username, name, profile_picture)
+            `)
+            .order('created_at', { ascending: false })
+            .limit(20);
+            
+          if (error) throw error;
+          
+          if (!news || news.length === 0) {
+            newsList.innerHTML = `
+              <div class="text-center text-gray-400 py-8">
+                <i class="fas fa-newspaper text-4xl mb-4"></i>
+                <p>သတင်းများ မရှိသေးပါ</p>
+              </div>
+            `;
+            return;
+          }
+          
+          newsList.innerHTML = news.map(item => {
+            const author = item.posted_by_admin ? item.admin_profiles : item.profiles;
+            const authorName = author?.name || 'Unknown';
+            const authorUsername = author?.username || 'unknown';
+            const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+            let mediaHtml = '';
+            if (item.media_urls && item.media_urls.length > 0) {
+              item.media_urls.forEach(media => {
+                const mediaType = utils.getMediaType(media.type);
+                if (mediaType === 'image') {
+                  mediaHtml += `<img src="${media.url}" class="w-full rounded-lg mb-3" alt="News image">`;
+                } else if (mediaType === 'video') {
+                  mediaHtml += `
+                    <div class="video-container mb-3">
+                      <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+                        <source src="${media.url}" type="${media.type}">
+                      </video>
+                    </div>
+                  `;
+                } else if (mediaType === 'audio') {
+                  mediaHtml += `
+                    <div class="audio-container mb-3">
+                      <audio controls class="w-full">
+                        <source src="${media.url}" type="${media.type}">
+                      </audio>
+                    </div>
+                  `;
+                }
+              });
+            }
+
+            return `
+              <div class="news-card p-4 mb-4">
+                <div class="flex items-center space-x-3 mb-3">
+                  <img src="${authorAvatar}" class="profile-avatar" alt="${authorName} avatar">
+                  <div>
+                    <h4 class="text-yellow-400 font-medium">${authorName}</h4>
+                    <p class="text-gray-400 text-xs">@${authorUsername}</p>
+                  </div>
+                  ${item.posted_by_admin ? '<span class="bg-red-500 text-white px-2 py-1 rounded text-xs">Admin</span>' : ''}
+                </div>
+                
+                <h3 class="text-lg font-semibold text-white mb-2">${item.title}</h3>
+                <p class="text-gray-300 mb-3">${item.content.substring(0, 150)}${item.content.length > 150 ? '...' : ''}</p>
+                
+                ${mediaHtml}
+                
+                <div class="flex items-center justify-between text-sm text-gray-400">
+                  <div class="flex items-center space-x-4">
+                    <button onclick="toggleLike('${item.id}')" class="like-btn flex items-center space-x-1">
+                      <i class="fas fa-heart"></i>
+                      <span id="likes-${item.id}">${item.likes || 0}</span>
+                    </button>
+                    <span class="flex items-center space-x-1">
+                      <i class="fas fa-eye"></i>
+                      <span>${item.views || 0}</span>
+                    </span>
+                  </div>
+                  <button onclick="viewNewsDetail('${item.id}')" class="text-yellow-400 hover:underline">
+                    အသေးစိတ် ကြည့်ရန်
+                  </button>
+                </div>
+              </div>
+            `;
+          }).join('');
+          
+        } catch (error) {
+          console.error('Error loading news:', error);
+          newsList.innerHTML = `
+            <div class="text-center text-red-400 py-8">
+              <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+              <p>သတင်းများ ရယူ၍ မရပါ</p>
+            </div>
+          `;
+        }
+      },
+
+      async loadAbout() {
+        const aboutContent = document.getElementById('about-content');
+        ui.showLoading(aboutContent);
+        try {
+          const { data: about, error } = await state.supabase
+            .from('about')
+            .select('*')
+            .eq('id', 'main')
+            .single();
+            
+          if (error) throw error;
+          
+          let socialLinksHtml = '';
+          if (about.social_links && about.social_links.length > 0) {
+            about.social_links.forEach(link => {
+              socialLinksHtml += `
+                <a href="${link.url}" target="_blank" class="social-link-item">
+                  <img src="${link.icon_url || '/placeholder.svg?height=24&width=24'}" alt="${link.name} icon">
+                  <span>${link.name}</span>
+                </a>
+              `;
+            });
+          }
+
+          aboutContent.innerHTML = `
+            <div class="space-y-4">
+              <div class="text-center">
+                <h3 class="text-lg font-semibold text-yellow-400 mb-4">ဆက်သွယ်ရန် အချက်အလက်များ</h3>
+              </div>
+              <div class="space-y-3">
+                ${about.contact_name ? `<p class="text-white"><i class="fas fa-user mr-2"></i> ${about.contact_name}</p>` : ''}
+                ${about.phone ? `
+                  <a href="tel:${about.phone}" class="myanmar-btn w-full flex items-center justify-center">
+                    <i class="fas fa-phone mr-2"></i>
+                    ${about.phone}
+                  </a>
+                ` : ''}
+                ${socialLinksHtml ? `
+                  <h4 class="text-md font-semibold text-yellow-400 mt-4 mb-2">Social Media များ</h4>
+                  <div class="grid grid-cols-1 gap-3">
+                    ${socialLinksHtml}
+                  </div>
+                ` : ''}
+              </div>
+              <div class="mt-6 p-4 bg-blue-600 bg-opacity-20 border border-blue-500 rounded-lg">
+                <h4 class="text-blue-400 font-medium mb-2">
+                  <i class="fas fa-info-circle mr-2"></i>
+                  အရေးကြီး သတိပေးချက်
+                </h4>
+                <p class="text-sm text-gray-300">
+                  Key များ ဝယ်ယူရန် သို့မဟုတ် အကူအညီ လိုအပ်ပါက အထက်ပါ ဆက်သွယ်ရေး နည်းလမ်းများ အသုံးပြု၍ ဆက်သွယ်နိုင်ပါသည်။
+                </p>
+              </div>
+            </div>
+          `;
+        } catch (error) {
+          console.error('Error loading about info:', error);
+          aboutContent.innerHTML = `
+            <div class="text-center text-red-400">
+              <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+              <p>အချက်အလက် ရယူ၍ မရပါ</p>
+            </div>
+          `;
+        }
+      },
+
+      async loadMiProfile() {
+        const miProfileContent = document.getElementById('mi-profile-content');
+        const miNewsList = document.getElementById('mi-news-list');
+        ui.showLoading(miProfileContent);
+        ui.showLoading(miNewsList);
+
+        if (!state.profileId) {
+          miProfileContent.innerHTML = '<p class="text-center text-red-400">Profile မရှိသေးပါ</p>';
+          miNewsList.innerHTML = '<p class="text-center text-gray-400">Profile မရှိသေးသောကြောင့် သတင်းများ မပြသနိုင်ပါ</p>';
+          return;
+        }
+
+        try {
+          const { data: profile, error: profileError } = await state.supabase
+            .from('profiles')
+            .select('*')
+            .eq('id', state.profileId)
+            .single();
+
+          if (profileError) throw profileError;
+
+          miProfileContent.innerHTML = `
+            <div class="text-center">
+              <img src="${profile.profile_picture || '/placeholder.svg?height=96&width=96'}" 
+                   class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" alt="Profile Picture">
+              <h3 class="text-xl font-bold text-yellow-400">${profile.name}</h3>
+              <p class="text-gray-400 mb-4">@${profile.username}</p>
+              ${profile.bio ? `<p class="text-gray-300 mb-4">${profile.bio}</p>` : ''}
+              <div class="text-sm text-gray-400">
+                <p>Profile ဖန်တီးရက်: ${new Date(profile.created_at).toLocaleDateString('my-MM')}</p>
+                ${profile.is_verified ? '<p class="text-green-400"><i class="fas fa-check-circle mr-1"></i>အတည်ပြုပြီး</p>' : ''}
+              </div>
+            </div>
+          `;
+
+          // Load user's news
+          const { data: userNews, error: userNewsError } = await state.supabase
+            .from('news')
+            .select(`
+              *,
+              profiles(username, name, profile_picture)
+            `)
+            .eq('user_profile_id', state.profileId)
+            .order('created_at', { ascending: false });
+
+          if (userNewsError) throw userNewsError;
+
+          if (userNews && userNews.length > 0) {
+            miNewsList.innerHTML = userNews.map(item => {
+              let mediaHtml = '';
+              if (item.media_urls && item.media_urls.length > 0) {
+                item.media_urls.forEach(media => {
+                  const mediaType = utils.getMediaType(media.type);
+                  if (mediaType === 'image') {
+                    mediaHtml += `<img src="${media.url}" class="w-full rounded-lg mb-3" alt="News image">`;
+                  } else if (mediaType === 'video') {
+                    mediaHtml += `
+                      <div class="video-container mb-3">
+                        <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+                          <source src="${media.url}" type="${media.type}">
+                        </video>
+                      </div>
+                    `;
+                  } else if (mediaType === 'audio') {
+                    mediaHtml += `
+                      <div class="audio-container mb-3">
+                        <audio controls class="w-full">
+                          <source src="${media.url}" type="${media.type}">
+                        </audio>
+                      </div>
+                    `;
+                  }
+                });
+              }
+              return `
+                <div class="news-card p-4 mb-4">
+                  <h3 class="text-lg font-semibold text-white mb-2">${item.title}</h3>
+                  <p class="text-gray-300 mb-3">${item.content.substring(0, 150)}${item.content.length > 150 ? '...' : ''}</p>
+                  ${mediaHtml}
+                  <div class="flex items-center justify-between text-sm text-gray-400">
+                    <div class="flex items-center space-x-4">
+                      <span class="flex items-center space-x-1">
+                        <i class="fas fa-eye"></i>
+                        <span>${item.views || 0}</span>
+                      </span>
+                    </div>
+                    <button onclick="viewNewsDetail('${item.id}')" class="text-yellow-400 hover:underline">
+                      အသေးစိတ် ကြည့်ရန်
+                    </button>
+                  </div>
+                </div>
+              `;
+            }).join('');
+          } else {
+            miNewsList.innerHTML = '<p class="text-center text-gray-400">သင်တင်ထားသော သတင်းများ မရှိသေးပါ</p>';
+          }
+
+        } catch (error) {
+          console.error('Error loading Mi profile:', error);
+          miProfileContent.innerHTML = `
+            <div class="text-center text-red-400">
+              <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+              <p>Profile အချက်အလက် ရယူ၍ မရပါ</p>
+            </div>
+          `;
+          miNewsList.innerHTML = '<p class="text-center text-red-400">သတင်းများ ရယူ၍ မရပါ</p>';
+        }
+      }
+    };
+
+    // Authentication Management
+    const auth = {
+      async login() {
+        const keyInput = document.getElementById('key-input');
+        const loginBtn = document.getElementById('login-btn');
+        const loginText = document.getElementById('login-text');
+        
+        const keyText = utils.sanitizeInput(keyInput.value);
+        
+        if (!keyText) {
+          ui.showNotification('ကျေးဇူးပြု၍ သင့် Key ကို ရိုက်ထည့်ပါ', 'error');
+          return;
+        }
+
+        try {
+          loginBtn.disabled = true;
+          loginText.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i>စစ်ဆေးနေသည်...';
+
+          // Call Supabase RPC function for login
+          const { data, error } = await state.supabase.rpc('user_login', {
+            input_key_text: keyText,
+            input_device_id: state.deviceId,
+            input_user_agent: navigator.userAgent,
+            input_device_info: {
+              width: window.screen.width,
+              height: window.screen.height,
+              pixelRatio: window.devicePixelRatio,
+              platform: navigator.platform,
+              language: navigator.language
+            }
+          });
+
+          if (error) throw error;
+
+          if (!data.success) {
+            throw new Error(data.message);
+          }
+
+          // Store login data for persistence
+          const loginData = {
+            sessionId: data.session_id,
+            deviceId: state.deviceId,
+            keyText: keyText,
+            loginTime: new Date().toISOString()
+          };
+          
+          localStorage.setItem('fps_gfx_login', JSON.stringify(loginData));
+          state.loginData = loginData;
+          state.sessionId = data.session_id;
+          state.keyExpiration = data.expires_at;
+          state.profileId = data.profile_id;
+
+          // Load user profile
+          await database.loadUserProfile();
+
+          // Show main content
+          document.getElementById('login-section').classList.add('hidden');
+          document.getElementById('main-content').classList.remove('hidden');
+          
+          ui.showNotification('အောင်မြင်စွာ ဝင်ရောက်ပြီးပါပြီ!', 'success');
+          
+          // Start expiration timer
+          this.startExpirationTimer();
+          
+          // Setup realtime subscriptions
+          this.setupRealtimeSubscriptions();
+
+          // Load initial data for home section
+          showSection('home');
+          
+        } catch (error) {
+          console.error('Login error:', error);
+          ui.showNotification(error.message, 'error');
+        } finally {
+          loginBtn.disabled = false;
+          loginText.textContent = 'ဝင်ရောက်ရန်';
+        }
+      },
+
+      async validateStoredSession(loginData) {
+        try {
+          const { data, error } = await state.supabase.rpc('validate_session', {
+            session_id_param: loginData.sessionId
+          });
+
+          if (error) throw error;
+
+          if (!data.is_valid) {
+            throw new Error(data.message);
+          }
+
+          // Session is valid, restore login state
+          state.sessionId = loginData.sessionId;
+          state.keyExpiration = data.key_expires_at;
+          state.loginData = loginData;
+          state.profileId = data.profile_id;
+
+          // Load profile if exists
+          await database.loadUserProfile();
+          
+          // Show main content
+          document.getElementById('login-section').classList.add('hidden');
+          document.getElementById('main-content').classList.remove('hidden');
+          
+          ui.showNotification('အောင်မြင်စွာ ပြန်လည် ဝင်ရောက်ပြီး!', 'success');
+          
+          // Start expiration timer
+          this.startExpirationTimer();
+
+          // Setup realtime subscriptions
+          this.setupRealtimeSubscriptions();
+
+          // Load initial data for home section
+          showSection('home');
+          
+        } catch (error) {
+          console.error('Session validation failed:', error);
+          localStorage.removeItem('fps_gfx_login');
+          ui.showNotification('Session ကုန်ဆုံးပြီး၊ ပြန်လည် login လုပ်ပါ', 'info');
+          ui.showGlobalLoading(false);
+        }
+      },
+
+      async getKeyFromSession() {
+        const { data: session, error } = await state.supabase
+          .from('sessions')
+          .select(`
+            keys(*)
+          `)
+          .eq('id', state.sessionId)
+          .single();
+
+        if (error) throw error;
+        return session.keys;
+      },
+
+      startExpirationTimer() {
+        const updateTimer = () => {
+          const timerElement = document.getElementById('timer-text');
+          if (timerElement && state.keyExpiration) {
+            const timeRemaining = utils.formatTimeRemaining(state.keyExpiration);
+            timerElement.textContent = timeRemaining;
+            
+            // Check if key is expired
+            const now = new Date();
+            const expiration = new Date(state.keyExpiration);
+            
+            if (expiration <= now) {
+              this.handleKeyExpiration();
+              return;
+            }
+            
+            // Show warning if less than 24 hours remaining
+            const hoursLeft = (expiration - now) / (1000 * 60 * 60);
+            const expirationContainer = document.getElementById('expiration-timer');
+            
+            if (hoursLeft <= 24) {
+              expirationContainer.className = 'expire-warning';
+              timerElement.innerHTML = `
+                <i class="fas fa-exclamation-triangle mr-2"></i>
+                ${timeRemaining} - Admin ကို ဆက်သွယ်ပါ!
+              `;
+            } else {
+              expirationContainer.className = 'bg-gradient-to-r from-yellow-600 to-green-600 text-white p-3 rounded-lg text-center font-semibold';
+            }
+          }
+        };
+
+        // Update immediately and then every minute
+        updateTimer();
+        setInterval(updateTimer, 60000);
+      },
+
+      handleKeyExpiration() {
+        ui.showNotification('သင့် Key သက်တမ်း ကုန်ဆုံးပြီးပါပြီ။ Admin ကို ဆက်သွယ်ပြီး သက်တမ်း တိုးမြှင့်ရန် တောင်းဆိုပါ။', 'error', 10000);
+        
+        const timerElement = document.getElementById('timer-text');
+        if (timerElement) {
+          timerElement.innerHTML = `
+            <i class="fas fa-exclamation-triangle mr-2"></i>
+            Key သက်တမ်း ကုန်ဆုံးပြီး - Admin ကို ဆက်သွယ်ပါ
+          `;
+        }
+        
+        // Show support section
+        showSection('support');
+      },
+
+      setupRealtimeSubscriptions() {
+        // Unsubscribe from previous channels if they exist
+        if (state.chatRealtimeChannel) state.supabase.removeChannel(state.chatRealtimeChannel);
+        if (state.supportRealtimeChannel) state.supabase.removeChannel(state.supportRealtimeChannel);
+        if (state.newsRealtimeChannel) state.supabase.removeChannel(state.newsRealtimeChannel);
+
+        // Chat messages realtime
+        state.chatRealtimeChannel = state.supabase
+          .channel('chat_messages_changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'chat_messages', filter: `conversation_id=in.(select id from chat_conversations where participant1_id='${state.profileId}' or participant2_id='${state.profileId}')` }, 
+            (payload) => {
+              if (state.currentSection === 'chat' && state.activeChatPartner) {
+                // Reload messages for active chat
+                const conversationId = payload.new?.conversation_id || payload.old?.conversation_id;
+                if (conversationId) {
+                  loadChatMessages(conversationId);
+                }
+              }
+            }
+          )
+          .subscribe();
+
+        // Support messages realtime
+        state.supportRealtimeChannel = state.supabase
+          .channel('support_messages_changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'support_messages', filter: `profile_id=eq.${state.profileId}` }, 
+            (payload) => {
+              if (state.currentSection === 'support') {
+                loadSupportMessages();
+              }
+            }
+          )
+          .subscribe();
+
+        // News realtime
+        state.newsRealtimeChannel = state.supabase
+          .channel('news_changes')
+          .on('postgres_changes', 
+            { event: '*', schema: 'public', table: 'news' }, 
+            (payload) => {
+              if (state.currentSection === 'news') {
+                database.loadNews();
+              }
+              if (state.currentSection === 'mi') {
+                database.loadMiProfile(); // Reload user's news on Mi page
+              }
+            }
+          )
+          .subscribe();
+      }
+    };
+
+    // Profile Management
+    async function createProfile() {
+      const username = utils.sanitizeInput(document.getElementById('profile-username').value);
+      const name = utils.sanitizeInput(document.getElementById('profile-name').value);
+      const pictureFile = document.getElementById('profile-picture').files[0];
+      
+      if (!username || !name) {
+        ui.showNotification('ကျေးဇူးပြု၍ အသုံးပြုသူအမည် နှင့် နာမည် ကို ရိုက်ထည့်ပါ', 'error');
+        return;
+      }
+      
+      try {
+        ui.showNotification('Profile ဖန်တီးနေသည်...', 'info');
+        
+        let profilePictureUrl = null;
+        
+        if (pictureFile) {
+          // Upload profile picture
+          const fileExt = pictureFile.name.split('.').pop();
+          const fileName = `${state.profileId}_${Date.now()}.${fileExt}`;
+          
+          const { data: uploadData, error: uploadError } = await state.supabase.storage
+            .from('profiles')
+            .upload(fileName, pictureFile);
+            
+          if (uploadError) throw uploadError;
+          
+          const { data: urlData } = state.supabase.storage
+            .from('profiles')
+            .getPublicUrl(fileName);
+            
+          profilePictureUrl = urlData.publicUrl;
+        }
+        
+        // Update profile
+        const { data: profile, error } = await state.supabase
+          .from('profiles')
+          .update({
+            username: username,
+            name: name,
+            profile_picture: profilePictureUrl
+          })
+          .eq('id', state.profileId)
+          .select()
+          .single();
+          
+        if (error) {
+          if (error.code === '23505') {
+            throw new Error('ဤ အသုံးပြုသူအမည် ရှိနေပြီးပါပြီ');
+          }
+          throw error;
+        }
+        
+        state.currentProfile = profile;
+        
+        // Show post news form
+        document.getElementById('create-profile').classList.add('hidden');
+        document.getElementById('post-news').classList.remove('hidden');
+        
+        ui.showNotification('Profile ကို အောင်မြင်စွာ ဖန်တီးပြီးပါပြီ!', 'success');
+        
+        // Reload news
+        database.loadNews();
+        
+      } catch (error) {
+        console.error('Profile creation error:', error);
+        ui.showNotification(error.message, 'error');
+      }
+    }
+
+    // News Management
+    async function postNews() {
+      const title = utils.sanitizeInput(document.getElementById('news-title').value);
+      const content = utils.sanitizeInput(document.getElementById('news-content').value);
+      const mediaFiles = document.getElementById('news-media').files;
+      
+      if (!title || !content) {
+        ui.showNotification('ကျေးဇူးပြု၍ ခေါင်းစဉ် နှင့် အကြောင်းအရာ ကို ရိုက်ထည့်ပါ', 'error');
+        return;
+      }
+      
+      try {
+        ui.showNotification('သတင်း တင်နေသည်...', 'info');
+        
+        let mediaUrls = [];
+        if (mediaFiles.length > 0) {
+          for (let i = 0; i < mediaFiles.length; i++) {
+            const file = mediaFiles[i];
+            const fileExt = file.name.split('.').pop();
+            const fileName = `news/${state.profileId}_${Date.now()}_${i}.${fileExt}`;
+            
+            const { data: uploadData, error: uploadError } = await state.supabase.storage
+              .from('news')
+              .upload(fileName, file);
+              
+            if (uploadError) throw uploadError;
+            
+            const { data: urlData } = state.supabase.storage
+              .from('news')
+              .getPublicUrl(fileName);
+              
+            mediaUrls.push({ url: urlData.publicUrl, type: file.type, size: file.size });
+          }
+        }
+        
+        // Post news
+        const { data: news, error } = await state.supabase
+          .from('news')
+          .insert({
+            title: title,
+            content: content,
+            media_urls: mediaUrls,
+            user_profile_id: state.profileId,
+            posted_by_admin: false
+          })
+          .select()
+          .single();
+          
+        if (error) throw error;
+        
+        // Clear form
+        document.getElementById('news-title').value = '';
+        document.getElementById('news-content').value = '';
+        document.getElementById('news-media').value = '';
+        
+        ui.showNotification('သတင်း ကို အောင်မြင်စွာ တင်ပြီးပါပြီ!', 'success');
+        
+        // Reload news
+        database.loadNews();
+        
+      } catch (error) {
+        console.error('News posting error:', error);
+        ui.showNotification('သတင်း တင်ရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+      }
+    }
+
+    // Like Management
+    async function toggleLike(newsId) {
+      if (!state.profileId) {
+        ui.showNotification('Like လုပ်ရန် Profile ဖန်တီးပါ', 'info');
+        return;
+      }
+      
+      try {
+        const { data, error } = await state.supabase.rpc('toggle_like', {
+          profile_id_param: state.profileId,
+          news_id_param: newsId
+        });
+        
+        if (error) throw error;
+        
+        // Update like count in UI
+        const likesElement = document.getElementById(`likes-${newsId}`);
+        if (likesElement) {
+          likesElement.textContent = data.total_likes;
+        }
+        
+      } catch (error) {
+        console.error('Error toggling like:', error);
+        ui.showNotification('Like လုပ်ရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+      }
+    }
+
+    // User Search
+    async function searchUsers() {
+      const searchInput = document.getElementById('user-search');
+      const searchResults = document.getElementById('search-results');
+      const query = utils.sanitizeInput(searchInput.value);
+      
+      if (query.length < 2) {
+        searchResults.classList.add('hidden');
+        return;
+      }
+      
+      try {
+        const { data: users, error } = await state.supabase
+          .from('profiles')
+          .select('id, username, name, profile_picture')
+          .or(`username.ilike.%${query}%,name.ilike.%${query}%`)
+          .limit(10);
+          
+        if (error) throw error;
+        
+        if (!users || users.length === 0) {
+          searchResults.innerHTML = '<div class="search-result-item text-gray-400">ရလဒ် မရှိပါ</div>';
+        } else {
+          searchResults.innerHTML = users.map(user => `
+            <div class="search-result-item flex items-center space-x-3" onclick="viewProfile('${user.id}')">
+              ${user.profile_picture ? 
+                `<img src="${user.profile_picture}" class="w-8 h-8 rounded-full object-cover" alt="${user.name} avatar">` :
+                `<div class="w-8 h-8 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold text-sm">${user.name.charAt(0)}</div>`
+              }
+              <div>
+                <p class="text-white font-medium">${user.name}</p>
+                <p class="text-gray-400 text-sm">@${user.username}</p>
+              </div>
+            </div>
+          `).join('');
+        }
+        
+        searchResults.classList.remove('hidden');
+        
+      } catch (error) {
+        console.error('Error searching users:', error);
+      }
+    }
+
+    // Profile Modal
+    async function viewProfile(profileId) {
+      const modal = document.getElementById('profile-modal');
+      const content = document.getElementById('profile-modal-content');
+      
+      modal.classList.remove('hidden');
+      ui.showLoading(content);
+      
+      try {
+        const { data: profile, error } = await state.supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', profileId)
+          .single();
+          
+        if (error) throw error;
+        
+        content.innerHTML = `
+          <div class="text-center">
+            ${profile.profile_picture ? 
+              `<img src="${profile.profile_picture}" class="w-24 h-24 rounded-full mx-auto mb-4 object-cover" alt="Profile Picture">` :
+              `<div class="w-24 h-24 rounded-full bg-yellow-400 flex items-center justify-center text-black font-bold text-3xl mx-auto mb-4">${profile.name.charAt(0)}</div>`
+            }
+            <h3 class="text-xl font-bold text-yellow-400">${profile.name}</h3>
+            <p class="text-gray-400 mb-4">@${profile.username}</p>
+            ${profile.bio ? `<p class="text-gray-300 mb-4">${profile.bio}</p>` : ''}
+            <div class="text-sm text-gray-400">
+              <p>Profile ဖန်တီးရက်: ${new Date(profile.created_at).toLocaleDateString('my-MM')}</p>
+              ${profile.is_verified ? '<p class="text-green-400"><i class="fas fa-check-circle mr-1"></i>အတည်ပြုပြီး</p>' : ''}
+            </div>
+            
+            ${state.profileId && state.profileId !== profileId ? `
+              <button onclick="startChat('${profileId}')" class="myanmar-btn w-full mt-4">
+                <i class="fas fa-comments mr-2"></i>
+                စကားပြောရန်
+              </button>
+            ` : ''}
+          </div>
+        `;
+        
+        // Hide search results
+        document.getElementById('search-results').classList.add('hidden');
+        
+      } catch (error) {
+        console.error('Error loading profile:', error);
+        content.innerHTML = `
+          <div class="text-center text-red-400">
+            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+            <p>Profile ရယူ၍ မရပါ</p>
+          </div>
+        `;
+      }
+    }
+
+    function closeProfileModal() {
+      document.getElementById('profile-modal').classList.add('hidden');
+    }
+
+    // News Detail Modal
+    async function viewNewsDetail(newsId) {
+      const modal = document.getElementById('news-detail-modal');
+      const content = document.getElementById('news-detail-content');
+      
+      modal.classList.remove('hidden');
+      ui.showLoading(content);
+
+      try {
+        // Increment view count
+        const { data: updatedViews, error: viewError } = await state.supabase.rpc('increment_news_views', { input_news_id: newsId });
+        if (viewError) console.error('Error incrementing views:', viewError);
+
+        const { data, error } = await state.supabase
+          .from('news')
+          .select(`
+            *,
+            profiles(username, name, profile_picture),
+            admin_profiles(username, name, profile_picture)
+          `)
+          .eq('id', newsId)
+          .single();
+
+        if (error) throw error;
+
+        const author = data.posted_by_admin ? data.admin_profiles : data.profiles;
+        const authorName = author?.name || 'Unknown';
+        const authorUsername = author?.username || 'unknown';
+        const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        let mediaHtml = '';
+        if (data.media_urls && data.media_urls.length > 0) {
+          data.media_urls.forEach(media => {
+            const mediaType = utils.getMediaType(media.type);
+            if (mediaType === 'image') {
+              mediaHtml += `<img src="${media.url}" class="w-full rounded-lg mb-3" alt="News image">`;
+            } else if (mediaType === 'video') {
+              mediaHtml += `
+                <div class="video-container mb-3">
+                  <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+                    <source src="${media.url}" type="${media.type}">
+                  </video>
+                </div>
+              `;
+            } else if (mediaType === 'audio') {
+              mediaHtml += `
+                <div class="audio-container mb-3">
+                  <audio controls class="w-full">
+                    <source src="${media.url}" type="${media.type}">
+                  </audio>
+                </div>
+              `;
+            }
+          });
+        }
+
+        let socialLinksHtml = '';
+        if (data.youtube_link) socialLinksHtml += `<a href="${data.youtube_link}" target="_blank" class="text-red-500 hover:text-red-400"><i class="fab fa-youtube text-2xl"></i></a>`;
+        if (data.tiktok_link) socialLinksHtml += `<a href="${data.tiktok_link}" target="_blank" class="text-gray-400 hover:text-white"><i class="fab fa-tiktok text-2xl"></i></a>`;
+        if (data.telegram_link) socialLinksHtml += `<a href="${data.telegram_link}" target="_blank" class="text-blue-400 hover:text-blue-300"><i class="fab fa-telegram text-2xl"></i></a>`;
+        if (data.facebook_link) socialLinksHtml += `<a href="${data.facebook_link}" target="_blank" class="text-blue-600 hover:text-blue-500"><i class="fab fa-facebook text-2xl"></i></a>`;
+
+
+        content.innerHTML = `
+          <div class="space-y-4">
+            <div class="flex items-center space-x-3">
+              <img src="${authorAvatar}" class="profile-avatar" alt="${authorName} avatar">
+              <div>
+                <h4 class="font-semibold text-white">${authorName}</h4>
+                <p class="text-sm text-gray-400">@${authorUsername}</p>
+              </div>
+            </div>
+            
+            <h3 class="text-xl font-bold text-yellow-400">${data.title}</h3>
+            
+            ${mediaHtml}
+            
+            <div class="prose prose-invert max-w-none">
+              <p class="text-gray-300 whitespace-pre-wrap">${data.content}</p>
+            </div>
+            
+            ${socialLinksHtml ? `<div class="flex space-x-4 mt-4">${socialLinksHtml}</div>` : ''}
+
+            <div class="flex items-center justify-between text-sm text-gray-400 pt-4 border-t border-gray-700">
+              <div class="flex space-x-4">
+                <span><i class="fas fa-eye mr-1"></i> ${updatedViews || data.views || 0} ကြည့်ရှုမှု</span>
+                <span><i class="fas fa-heart mr-1"></i> ${data.likes || 0} နှစ်သက်မှု</span>
+              </div>
+              <span><i class="fas fa-calendar mr-1"></i> ${new Date(data.created_at).toLocaleString('my-MM')}</span>
+            </div>
+          </div>
+        `;
+
+      } catch (error) {
+        console.error('Error viewing news:', error);
+        content.innerHTML = `
+          <div class="text-center text-red-400">
+            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+            <p>သတင်း ကြည့်ရာတွင် အမှား ဖြစ်ပွားခဲ့သည်</p>
+          </div>
+        `;
+      }
+    }
+
+    function closeNewsDetailModal() {
+      document.getElementById('news-detail-modal').classList.add('hidden');
+    }
+
+    // Chat Management
+    async function startChat(partnerId) {
+      if (!state.profileId) {
+        ui.showNotification('စကားပြောရန် Profile ဖန်တီးပါ', 'info');
+        return;
+      }
+      
+      try {
+        // Get or create conversation
+        const { data: conversationId, error } = await state.supabase.rpc('get_or_create_conversation', {
+          user1_id: state.profileId,
+          user2_id: partnerId
+        });
+        
+        if (error) throw error;
+        
+        state.activeChatPartner = partnerId;
+        
+        // Load partner info
+        const { data: partner, error: partnerError } = await state.supabase
+          .from('profiles')
+          .select('*')
+          .eq('id', partnerId)
+          .single();
+          
+        if (partnerError) throw partnerError;
+        
+        // Update chat UI
+        document.getElementById('chat-partner-name').textContent = partner.name;
+        document.getElementById('chat-partner-username').textContent = `@${partner.username}`;
+        document.getElementById('chat-partner-avatar').src = partner.profile_picture || '/placeholder.svg?height=40&width=40';
+        
+        // Show chat window
+        closeProfileModal();
+        showSection('chat');
+        document.getElementById('chat-list').classList.add('hidden');
+        document.getElementById('active-chat').classList.remove('hidden');
+        
+        // Load messages
+        await loadChatMessages(conversationId);
+        
+      } catch (error) {
+        console.error('Error starting chat:', error);
+        ui.showNotification('စကားပြောခန်း ဖွင့်ရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+      }
+    }
+
+    async function loadChatMessages(conversationId) {
+      const messagesContainer = document.getElementById('chat-messages');
+      
+      try {
+        const { data: messages, error } = await state.supabase
+          .from('chat_messages')
+          .select(`
+            *,
+            profiles(name, username, profile_picture)
+          `)
+          .eq('conversation_id', conversationId)
+          .order('created_at', { ascending: true });
+          
+        if (error) throw error;
+        
+        if (!messages || messages.length === 0) {
+          messagesContainer.innerHTML = '<p class="text-center text-gray-400">စကားပြောမှု စတင်ပါ</p>';
+          return;
+        }
+        
+        messagesContainer.innerHTML = messages.map(message => `
+          <div class="chat-message ${message.sender_id === state.profileId ? 'sent' : 'received'}">
+            <p class="mb-1">${message.content}</p>
+            <p class="text-xs opacity-70">${new Date(message.created_at).toLocaleTimeString('my-MM')}</p>
+          </div>
+        `).join('');
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+      } catch (error) {
+        console.error('Error loading chat messages:', error);
+        messagesContainer.innerHTML = '<p class="text-center text-red-400">မက်ဆေ့ချ်များ ရယူ၍ မရပါ</p>';
+      }
+    }
+
+    async function sendChatMessage() {
+      const input = document.getElementById('chat-input');
+      const message = utils.sanitizeInput(input.value);
+      
+      if (!message.trim()) return;
+      
+      try {
+        // Get conversation ID
+        const { data: conversationId, error: convError } = await state.supabase.rpc('get_or_create_conversation', {
+          user1_id: state.profileId,
+          user2_id: state.activeChatPartner
+        });
+        
+        if (convError) throw convError;
+        
+        // Send message
+        const { error } = await state.supabase
+          .from('chat_messages')
+          .insert({
+            conversation_id: conversationId,
+            sender_id: state.profileId,
+            content: message
+          });
+          
+        if (error) throw error;
+        
+        input.value = '';
+        
+        // Reload messages (realtime will handle this, but force for immediate feedback)
+        await loadChatMessages(conversationId);
+        
+      } catch (error) {
+        console.error('Error sending message:', error);
+        ui.showNotification('မက်ဆေ့ချ် ပို့ရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+      }
+    }
+
+    function closeChatWindow() {
+      document.getElementById('chat-list').classList.remove('hidden');
+      document.getElementById('active-chat').classList.add('hidden');
+      state.activeChatPartner = null;
+    }
+
+    // Support Management
+    async function sendSupportMessage() {
+      const input = document.getElementById('support-input');
+      const message = utils.sanitizeInput(input.value);
+      
+      if (!message.trim()) {
+        ui.showNotification('ကျေးဇူးပြု၍ မက်ဆေ့ချ် ရေးပါ', 'error');
+        return;
+      }
+      
+      try {
+        const { error } = await state.supabase
+          .from('support_messages')
+          .insert({
+            profile_id: state.profileId,
+            content: message,
+            is_from_user: true
+          });
+          
+        if (error) throw error;
+        
+        input.value = '';
+        ui.showNotification('မက်ဆေ့ချ် ပို့ပြီးပါပြီ', 'success');
+        
+        // Reload support messages (realtime will handle this, but force for immediate feedback)
+        await loadSupportMessages();
+        
+      } catch (error) {
+        console.error('Error sending support message:', error);
+        ui.showNotification('မက်ဆေ့ချ် ပို့ရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+      }
+    }
+
+    async function loadSupportMessages() {
+      const messagesContainer = document.getElementById('support-messages');
+      ui.showLoading(messagesContainer);
+      
+      try {
+        const { data: messages, error } = await state.supabase
+          .from('support_messages')
+          .select('*')
+          .or(`profile_id.eq.${state.profileId},is_from_user.eq.false`) // Only show messages related to current user or admin replies
+          .order('created_at', { ascending: true })
+          .limit(50);
+          
+        if (error) throw error;
+        
+        if (!messages || messages.length === 0) {
+          messagesContainer.innerHTML = `
+            <div class="text-center text-gray-400">
+              <i class="fas fa-headset text-2xl mb-2"></i>
+              <p>အကူအညီ လိုအပ်ပါက ဒီနေရာတွင် စာရေးပို့နိုင်ပါသည်</p>
+            </div>
+          `;
+          return;
+        }
+        
+        messagesContainer.innerHTML = messages.map(message => `
+          <div class="chat-message ${message.is_from_user ? 'sent' : 'received'}">
+            <div class="flex items-center space-x-2 mb-1">
+              ${message.is_from_user ? 
+                '<i class="fas fa-user-circle text-yellow-400"></i>' :
+                '<i class="fas fa-headset text-green-400"></i>'
+              }
+              <span class="font-medium text-xs">${message.is_from_user ? 'သင်' : 'Admin'}</span>
+            </div>
+            <p class="mb-1">${message.content}</p>
+            <p class="text-xs opacity-70">${new Date(message.created_at).toLocaleString('my-MM')}</p>
+          </div>
+        `).join('');
+        
+        // Scroll to bottom
+        messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        
+      } catch (error) {
+        console.error('Error loading support messages:', error);
+        messagesContainer.innerHTML = `
+          <div class="text-center text-red-400">
+            <i class="fas fa-exclamation-triangle text-2xl mb-2"></i>
+            <p>မက်ဆေ့ချ်များ ရယူ၍ မရပါ</p>
+          </div>
+        `;
+      }
+    }
+
+    // Product Purchase Flow
+    async function initiatePurchase(productId, productName, productPrice) {
+      if (!state.profileId) {
+        ui.showNotification('Product ဝယ်ယူရန် Profile ဖန်တီးပါ', 'info');
+        return;
+      }
+      state.selectedProductForPurchase = { id: productId, name: productName, price: productPrice };
+      document.getElementById('purchase-product-name').textContent = productName;
+      document.getElementById('purchase-product-price').textContent = `${productPrice} MMK`;
+
+      const paymentMethodsList = document.getElementById('payment-methods-list');
+      ui.showLoading(paymentMethodsList);
+
+      try {
+        const { data: methods, error } = await state.supabase
+          .from('payment_methods')
+          .select('*')
+          .eq('is_active', true)
+          .order('method_name', { ascending: true });
+
+        if (error) throw error;
+
+        if (methods && methods.length > 0) {
+          paymentMethodsList.innerHTML = methods.map(method => `
+            <label class="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg cursor-pointer">
+              <input type="radio" name="payment_method" value="${method.id}" 
+                     onchange="state.selectedPaymentMethod = '${method.id}'" class="w-4 h-4 text-yellow-400 focus:ring-yellow-400">
+              <div>
+                <p class="font-semibold text-white">${method.method_name}</p>
+                <p class="text-gray-400 text-sm">${method.account_info || ''}</p>
+                ${method.qr_code_url ? `<img src="${method.qr_code_url}" class="w-24 h-24 mt-2 rounded-md" alt="QR Code">` : ''}
+                ${method.instructions ? `<p class="text-gray-500 text-xs mt-1">${method.instructions}</p>` : ''}
+              </div>
+            </label>
+          `).join('');
+        } else {
+          paymentMethodsList.innerHTML = '<p class="text-center text-gray-400">ငွေပေးချေမှု နည်းလမ်းများ မရှိသေးပါ</p>';
+        }
+        document.getElementById('purchase-modal').classList.remove('hidden');
+      } catch (error) {
+        console.error('Error loading payment methods:', error);
+        ui.showNotification('ငွေပေးချေမှု နည်းလမ်းများ ရယူရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+        paymentMethodsList.innerHTML = '<p class="text-center text-red-400">ငွေပေးချေမှု နည်းလမ်းများ ရယူ၍ မရပါ</p>';
+      }
+    }
+
+    function closePurchaseModal() {
+      document.getElementById('purchase-modal').classList.add('hidden');
+      state.selectedProductForPurchase = null;
+      state.selectedPaymentMethod = null;
+      document.getElementById('receipt-upload').value = '';
+    }
+
+    async function submitPurchase() {
+      if (!state.selectedProductForPurchase || !state.selectedPaymentMethod) {
+        ui.showNotification('Product နှင့် ငွေပေးချေမှု နည်းလမ်းကို ရွေးချယ်ပါ', 'error');
+        return;
+      }
+      const receiptFile = document.getElementById('receipt-upload').files[0];
+      if (!receiptFile) {
+        ui.showNotification('ငွေလွှဲပြေစာ ပုံတင်ပါ', 'error');
+        return;
+      }
+
+      ui.showNotification('ငွေပေးချေမှု အတည်ပြုနေသည်...', 'info');
+
+      try {
+        // Upload receipt image
+        const fileExt = receiptFile.name.split('.').pop();
+        const fileName = `receipts/${state.profileId}_${state.selectedProductForPurchase.id}_${Date.now()}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await state.supabase.storage
+          .from('receipts')
+          .upload(fileName, receiptFile);
+          
+        if (uploadError) throw uploadError;
+        
+        const { data: urlData } = state.supabase.storage
+          .from('receipts')
+          .getPublicUrl(fileName);
+          
+        const receiptUrl = urlData.publicUrl;
+
+        // Create order (this would ideally be a secure backend call)
+        // For this client-side only example, we simulate it.
+        const { error: orderError } = await state.supabase
+          .from('orders')
+          .insert({
+            profile_id: state.profileId,
+            product_id: state.selectedProductForPurchase.id,
+            payment_method_id: state.selectedPaymentMethod,
+            amount: state.selectedProductForPurchase.price,
+            receipt_url: receiptUrl,
+            status: 'pending' // Admin needs to approve this
+          });
+
+        if (orderError) throw orderError;
+
+        ui.showNotification('ငွေပေးချေမှု အောင်မြင်စွာ တင်ပြပြီးပါပြီ။ Admin မှ စစ်ဆေးနေပါသည်။', 'success');
+        closePurchaseModal();
+        database.loadProducts(); // Reload products to update status
+      } catch (error) {
+        console.error('Error submitting purchase:', error);
+        ui.showNotification('ငွေပေးချေမှု တင်ပြရာတွင် အမှားဖြစ်ပေါ်ခဲ့သည်', 'error');
+      }
+    }
+
+    // Section Management
+    function showSection(section) {
+      // Hide all sections
+      document.querySelectorAll('#main-content > div[id$="-section"]').forEach(el => {
+        el.classList.add('hidden');
+      });
+      
+      // Show selected section
+      document.getElementById(`${section}-section`).classList.remove('hidden');
+      
+      // Update navigation
+      ui.updateNavigationActive(section);
+      state.currentSection = section;
+      
+      // Load section-specific data
+      switch (section) {
+        case 'home':
+          database.loadProducts();
+          break;
+        case 'news':
+          database.loadNews();
+          break;
+        case 'chat':
+          // Load chat partners
+          loadChatPartners();
+          break;
+        case 'support':
+          loadSupportMessages();
+          break;
+        case 'about':
+          database.loadAbout();
+          break;
+        case 'mi':
+          database.loadMiProfile();
+          break;
+      }
+    }
+
+    async function loadChatPartners() {
+      const chatUsersContainer = document.getElementById('chat-users');
+      ui.showLoading(chatUsersContainer);
+
+      try {
+        const { data: conversations, error } = await state.supabase
+          .from('chat_conversations')
+          .select(`
+            id,
+            participant1_id,
+            participant2_id,
+            participant1:profiles!chat_conversations_participant1_id_fkey(id, username, name, profile_picture),
+            participant2:profiles!chat_conversations_participant2_id_fkey(id, username, name, profile_picture)
+          `)
+          .or(`participant1_id.eq.${state.profileId},participant2_id.eq.${state.profileId}`)
+          .order('last_message_at', { ascending: false });
+
+        if (error) throw error;
+
+        if (conversations && conversations.length > 0) {
+          chatUsersContainer.innerHTML = conversations.map(conv => {
+            const partner = conv.participant1.id === state.profileId ? conv.participant2 : conv.participant1;
+            return `
+              <div class="flex items-center space-x-3 p-3 bg-gray-800 rounded-lg cursor-pointer hover:bg-gray-700" 
+                   onclick="startChat('${partner.id}')">
+                <img src="${partner.profile_picture || '/placeholder.svg?height=40&width=40'}" class="profile-avatar" alt="${partner.name} avatar">
+                <div>
+                  <h4 class="font-semibold text-white">${partner.name}</h4>
+                  <p class="text-gray-400 text-sm">@${partner.username}</p>
+                </div>
+              </div>
+            `;
+          }).join('');
+        } else {
+          chatUsersContainer.innerHTML = '<p class="text-center text-gray-400">စကားပြောမှု မရှိသေးပါ</p>';
+        }
+      } catch (error) {
+        console.error('Error loading chat partners:', error);
+        chatUsersContainer.innerHTML = '<p class="text-center text-red-400">စကားပြောသူများ ရယူ၍ မရပါ</p>';
+      }
+    }
+
+    // Logout
+    function logout() {
+      if (confirm('သင် ထွက်ရန် သေချာပါသလား?')) {
+        // Clear stored login data
+        localStorage.removeItem('fps_gfx_login');
+        
+        // Reset state
+        state.sessionId = '';
+        state.profileId = null;
+        state.currentProfile = null;
+        state.loginData = null;
+        
+        // Unsubscribe from realtime channels
+        if (state.chatRealtimeChannel) state.supabase.removeChannel(state.chatRealtimeChannel);
+        if (state.supportRealtimeChannel) state.supabase.removeChannel(state.supportRealtimeChannel);
+        if (state.newsRealtimeChannel) state.supabase.removeChannel(state.newsRealtimeChannel);
+
+        // Show login section
+        document.getElementById('main-content').classList.add('hidden');
+        document.getElementById('login-section').classList.remove('hidden');
+        
+        ui.showNotification('အောင်မြင်စွာ ထွက်ပြီးပါပြီ', 'info');
+      }
+    }
+
+    // Initialize when page loads
+    document.addEventListener('DOMContentLoaded', function() {
+      database.initialize();
+    });
+
+    // Global functions for HTML onclick events
+    window.login = auth.login;
+    window.createProfile = createProfile;
+    window.postNews = postNews;
+    window.searchUsers = searchUsers;
+    window.viewProfile = viewProfile;
+    window.closeProfileModal = closeProfileModal;
+    window.viewNewsDetail = viewNewsDetail;
+    window.closeNewsDetailModal = closeNewsDetailModal;
+    window.toggleLike = toggleLike;
+    window.startChat = startChat;
+    window.sendChatMessage = sendChatMessage;
+    window.closeChatWindow = closeChatWindow;
+    window.sendSupportMessage = sendSupportMessage;
+    window.initiatePurchase = initiatePurchase;
+    window.closePurchaseModal = closePurchaseModal;
+    window.submitPurchase = submitPurchase;
+    window.showSection = showSection;
+    window.logout = logout;
+  </script>
+</body>
+</html>
