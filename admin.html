@@ -1,0 +1,2768 @@
+<!DOCTYPE html>
+<html lang="my">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>FPS GFX Tool - Admin Dashboard</title>
+<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+  /* Custom Fonts */
+  body {
+    font-family: 'Noto Sans Myanmar', 'Inter', sans-serif;
+  }
+  h1, h2, h3, .font-orbitron {
+    font-family: 'Orbitron', sans-serif;
+  }
+  .font-share-tech {
+    font-family: 'Share Tech Mono', monospace;
+  }
+
+  /* New Color Palette */
+  :root {
+    --primary-bg: hsl(220 20% 8%); /* Deep Dark Blue-Grey */
+    --secondary-bg: hsl(220 20% 12%); /* Slightly Lighter Dark Blue-Grey */
+    --accent-purple: hsl(280 80% 60%); /* Vibrant Purple */
+    --accent-green: hsl(160 80% 50%); /* Neon Green */
+    --accent-red: hsl(0 80% 60%); /* Vibrant Red */
+    --text-primary: hsl(220 20% 90%); /* Light Grey */
+    --text-secondary: hsl(220 15% 60%); /* Medium Grey */
+    --border-color: hsl(220 15% 20%); /* Dark Grey */
+    --card-bg: rgba(20, 25, 35, 0.7); /* Dark Translucent */
+    --input-bg: rgba(30, 35, 45, 0.6); /* Darker Translucent */
+    --table-header-bg: rgba(var(--accent-purple-rgb), 0.15);
+    --table-row-hover-bg: rgba(var(--accent-purple-rgb), 0.08);
+
+    /* RGB values for easier use in rgba() */
+    --accent-purple-rgb: 199, 56, 255; /* From hsl(280 80% 60%) */
+    --accent-green-rgb: 0, 204, 136; /* From hsl(160 80% 50%) */
+    --accent-red-rgb: 255, 51, 51; /* From hsl(0 80% 60%) */
+  }
+
+  body {
+    background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
+    min-height: 100vh;
+    position: relative;
+    overflow-x: hidden;
+    color: var(--text-primary);
+  }
+
+  .myanmar-pattern {
+    background-image: 
+      radial-gradient(circle at 25% 25%, rgba(var(--accent-purple-rgb), 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 75% 75%, rgba(var(--accent-green-rgb), 0.15) 0%, transparent 50%),
+      radial-gradient(circle at 50% 50%, rgba(var(--accent-red-rgb), 0.1) 0%, transparent 50%);
+    animation: patternMove 25s ease-in-out infinite;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    z-index: -2;
+  }
+
+  @keyframes patternMove {
+    0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
+    33% { background-position: 100% 100%, 0% 0%, 75% 25%; }
+    66% { background-position: 50% 50%, 75% 25%, 25% 75%; }
+  }
+
+  .myanmar-waves {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    height: 80px;
+    background: linear-gradient(45deg, 
+      rgba(var(--accent-purple-rgb), 0.2), 
+      rgba(var(--accent-green-rgb), 0.2), 
+      rgba(var(--accent-red-rgb), 0.2));
+    clip-path: polygon(0 100%, 0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%);
+    animation: waveFloat 12s ease-in-out infinite;
+    z-index: -1;
+  }
+
+  @keyframes waveFloat {
+    0%, 100% { transform: translateY(0px) scaleY(1); }
+    50% { transform: translateY(-10px) scaleY(1.1); }
+  }
+
+  .admin-card {
+    backdrop-filter: blur(20px);
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    box-shadow: 
+      0 20px 40px -12px rgba(0, 0, 0, 0.8),
+      0 0 0 1px rgba(var(--accent-purple-rgb), 0.1),
+      inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    border-radius: 16px;
+  }
+
+  .admin-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 
+      0 25px 50px -12px rgba(var(--accent-purple-rgb), 0.25),
+      0 0 0 1px rgba(var(--accent-purple-rgb), 0.2),
+      inset 0 1px 0 rgba(255, 255, 255, 0.1);
+    border-color: rgba(var(--accent-purple-rgb), 0.5);
+  }
+
+  .myanmar-btn {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
+    color: #000;
+    font-weight: 700;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.3s ease;
+    text-shadow: 0 1px 2px rgba(0,0,0,0.1);
+    border: none;
+    border-radius: 12px;
+    padding: 12px 20px;
+    cursor: pointer;
+    box-shadow: 0 5px 15px rgba(var(--accent-purple-rgb), 0.2);
+  }
+
+  .myanmar-btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
+    transition: left 0.6s ease;
+  }
+
+  .myanmar-btn:hover::before {
+    left: 100%;
+  }
+
+  .myanmar-btn:hover {
+    background: linear-gradient(135deg, var(--accent-green), var(--accent-purple));
+    transform: translateY(-1px);
+    box-shadow: 0 10px 25px rgba(var(--accent-green-rgb), 0.4);
+  }
+
+  .btn-danger {
+    background: linear-gradient(135deg, var(--accent-red), #FF6B6B);
+    color: white;
+    box-shadow: 0 5px 15px rgba(var(--accent-red-rgb), 0.2);
+  }
+
+  .btn-danger:hover {
+    background: linear-gradient(135deg, #FF6B6B, var(--accent-red));
+    box-shadow: 0 10px 25px rgba(var(--accent-red-rgb), 0.4);
+  }
+
+  .connection-status {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    z-index: 1000;
+    padding: 8px 16px;
+    border-radius: 20px;
+    font-size: 11px;
+    font-weight: 700;
+    text-transform: uppercase;
+    backdrop-filter: blur(10px);
+    animation: statusPulse 2s infinite;
+    color: var(--text-primary);
+  }
+
+  .status-online {
+    background: linear-gradient(135deg, var(--accent-green), #4ADE80);
+    color: white;
+    box-shadow: 0 0 20px rgba(var(--accent-green-rgb), 0.5);
+  }
+
+  .status-offline {
+    background: linear-gradient(135deg, var(--accent-red), #EF4444);
+    color: white;
+    animation: statusShake 0.5s ease-in-out;
+  }
+
+  .status-connecting {
+    background: linear-gradient(135deg, var(--accent-purple), #FCD34D);
+    color: #000;
+    animation: statusSpin 1s linear infinite;
+  }
+
+  @keyframes statusPulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.8; transform: scale(1.05); }
+  }
+
+  @keyframes statusShake {
+    0%, 100% { transform: translateX(0); }
+    25% { transform: translateX(-3px); }
+    75% { transform: translateX(3px); }
+  }
+
+  @keyframes statusSpin {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+  }
+
+  .stats-card {
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    transition: all 0.3s ease;
+    position: relative;
+    overflow: hidden;
+    border-radius: 12px;
+  }
+
+  .stats-card::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 3px;
+    background: linear-gradient(90deg, var(--accent-purple), var(--accent-green), var(--accent-red));
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  .stats-card:hover::before {
+    opacity: 1;
+  }
+
+  .stats-card:hover {
+    transform: translateY(-3px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(var(--accent-purple-rgb), 0.2);
+    border-color: rgba(var(--accent-purple-rgb), 0.3);
+  }
+
+  .admin-input {
+    background: var(--input-bg);
+    border: 2px solid var(--border-color);
+    backdrop-filter: blur(10px);
+    color: var(--text-primary);
+    transition: all 0.3s ease;
+    border-radius: 12px;
+    padding: 12px 16px;
+  }
+
+  .admin-input:focus {
+    border-color: var(--accent-purple);
+    background: rgba(30, 35, 45, 0.8);
+    outline: none;
+    box-shadow: 0 0 25px rgba(var(--accent-purple-rgb), 0.3);
+  }
+
+  .admin-input::placeholder {
+    color: var(--text-secondary);
+  }
+
+  .admin-table {
+    backdrop-filter: blur(10px);
+    background: rgba(255, 255, 255, 0.03);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+
+  .admin-table th {
+    background: var(--table-header-bg);
+    color: var(--accent-purple);
+    font-weight: 700;
+    text-transform: uppercase;
+    font-size: 12px;
+    letter-spacing: 0.5px;
+    padding: 12px 8px;
+  }
+
+  .admin-table td {
+    padding: 12px 8px;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    color: var(--text-primary);
+  }
+
+  .admin-table tr:hover {
+    background: var(--table-row-hover-bg);
+  }
+
+  .loading-spinner {
+    border: 3px solid rgba(var(--accent-purple-rgb), 0.3);
+    border-top: 3px solid var(--accent-purple);
+    border-radius: 50%;
+    width: 24px;
+    height: 24px;
+    animation: spin 1s linear infinite;
+  }
+
+  @keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+  }
+
+  .notification {
+    position: fixed;
+    top: 70px;
+    right: 15px;
+    left: 15px;
+    max-width: 400px;
+    margin: 0 auto;
+    padding: 12px 16px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 600;
+    z-index: 1001;
+    animation: slideInRight 0.4s ease-out;
+    backdrop-filter: blur(15px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  @keyframes slideInRight {
+    from { transform: translateX(100%); opacity: 0; }
+    to { transform: translateX(0); opacity: 1; }
+  }
+
+  .nav-btn {
+    transition: all 0.3s ease;
+    position: relative;
+    border-radius: 8px;
+    padding: 8px 12px;
+    font-size: 14px;
+    color: var(--text-secondary);
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+  }
+
+  .nav-btn.active {
+    background: linear-gradient(135deg, var(--accent-purple), var(--accent-green)) !important;
+    color: #000 !important;
+    box-shadow: 0 5px 15px rgba(var(--accent-purple-rgb), 0.4);
+    border-color: var(--accent-purple) !important;
+  }
+
+  .nav-btn:not(.active):hover {
+    background: rgba(var(--accent-purple-rgb), 0.1);
+    color: var(--accent-purple);
+    border-color: rgba(var(--accent-purple-rgb), 0.3);
+  }
+
+  .fade-in {
+    animation: fadeInUp 0.6s ease-out forwards;
+  }
+
+  @keyframes fadeInUp {
+    from { opacity: 0; transform: translateY(20px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .status-active { color: var(--accent-green); }
+  .status-inactive { color: var(--accent-red); }
+  .status-banned { color: var(--accent-red); }
+
+  .news-card {
+    background: rgba(255, 255, 255, 0.05);
+    border: 1px solid rgba(255, 255, 255, 0.1);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+    margin-bottom: 16px;
+  }
+
+  .news-card:hover {
+    border-color: rgba(var(--accent-purple-rgb), 0.3);
+    transform: translateY(-2px);
+  }
+
+  .modal {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.8);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+    padding: 20px;
+  }
+
+  .modal-content {
+    background: var(--card-bg);
+    border: 1px solid var(--border-color);
+    border-radius: 16px;
+    padding: 24px;
+    max-width: 90vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    backdrop-filter: blur(20px);
+    box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+  }
+
+  /* Mobile optimizations */
+  @media (max-width: 768px) {
+    .container { padding: 8px; }
+    .admin-card { padding: 16px; margin: 8px; }
+    .connection-status { top: 10px; right: 10px; font-size: 9px; padding: 6px 12px; }
+    .notification { top: 50px; right: 10px; left: 10px; max-width: none; }
+    .stats-card { margin-bottom: 12px; }
+    .myanmar-btn { padding: 10px 16px; font-size: 14px; }
+    .admin-table { font-size: 12px; }
+    .admin-table th, .admin-table td { padding: 8px 4px; }
+    h1 { font-size: 20px; }
+    h2 { font-size: 18px; }
+    h3 { font-size: 16px; }
+    .nav-btn { padding: 6px 10px; font-size: 12px; margin: 2px; }
+    .modal-content { padding: 16px; max-width: 95vw; }
+  }
+
+  @media (max-width: 480px) {
+    .myanmar-pattern { opacity: 0.7; }
+    .myanmar-waves { height: 60px; }
+    .admin-card { padding: 12px; margin: 4px; }
+    .grid { gap: 8px; }
+    .stats-card { padding: 12px; }
+    .admin-table th, .admin-table td { padding: 6px 2px; font-size: 11px; }
+  }
+
+  /* Scrollbar styling */
+  ::-webkit-scrollbar { width: 6px; }
+  ::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
+  ::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
+
+  /* Loading overlay */
+  .loading-overlay {
+    backdrop-filter: blur(8px);
+    background: rgba(0,0,0,0.7);
+  }
+
+  .btn-small {
+    padding: 6px 12px;
+    font-size: 12px;
+    border-radius: 8px;
+  }
+
+  .table-actions {
+    display: flex;
+    gap: 4px;
+    flex-wrap: wrap;
+  }
+
+  .hidden { display: none !important; }
+
+  /* Search input specific styles */
+  .search-input-container {
+    position: relative;
+  }
+  .search-input-container .admin-input {
+    padding-left: 40px; /* Space for icon */
+  }
+  .search-input-container .search-icon {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--text-secondary);
+    pointer-events: none;
+  }
+</style>
+</head>
+<body class="text-white">
+<div class="myanmar-pattern"></div>
+<div class="myanmar-waves"></div>
+
+<!-- Connection Status -->
+<div id="connection-status" class="connection-status status-connecting">
+<i class="fas fa-wifi"></i> ချိတ်ဆက်နေသည်...
+</div>
+
+<!-- Main Container -->
+<div class="container mx-auto px-2 py-4 max-w-6xl">
+<!-- Header -->
+<div class="text-center mb-6 fade-in">
+  <h1 class="text-2xl md:text-3xl lg:text-4xl font-orbitron font-bold mb-2 text-accent-purple">
+    <i class="fas fa-shield-alt mr-2"></i>
+    ADMIN CONSOLE
+  </h1>
+  <h2 class="text-lg md:text-xl lg:text-2xl font-orbitron font-semibold text-accent-green mb-2">
+    SYSTEM OVERVIEW
+  </h2>
+  <div class="inline-block px-4 py-2 bg-gradient-to-r from-accent-purple to-accent-green text-black rounded-full font-bold text-sm">
+    <i class="fas fa-crown mr-1"></i> Administrator Panel
+  </div>
+</div>
+
+<!-- Notification Container -->
+<div id="notification-container"></div>
+
+<!-- Login Section -->
+<div id="login-section" class="max-w-md mx-auto fade-in">
+  <div class="admin-card p-6">
+    <h3 class="text-xl md:text-2xl font-orbitron font-bold text-center mb-6 text-accent-purple">
+      <i class="fas fa-key mr-2"></i>
+      ADMIN AUTHENTICATION
+    </h3>
+    <div class="space-y-4">
+      <div class="relative search-input-container">
+        <input 
+          type="password" 
+          id="admin-key" 
+          placeholder="Enter Admin Key..." 
+          class="admin-input w-full"
+        >
+        <i class="fas fa-key search-icon"></i>
+      </div>
+      <button 
+        onclick="adminLogin()" 
+        id="login-btn"
+        class="myanmar-btn w-full flex items-center justify-center space-x-2"
+      >
+        <i class="fas fa-sign-in-alt"></i>
+        <span id="login-text">ACCESS DASHBOARD</span>
+      </button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Content -->
+<div id="admin-content" class="hidden">
+  <!-- Stats Section -->
+  <div id="stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
+    <div class="stats-card p-4 text-center">
+      <i class="fas fa-users text-2xl md:text-3xl text-blue-400 mb-2"></i>
+      <h3 class="text-xs md:text-sm font-semibold text-text-secondary">TOTAL USERS</h3>
+      <p id="total-users" class="text-lg md:text-xl font-bold text-accent-purple">0</p>
+    </div>
+    <div class="stats-card p-4 text-center">
+      <i class="fas fa-key text-2xl md:text-3xl text-green-400 mb-2"></i>
+      <h3 class="text-xs md:text-sm font-semibold text-text-secondary">ACTIVE KEYS</h3>
+      <p id="active-keys" class="text-lg md:text-xl font-bold text-accent-green">0</p>
+    </div>
+    <div class="stats-card p-4 text-center">
+      <i class="fas fa-newspaper text-2xl md:text-3xl text-purple-400 mb-2"></i>
+      <h3 class="text-xs md:text-sm font-semibold text-text-secondary">TOTAL NEWS</h3>
+      <p id="total-news" class="text-lg md:text-xl font-bold text-accent-purple">0</p>
+    </div>
+    <div class="stats-card p-4 text-center">
+      <i class="fas fa-comments text-2xl md:text-3xl text-red-400 mb-2"></i>
+      <h3 class="text-xs md:text-sm font-semibold text-text-secondary">SUPPORT MESSAGES</h3>
+      <p id="total-support" class="text-lg md:text-xl font-bold text-accent-red">0</p>
+    </div>
+  </div>
+
+  <!-- Navigation -->
+  <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
+    <button onclick="showSection('about', this)" class="nav-btn active">
+      <i class="fas fa-info-circle mr-1"></i>
+      <span class="hidden sm:inline">ABOUT</span>
+      <span class="sm:hidden">About</span>
+    </button>
+    <button onclick="showSection('keys', this)" class="nav-btn">
+      <i class="fas fa-key mr-1"></i>
+      <span class="hidden sm:inline">KEYS</span>
+      <span class="sm:hidden">Keys</span>
+    </button>
+    <button onclick="showSection('users', this)" class="nav-btn">
+      <i class="fas fa-users mr-1"></i>
+      <span class="hidden sm:inline">USERS</span>
+      <span class="sm:hidden">Users</span>
+    </button>
+    <button onclick="showSection('news', this)" class="nav-btn">
+      <i class="fas fa-newspaper mr-1"></i>
+      <span class="hidden sm:inline">NEWS</span>
+      <span class="sm:hidden">News</span>
+    </button>
+    <button onclick="showSection('products', this)" class="nav-btn">
+      <i class="fas fa-box-open mr-1"></i>
+      <span class="hidden sm:inline">PRODUCTS</span>
+      <span class="sm:hidden">Products</span>
+    </button>
+    <button onclick="showSection('payments', this)" class="nav-btn">
+      <i class="fas fa-money-check-alt mr-1"></i>
+      <span class="hidden sm:inline">PAYMENTS</span>
+      <span class="sm:hidden">Payments</span>
+    </button>
+    <button onclick="showSection('support', this)" class="nav-btn">
+      <i class="fas fa-headset mr-1"></i>
+      <span class="hidden sm:inline">SUPPORT</span>
+      <span class="sm:hidden">Support</span>
+    </button>
+    <button onclick="adminLogout()" class="nav-btn btn-danger">
+      <i class="fas fa-sign-out-alt mr-1"></i>
+      <span class="hidden sm:inline">LOGOUT</span>
+      <span class="sm:hidden">Logout</span>
+    </button>
+  </div>
+
+  <!-- About Management -->
+  <div id="about-section" class="admin-section">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-info-circle mr-3"></i>
+        ABOUT MANAGEMENT
+      </h3>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">CONTACT NAME</label>
+          <input type="text" id="about-contact-name" placeholder="Contact Name" 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">PHONE NUMBER</label>
+          <input type="tel" id="about-phone" placeholder="+95..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">TELEGRAM LINK</label>
+          <input type="url" id="about-telegram" placeholder="https://t.me/..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">VIBER LINK</label>
+          <input type="url" id="about-viber" placeholder="viber://..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">FACEBOOK LINK</label>
+          <input type="url" id="about-facebook" placeholder="https://facebook.com/..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">TIKTOK LINK</label>
+          <input type="url" id="about-tiktok" placeholder="https://tiktok.com/@..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">EMAIL</label>
+          <input type="email" id="about-email" placeholder="support@example.com" 
+                 class="admin-input w-full">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-2 text-text-secondary">SOCIAL LINKS (JSON Array)</label>
+          <textarea id="about-social-links" rows="4" placeholder='[{"name": "Telegram", "url": "...", "icon_url": "..."}]'
+                    class="admin-input w-full resize-none font-share-tech"></textarea>
+          <p class="text-xs text-text-secondary mt-1">
+            JSON array format: `[{'name': 'Telegram', 'url': 'https://t.me/yourchannel', 'icon_url': '/placeholder.svg?height=24&width=24'}]`
+          </p>
+        </div>
+        <div class="md:col-span-2 flex items-end">
+          <button onclick="updateAbout()" 
+                  class="myanmar-btn w-full flex items-center justify-center space-x-2">
+            <i class="fas fa-save"></i>
+            <span>UPDATE ABOUT</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Keys Management -->
+  <div id="keys-section" class="admin-section hidden">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-key mr-3"></i>
+        ACCESS KEY MANAGEMENT
+      </h3>
+      
+      <!-- Create Key Form -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
+        <input type="text" id="key-text" placeholder="Key Text" 
+               class="admin-input col-span-full md:col-span-2 lg:col-span-4 font-share-tech">
+      </div>
+      <button onclick="createKey()" 
+              class="myanmar-btn mb-6 flex items-center space-x-2">
+        <i class="fas fa-plus"></i>
+        <span>CREATE NEW KEY</span>
+      </button>
+
+      <!-- Search Input for Keys -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-keys" placeholder="Search Keys..." class="admin-input w-full" onkeyup="filterTable('keys-table-body', this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <!-- Keys Table -->
+      <div class="overflow-x-auto">
+        <table class="admin-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">KEY TEXT</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="keys-table-body">
+            <tr>
+              <td colspan="3" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading keys...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Users Management -->
+  <div id="users-section" class="admin-section hidden">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-users mr-3"></i>
+        USER MANAGEMENT
+      </h3>
+
+      <!-- Search Input for Users -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-users" placeholder="Search Users..." class="admin-input w-full" onkeyup="filterTable('users-table-body', this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <!-- Users Table -->
+      <div class="overflow-x-auto">
+        <table class="admin-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">PROFILE</th>
+              <th class="text-left">USERNAME</th>
+              <th class="text-left">NAME</th>
+              <th class="text-left">CREATED AT</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="users-table-body">
+            <tr>
+              <td colspan="6" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading users...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- News Management -->
+  <div id="news-section" class="admin-section hidden">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-newspaper mr-3"></i>
+        NEWS MANAGEMENT
+      </h3>
+
+      <!-- Post News Form -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">TITLE</label>
+          <input type="text" id="admin-news-title" placeholder="News Title" 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">CONTENT</label>
+          <textarea id="admin-news-content" placeholder="News Content..." rows="4"
+                    class="admin-input w-full resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">MEDIA (IMAGE/VIDEO/AUDIO)</label>
+          <input type="file" id="admin-news-media" accept="image/*,video/*,audio/*" multiple
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">YOUTUBE LINK (OPTIONAL)</label>
+          <input type="url" id="admin-news-youtube" placeholder="https://youtube.com/..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">TIKTOK LINK (OPTIONAL)</label>
+          <input type="url" id="admin-news-tiktok" placeholder="https://tiktok.com/@..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">TELEGRAM LINK (OPTIONAL)</label>
+          <input type="url" id="admin-news-telegram" placeholder="https://t.me/..." 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">FACEBOOK LINK (OPTIONAL)</label>
+          <input type="url" id="admin-news-facebook" placeholder="https://facebook.com/..." 
+                 class="admin-input w-full">
+        </div>
+        <div class="flex items-end">
+          <button onclick="postAdminNews()" 
+                  class="myanmar-btn w-full flex items-center justify-center space-x-2">
+            <i class="fas fa-paper-plane"></i>
+            <span>POST NEWS</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Input for News -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-news" placeholder="Search News..." class="admin-input w-full" onkeyup="filterNewsList(this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <!-- News List -->
+      <div id="news-list" class="space-y-4">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-center text-text-secondary">Loading news...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Products Management -->
+  <div id="products-section" class="admin-section hidden">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-box-open mr-3"></i>
+        PRODUCTS & APKS MANAGEMENT
+      </h3>
+
+      <!-- Upload Product Form -->
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT NAME</label>
+          <input type="text" id="product-name" placeholder="Product Name" 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">FILE TYPE</label>
+          <select id="product-file-type" class="admin-input w-full">
+            <option value="apk">APK</option>
+            <option value="file">File (ZIP, RAR, etc.)</option>
+          </select>
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-2 text-text-secondary">DESCRIPTION</label>
+          <textarea id="product-description" placeholder="Product Description..." rows="3"
+                    class="admin-input w-full resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">FILE (APK/ZIP)</label>
+          <input type="file" id="product-file" class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">PRICE (MMK)</label>
+          <input type="number" id="product-price" placeholder="0.00" min="0" step="0.01"
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">APK ICON (OPTIONAL)</label>
+          <input type="file" id="product-icon" accept="image/*" 
+                 class="admin-input w-full">
+          <p class="text-xs text-text-secondary mt-1">
+            APK icon cannot be extracted directly from client-side. Image upload is required.
+          </p>
+        </div>
+        <div class="flex items-end">
+          <button onclick="uploadProduct()" 
+                  class="myanmar-btn w-full flex items-center justify-center space-x-2">
+            <i class="fas fa-upload"></i>
+            <span>UPLOAD PRODUCT</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Input for Products -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-products" placeholder="Search Products..." class="admin-input w-full" onkeyup="filterTable('products-table-body', this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <!-- Products List -->
+      <div class="overflow-x-auto">
+        <table class="admin-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">ICON</th>
+              <th class="text-left">NAME</th>
+              <th class="text-left">TYPE</th>
+              <th class="text-left">PRICE</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="products-table-body">
+            <tr>
+              <td colspan="6" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading products...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Payments Management -->
+  <div id="payments-section" class="admin-section hidden">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-money-check-alt mr-3"></i>
+        PAYMENTS MANAGEMENT
+      </h3>
+
+      <!-- Payment Methods Management -->
+      <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
+        <i class="fas fa-wallet mr-2"></i>
+        PAYMENT METHODS
+      </h4>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">METHOD NAME</label>
+          <input type="text" id="payment-method-name" placeholder="KBZ Pay / Wave Money" 
+                 class="admin-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">ACCOUNT INFO</label>
+          <input type="text" id="payment-account-info" placeholder="Phone Number / Account Number" 
+                 class="admin-input w-full">
+        </div>
+        <div class="md:col-span-2">
+          <label class="block text-sm font-medium mb-2 text-text-secondary">INSTRUCTIONS</label>
+          <textarea id="payment-instructions" placeholder="Instructions for transfer..." rows="2"
+                    class="admin-input w-full resize-none"></textarea>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">QR CODE IMAGE (OPTIONAL)</label>
+          <input type="file" id="payment-qr-code" accept="image/*" 
+                 class="admin-input w-full">
+        </div>
+        <div class="flex items-end">
+          <button onclick="addPaymentMethod()" 
+                  class="myanmar-btn w-full flex items-center justify-center space-x-2">
+            <i class="fas fa-plus"></i>
+            <span>ADD NEW METHOD</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Search Input for Payment Methods -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-payment-methods" placeholder="Search Payment Methods..." class="admin-input w-full" onkeyup="filterTable('payment-methods-table-body', this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <div class="overflow-x-auto mb-8">
+        <table class="admin-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">METHOD</th>
+              <th class="text-left">ACCOUNT INFO</th>
+              <th class="text-left">QR CODE</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="payment-methods-table-body">
+            <tr>
+              <td colspan="5" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading payment methods...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <!-- Pending Orders -->
+      <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
+        <i class="fas fa-hourglass-half mr-2"></i>
+        PENDING ORDERS
+      </h4>
+
+      <!-- Search Input for Pending Orders -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-pending-orders" placeholder="Search Pending Orders..." class="admin-input w-full" onkeyup="filterTable('pending-orders-table-body', this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="admin-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">ORDERER</th>
+              <th class="text-left">PRODUCT</th>
+              <th class="text-left">AMOUNT</th>
+              <th class="text-left">METHOD</th>
+              <th class="text-left">RECEIPT</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="pending-orders-table-body">
+            <tr>
+              <td colspan="7" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading pending orders...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- Support Management -->
+  <div id="support-section" class="admin-section hidden">
+    <div class="admin-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-headset mr-3"></i>
+        SUPPORT MESSAGES
+      </h3>
+
+      <!-- Search Input for Support Messages -->
+      <div class="relative search-input-container mb-4">
+        <input type="text" id="search-support-messages" placeholder="Search Support Messages..." class="admin-input w-full" onkeyup="filterSupportMessages(this.value)">
+        <i class="fas fa-search search-icon"></i>
+      </div>
+
+      <!-- Support Messages -->
+      <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+        <div class="loading-spinner mx-auto mb-4"></div>
+        <p class="text-center text-text-secondary">Loading messages...</p>
+      </div>
+
+      <!-- Reply Form -->
+      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+        <textarea id="admin-support-input" placeholder="Write your support message..." rows="3"
+                  class="admin-input flex-1 resize-none"></textarea>
+        <button onclick="sendAdminSupportMessage()" 
+                class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
+          <i class="fas fa-paper-plane"></i>
+          <span>SEND SUPPORT</span>
+        </button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- News Detail Modal -->
+<div id="news-modal" class="modal hidden">
+<div class="modal-content max-w-2xl">
+  <div class="flex justify-between items-center mb-4">
+    <h2 class="text-xl font-orbitron font-bold text-accent-purple">NEWS DETAILS</h2>
+    <button onclick="closeNewsModal()" class="text-text-secondary hover:text-accent-red">
+      <i class="fas fa-times"></i>
+    </button>
+  </div>
+  <div id="news-modal-content">
+    <div class="loading-spinner mx-auto mb-4"></div>
+    <p class="text-center text-text-secondary">Loading...</p>
+  </div>
+</div>
+</div>
+
+<!-- Confirm Delete Modal -->
+<div id="confirm-modal" class="modal hidden">
+<div class="modal-content max-w-md">
+  <div class="text-center">
+    <i class="fas fa-exclamation-triangle text-4xl text-accent-red mb-4"></i>
+    <h3 class="text-xl font-orbitron font-bold text-text-primary mb-4">ARE YOU SURE?</h3>
+    <p id="confirm-message" class="text-text-secondary mb-6">This action cannot be undone.</p>
+    <div class="flex space-x-4">
+      <button onclick="closeConfirmModal()" class="myanmar-btn flex-1">
+        <i class="fas fa-times mr-2"></i>
+        CANCEL
+      </button>
+      <button onclick="confirmAction()" class="btn-danger myanmar-btn flex-1">
+        <i class="fas fa-trash mr-2"></i>
+        DELETE
+      </button>
+    </div>
+  </div>
+</div>
+</div>
+
+<!-- Loading Overlay -->
+<div id="loading-overlay" class="fixed inset-0 loading-overlay flex items-center justify-center z-50 hidden">
+<div class="admin-card p-8 text-center">
+  <div class="loading-spinner mx-auto mb-4" style="width: 40px; height: 40px;"></div>
+  <p class="text-text-primary font-semibold">PROCESSING...</p>
+</div>
+</div>
+
+<!-- Scripts -->
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
+<script>
+// Configuration
+const CONFIG = {
+  SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // သင့် Supabase URL ကို ထည့်ပါ
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
+  ADMIN_KEY: 'Opper_FPS', // This key is hardcoded as per user request. In production, this should be on a secure backend.
+  MAX_RETRY_ATTEMPTS: 3,
+  RETRY_DELAY: 2000
+};
+
+// State
+let state = {
+  supabase: null,
+  isAuthenticated: false,
+  currentSection: 'about',
+  reconnectAttempts: 0,
+  isConnected: false,
+  confirmCallback: null,
+  newsRealtime: null,
+  supportRealtime: null,
+  productsRealtime: null,
+  ordersRealtime: null,
+  adminProfileId: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' // Hardcoded admin_profile_id for news posting, assuming a default admin user exists in admin_profiles table.
+};
+
+// Utility Functions
+const utils = {
+  formatFileSize(bytes) {
+    if (bytes === 0) return '0 Bytes';
+    const k = 1024;
+    const sizes = ['Bytes', 'KB', 'MB', 'GB'];
+    const i = Math.floor(Math.log(bytes) / Math.log(k));
+    return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
+  },
+  getMediaType(fileType) {
+    if (fileType.startsWith('image/')) return 'image';
+    if (fileType.startsWith('video/')) return 'video';
+    if (fileType.startsWith('audio/')) return 'audio';
+    return 'file';
+  }
+};
+
+// Initialize
+document.addEventListener('DOMContentLoaded', initializeApp);
+
+async function initializeApp() {
+  updateConnectionStatus('connecting');
+  
+  try {
+    // Check if Supabase config is set
+    if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+      throw new Error('Supabase URL လိုအပ်ပါတယ်! CONFIG အပိုင်းထဲမှာ သင့် Supabase URL ကို ထည့်ပါ။');
+    }
+
+    if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY_HERE') {
+      throw new Error('Supabase Anon Key လိုအပ်ပါတယ်! CONFIG အပိုင်းထဲမှာ သင့် Supabase Anon Key ကို ထည့်ပါ။');
+    }
+
+    // Initialize Supabase
+    if (typeof supabase !== 'undefined') {
+      state.supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
+        auth: { persistSession: false },
+        realtime: { params: { eventsPerSecond: 10 } }
+      });
+
+      // Test connection
+      const { data, error } = await state.supabase.from('about').select('id').limit(1);
+      
+      if (error && error.code !== 'PGRST116') {
+        throw new Error(`Database connection failed: ${error.message}`);
+      }
+
+      updateConnectionStatus('online');
+      showNotification('Database connected successfully! အက်ဒမင် ဝင်ရောက်ရန် အသင့်ဖြစ်ပါတယ်။', 'success');
+      
+      state.isConnected = true;
+      state.reconnectAttempts = 0;
+      
+    } else {
+      throw new Error('Supabase library မတင်လို့ရပါ');
+    }
+  } catch (error) {
+    console.error('Initialization error:', error);
+    updateConnectionStatus('offline');
+    showNotification(`Connection failed: ${error.message}`, 'error');
+    
+    // Retry connection
+    if (state.reconnectAttempts < CONFIG.MAX_RETRY_ATTEMPTS) {
+      state.reconnectAttempts++;
+      setTimeout(() => {
+        console.log(`Retrying connection (${state.reconnectAttempts}/${CONFIG.MAX_RETRY_ATTEMPTS})...`);
+        initializeApp();
+      }, CONFIG.RETRY_DELAY);
+    }
+  }
+
+  // Add enter key listener for admin key input
+  document.getElementById('admin-key').addEventListener('keypress', function(event) {
+    if (event.key === 'Enter') {
+      adminLogin();
+    }
+  });
+}
+
+function updateConnectionStatus(status) {
+  const statusElement = document.getElementById('connection-status');
+  statusElement.className = 'connection-status';
+  
+  switch (status) {
+    case 'online':
+      statusElement.classList.add('status-online');
+      statusElement.innerHTML = '<i class="fas fa-check-circle"></i> ONLINE';
+      break;
+    case 'offline':
+      statusElement.classList.add('status-offline');
+      statusElement.innerHTML = '<i class="fas fa-exclamation-triangle"></i> OFFLINE';
+      break;
+    case 'connecting':
+      statusElement.classList.add('status-connecting');
+      statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CONNECTING...';
+      break;
+  }
+}
+
+function showNotification(message, type = 'info', duration = 5000) {
+  const container = document.getElementById('notification-container');
+  const notification = document.createElement('div');
+  
+  const bgColors = {
+    success: 'bg-green-600',
+    error: 'bg-red-600',
+    info: 'bg-blue-600',
+    warning: 'bg-yellow-600'
+  };
+  
+  const icons = {
+    success: 'fa-check-circle',
+    error: 'fa-exclamation-triangle',
+    info: 'fa-info-circle',
+    warning: 'fa-exclamation-circle'
+  };
+  
+  notification.className = `notification ${bgColors[type]}`;
+  notification.innerHTML = `
+    <div class="flex items-center justify-between">
+      <div class="flex items-center">
+        <i class="fas ${icons[type]} mr-2"></i>
+        <span>${message}</span>
+      </div>
+      <button onclick="this.parentElement.parentElement.remove()" class="ml-4 hover:text-gray-200">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+  `;
+  
+  container.appendChild(notification);
+  
+  setTimeout(() => {
+    if (notification.parentElement) {
+      notification.remove();
+    }
+  }, duration);
+}
+
+async function adminLogin() {
+  if (!state.isConnected) {
+    showNotification('Waiting for database connection...', 'warning');
+    return;
+  }
+
+  const adminKey = document.getElementById('admin-key').value.trim();
+  const loginBtn = document.getElementById('login-btn');
+  const loginText = document.getElementById('login-text');
+
+  if (!adminKey) {
+    showNotification('Please enter Admin Key', 'warning');
+    return;
+  }
+
+  try {
+    loginBtn.disabled = true;
+    loginText.textContent = 'VERIFYING...';
+
+    // Direct comparison with hardcoded ADMIN_KEY
+    if (adminKey === CONFIG.ADMIN_KEY) {
+      // Admin profile ID is hardcoded in state.adminProfileId
+      state.isAuthenticated = true;
+      document.getElementById('login-section').classList.add('hidden');
+      document.getElementById('admin-content').classList.remove('hidden');
+      
+      showNotification('Successfully logged in as Admin!', 'success');
+      
+      // Load initial data
+      await loadDashboardData();
+      setupRealtimeSubscriptions();
+      showSection('about', document.querySelector('.nav-btn.active')); // Activate default section
+      
+    } else {
+      throw new Error('Incorrect Admin Key');
+    }
+
+  } catch (error) {
+    console.error('Login error:', error);
+    showNotification(error.message, 'error');
+  } finally {
+    document.getElementById('admin-key').value = ''; // Clear key input
+    loginBtn.disabled = false;
+    loginText.textContent = 'ACCESS DASHBOARD';
+  }
+}
+
+async function loadDashboardData() {
+  try {
+    // Load stats
+    const [usersResult, keysResult, newsResult, supportResult] = await Promise.all([
+      state.supabase.from('profiles').select('id', { count: 'exact' }),
+      state.supabase.from('keys').select('id', { count: 'exact' }).eq('is_active', true),
+      state.supabase.from('news').select('id', { count: 'exact' }),
+      state.supabase.from('support_messages').select('id', { count: 'exact' }).eq('is_read', false) // Unread support messages
+    ]);
+
+    document.getElementById('total-users').textContent = usersResult.count || 0;
+    document.getElementById('active-keys').textContent = keysResult.count || 0;
+    document.getElementById('total-news').textContent = newsResult.count || 0;
+    document.getElementById('total-support').textContent = supportResult.count || 0;
+
+  } catch (error) {
+    console.error('Error loading dashboard data:', error);
+    showNotification('Failed to retrieve dashboard data', 'error');
+  }
+}
+
+function setupRealtimeSubscriptions() {
+  // Unsubscribe from previous channels if they exist
+  if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
+  if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
+  if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
+  if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+
+  // News realtime updates
+  state.newsRealtime = state.supabase
+    .channel('news_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'news' }, 
+      (payload) => {
+        if (state.currentSection === 'news') {
+          loadNewsData();
+        }
+        loadDashboardData(); // Update stats
+      }
+    )
+    .subscribe();
+
+  // Support messages realtime
+  state.supportRealtime = state.supabase
+    .channel('support_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'support_messages' }, 
+      (payload) => {
+        if (state.currentSection === 'support') {
+          loadSupportMessages();
+        }
+        loadDashboardData(); // Update stats
+      }
+    )
+    .subscribe();
+
+  // Products realtime
+  state.productsRealtime = state.supabase
+    .channel('products_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'products' }, 
+      (payload) => {
+        if (state.currentSection === 'products') {
+          loadProductsData();
+        }
+      }
+    )
+    .subscribe();
+
+  // Orders realtime
+  state.ordersRealtime = state.supabase
+    .channel('orders_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'orders' }, 
+      (payload) => {
+        if (state.currentSection === 'payments') {
+          loadPendingOrders();
+        }
+      }
+    )
+    .subscribe();
+}
+
+function showSection(section, buttonElement) {
+  // Hide all sections
+  document.querySelectorAll('.admin-section').forEach(sec => {
+    sec.classList.add('hidden');
+  });
+  
+  // Update navigation
+  document.querySelectorAll('.nav-btn').forEach(btn => {
+    btn.classList.remove('active');
+  });
+  
+  // Show selected section
+  const sectionElement = document.getElementById(`${section}-section`);
+  if (sectionElement) {
+    sectionElement.classList.remove('hidden');
+    sectionElement.classList.add('fade-in');
+  }
+  
+  // Update active nav
+  if (buttonElement) {
+    buttonElement.classList.add('active');
+  }
+  state.currentSection = section;
+  
+  // Load section data
+  switch (section) {
+    case 'about':
+      loadAboutData();
+      break;
+    case 'keys':
+      loadKeysData();
+      break;
+    case 'users':
+      loadUsersData();
+      break;
+    case 'news':
+      loadNewsData();
+      break;
+    case 'products':
+      loadProductsData();
+      break;
+    case 'payments':
+      loadPaymentMethods();
+      loadPendingOrders();
+      break;
+    case 'support':
+      loadSupportMessages();
+      break;
+  }
+}
+
+async function loadAboutData() {
+  try {
+    const { data, error } = await state.supabase
+      .from('about')
+      .select('*')
+      .eq('id', 'main')
+      .single();
+
+    if (error && error.code !== 'PGRST116') {
+      throw error;
+    }
+
+    if (data) {
+      document.getElementById('about-contact-name').value = data.contact_name || '';
+      document.getElementById('about-telegram').value = data.telegram || '';
+      document.getElementById('about-viber').value = data.viber || '';
+      document.getElementById('about-phone').value = data.phone || '';
+      document.getElementById('about-facebook').value = data.facebook || '';
+      document.getElementById('about-tiktok').value = data.tiktok || '';
+      document.getElementById('about-email').value = data.email || '';
+      document.getElementById('about-social-links').value = JSON.stringify(data.social_links, null, 2) || '[]';
+    }
+  } catch (error) {
+    console.error('Error loading about data:', error);
+    showNotification('Failed to retrieve about data', 'error');
+  }
+}
+
+async function updateAbout() {
+  try {
+    const contactName = document.getElementById('about-contact-name').value.trim();
+    const telegram = document.getElementById('about-telegram').value.trim();
+    const viber = document.getElementById('about-viber').value.trim();
+    const phone = document.getElementById('about-phone').value.trim();
+    const facebook = document.getElementById('about-facebook').value.trim();
+    const tiktok = document.getElementById('about-tiktok').value.trim();
+    const email = document.getElementById('about-email').value.trim();
+    let socialLinks = [];
+    try {
+      socialLinks = JSON.parse(document.getElementById('about-social-links').value);
+      if (!Array.isArray(socialLinks)) throw new Error('Social links must be a JSON array.');
+    } catch (e) {
+      showNotification('Invalid Social Links JSON format: ' + e.message, 'error');
+      return;
+    }
+
+    const { error } = await state.supabase
+      .from('about')
+      .upsert({
+        id: 'main',
+        contact_name: contactName,
+        telegram,
+        viber,
+        phone,
+        facebook,
+        tiktok,
+        email,
+        social_links: socialLinks,
+        updated_at: new Date().toISOString()
+      });
+
+    if (error) throw error;
+
+    showNotification('About information updated successfully!', 'success');
+  } catch (error) {
+    console.error('Error updating about:', error);
+    showNotification('Failed to update about information', 'error');
+  }
+}
+
+async function loadKeysData() {
+  const tbody = document.getElementById('keys-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="3" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading keys...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('keys')
+      .select(`
+        *,
+        profiles(id)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(key => {
+        const statusClass = key.is_active ? 'status-active' : 'status-inactive';
+        const statusText = key.is_active ? 'ACTIVE' : 'INACTIVE';
+
+        return `
+          <tr>
+            <td class="font-share-tech text-sm">${key.key_text}</td>
+            <td class="text-center">
+              <span class="${statusClass} font-semibold">${statusText}</span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <button onclick="toggleKey('${key.id}', ${!key.is_active})" 
+                        class="myanmar-btn btn-small ${key.is_active ? 'btn-danger' : ''}">
+                  <i class="fas fa-${key.is_active ? 'ban' : 'check'} mr-1"></i>
+                  <span class="hidden sm:inline">${key.is_active ? 'DEACTIVATE' : 'ACTIVATE'}</span>
+                </button>
+                <button onclick="deleteKey('${key.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i>
+                  <span class="hidden sm:inline">DELETE</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="3" class="text-center text-text-secondary py-8">
+            No Keys Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading keys:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="3" class="text-center text-accent-red py-8">
+          Failed to retrieve Keys
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function createKey() {
+  try {
+    const keyText = document.getElementById('key-text').value.trim();
+    
+    if (!keyText) {
+      showNotification('Please enter Key Text', 'warning');
+      return;
+    }
+
+    showLoading(true);
+
+    const { data: newKey, error: keyError } = await state.supabase
+      .from('keys')
+      .insert({
+        key_text: keyText,
+        is_active: true
+      })
+      .select()
+      .single();
+
+    if (keyError) throw keyError;
+
+    // Clear form
+    document.getElementById('key-text').value = '';
+
+    showNotification('Key created successfully!', 'success');
+    loadKeysData();
+    loadDashboardData();
+
+  } catch (error) {
+    console.error('Error creating key:', error);
+    if (error.code === '23505') {
+      showNotification('Key name already exists. Choose another name.', 'error');
+    } else {
+      showNotification('Failed to create Key', 'error');
+    }
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function toggleKey(keyId, newStatus) {
+  try {
+    const { error } = await state.supabase
+      .from('keys')
+      .update({ 
+        is_active: newStatus,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', keyId);
+
+    if (error) throw error;
+
+    showNotification(`Key ${newStatus ? 'activated' : 'deactivated'} successfully!`, 'success');
+    loadKeysData();
+    loadDashboardData();
+
+  } catch (error) {
+    console.error('Error toggling key:', error);
+    showNotification('Failed to change Key status', 'error');
+  }
+}
+
+function deleteKey(keyId) {
+  showConfirmModal(
+    'Deleting this Key will also delete all associated profiles. Are you sure?',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('keys')
+          .delete()
+          .eq('id', keyId);
+
+        if (error) throw error;
+
+        showNotification('Key deleted successfully!', 'success');
+        loadKeysData();
+        loadDashboardData();
+
+      } catch (error) {
+        console.error('Error deleting key:', error);
+        showNotification('Failed to delete Key', 'error');
+      }
+    }
+  );
+}
+
+async function loadUsersData() {
+  const tbody = document.getElementById('users-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading users...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('profiles')
+      .select(`
+        *,
+        keys(key_text, is_active)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(profile => {
+        const statusClass = profile.is_banned ? 'status-banned' : 'status-active';
+        const statusText = profile.is_banned ? 'BANNED' : 'ACTIVE';
+        const avatar = profile.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr>
+            <td>
+              <img src="${avatar}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
+            </td>
+            <td class="font-medium">${profile.username || 'N/A'}</td>
+            <td>${profile.name || 'N/A'}</td>
+            <td class="text-sm">${new Date(profile.created_at).toLocaleDateString('en-US')}</td>
+            <td>
+              <span class="${statusClass} font-semibold">${statusText}</span>
+            </td>
+            <td>
+              <div class="table-actions">
+                <button onclick="toggleUserBan('${profile.id}', ${!profile.is_banned})" 
+                        class="myanmar-btn btn-small ${profile.is_banned ? '' : 'btn-danger'}">
+                  <i class="fas fa-${profile.is_banned ? 'unlock' : 'ban'} mr-1"></i>
+                  <span class="hidden sm:inline">${profile.is_banned ? 'UNBAN' : 'BAN'}</span>
+                </button>
+                <button onclick="viewUserDetails('${profile.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye mr-1"></i>
+                  <span class="hidden sm:inline">VIEW</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            No Users Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading users:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve Users
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function toggleUserBan(profileId, banStatus) {
+  try {
+    const { data, error } = await state.supabase.rpc('toggle_user_ban', {
+      profile_id_param: profileId,
+      ban_status: banStatus,
+      ban_reason_param: banStatus ? prompt('Reason for banning?', 'Violation of terms') : null
+    });
+
+    if (error) throw error;
+
+    showNotification(`User ${banStatus ? 'banned' : 'unbanned'} successfully!`, 'success');
+    loadUsersData();
+    loadDashboardData();
+
+  } catch (error) {
+    console.error('Error toggling user ban:', error);
+    showNotification('Failed to change user status', 'error');
+  }
+}
+
+async function viewUserDetails(profileId) {
+  // This would typically open a modal with more details about the user
+  showNotification('User details feature coming soon!', 'info');
+}
+
+async function loadNewsData() {
+  const newsContainer = document.getElementById('news-list');
+  newsContainer.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4"></div>
+    <p class="text-center text-text-secondary">Loading news...</p>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('news')
+      .select(`
+        *,
+        profiles(username, name, profile_picture),
+        admin_profiles(username, name, profile_picture)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      newsContainer.innerHTML = data.map(news => {
+        const author = news.posted_by_admin ? news.admin_profiles : news.profiles;
+        const authorName = author?.name || 'Unknown';
+        const authorUsername = author?.username || 'unknown';
+        const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        let mediaHtml = '';
+        if (news.media_urls && news.media_urls.length > 0) {
+          news.media_urls.forEach(media => {
+            const mediaType = utils.getMediaType(media.type);
+            if (mediaType === 'image') {
+              mediaHtml += `<img src="${media.url}" class="w-full rounded-lg mb-3" alt="News image">`;
+            } else if (mediaType === 'video') {
+              mediaHtml += `
+                <div class="video-container mb-3">
+                  <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+                    <source src="${media.url}" type="${media.type}">
+                  </video>
+                </div>
+              `;
+            } else if (mediaType === 'audio') {
+              mediaHtml += `
+                <div class="audio-container mb-3">
+                  <audio controls class="w-full">
+                    <source src="${media.url}" type="${media.type}">
+                  </audio>
+                </div>
+              `;
+            }
+          });
+        }
+        
+        return `
+          <div class="news-card p-4" data-search-terms="${news.title.toLowerCase()} ${news.content.toLowerCase()} ${authorName.toLowerCase()} ${authorUsername.toLowerCase()}">
+            <div class="flex justify-between items-start mb-3">
+              <div>
+                <h4 class="text-lg font-semibold text-accent-purple mb-1">${news.title}</h4>
+                <p class="text-sm text-text-secondary">
+                  <i class="fas fa-user mr-1"></i> ${authorName} (@${authorUsername})
+                  <span class="ml-3">
+                    <i class="fas fa-calendar mr-1"></i> ${new Date(news.created_at).toLocaleDateString('en-US')}
+                  </span>
+                </p>
+              </div>
+              <div class="flex space-x-2">
+                <button onclick="viewNews('${news.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye"></i>
+                </button>
+                <button onclick="deleteNews('${news.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            
+            ${mediaHtml}
+            
+            <p class="text-text-secondary text-sm mb-3">${news.content.substring(0, 150)}${news.content.length > 150 ? '...' : ''}</p>
+            
+            <div class="flex items-center justify-between text-sm text-text-secondary">
+              <div class="flex space-x-4">
+                <span><i class="fas fa-eye mr-1"></i> ${news.views || 0}</span>
+                <span><i class="fas fa-heart mr-1"></i> ${news.likes || 0}</span>
+              </div>
+              ${news.youtube_link ? '<i class="fab fa-youtube text-red-500"></i>' : ''}
+            </div>
+          </div>
+        `;
+      }).join('');
+    } else {
+      newsContainer.innerHTML = `
+        <div class="text-center text-text-secondary py-8">
+          <i class="fas fa-newspaper text-4xl mb-4"></i>
+          <p>No News Found</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading news:', error);
+    newsContainer.innerHTML = `
+      <div class="text-center text-accent-red py-8">
+        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+        <p>Failed to retrieve News</p>
+      </div>
+    `;
+  }
+}
+
+async function postAdminNews() {
+  try {
+    const title = document.getElementById('admin-news-title').value.trim();
+    const content = document.getElementById('admin-news-content').value.trim();
+    const mediaFiles = document.getElementById('admin-news-media').files;
+    const youtubeLink = document.getElementById('admin-news-youtube').value.trim();
+    const tiktokLink = document.getElementById('admin-news-tiktok').value.trim();
+    const telegramLink = document.getElementById('admin-news-telegram').value.trim();
+    const facebookLink = document.getElementById('admin-news-facebook').value.trim();
+
+    if (!title || !content) {
+      showNotification('Please enter Title and Content', 'warning');
+      return;
+    }
+
+    showLoading(true);
+
+    let mediaUrls = [];
+    if (mediaFiles.length > 0) {
+      for (let i = 0; i < mediaFiles.length; i++) {
+        const file = mediaFiles[i];
+        const fileExt = file.name.split('.').pop();
+        const fileName = `news/${state.adminProfileId}_${Date.now()}_${i}.${fileExt}`;
+        
+        const { data: uploadData, error: uploadError } = await state.supabase.storage
+          .from('news')
+          .upload(fileName, file);
+          
+        if (uploadError) throw uploadError;
+        
+        const { data: urlData } = state.supabase.storage
+          .from('news')
+          .getPublicUrl(fileName);
+          
+        mediaUrls.push({ url: urlData.publicUrl, type: file.type, size: file.size });
+      }
+    }
+
+    // Insert news
+    const { error } = await state.supabase
+      .from('news')
+      .insert({
+        title,
+        content,
+        media_urls: mediaUrls,
+        youtube_link: youtubeLink || null,
+        tiktok_link: tiktokLink || null,
+        telegram_link: telegramLink || null,
+        facebook_link: facebookLink || null,
+        posted_by_admin: true,
+        admin_profile_id: state.adminProfileId,
+        is_featured: false,
+        is_published: true
+      });
+
+    if (error) throw error;
+
+    // Clear form
+    document.getElementById('admin-news-title').value = '';
+    document.getElementById('admin-news-content').value = '';
+    document.getElementById('admin-news-media').value = '';
+    document.getElementById('admin-news-youtube').value = '';
+    document.getElementById('admin-news-tiktok').value = '';
+    document.getElementById('admin-news-telegram').value = '';
+    document.getElementById('admin-news-facebook').value = '';
+
+    showNotification('Admin News posted successfully!', 'success');
+    loadNewsData();
+    loadDashboardData();
+
+  } catch (error) {
+    console.error('Error posting admin news:', error);
+    showNotification('Failed to post News', 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function viewNews(newsId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('news')
+      .select(`
+        *,
+        profiles(username, name, profile_picture),
+        admin_profiles(username, name, profile_picture)
+      `)
+      .eq('id', newsId)
+      .single();
+
+    if (error) throw error;
+
+    const author = data.posted_by_admin ? data.admin_profiles : data.profiles;
+    const authorName = author?.name || 'Unknown';
+    const authorUsername = author?.username || 'unknown';
+    const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    let mediaHtml = '';
+    if (data.media_urls && data.media_urls.length > 0) {
+      data.media_urls.forEach(media => {
+        const mediaType = utils.getMediaType(media.type);
+        if (mediaType === 'image') {
+          mediaHtml += `<img src="${media.url}" class="w-full rounded-lg mb-3" alt="News image">`;
+        } else if (mediaType === 'video') {
+          mediaHtml += `
+            <div class="video-container mb-3">
+              <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+                <source src="${media.url}" type="${media.type}">
+              </video>
+            </div>
+          `;
+        } else if (mediaType === 'audio') {
+          mediaHtml += `
+            <div class="audio-container mb-3">
+              <audio controls class="w-full">
+                <source src="${media.url}" type="${media.type}">
+              </audio>
+            </div>
+          `;
+        }
+      });
+    }
+
+    let socialLinksHtml = '';
+    if (data.youtube_link) socialLinksHtml += `<a href="${data.youtube_link}" target="_blank" class="text-red-500 hover:text-red-400"><i class="fab fa-youtube text-2xl"></i></a>`;
+    if (data.tiktok_link) socialLinksHtml += `<a href="${data.tiktok_link}" target="_blank" class="text-text-secondary hover:text-text-primary"><i class="fab fa-tiktok text-2xl"></i></a>`;
+    if (data.telegram_link) socialLinksHtml += `<a href="${data.telegram_link}" target="_blank" class="text-blue-400 hover:text-blue-300"><i class="fab fa-telegram text-2xl"></i></a>`;
+    if (data.facebook_link) socialLinksHtml += `<a href="${data.facebook_link}" target="_blank" class="text-blue-600 hover:text-blue-500"><i class="fab fa-facebook text-2xl"></i></a>`;
+
+
+    document.getElementById('news-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3">
+          <img src="${authorAvatar}" 
+               alt="Author" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <h4 class="font-semibold text-text-primary">${authorName}</h4>
+            <p class="text-sm text-text-secondary">@${authorUsername}</p>
+          </div>
+        </div>
+        
+        <h3 class="text-xl font-bold text-accent-purple">${data.title}</h3>
+        
+        ${mediaHtml}
+        
+        <div class="prose prose-invert max-w-none">
+          <p class="text-text-secondary whitespace-pre-wrap">${data.content}</p>
+        </div>
+        
+        ${socialLinksHtml ? `<div class="flex space-x-4 mt-4">${socialLinksHtml}</div>` : ''}
+
+        <div class="flex items-center justify-between text-sm text-text-secondary pt-4 border-t border-border-color">
+          <div class="flex space-x-4">
+            <span><i class="fas fa-eye mr-1"></i> ${data.views || 0} VIEWS</span>
+            <span><i class="fas fa-heart mr-1"></i> ${data.likes || 0} LIKES</span>
+          </div>
+          <span><i class="fas fa-calendar mr-1"></i> ${new Date(data.created_at).toLocaleString('en-US')}</span>
+        </div>
+      </div>
+    `;
+
+    document.getElementById('news-modal').classList.remove('hidden');
+
+  } catch (error) {
+    console.error('Error viewing news:', error);
+    showNotification('Failed to view News', 'error');
+  }
+}
+
+function closeNewsModal() {
+  document.getElementById('news-modal').classList.add('hidden');
+}
+
+function deleteNews(newsId) {
+  showConfirmModal(
+    'Deleting this News will also delete all associated comments and likes. Are you sure?',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('news')
+          .delete()
+          .eq('id', newsId);
+
+        if (error) throw error;
+
+        showNotification('News deleted successfully!', 'success');
+        loadNewsData();
+        loadDashboardData();
+
+      } catch (error) {
+        console.error('Error deleting news:', error);
+        showNotification('Failed to delete News', 'error');
+      }
+    }
+  );
+}
+
+async function loadProductsData() {
+  const tbody = document.getElementById('products-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading products...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('products')
+      .select('*')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(product => {
+        const statusClass = product.is_active ? 'status-active' : 'status-inactive';
+        const statusText = product.is_active ? 'ACTIVE' : 'INACTIVE';
+        const iconUrl = product.apk_icon_url || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr data-search-terms="${product.name.toLowerCase()} ${product.file_type.toLowerCase()} ${product.price}">
+            <td><img src="${iconUrl}" alt="Icon" class="w-10 h-10 object-contain"></td>
+            <td class="font-medium">${product.name}</td>
+            <td>${product.file_type.toUpperCase()}</td>
+            <td>${product.price} MMK</td>
+            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
+            <td>
+              <div class="table-actions">
+                <a href="${product.file_url}" target="_blank" download class="myanmar-btn btn-small">
+                  <i class="fas fa-download mr-1"></i>
+                  <span class="hidden sm:inline">Download</span>
+                </a>
+                <button onclick="toggleProductActive('${product.id}', ${!product.is_active})" 
+                        class="myanmar-btn btn-small ${product.is_active ? 'btn-danger' : ''}">
+                  <i class="fas fa-${product.is_active ? 'ban' : 'check'} mr-1"></i>
+                  <span class="hidden sm:inline">${product.is_active ? 'DEACTIVATE' : 'ACTIVATE'}</span>
+                </button>
+                <button onclick="deleteProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i>
+                  <span class="hidden sm:inline">DELETE</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            No Products Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading products:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve Products
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function uploadProduct() {
+  try {
+    const name = document.getElementById('product-name').value.trim();
+    const fileType = document.getElementById('product-file-type').value;
+    const description = document.getElementById('product-description').value.trim();
+    const productFile = document.getElementById('product-file').files[0];
+    const price = parseFloat(document.getElementById('product-price').value);
+    const iconFile = document.getElementById('product-icon').files[0];
+
+    if (!name || !productFile || isNaN(price)) {
+      showNotification('Please enter Product Name, File, and Price', 'warning');
+      return;
+    }
+
+    showLoading(true);
+
+    let fileUrl = null;
+    let iconUrl = null;
+    let fileSize = productFile.size;
+
+    // Upload product file
+    const fileExt = productFile.name.split('.').pop();
+    const fileName = `products/${Date.now()}_${productFile.name}`;
+    const { data: uploadData, error: uploadError } = await state.supabase.storage
+      .from('products')
+      .upload(fileName, productFile);
+    if (uploadError) throw uploadError;
+    const { data: fileUrlData } = state.supabase.storage.from('products').getPublicUrl(fileName);
+    fileUrl = fileUrlData.publicUrl;
+
+    // Upload icon if provided
+    if (iconFile) {
+      const iconExt = iconFile.name.split('.').pop();
+      const iconName = `product_icons/${Date.now()}_${iconFile.name}`;
+      const { data: iconUploadData, error: iconUploadError } = await state.supabase.storage
+        .from('products')
+        .upload(iconName, iconFile);
+      if (iconUploadError) throw iconUploadError;
+      const { data: iconUrlData } = state.supabase.storage.from('products').getPublicUrl(iconName);
+      iconUrl = iconUrlData.publicUrl;
+    }
+
+    // Insert product
+    const { error } = await state.supabase
+      .from('products')
+      .insert({
+        name,
+        description,
+        file_url: fileUrl,
+        file_type: fileType,
+        file_size: fileSize,
+        price,
+        apk_icon_url: iconUrl,
+        is_active: true,
+        uploaded_by: state.adminProfileId
+      });
+
+    if (error) throw error;
+
+    // Clear form
+    document.getElementById('product-name').value = '';
+    document.getElementById('product-description').value = '';
+    document.getElementById('product-file').value = '';
+    document.getElementById('product-price').value = '';
+    document.getElementById('product-icon').value = '';
+
+    showNotification('Product uploaded successfully!', 'success');
+    loadProductsData();
+
+  } catch (error) {
+    console.error('Error uploading product:', error);
+    showNotification('Failed to upload Product', 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function toggleProductActive(productId, newStatus) {
+  try {
+    const { error } = await state.supabase
+      .from('products')
+      .update({ 
+        is_active: newStatus,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', productId);
+
+    if (error) throw error;
+
+    showNotification(`Product ${newStatus ? 'activated' : 'deactivated'} successfully!`, 'success');
+    loadProductsData();
+
+  } catch (error) {
+    console.error('Error toggling product status:', error);
+    showNotification('Failed to change Product status', 'error');
+  }
+}
+
+function deleteProduct(productId) {
+  showConfirmModal(
+    'Deleting this Product will also delete all associated orders. Are you sure?',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('products')
+          .delete()
+          .eq('id', productId);
+
+        if (error) throw error;
+
+        showNotification('Product deleted successfully!', 'success');
+        loadProductsData();
+
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        showNotification('Failed to delete Product', 'error');
+      }
+    }
+  );
+}
+
+async function loadPaymentMethods() {
+  const tbody = document.getElementById('payment-methods-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="5" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading payment methods...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('payment_methods')
+      .select('*')
+      .order('method_name', { ascending: true });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(method => {
+        const statusClass = method.is_active ? 'status-active' : 'status-inactive';
+        const statusText = method.is_active ? 'ACTIVE' : 'INACTIVE';
+        const qrCodeHtml = method.qr_code_url ? `<img src="${method.qr_code_url}" class="w-16 h-16 object-contain rounded-md" alt="QR Code">` : 'N/A';
+
+        return `
+          <tr data-search-terms="${method.method_name.toLowerCase()} ${method.account_info.toLowerCase()}">
+            <td class="font-medium">${method.method_name}</td>
+            <td>${method.account_info || 'N/A'}</td>
+            <td>${qrCodeHtml}</td>
+            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
+            <td>
+              <div class="table-actions">
+                <button onclick="togglePaymentMethodActive('${method.id}', ${!method.is_active})" 
+                        class="myanmar-btn btn-small ${method.is_active ? 'btn-danger' : ''}">
+                  <i class="fas fa-${method.is_active ? 'ban' : 'check'} mr-1"></i>
+                  <span class="hidden sm:inline">${method.is_active ? 'DEACTIVATE' : 'ACTIVATE'}</span>
+                </button>
+                <button onclick="deletePaymentMethod('${method.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i>
+                  <span class="hidden sm:inline">DELETE</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center text-text-secondary py-8">
+            No Payment Methods Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading payment methods:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-accent-red py-8">
+          Failed to retrieve Payment Methods
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function addPaymentMethod() {
+  try {
+    const methodName = document.getElementById('payment-method-name').value.trim();
+    const accountInfo = document.getElementById('payment-account-info').value.trim();
+    const instructions = document.getElementById('payment-instructions').value.trim();
+    const qrCodeFile = document.getElementById('payment-qr-code').files[0];
+
+    if (!methodName || !accountInfo) {
+      showNotification('Please enter Method Name and Account Info', 'warning');
+      return;
+    }
+
+    showLoading(true);
+
+    let qrCodeUrl = null;
+    if (qrCodeFile) {
+      const fileExt = qrCodeFile.name.split('.').pop();
+      const fileName = `payment_qrs/${Date.now()}_${qrCodeFile.name}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('payment-qrs')
+        .upload(fileName, qrCodeFile);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('payment-qrs').getPublicUrl(fileName);
+      qrCodeUrl = urlData.publicUrl;
+    }
+
+    const { error } = await state.supabase
+      .from('payment_methods')
+      .insert({
+        method_name: methodName,
+        account_info: accountInfo,
+        qr_code_url: qrCodeUrl,
+        instructions: instructions || null,
+        is_active: true
+      });
+
+    if (error) throw error;
+
+    // Clear form
+    document.getElementById('payment-method-name').value = '';
+    document.getElementById('payment-account-info').value = '';
+    document.getElementById('payment-instructions').value = '';
+    document.getElementById('payment-qr-code').value = '';
+
+    showNotification('Payment Method added successfully!', 'success');
+    loadPaymentMethods();
+
+  } catch (error) {
+    console.error('Error adding payment method:', error);
+    showNotification('Failed to add Payment Method', 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function togglePaymentMethodActive(methodId, newStatus) {
+  try {
+    const { error } = await state.supabase
+      .from('payment_methods')
+      .update({ 
+        is_active: newStatus,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', methodId);
+
+    if (error) throw error;
+
+    showNotification(`Payment Method ${newStatus ? 'activated' : 'deactivated'} successfully!`, 'success');
+    loadPaymentMethods();
+
+  } catch (error) {
+    console.error('Error toggling payment method status:', error);
+    showNotification('Failed to change Payment Method status', 'error');
+  }
+}
+
+function deletePaymentMethod(methodId) {
+  showConfirmModal(
+    'Deleting this Payment Method will also affect associated orders. Are you sure?',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('payment_methods')
+          .delete()
+          .eq('id', methodId);
+
+        if (error) throw error;
+
+        showNotification('Payment Method deleted successfully!', 'success');
+        loadPaymentMethods();
+
+      } catch (error) {
+        console.error('Error deleting payment method:', error);
+        showNotification('Failed to delete Payment Method', 'error');
+      }
+    }
+  );
+}
+
+async function loadPendingOrders() {
+  const tbody = document.getElementById('pending-orders-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="7" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading pending orders...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('orders')
+      .select(`
+        *,
+        profiles(username, name),
+        products(name),
+        payment_methods(method_name)
+      `)
+      .eq('status', 'pending')
+      .order('ordered_at', { ascending: true });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(order => `
+        <tr data-search-terms="${(order.profiles?.name || '').toLowerCase()} ${(order.profiles?.username || '').toLowerCase()} ${(order.products?.name || '').toLowerCase()} ${order.amount} ${(order.payment_methods?.method_name || '').toLowerCase()}">
+          <td>${order.profiles?.name || 'N/A'} (@${order.profiles?.username || 'N/A'})</td>
+          <td>${order.products?.name || 'N/A'}</td>
+          <td>${order.amount} MMK</td>
+          <td>${order.payment_methods?.method_name || 'N/A'}</td>
+          <td>
+            ${order.receipt_url ? `<a href="${order.receipt_url}" target="_blank" class="text-blue-400 hover:underline">VIEW</a>` : 'N/A'}
+          </td>
+          <td><span class="text-accent-purple font-semibold">PENDING</span></td>
+          <td>
+            <div class="table-actions">
+              <button onclick="approveOrder('${order.id}')" class="myanmar-btn btn-small">
+                <i class="fas fa-check mr-1"></i>
+                <span class="hidden sm:inline">APPROVE</span>
+              </button>
+              <button onclick="rejectOrder('${order.id}')" class="btn-danger myanmar-btn btn-small">
+                <i class="fas fa-times mr-1"></i>
+                <span class="hidden sm:inline">REJECT</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="text-center text-text-secondary py-8">
+            No Pending Orders
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading pending orders:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center text-accent-red py-8">
+          Failed to retrieve Orders
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function approveOrder(orderId) {
+  try {
+    const { error } = await state.supabase
+      .from('orders')
+      .update({ 
+        status: 'approved',
+        approved_at: new Date().toISOString(),
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', orderId);
+
+    if (error) throw error;
+
+    showNotification('Order approved successfully!', 'success');
+    loadPendingOrders();
+
+  } catch (error) {
+    console.error('Error approving order:', error);
+    showNotification('Failed to approve Order', 'error');
+  }
+}
+
+async function rejectOrder(orderId) {
+  try {
+    const reason = prompt('Reason for rejection?', 'Invalid receipt');
+    if (!reason) return;
+
+    const { error } = await state.supabase
+      .from('orders')
+      .update({ 
+        status: 'rejected',
+        rejected_at: new Date().toISOString(),
+        admin_notes: reason,
+        updated_at: new Date().toISOString()
+      })
+      .eq('id', orderId);
+
+    if (error) throw error;
+
+    showNotification('Order rejected successfully!', 'success');
+    loadPendingOrders();
+
+  } catch (error) {
+    console.error('Error rejecting order:', error);
+    showNotification('Failed to reject Order', 'error');
+  }
+}
+
+async function loadSupportMessages() {
+  const container = document.getElementById('support-messages');
+  container.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4"></div>
+    <p class="text-center text-text-secondary">Loading messages...</p>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('support_messages')
+      .select(`
+        *,
+        profiles(username, name, profile_picture)
+      `)
+      .order('created_at', { ascending: true });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      container.innerHTML = data.map(message => {
+        const isFromUser = message.is_from_user;
+        const senderName = isFromUser ? (message.profiles?.name || 'User') : 'Admin';
+        const messageClass = isFromUser ? 'bg-blue-600 bg-opacity-20 border-blue-500' : 'bg-green-600 bg-opacity-20 border-green-500';
+        
+        return `
+          <div class="mb-4 p-3 rounded-lg border ${messageClass}" data-search-terms="${message.content.toLowerCase()} ${senderName.toLowerCase()}">
+            <div class="flex items-center justify-between mb-2">
+              <div class="flex items-center space-x-2">
+                <i class="fas fa-${isFromUser ? 'user' : 'headset'} text-sm"></i>
+                <span class="font-semibold text-sm">${senderName}</span>
+              </div>
+              <span class="text-xs text-text-secondary">${new Date(message.created_at).toLocaleString('en-US')}</span>
+            </div>
+            <p class="text-sm text-text-secondary whitespace-pre-wrap">${message.content}</p>
+          </div>
+        `;
+      }).join('');
+      
+      // Scroll to bottom
+      container.scrollTop = container.scrollHeight;
+    } else {
+      container.innerHTML = `
+        <div class="text-center text-text-secondary py-8">
+          <i class="fas fa-comments text-4xl mb-4"></i>
+          <p>No Messages Yet</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading support messages:', error);
+    container.innerHTML = `
+      <div class="text-center text-accent-red py-8">
+        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+        <p>Failed to retrieve Messages</p>
+      </div>
+    `;
+  }
+}
+
+async function sendAdminSupportMessage() {
+  try {
+    const content = document.getElementById('admin-support-input').value.trim();
+    
+    if (!content) {
+      showNotification('Please enter a message', 'warning');
+      return;
+    }
+
+    const { error } = await state.supabase
+      .from('support_messages')
+      .insert({
+        content,
+        is_from_user: false,
+        is_read: true,
+        priority: 'normal',
+        status: 'in_progress',
+        admin_profile_id: state.adminProfileId // Assign admin_profile_id
+      });
+
+    if (error) throw error;
+
+    document.getElementById('admin-support-input').value = '';
+    showNotification('Support message sent!', 'success');
+    loadSupportMessages();
+    loadDashboardData();
+
+  } catch (error) {
+    console.error('Error sending support message:', error);
+    showNotification('Failed to send message', 'error');
+  }
+}
+
+function showConfirmModal(message, callback) {
+  document.getElementById('confirm-message').textContent = message;
+  state.confirmCallback = callback;
+  document.getElementById('confirm-modal').classList.remove('hidden');
+}
+
+function closeConfirmModal() {
+  document.getElementById('confirm-modal').classList.add('hidden');
+  state.confirmCallback = null;
+}
+
+function confirmAction() {
+  if (state.confirmCallback) {
+    state.confirmCallback();
+  }
+  closeConfirmModal();
+}
+
+function showLoading(show) {
+  const overlay = document.getElementById('loading-overlay');
+  if (show) {
+    overlay.classList.remove('hidden');
+  } else {
+    overlay.classList.add('hidden');
+  }
+}
+
+function adminLogout() {
+  state.isAuthenticated = false;
+  document.getElementById('admin-content').classList.add('hidden');
+  document.getElementById('login-section').classList.remove('hidden');
+  document.getElementById('admin-key').value = '';
+  showNotification('Logged out from Admin account', 'info');
+  
+  // Unsubscribe from all realtime channels on logout
+  if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
+  if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
+  if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
+  if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+}
+
+// Generic table filtering function
+function filterTable(tableBodyId, query) {
+  const tbody = document.getElementById(tableBodyId);
+  if (!tbody) return;
+
+  const rows = tbody.getElementsByTagName('tr');
+  const lowerCaseQuery = query.toLowerCase();
+
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    // Skip loading/no data rows
+    if (row.querySelector('.loading-spinner') || row.querySelector('.text-center.text-text-secondary')) {
+      continue;
+    }
+    
+    const searchTerms = row.getAttribute('data-search-terms');
+    if (searchTerms && searchTerms.includes(lowerCaseQuery)) {
+      row.style.display = '';
+    } else {
+      row.style.display = 'none';
+    }
+  }
+}
+
+// Specific filter for news list (since it's not a table)
+function filterNewsList(query) {
+  const newsList = document.getElementById('news-list');
+  if (!newsList) return;
+
+  const newsCards = newsList.getElementsByClassName('news-card');
+  const lowerCaseQuery = query.toLowerCase();
+
+  for (let i = 0; i < newsCards.length; i++) {
+    const card = newsCards[i];
+    const searchTerms = card.getAttribute('data-search-terms');
+    if (searchTerms && searchTerms.includes(lowerCaseQuery)) {
+      card.style.display = '';
+    } else {
+      card.style.display = 'none';
+    }
+  }
+}
+
+// Specific filter for support messages (since it's not a table)
+function filterSupportMessages(query) {
+  const supportMessagesContainer = document.getElementById('support-messages');
+  if (!supportMessagesContainer) return;
+
+  const messages = supportMessagesContainer.querySelectorAll('.mb-4.p-3.rounded-lg.border'); // Select message divs
+  const lowerCaseQuery = query.toLowerCase();
+
+  for (let i = 0; i < messages.length; i++) {
+    const message = messages[i];
+    const searchTerms = message.getAttribute('data-search-terms');
+    if (searchTerms && searchTerms.includes(lowerCaseQuery)) {
+      message.style.display = '';
+    } else {
+      message.style.display = 'none';
+    }
+  }
+}
+
+
+// Error handling
+window.onerror = function(msg, url, lineNo, columnNo, error) {
+  console.error('Global error:', { msg, url, lineNo, columnNo, error });
+  showNotification('A system error occurred', 'error');
+  return false;
+};
+
+// Mobile optimizations
+if ('ontouchstart' in window) {
+  document.addEventListener('touchstart', function() {}, true);
+}
+
+// Prevent zoom on double tap for iOS
+document.addEventListener('touchend', function(event) {
+  const now = (new Date()).getTime();
+  if (now - lastTouchEnd <= 300) {
+    event.preventDefault();
+  }
+  lastTouchEnd = now;
+}, false);
+
+let lastTouchEnd = 0;
+</script>
+</body>
+</html>
