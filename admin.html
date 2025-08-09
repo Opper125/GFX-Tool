@@ -471,14 +471,14 @@ body {
 <div class="myanmar-pattern"></div>
 <div class="myanmar-waves"></div>
 
-<!-- Connection Status -->
+ Connection Status 
 <div id="connection-status" class="connection-status status-connecting">
 <i class="fas fa-wifi"></i> CONNECTING...
 </div>
 
-<!-- Main Container -->
+ Main Container 
 <div class="container mx-auto px-2 py-4 max-w-6xl">
-<!-- Header -->
+ Header 
 <div class="text-center mb-6 fade-in">
 <h1 class="text-2xl md:text-3xl lg:text-4xl font-orbitron font-bold mb-2 text-accent-purple">
   <i class="fas fa-shield-alt mr-2"></i>
@@ -492,10 +492,10 @@ body {
 </div>
 </div>
 
-<!-- Notification Container -->
+ Notification Container 
 <div id="notification-container"></div>
 
-<!-- Login Section -->
+ Login Section 
 <div id="login-section" class="max-w-md mx-auto fade-in">
 <div class="admin-card p-6">
   <h3 class="text-xl md:text-2xl font-orbitron font-bold text-center mb-6 text-accent-purple">
@@ -524,9 +524,9 @@ body {
 </div>
 </div>
 
-<!-- Admin Content -->
+ Admin Content 
 <div id="admin-content" class="hidden">
-<!-- Stats Section -->
+ Stats Section 
 <div id="stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
   <div class="stats-card p-4 text-center">
     <i class="fas fa-users text-2xl md:text-3xl text-blue-400 mb-2"></i>
@@ -550,7 +550,7 @@ body {
   </div>
 </div>
 
-<!-- Navigation -->
+ Navigation 
 <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
   <button onclick="showSection('about', this)" class="nav-btn active">
     <i class="fas fa-info-circle mr-1"></i>
@@ -594,7 +594,7 @@ body {
   </button>
 </div>
 
-<!-- About Management -->
+ About Management 
 <div id="about-section" class="admin-section">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -656,7 +656,7 @@ body {
   </div>
 </div>
 
-<!-- Keys Management -->
+ Keys Management 
 <div id="keys-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -664,7 +664,7 @@ body {
       ACCESS KEY MANAGEMENT
     </h3>
     
-    <!-- Create Key Form -->
+     Create Key Form 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <input type="text" id="key-text" placeholder="Key Text" 
              class="admin-input col-span-full md:col-span-2 lg:col-span-4 font-share-tech">
@@ -675,13 +675,13 @@ body {
       <span>CREATE NEW KEY</span>
     </button>
 
-    <!-- Search Input for Keys -->
+     Search Input for Keys 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-keys" placeholder="Search Keys..." class="admin-input w-full" onkeyup="filterTable('keys-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Keys Table -->
+     Keys Table 
     <div class="overflow-x-auto">
       <table class="admin-table w-full">
         <thead>
@@ -704,7 +704,7 @@ body {
   </div>
 </div>
 
-<!-- Users Management -->
+ Users Management 
 <div id="users-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -712,13 +712,13 @@ body {
       USER MANAGEMENT
     </h3>
 
-    <!-- Search Input for Users -->
+     Search Input for Users 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-users" placeholder="Search Users..." class="admin-input w-full" onkeyup="filterTable('users-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Users Table -->
+     Users Table 
     <div class="overflow-x-auto">
       <table class="admin-table w-full">
         <thead>
@@ -744,7 +744,7 @@ body {
   </div>
 </div>
 
-<!-- News Management -->
+ News Management 
 <div id="news-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -752,7 +752,7 @@ body {
       NEWS MANAGEMENT
     </h3>
 
-    <!-- Post News Form -->
+     Post News Form 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">TITLE</label>
@@ -798,13 +798,13 @@ body {
       </div>
     </div>
 
-    <!-- Search Input for News -->
+     Search Input for News 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-news" placeholder="Search News..." class="admin-input w-full" onkeyup="filterNewsList(this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- News List -->
+     News List 
     <div id="news-list" class="space-y-4">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading news...</p>
@@ -812,7 +812,7 @@ body {
   </div>
 </div>
 
-<!-- Products Management -->
+ Products Management 
 <div id="products-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -820,7 +820,7 @@ body {
       PRODUCTS & APKS MANAGEMENT
     </h3>
 
-    <!-- Upload Product Form -->
+     Upload Product Form 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT NAME</label>
@@ -865,13 +865,13 @@ body {
       </div>
     </div>
 
-    <!-- Search Input for Products -->
+     Search Input for Products 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-products" placeholder="Search Products..." class="admin-input w-full" onkeyup="filterTable('products-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Products List -->
+     Products List 
     <div class="overflow-x-auto">
       <table class="admin-table w-full">
         <thead>
@@ -897,7 +897,7 @@ body {
   </div>
 </div>
 
-<!-- Payments Management -->
+ Payments Management 
 <div id="payments-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -905,7 +905,7 @@ body {
       PAYMENTS MANAGEMENT
     </h3>
 
-    <!-- Payment Methods Management -->
+     Payment Methods Management 
     <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
       <i class="fas fa-wallet mr-2"></i>
       PAYMENT METHODS
@@ -940,7 +940,7 @@ body {
       </div>
     </div>
 
-    <!-- Search Input for Payment Methods -->
+     Search Input for Payment Methods 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-payment-methods" placeholder="Search Payment Methods..." class="admin-input w-full" onkeyup="filterTable('payment-methods-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
@@ -968,13 +968,13 @@ body {
       </table>
     </div>
 
-    <!-- Pending Orders -->
+     Pending Orders 
     <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
       <i class="fas fa-hourglass-half mr-2"></i>
       PENDING ORDERS
     </h4>
 
-    <!-- Search Input for Pending Orders -->
+     Search Input for Pending Orders 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-pending-orders" placeholder="Search Pending Orders..." class="admin-input w-full" onkeyup="filterTable('pending-orders-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
@@ -1006,7 +1006,7 @@ body {
   </div>
 </div>
 
-<!-- Support Management -->
+ Support Management 
 <div id="support-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -1014,19 +1014,19 @@ body {
       SUPPORT MESSAGES
     </h3>
 
-    <!-- Search Input for Support Messages -->
+     Search Input for Support Messages 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-support-messages" placeholder="Search Support Messages..." class="admin-input w-full" onkeyup="filterSupportMessages(this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Support Messages -->
+     Support Messages 
     <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading messages...</p>
     </div>
 
-    <!-- Reply Form -->
+     Reply Form 
     <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
       <textarea id="admin-support-input" placeholder="Write your support message..." rows="3"
                 class="admin-input flex-1 resize-none"></textarea>
@@ -1041,7 +1041,7 @@ body {
 </div>
 </div>
 
-<!-- News Detail Modal -->
+ News Detail Modal 
 <div id="news-modal" class="modal hidden">
 <div class="modal-content max-w-2xl">
 <div class="flex justify-between items-center mb-4">
@@ -1057,7 +1057,7 @@ body {
 </div>
 </div>
 
-<!-- Confirm Delete Modal -->
+ Confirm Delete Modal 
 <div id="confirm-modal" class="modal hidden">
 <div class="modal-content max-w-md">
 <div class="text-center">
@@ -1078,7 +1078,7 @@ body {
 </div>
 </div>
 
-<!-- Loading Overlay -->
+ Loading Overlay 
 <div id="loading-overlay" class="fixed inset-0 loading-overlay flex items-center justify-center z-50 hidden">
 <div class="admin-card p-8 text-center">
 <div class="loading-spinner mx-auto mb-4" style="width: 40px; height: 40px;"></div>
@@ -1086,7 +1086,7 @@ body {
 </div>
 </div>
 
-<!-- Scripts -->
+ Scripts 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script>
     // Configuration
@@ -1595,7 +1595,7 @@ try {
 
   if (keyError) throw keyError;
 
-  // Clear form
+  -- Clear form
   document.getElementById('key-text').value = '';
 
   showNotification('Key created successfully!', 'success');
@@ -1906,7 +1906,7 @@ try {
     }
   }
 
-  // Insert news
+  -- Insert news
   const { error } = await state.supabase
     .from('news')
     .insert({
@@ -1925,7 +1925,7 @@ try {
 
   if (error) throw error;
 
-  // Clear form
+  -- Clear form
   document.getElementById('admin-news-title').value = '';
   document.getElementById('admin-news-content').value = '';
   document.getElementById('admin-news-media').value = '';
@@ -2158,7 +2158,7 @@ try {
   let iconUrl = null;
   let fileSize = productFile.size;
 
-  // Upload product file
+  -- Upload product file
   const fileExt = productFile.name.split('.').pop();
   const fileName = `products/${Date.now()}_${productFile.name}`;
   const { data: uploadData, error: uploadError } = await state.supabase.storage
@@ -2168,7 +2168,7 @@ try {
   const { data: fileUrlData } = state.supabase.storage.from('products').getPublicUrl(fileName);
   fileUrl = fileUrlData.publicUrl;
 
-  // Upload icon if provided
+  -- Upload icon if provided
   if (iconFile) {
     const iconExt = iconFile.name.split('.').pop();
     const iconName = `product_icons/${Date.now()}_${iconFile.name}`;
@@ -2180,7 +2180,7 @@ try {
     iconUrl = iconUrlData.publicUrl;
   }
 
-  // Insert product
+  -- Insert product
   const { error } = await state.supabase
     .from('products')
     .insert({
@@ -2197,7 +2197,7 @@ try {
 
   if (error) throw error;
 
-  // Clear form
+  -- Clear form
   document.getElementById('product-name').value = '';
   document.getElementById('product-description').value = '';
   document.getElementById('product-file').value = '';
@@ -2365,7 +2365,7 @@ try {
 
   if (error) throw error;
 
-  // Clear form
+  -- Clear form
   document.getElementById('payment-method-name').value = '';
   document.getElementById('payment-account-info').value = '';
   document.getElementById('payment-instructions').value = '';
@@ -2587,7 +2587,7 @@ try {
       `;
     }).join('');
     
-    // Scroll to bottom
+    -- Scroll to bottom
     container.scrollTop = container.scrollHeight;
   } else {
     container.innerHTML = `
@@ -2625,7 +2625,7 @@ try {
       is_read: true,
       priority: 'normal',
       status: 'in_progress',
-      admin_profile_id: state.adminProfileId // Assign admin_profile_id
+      admin_profile_id: state.adminProfileId -- Assign admin_profile_id
     });
 
   if (error) throw error;
@@ -2675,14 +2675,14 @@ document.getElementById('login-section').classList.remove('hidden');
 document.getElementById('admin-key').value = '';
 showNotification('Logged out from Admin account', 'info');
 
-// Unsubscribe from all realtime channels on logout
+-- Unsubscribe from all realtime channels on logout
 if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
 if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
 if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
 if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
 }
 
-// Generic table filtering function
+-- Generic table filtering function
 function filterTable(tableBodyId, query) {
 const tbody = document.getElementById(tableBodyId);
 if (!tbody) return;
@@ -2692,7 +2692,7 @@ const lowerCaseQuery = query.toLowerCase();
 
 for (let i = 0; i < rows.length; i++) {
   const row = rows[i];
-  // Skip loading/no data rows
+  -- Skip loading/no data rows
   if (row.querySelector('.loading-spinner') || row.querySelector('.text-center.text-text-secondary')) {
     continue;
   }
@@ -2706,7 +2706,7 @@ for (let i = 0; i < rows.length; i++) {
 }
 }
 
-// Specific filter for news list (since it's not a table)
+-- Specific filter for news list (since it's not a table)
 function filterNewsList(query) {
 const newsList = document.getElementById('news-list');
 if (!newsList) return;
@@ -2725,12 +2725,12 @@ for (let i = 0; i < newsCards.length; i++) {
 }
 }
 
-// Specific filter for support messages (since it's not a table)
+-- Specific filter for support messages (since it's not a table)
 function filterSupportMessages(query) {
 const supportMessagesContainer = document.getElementById('support-messages');
 if (!supportMessagesContainer) return;
 
-const messages = supportMessagesContainer.querySelectorAll('.mb-4.p-3.rounded-lg.border'); // Select message divs
+const messages = supportMessagesContainer.querySelectorAll('.mb-4.p-3.rounded-lg.border'); -- Select message divs
 const lowerCaseQuery = query.toLowerCase();
 
 for (let i = 0; i < messages.length; i++) {
@@ -2745,19 +2745,19 @@ for (let i = 0; i < messages.length; i++) {
 }
 
 
-// Error handling
+-- Error handling
 window.onerror = function(msg, url, lineNo, columnNo, error) {
 console.error('Global error:', { msg, url, lineNo, columnNo, error });
 showNotification('A system error occurred', 'error');
 return false;
 };
 
-// Mobile optimizations
+-- Mobile optimizations
 if ('ontouchstart' in window) {
 document.addEventListener('touchstart', function() {}, true);
 }
 
-// Prevent zoom on double tap for iOS
+-- Prevent zoom on double tap for iOS
 document.addEventListener('touchend', function(event) {
 const now = (new Date()).getTime();
 if (now - lastTouchEnd <= 300) {
