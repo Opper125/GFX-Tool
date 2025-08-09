@@ -987,7 +987,7 @@ function updateConnectionStatus(status) {
       break;
     case 'connecting':
       statusElement.classList.add('status-connecting');
-      statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CONNECTING...';
+      statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ချိတ်ဆက်နေသည်...';
       break;
   }
 }
@@ -1112,14 +1112,15 @@ async function createProfile() {
   const profilePictureFile = document.getElementById('profile-picture').files[0];
   const createProfileBtn = document.getElementById('create-profile-btn');
   const createProfileText = document.getElementById('create-profile-text');
+  const loginKey = document.getElementById('login-key').value.trim(); // Get the key from the login input
 
   if (!username || !name) {
     showNotification('Please enter Username and Name', 'warning');
     return;
   }
 
-  if (!state.userProfile || !state.userProfile.key_id) {
-    showNotification('Key information missing, please re-login.', 'error');
+  if (!loginKey) { // Ensure the key is present in the input field
+    showNotification('Login key is missing. Please re-enter your key and try again.', 'error');
     return;
   }
 
@@ -1128,10 +1129,22 @@ async function createProfile() {
     createProfileText.textContent = 'CREATING PROFILE...';
     showLoading(true);
 
+    // Fetch key_id directly from the keys table using the loginKey
+    const { data: keyData, error: keyError } = await state.supabase
+      .from('keys')
+      .select('id')
+      .eq('key_text', loginKey)
+      .single();
+
+    if (keyError || !keyData) {
+      throw new Error('Invalid or missing key. Please re-login.');
+    }
+    const keyId = keyData.id;
+
     let profilePictureUrl = null;
     if (profilePictureFile) {
       const fileExt = profilePictureFile.name.split('.').pop();
-      const fileName = `profile_pictures/${state.userProfile.key_id}_${Date.now()}.${fileExt}`;
+      const fileName = `profile_pictures/${keyId}_${Date.now()}.${fileExt}`; // Use fetched keyId
       const { data: uploadData, error: uploadError } = await state.supabase.storage
         .from('profiles')
         .upload(fileName, profilePictureFile);
@@ -1143,7 +1156,7 @@ async function createProfile() {
     const { data, error } = await state.supabase
       .from('profiles')
       .insert({
-        key_id: state.userProfile.key_id,
+        key_id: keyId, // Use the fetched keyId
         username: username,
         name: name,
         profile_picture: profilePictureUrl,
@@ -1154,11 +1167,16 @@ async function createProfile() {
 
     if (error) throw error;
 
-    state.userProfile.profile_id = data.id;
-    state.userProfile.username = data.username;
-    state.userProfile.name = data.name;
-    state.userProfile.profile_picture = data.profile_picture;
-    state.userProfile.is_banned = data.is_banned;
+    // Update state.userProfile with the newly created profile data and the key_id
+    state.userProfile = {
+      ...state.userProfile, // Keep existing key_text, key_is_active from previous login
+      profile_id: data.id,
+      username: data.username,
+      name: data.name,
+      profile_picture: data.profile_picture,
+      is_banned: data.is_banned,
+      key_id: keyId // Ensure key_id is explicitly set here
+    };
 
     showNotification('Profile created successfully!', 'success');
     document.getElementById('profile-creation-section').classList.add('hidden');
@@ -1173,7 +1191,7 @@ async function createProfile() {
     if (error.code === '23505') { // Unique constraint violation
       showNotification('Username already exists, please choose another.', 'error');
     } else {
-      showNotification('Failed to create profile', 'error');
+      showNotification('Failed to create profile: ' + error.message, 'error'); // Show error message
     }
   } finally {
     createProfileBtn.disabled = false;
