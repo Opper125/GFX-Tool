@@ -593,6 +593,11 @@ body {
       <span class="hidden sm:inline">PRODUCTS</span>
       <span class="sm:hidden">Products</span>
     </button>
+    <button onclick="showSection('user-products', this)" class="nav-btn">
+      <i class="fas fa-store mr-1"></i>
+      <span class="hidden sm:inline">USER PRODUCTS</span>
+      <span class="sm:hidden">User Products</span>
+    </button>
     <button onclick="showSection('chat', this)" class="nav-btn">
       <i class="fas fa-comments mr-1"></i>
       <span class="hidden sm:inline">CHAT</span>
@@ -659,7 +664,7 @@ body {
     </div>
   </div>
 
-  <!-- Products Section -->
+  <!-- Products Section (Admin Uploaded) -->
   <div id="products-section" class="app-section hidden">
     <div class="app-card p-4 md:p-8">
       <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -669,6 +674,87 @@ body {
       <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
         <p class="text-center text-text-secondary col-span-full">Loading products...</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- User Products Section (Seller/Buyer) -->
+  <div id="user-products-section" class="app-section hidden">
+    <div class="app-card p-4 md:p-8">
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-store mr-3"></i>
+        USER MARKETPLACE
+      </h3>
+
+      <!-- Seller Post Form -->
+      <div id="seller-post-form-container" class="mb-8">
+        <h4 class="text-md font-orbitron font-bold mb-4 text-accent-green flex items-center">
+          <i class="fas fa-plus-circle mr-2"></i>
+          SELL YOUR PRODUCT
+        </h4>
+        <div id="kyc-warning" class="bg-red-600 bg-opacity-20 border border-red-500 rounded-lg p-4 mb-4 hidden">
+          <p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> You need to complete KYC verification to sell products. Please go to 'MI' section to submit your KYC.</p>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT NAME</label>
+            <input type="text" id="seller-product-name" placeholder="Product Name" 
+                   class="app-input w-full">
+          </div>
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium mb-2 text-text-secondary">DESCRIPTION</label>
+            <textarea id="seller-product-description" placeholder="Product Description..." rows="3"
+                      class="app-input w-full resize-none"></textarea>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">CONTACT SOCIAL PLATFORM NAME</label>
+            <input type="text" id="seller-social-name" placeholder="Telegram / Facebook" 
+                   class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">CONTACT SOCIAL LINK</label>
+            <input type="url" id="seller-social-link" placeholder="https://t.me/yourprofile" 
+                   class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT IMAGES (Max 5MB per image)</label>
+            <input type="file" id="seller-product-images" accept="image/*" multiple
+                   class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PRICE (MMK)</label>
+            <input type="number" id="seller-product-price" placeholder="0.00" min="0" step="0.01"
+                   class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PAYMENT METHOD ICON</label>
+            <input type="file" id="seller-payment-icon" accept="image/*" 
+                   class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PAYMENT ACCOUNT INFO (Phone / Address)</label>
+            <input type="text" id="seller-payment-info" placeholder="09xxxxxxxxx / Bank Account No." 
+                   class="app-input w-full">
+          </div>
+          <div class="md:col-span-2 flex items-end">
+            <button onclick="postUserProduct()" 
+                    id="post-user-product-btn"
+                    class="myanmar-btn w-full flex items-center justify-center space-x-2">
+              <i class="fas fa-upload"></i>
+              <span>POST PRODUCT</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- User Products List (for buying) -->
+      <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple flex items-center">
+        <i class="fas fa-shopping-bag mr-2"></i>
+        AVAILABLE USER PRODUCTS
+      </h4>
+      <div id="user-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
+        <p class="text-center text-text-secondary col-span-full">Loading user products...</p>
       </div>
     </div>
   </div>
@@ -766,6 +852,151 @@ body {
           </div>
         </div>
       </div>
+
+      <!-- KYC Section -->
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-id-card mr-3"></i>
+        KYC VERIFICATION
+      </h3>
+      <div id="kyc-status-display" class="mb-4">
+        <p class="text-text-secondary">KYC Status: <span id="kyc-status-text" class="font-semibold">Loading...</span></p>
+        <p id="kyc-admin-notes" class="text-sm text-text-secondary hidden"></p>
+      </div>
+      <div id="kyc-form-container" class="space-y-4 hidden">
+        <h4 class="text-md font-orbitron font-bold mb-4 text-accent-green">SUBMIT KYC</h4>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">FULL NAME</label>
+          <input type="text" id="kyc-full-name" placeholder="Your Full Name" class="app-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">DATE OF BIRTH</label>
+          <input type="date" id="kyc-dob" class="app-input w-full">
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">ID TYPE</label>
+          <select id="kyc-id-type" class="app-input w-full" onchange="toggleKycIdFields()">
+            <option value="">Select ID Type</option>
+            <option value="passport">Passport</option>
+            <option value="nrc">NRC</option>
+            <option value="driving_license">Driving License</option>
+          </select>
+        </div>
+        <div id="kyc-passport-fields" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PASSPORT NUMBER</label>
+            <input type="text" id="kyc-passport-number" placeholder="Passport Number" class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PASSPORT EXPIRY DATE</label>
+            <input type="date" id="kyc-passport-expiry" class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">PASSPORT PHOTO (Max 5MB)</label>
+            <input type="file" id="kyc-passport-photo" accept="image/*" class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">FACE VIDEO (10-20s, Max 10MB)</label>
+            <input type="file" id="kyc-face-video" accept="video/mp4,video/quicktime,video/webm" class="app-input w-full">
+          </div>
+        </div>
+        <div id="kyc-nrc-driving-fields" class="space-y-4 hidden">
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">NRC / DRIVING LICENSE NUMBER</label>
+            <input type="text" id="kyc-nrc-driving-number" placeholder="NRC / Driving License Number" class="app-input w-full">
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">ID PHOTO (Front & Back, Max 5MB each)</label>
+            <input type="file" id="kyc-id-photo" accept="image/*" multiple class="app-input w-full">
+          </div>
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">ADDRESS</label>
+          <textarea id="kyc-address" placeholder="Your Full Address" rows="3" class="app-input w-full resize-none"></textarea>
+        </div>
+        <button onclick="submitKyc()" class="myanmar-btn w-full flex items-center justify-center space-x-2">
+          <i class="fas fa-paper-plane"></i>
+          <span>SUBMIT KYC</span>
+        </button>
+      </div>
+
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-shopping-bag mr-3"></i>
+        MY PURCHASES (Admin Products)
+      </h3>
+      <div id="my-purchases-list" class="overflow-x-auto">
+        <table class="app-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">PRODUCT</th>
+              <th class="text-left">AMOUNT</th>
+              <th class="text-left">ORDER DATE</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">DOWNLOAD</th>
+            </tr>
+          </thead>
+          <tbody id="purchased-products-table-body">
+            <tr>
+              <td colspan="5" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading purchases...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-handshake mr-3"></i>
+        MY SELLER POSTS
+      </h3>
+      <div id="my-seller-posts-list" class="overflow-x-auto">
+        <table class="app-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">PRODUCT NAME</th>
+              <th class="text-left">PRICE</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="seller-posts-table-body">
+            <tr>
+              <td colspan="4" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading seller posts...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
+        <i class="fas fa-receipt mr-3"></i>
+        MY BUYER ORDERS (on my products)
+      </h3>
+      <div id="my-buyer-orders-list" class="overflow-x-auto">
+        <table class="app-table w-full">
+          <thead>
+            <tr>
+              <th class="text-left">BUYER</th>
+              <th class="text-left">PRODUCT</th>
+              <th class="text-left">AMOUNT</th>
+              <th class="text-left">RECEIPT</th>
+              <th class="text-left">STATUS</th>
+              <th class="text-left">ACTIONS</th>
+            </tr>
+          </thead>
+          <tbody id="buyer-orders-table-body">
+            <tr>
+              <td colspan="6" class="text-center text-text-secondary py-8">
+                <div class="loading-spinner mx-auto mb-2"></div>
+                Loading buyer orders...
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 
@@ -804,6 +1035,22 @@ body {
 </div>
 </div>
 
+<!-- User Product Detail Modal -->
+<div id="user-product-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">USER PRODUCT DETAILS</h2>
+      <button onclick="closeUserProductModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="user-product-modal-content">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
 <!-- Payment Modal -->
 <div id="payment-modal" class="modal hidden">
 <div class="modal-content max-w-md">
@@ -818,6 +1065,47 @@ body {
   </div>
 </div>
 </div>
+
+<!-- User Product Payment Modal -->
+<div id="user-product-payment-modal" class="modal hidden">
+  <div class="modal-content max-w-md">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">MAKE PAYMENT FOR USER PRODUCT</h2>
+      <button onclick="closeUserProductPaymentModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="user-product-payment-modal-content" class="space-y-4">
+      <!-- Payment method selection will go here -->
+    </div>
+  </div>
+</div>
+
+<!-- Private Chat Modal -->
+<div id="private-chat-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">PRIVATE CHAT WITH <span id="chat-partner-username"></span></h2>
+      <button onclick="closePrivateChatModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="private-chat-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading messages...</p>
+    </div>
+    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+      <textarea id="private-chat-input" placeholder="Type your message..." rows="3"
+                class="app-input flex-1 resize-none"></textarea>
+      <button onclick="sendPrivateChatMessage()" 
+              class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
+        <i class="fas fa-paper-plane"></i>
+        <span>SEND</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 
 <!-- Confirm Delete Modal -->
 <div id="confirm-modal" class="modal hidden">
@@ -856,7 +1144,10 @@ const CONFIG = {
   SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // သင့် Supabase URL ကို ထည့်ပါ
   SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
   MAX_RETRY_ATTEMPTS: 3,
-  RETRY_DELAY: 2000
+  RETRY_DELAY: 2000,
+  MAX_IMAGE_SIZE_MB: 5, // Max image size for user uploads (e.g., product images, KYC photos)
+  MAX_VIDEO_SIZE_MB: 10, // Max video size for KYC face video
+  CHAT_MESSAGE_LIFESPAN_HOURS: 24 // Chat messages will be automatically deleted after this period
 };
 
 // State
@@ -872,9 +1163,17 @@ let state = {
   chatRealtime: null,
   supportRealtime: null,
   productsRealtime: null,
-  ordersRealtime: null,
-  selectedProductForPurchase: null,
-  selectedPaymentMethod: null,
+  ordersRealtime: null, // For admin-uploaded products
+  userProductsRealtime: null, // For user-uploaded products
+  userProductOrdersRealtime: null, // For orders on user-uploaded products
+  kycRealtime: null,
+  selectedProductForPurchase: null, // For admin-uploaded products
+  selectedPaymentMethod: null, // For admin-uploaded products
+  selectedUserProductForPurchase: null, // For user-uploaded products
+  selectedUserProductPaymentMethod: null, // For user-uploaded products
+  privateChatPartnerId: null,
+  privateChatConversationId: null,
+  privateChatRealtime: null,
 };
 
 // Utility Functions
@@ -900,6 +1199,32 @@ const utils = {
       localStorage.setItem('device_id', deviceId);
     }
     return deviceId;
+  },
+  validateFileSize(file, maxMb) {
+    const maxSize = maxMb * 1024 * 1024; // Convert MB to bytes
+    if (file.size > maxSize) {
+      showNotification(`File size exceeds ${maxMb}MB limit.`, 'error');
+      return false;
+    }
+    return true;
+  },
+  validateVideoDuration(file, minSeconds, maxSeconds, callback) {
+    const video = document.createElement('video');
+    video.preload = 'metadata';
+    video.onloadedmetadata = function() {
+      window.URL.revokeObjectURL(video.src);
+      if (video.duration < minSeconds || video.duration > maxSeconds) {
+        showNotification(`Video duration must be between ${minSeconds} and ${maxSeconds} seconds.`, 'error');
+        callback(false);
+      } else {
+        callback(true);
+      }
+    };
+    video.onerror = function() {
+      showNotification('Could not load video metadata. Please try another file.', 'error');
+      callback(false);
+    };
+    video.src = URL.createObjectURL(file);
   }
 };
 
@@ -1143,6 +1468,12 @@ async function createProfile() {
 
     let profilePictureUrl = null;
     if (profilePictureFile) {
+      if (!utils.validateFileSize(profilePictureFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
+        createProfileBtn.disabled = false;
+        createProfileText.textContent = 'CREATE PROFILE';
+        showLoading(false);
+        return;
+      }
       const fileExt = profilePictureFile.name.split('.').pop();
       const fileName = `profile_pictures/${keyId}_${Date.now()}.${fileExt}`; // Use fetched keyId
       const { data: uploadData, error: uploadError } = await state.supabase.storage
@@ -1160,7 +1491,9 @@ async function createProfile() {
         username: username,
         name: name,
         profile_picture: profilePictureUrl,
-        is_banned: false
+        is_banned: false,
+        kyc_status: 'not_submitted', // Default KYC status
+        is_seller_banned: false // Default seller ban status
       })
       .select()
       .single();
@@ -1175,7 +1508,9 @@ async function createProfile() {
       name: data.name,
       profile_picture: data.profile_picture,
       is_banned: data.is_banned,
-      key_id: keyId // Ensure key_id is explicitly set here
+      key_id: keyId, // Ensure key_id is explicitly set here
+      kyc_status: data.kyc_status,
+      is_seller_banned: data.is_seller_banned
     };
 
     showNotification('Profile created successfully!', 'success');
@@ -1203,13 +1538,13 @@ async function createProfile() {
 async function loadDashboardData() {
   try {
     // Load stats
-    const [productsResult, downloadsResult] = await Promise.all([
+    const [productsResult, ordersResult] = await Promise.all([
       state.supabase.from('products').select('id', { count: 'exact' }).eq('is_active', true),
       state.supabase.from('orders').select('id', { count: 'exact' }).eq('status', 'approved')
     ]);
 
     document.getElementById('available-products').textContent = productsResult.count || 0;
-    document.getElementById('total-downloads').textContent = downloadsResult.count || 0;
+    document.getElementById('total-downloads').textContent = ordersResult.count || 0;
 
   } catch (error) {
     console.error('Error loading dashboard data:', error);
@@ -1224,6 +1559,11 @@ function setupRealtimeSubscriptions() {
   if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
   if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
   if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+  if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
+  if (state.userProductOrdersRealtime) state.supabase.removeChannel(state.userProductOrdersRealtime);
+  if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
+  if (state.privateChatRealtime) state.supabase.removeChannel(state.privateChatRealtime);
+
 
   // News realtime updates
   state.newsRealtime = state.supabase
@@ -1265,7 +1605,7 @@ function setupRealtimeSubscriptions() {
     )
     .subscribe();
 
-  // Products realtime
+  // Products realtime (Admin Uploaded)
   state.productsRealtime = state.supabase
     .channel('products_changes')
     .on('postgres_changes', 
@@ -1278,7 +1618,7 @@ function setupRealtimeSubscriptions() {
     )
     .subscribe();
 
-  // Orders realtime (for user's own orders)
+  // Orders realtime (for user's own orders on admin products)
   state.ordersRealtime = state.supabase
     .channel('orders_changes')
     .on('postgres_changes', 
@@ -1287,6 +1627,52 @@ function setupRealtimeSubscriptions() {
         // If user is on 'Mi' section, refresh their order history
         if (state.currentSection === 'mi') {
           loadUserOrders();
+        }
+        if (state.currentSection === 'products') {
+          loadProductsData(); // To update purchase status
+        }
+      }
+    )
+    .subscribe();
+
+  // User Products realtime (for user-uploaded products)
+  state.userProductsRealtime = state.supabase
+    .channel('user_products_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'user_products' }, 
+      (payload) => {
+        if (state.currentSection === 'user-products') {
+          loadUserProductsForBuying();
+        }
+        if (state.currentSection === 'mi') {
+          loadMySellerPosts();
+        }
+      }
+    )
+    .subscribe();
+
+  // User Product Orders realtime (for orders on user-uploaded products)
+  state.userProductOrdersRealtime = state.supabase
+    .channel('user_product_orders_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'user_product_orders', filter: `buyer_profile_id=eq.${state.userProfile.profile_id}` }, 
+      (payload) => {
+        if (state.currentSection === 'mi') {
+          loadMyBuyerOrders(); // For seller to see incoming orders
+          loadUserProductPurchaseHistory(); // For buyer to see their purchase status
+        }
+      }
+    )
+    .subscribe();
+
+  // KYC Submissions realtime
+  state.kycRealtime = state.supabase
+    .channel('kyc_submissions_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'kyc_submissions', filter: `profile_id=eq.${state.userProfile.profile_id}` }, 
+      (payload) => {
+        if (state.currentSection === 'mi') {
+          loadMiProfile(); // Reload profile to update KYC status
         }
       }
     )
@@ -1328,6 +1714,10 @@ function showSection(section, buttonElement) {
     case 'products':
       loadProductsData();
       break;
+    case 'user-products':
+      checkSellerEligibility();
+      loadUserProductsForBuying();
+      break;
     case 'chat':
       loadChatMessages();
       break;
@@ -1339,6 +1729,9 @@ function showSection(section, buttonElement) {
       break;
     case 'mi':
       loadMiProfile();
+      loadUserOrders(); // Load user's purchased admin products
+      loadMySellerPosts(); // Load user's own seller posts
+      loadMyBuyerOrders(); // Load orders on user's own products
       break;
   }
 }
@@ -1358,6 +1751,7 @@ async function loadNewsData() {
         profiles(username, name, profile_picture),
         admin_profiles(username, name, profile_picture)
       `)
+      .eq('is_published', true) // Only show published news
       .order('created_at', { ascending: false });
 
     if (error) throw error;
@@ -1577,14 +1971,53 @@ async function loadProductsData() {
       productsList.innerHTML = ''; // Clear loading
       for (const product of products) {
         let isPurchased = false;
+        let orderStatus = null;
         if (state.userProfile && state.userProfile.profile_id) { // Only check if user is logged in and has a profile
           const { data: purchasedData, error: purchasedError } = await state.supabase
-            .from('purchased_products')
-            .select('id')
+            .from('orders')
+            .select('status')
             .eq('profile_id', state.userProfile.profile_id)
             .eq('product_id', product.id)
+            .order('ordered_at', { ascending: false }) // Get the latest order status
             .limit(1);
-          isPurchased = !purchasedError && purchasedData && purchasedData.length > 0;
+          
+          if (!purchasedError && purchasedData && purchasedData.length > 0) {
+            orderStatus = purchasedData[0].status;
+            isPurchased = (orderStatus === 'approved');
+          }
+        }
+
+        let actionButtonHtml = '';
+        if (isPurchased) {
+          actionButtonHtml = `
+            <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-auto">
+              <i class="fas fa-download mr-2"></i> DOWNLOAD
+            </a>
+          `;
+        } else if (orderStatus === 'pending') {
+          actionButtonHtml = `
+            <button class="myanmar-btn w-full mt-auto bg-yellow-600 text-black cursor-not-allowed" disabled>
+              <i class="fas fa-hourglass-half mr-2"></i> PENDING APPROVAL
+            </button>
+          `;
+        } else if (orderStatus === 'rejected') {
+          actionButtonHtml = `
+            <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto btn-danger">
+              <i class="fas fa-redo mr-2"></i> RE-PURCHASE (REJECTED)
+            </button>
+          `;
+        } else if (product.price > 0) {
+          actionButtonHtml = `
+            <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto">
+              <i class="fas fa-shopping-cart mr-2"></i> PURCHASE
+            </button>
+          `;
+        } else {
+          actionButtonHtml = `
+            <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-auto">
+              <i class="fas fa-download mr-2"></i> DOWNLOAD
+            </a>
+          `;
         }
 
         productsList.innerHTML += `
@@ -1593,15 +2026,7 @@ async function loadProductsData() {
             <h3 class="text-lg font-semibold text-text-primary mb-1">${product.name}</h3>
             <p class="text-text-secondary text-sm mb-2">${product.description || 'No description'}</p>
             ${product.price > 0 ? `<p class="text-xl font-bold text-accent-green mb-3">${product.price} MMK</p>` : '<p class="text-xl font-bold text-accent-green mb-3">FREE</p>'}
-            ${product.price > 0 && !isPurchased ? `
-              <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto">
-                <i class="fas fa-shopping-cart mr-2"></i> PURCHASE
-              </button>
-            ` : `
-              <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-auto">
-                <i class="fas fa-download mr-2"></i> DOWNLOAD
-              </a>
-            `}
+            ${actionButtonHtml}
           </div>
         `;
       }
@@ -1633,7 +2058,7 @@ async function initiatePurchase(productId, productName, productPrice) {
     </div>
 
     <div class="space-y-3">
-      <label class="block text-sm font-medium text-text-secondary">UPLOAD RECEIPT IMAGE</label>
+      <label class="block text-sm font-medium mb-2 text-text-secondary">UPLOAD RECEIPT IMAGE</label>
       <input type="file" id="receipt-upload" accept="image/*" class="app-input w-full">
       <button onclick="submitPurchase()" class="myanmar-btn w-full">
         <i class="fas fa-paper-plane mr-2"></i>
@@ -1698,6 +2123,9 @@ async function submitPurchase() {
     showNotification('Please upload a receipt image', 'warning');
     return;
   }
+  if (!utils.validateFileSize(receiptFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
+    return;
+  }
 
   showNotification('Confirming payment...', 'info');
   showLoading(true);
@@ -1743,6 +2171,427 @@ async function submitPurchase() {
     showLoading(false);
   }
 }
+
+async function checkSellerEligibility() {
+  const sellerPostFormContainer = document.getElementById('seller-post-form-container');
+  const kycWarning = document.getElementById('kyc-warning');
+  const postUserProductBtn = document.getElementById('post-user-product-btn');
+
+  if (!state.userProfile) {
+    sellerPostFormContainer.classList.add('hidden');
+    kycWarning.classList.remove('hidden');
+    kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> Please login and create a profile to sell products.</p>`;
+    return;
+  }
+
+  if (state.userProfile.is_banned || state.userProfile.is_seller_banned) {
+    sellerPostFormContainer.classList.add('hidden');
+    kycWarning.classList.remove('hidden');
+    kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> Your account is banned from selling products.</p>`;
+    return;
+  }
+
+  try {
+    const { data: kycData, error: kycError } = await state.supabase
+      .from('kyc_submissions')
+      .select('status')
+      .eq('profile_id', state.userProfile.profile_id)
+      .single();
+
+    if (kycError && kycError.code !== 'PGRST116') { // PGRST116 means no rows found
+      throw kycError;
+    }
+
+    if (kycData && kycData.status === 'approved') {
+      sellerPostFormContainer.classList.remove('hidden');
+      kycWarning.classList.add('hidden');
+      postUserProductBtn.disabled = false;
+    } else {
+      sellerPostFormContainer.classList.add('hidden');
+      kycWarning.classList.remove('hidden');
+      kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> You need to complete KYC verification to sell products. Please go to 'MI' section to submit your KYC.</p>`;
+      postUserProductBtn.disabled = true;
+    }
+  } catch (error) {
+    console.error('Error checking KYC status:', error);
+    showNotification('Failed to check KYC status.', 'error');
+    sellerPostFormContainer.classList.add('hidden');
+    kycWarning.classList.remove('hidden');
+    kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> Error checking KYC status. Please try again later.</p>`;
+    postUserProductBtn.disabled = true;
+  }
+}
+
+async function postUserProduct() {
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    showNotification('Please login to post products.', 'warning');
+    return;
+  }
+  if (state.userProfile.kyc_status !== 'approved' || state.userProfile.is_seller_banned) {
+    showNotification('You are not authorized to sell products. Please complete KYC or check your account status.', 'error');
+    return;
+  }
+
+  const name = document.getElementById('seller-product-name').value.trim();
+  const description = document.getElementById('seller-product-description').value.trim();
+  const socialName = document.getElementById('seller-social-name').value.trim();
+  const socialLink = document.getElementById('seller-social-link').value.trim();
+  const images = document.getElementById('seller-product-images').files;
+  const price = parseFloat(document.getElementById('seller-product-price').value);
+  const paymentIcon = document.getElementById('seller-payment-icon').files[0];
+  const paymentInfo = document.getElementById('seller-payment-info').value.trim();
+
+  if (!name || !description || !socialName || !socialLink || images.length === 0 || isNaN(price) || !paymentIcon || !paymentInfo) {
+    showNotification('Please fill all required fields for your product.', 'warning');
+    return;
+  }
+
+  for (let i = 0; i < images.length; i++) {
+    if (!utils.validateFileSize(images[i], CONFIG.MAX_IMAGE_SIZE_MB)) return;
+  }
+  if (!utils.validateFileSize(paymentIcon, CONFIG.MAX_IMAGE_SIZE_MB)) return;
+
+  showLoading(true);
+  try {
+    let imageUrls = [];
+    for (let i = 0; i < images.length; i++) {
+      const file = images[i];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `user_products/${state.userProfile.profile_id}_${Date.now()}_${i}.${fileExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('user_products')
+        .upload(fileName, file);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('user_products').getPublicUrl(fileName);
+      imageUrls.push({ url: urlData.publicUrl, size: file.size, type: file.type });
+    }
+
+    let paymentIconUrl = null;
+    const iconExt = paymentIcon.name.split('.').pop();
+    const iconName = `user_payment_icons/${state.userProfile.profile_id}_${Date.now()}.${iconExt}`;
+    const { data: iconUploadData, error: iconUploadError } = await state.supabase.storage
+      .from('user_products')
+      .upload(iconName, paymentIcon);
+    if (iconUploadError) throw iconUploadError;
+    const { data: iconUrlData } = state.supabase.storage.from('user_products').getPublicUrl(iconName);
+    paymentIconUrl = iconUrlData.publicUrl;
+
+    const { error } = await state.supabase
+      .from('user_products')
+      .insert({
+        profile_id: state.userProfile.profile_id,
+        name,
+        description,
+        social_platform_name: socialName,
+        social_platform_link: socialLink,
+        image_urls: imageUrls,
+        price,
+        payment_method_icon_url: paymentIconUrl,
+        payment_account_info: paymentInfo,
+        status: 'pending' // Requires admin approval
+      });
+
+    if (error) throw error;
+
+    showNotification('Product submitted for approval!', 'success');
+    // Clear form
+    document.getElementById('seller-product-name').value = '';
+    document.getElementById('seller-product-description').value = '';
+    document.getElementById('seller-social-name').value = '';
+    document.getElementById('seller-social-link').value = '';
+    document.getElementById('seller-product-images').value = '';
+    document.getElementById('seller-product-price').value = '';
+    document.getElementById('seller-payment-icon').value = '';
+    document.getElementById('seller-payment-info').value = '';
+
+    loadMySellerPosts(); // Refresh seller's own posts
+    loadUserProductsForBuying(); // Refresh products for buying (will not show pending)
+
+  } catch (error) {
+    console.error('Error posting user product:', error);
+    showNotification('Failed to post product: ' + error.message, 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function loadUserProductsForBuying() {
+  const userProductsList = document.getElementById('user-products-list');
+  userProductsList.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
+    <p class="text-center text-text-secondary col-span-full">Loading user products...</p>
+  `;
+
+  try {
+    const { data: products, error } = await state.supabase
+      .from('user_products')
+      .select(`
+        *,
+        profiles(username, name, profile_picture, is_banned, is_seller_banned)
+      `)
+      .eq('status', 'approved') // Only show approved products
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (products && products.length > 0) {
+      userProductsList.innerHTML = ''; // Clear loading
+      for (const product of products) {
+        const seller = product.profiles;
+        const sellerName = seller?.name || 'Unknown Seller';
+        const sellerUsername = seller?.username || 'unknown';
+        const sellerAvatar = seller?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        // Check if current user is the seller or if seller is banned
+        const isCurrentUserSeller = state.userProfile && state.userProfile.profile_id === product.profile_id;
+        const isSellerBanned = seller?.is_banned || seller?.is_seller_banned;
+
+        let actionButtonHtml = '';
+        if (isCurrentUserSeller) {
+          actionButtonHtml = `
+            <button class="myanmar-btn w-full mt-auto bg-gray-600 text-white cursor-not-allowed" disabled>
+              <i class="fas fa-user-tag mr-2"></i> YOUR PRODUCT
+            </button>
+          `;
+        } else if (isSellerBanned) {
+          actionButtonHtml = `
+            <button class="myanmar-btn w-full mt-auto btn-danger cursor-not-allowed" disabled>
+              <i class="fas fa-ban mr-2"></i> SELLER BANNED
+            </button>
+          `;
+        } else {
+          actionButtonHtml = `
+            <button onclick="initiateUserProductPurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto">
+              <i class="fas fa-shopping-cart mr-2"></i> BUY NOW
+            </button>
+          `;
+        }
+
+        userProductsList.innerHTML += `
+          <div class="app-card p-4 text-center flex flex-col justify-between items-center">
+            <div class="flex items-center mb-3">
+              <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2">
+              <span class="text-sm font-semibold text-text-primary">@${sellerUsername}</span>
+              ${!isCurrentUserSeller ? `<button onclick="openPrivateChat('${seller.id}', '${sellerUsername}')" class="ml-2 myanmar-btn btn-small"><i class="fas fa-comments"></i></button>` : ''}
+            </div>
+            <img src="${product.image_urls[0]?.url || '/placeholder.svg?height=64&width=64'}" alt="${product.name} icon" class="w-16 h-16 object-contain mb-3">
+            <h3 class="text-lg font-semibold text-text-primary mb-1">${product.name}</h3>
+            <p class="text-text-secondary text-sm mb-2">${product.description.substring(0, 50)}${product.description.length > 50 ? '...' : ''}</p>
+            <p class="text-xl font-bold text-accent-green mb-3">${product.price} MMK</p>
+            <div class="flex gap-2 w-full">
+              <button onclick="viewUserProduct('${product.id}')" class="myanmar-btn btn-small flex-1">
+                <i class="fas fa-eye mr-2"></i> VIEW DETAILS
+              </button>
+              ${actionButtonHtml}
+            </div>
+          </div>
+        `;
+      }
+    } else {
+      userProductsList.innerHTML = '<p class="text-center col-span-full text-text-secondary">No User Products Available</p>';
+    }
+  } catch (error) {
+    console.error('Error loading user products:', error);
+    userProductsList.innerHTML = '<p class="text-center col-span-full text-accent-red">Failed to retrieve User Products</p>';
+  }
+}
+
+async function viewUserProduct(productId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('user_products')
+      .select(`
+        *,
+        profiles(username, name, profile_picture)
+      `)
+      .eq('id', productId)
+      .single();
+
+    if (error) throw error;
+
+    const seller = data.profiles;
+    const sellerName = seller?.name || 'Unknown Seller';
+    const sellerUsername = seller?.username || 'unknown';
+    const sellerAvatar = seller?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    let imagesHtml = '';
+    if (data.image_urls && data.image_urls.length > 0) {
+      imagesHtml = data.image_urls.map(img => `<img src="${img.url}" class="w-full rounded-lg mb-3" alt="Product image">`).join('');
+    }
+
+    document.getElementById('user-product-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="${sellerAvatar}" 
+               alt="Seller" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <h4 class="font-semibold text-text-primary">${sellerName}</h4>
+            <p class="text-sm text-text-secondary">@${sellerUsername}</p>
+            ${state.userProfile && state.userProfile.profile_id !== seller.id ? `<button onclick="openPrivateChat('${seller.id}', '${sellerUsername}')" class="myanmar-btn btn-small mt-2"><i class="fas fa-comments mr-1"></i> Chat with Seller</button>` : ''}
+          </div>
+        </div>
+        
+        <h3 class="text-xl font-bold text-accent-purple">${data.name}</h3>
+        
+        ${imagesHtml}
+        
+        <div class="prose prose-invert max-w-none">
+          <p class="text-text-secondary whitespace-pre-wrap">${data.description}</p>
+        </div>
+
+        <p class="text-xl font-bold text-accent-green mb-3">Price: ${data.price} MMK</p>
+        
+        <div class="text-sm text-text-secondary pt-4 border-t border-border-color">
+          <p><i class="fas fa-phone mr-1"></i> Contact: ${data.payment_account_info}</p>
+          <p><i class="fas fa-link mr-1"></i> Social: <a href="${data.social_platform_link}" target="_blank" class="text-accent-purple hover:underline">${data.social_platform_name}</a></p>
+          <p><i class="fas fa-calendar mr-1"></i> Posted: ${new Date(data.created_at).toLocaleDateString('en-US')}</p>
+        </div>
+
+        ${state.userProfile && state.userProfile.profile_id !== seller.id && !seller.is_banned && !seller.is_seller_banned ? `
+          <button onclick="initiateUserProductPurchase('${data.id}', '${data.name}', ${data.price})" class="myanmar-btn w-full mt-4">
+            <i class="fas fa-shopping-cart mr-2"></i> BUY NOW
+          </button>
+        ` : ''}
+      </div>
+    `;
+
+    document.getElementById('user-product-modal').classList.remove('hidden');
+
+  } catch (error) {
+    console.error('Error viewing user product:', error);
+    showNotification('Failed to view User Product', 'error');
+  }
+}
+
+function closeUserProductModal() {
+  document.getElementById('user-product-modal').classList.add('hidden');
+}
+
+async function initiateUserProductPurchase(productId, productName, productPrice) {
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    showNotification('Please create a profile to purchase products.', 'info');
+    return;
+  }
+  state.selectedUserProductForPurchase = { id: productId, name: productName, price: productPrice };
+  
+  const paymentModalContent = document.getElementById('user-product-payment-modal-content');
+  paymentModalContent.innerHTML = `
+    <h3 class="text-xl font-semibold text-text-primary mb-2">${productName}</h3>
+    <p class="text-text-secondary mb-4">Price: <span class="text-accent-green font-bold">${productPrice} MMK</span></p>
+    
+    <h4 class="text-lg font-semibold text-accent-purple mb-3">SELLER'S PAYMENT INFO</h4>
+    <div id="seller-payment-info-display" class="space-y-3 mb-4">
+      <div class="loading-spinner mx-auto mb-2"></div>
+      <p class="text-center text-text-secondary">Loading seller's payment info...</p>
+    </div>
+
+    <div class="space-y-3">
+      <label class="block text-sm font-medium mb-2 text-text-secondary">UPLOAD RECEIPT IMAGE (Max 5MB)</label>
+      <input type="file" id="user-product-receipt-upload" accept="image/*" class="app-input w-full">
+      <button onclick="submitUserProductPurchase()" class="myanmar-btn w-full">
+        <i class="fas fa-paper-plane mr-2"></i>
+        CONFIRM PAYMENT
+      </button>
+    </div>
+    <p class="text-sm text-text-secondary mt-4">
+      <i class="fas fa-info-circle mr-1"></i>
+      After confirming payment, Seller will review and approve your order.
+    </p>
+  `;
+
+  document.getElementById('user-product-payment-modal').classList.remove('hidden');
+  
+  const sellerPaymentInfoDisplay = document.getElementById('seller-payment-info-display');
+  try {
+    const { data: productData, error: productError } = await state.supabase
+      .from('user_products')
+      .select('payment_method_icon_url, payment_account_info, social_platform_name, social_platform_link')
+      .eq('id', productId)
+      .single();
+
+    if (productError) throw productError;
+
+    sellerPaymentInfoDisplay.innerHTML = `
+      <div class="flex items-center space-x-3 p-3 bg-secondary-bg rounded-lg border border-border-color">
+        <img src="${productData.payment_method_icon_url || '/placeholder.svg?height=40&width=40'}" class="w-10 h-10 object-contain rounded-md" alt="Payment Icon">
+        <div>
+          <p class="font-semibold text-text-primary">Account: ${productData.payment_account_info}</p>
+          <p class="text-text-secondary text-sm">Contact: <a href="${productData.social_platform_link}" target="_blank" class="text-accent-purple hover:underline">${productData.social_platform_name}</a></p>
+        </div>
+      </div>
+    `;
+  } catch (error) {
+    console.error('Error loading seller payment info:', error);
+    showNotification('Failed to retrieve Seller Payment Info', 'error');
+    sellerPaymentInfoDisplay.innerHTML = '<p class="text-center text-accent-red">Failed to retrieve Seller Payment Info</p>';
+  }
+}
+
+function closeUserProductPaymentModal() {
+  document.getElementById('user-product-payment-modal').classList.add('hidden');
+  state.selectedUserProductForPurchase = null;
+  document.getElementById('user-product-receipt-upload').value = '';
+}
+
+async function submitUserProductPurchase() {
+  if (!state.selectedUserProductForPurchase) {
+    showNotification('Product information missing.', 'warning');
+    return;
+  }
+  const receiptFile = document.getElementById('user-product-receipt-upload').files[0];
+  if (!receiptFile) {
+    showNotification('Please upload a receipt image', 'warning');
+    return;
+  }
+  if (!utils.validateFileSize(receiptFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
+    return;
+  }
+
+  showNotification('Confirming purchase...', 'info');
+  showLoading(true);
+
+  try {
+    // Upload receipt image
+    const fileExt = receiptFile.name.split('.').pop();
+    const fileName = `user_product_receipts/${state.userProfile.profile_id}_${state.selectedUserProductForPurchase.id}_${Date.now()}.${fileExt}`;
+    
+    const { data: uploadData, error: uploadError } = await state.supabase.storage
+      .from('user_product_receipts')
+      .upload(fileName, receiptFile);
+      
+    if (uploadError) throw uploadError;
+    
+    const { data: urlData } = state.supabase.storage
+      .from('user_product_receipts')
+      .getPublicUrl(fileName);
+      
+    const receiptUrl = urlData.publicUrl;
+
+    // Create order
+    const { error: orderError } = await state.supabase
+      .from('user_product_orders')
+      .insert({
+        buyer_profile_id: state.userProfile.profile_id,
+        seller_product_id: state.selectedUserProductForPurchase.id,
+        amount: state.selectedUserProductForPurchase.price,
+        receipt_url: receiptUrl,
+        status: 'pending' // Seller needs to approve this
+      });
+
+    if (orderError) throw orderError;
+
+    showNotification('Purchase submitted successfully! Seller will review it.', 'success');
+    closeUserProductPaymentModal();
+    loadUserProductsForBuying(); // Reload products to update status
+    loadUserProductPurchaseHistory(); // Update buyer's purchase history
+  } catch (error) {
+    console.error('Error submitting user product purchase:', error);
+    showNotification('Failed to submit purchase', 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
 
 async function loadChatMessages() {
   const chatMessagesContainer = document.getElementById('chat-messages');
@@ -1845,7 +2694,8 @@ async function sendChatMessage() {
         conversation_id: conversationId,
         sender_id: state.userProfile.profile_id,
         content: messageContent,
-        message_type: 'text'
+        message_type: 'text',
+        expires_at: new Date(Date.now() + CONFIG.CHAT_MESSAGE_LIFESPAN_HOURS * 60 * 60 * 1000).toISOString()
       });
 
     if (error) throw error;
@@ -1858,6 +2708,158 @@ async function sendChatMessage() {
     showNotification('Failed to send message', 'error');
   }
 }
+
+async function openPrivateChat(partnerProfileId, partnerUsername) {
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    showNotification('Please create a profile to use chat.', 'info');
+    return;
+  }
+  if (state.userProfile.profile_id === partnerProfileId) {
+    showNotification('You cannot chat with yourself.', 'warning');
+    return;
+  }
+
+  state.privateChatPartnerId = partnerProfileId;
+  document.getElementById('chat-partner-username').textContent = partnerUsername;
+  document.getElementById('private-chat-modal').classList.remove('hidden');
+  document.getElementById('private-chat-input').value = '';
+
+  try {
+    const { data: conversationId, error: convError } = await state.supabase.rpc('get_or_create_conversation', {
+      user1_id: state.userProfile.profile_id,
+      user2_id: partnerProfileId
+    });
+
+    if (convError) throw convError;
+    state.privateChatConversationId = conversationId;
+
+    // Unsubscribe from previous private chat channel if exists
+    if (state.privateChatRealtime) state.supabase.removeChannel(state.privateChatRealtime);
+
+    // Subscribe to private chat messages
+    state.privateChatRealtime = state.supabase
+      .channel(`private_chat_${conversationId}`)
+      .on('postgres_changes', 
+        { event: '*', schema: 'public', table: 'chat_messages', filter: `conversation_id=eq.${conversationId}` }, 
+        (payload) => {
+          loadPrivateChatMessages(conversationId);
+        }
+      )
+      .subscribe();
+
+    loadPrivateChatMessages(conversationId);
+
+  } catch (error) {
+    console.error('Error opening private chat:', error);
+    showNotification('Failed to open private chat.', 'error');
+    closePrivateChatModal();
+  }
+}
+
+async function loadPrivateChatMessages(conversationId) {
+  const privateChatMessagesContainer = document.getElementById('private-chat-messages');
+  privateChatMessagesContainer.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4"></div>
+    <p class="text-center text-text-secondary">Loading messages...</p>
+  `;
+
+  try {
+    const { data: messages, error } = await state.supabase
+      .from('chat_messages')
+      .select(`
+        *,
+        sender:profiles(username, name, profile_picture)
+      `)
+      .eq('conversation_id', conversationId)
+      .order('created_at', { ascending: true })
+      .limit(50); // Limit to last 50 messages
+
+    if (error) throw error;
+
+    if (messages && messages.length > 0) {
+      privateChatMessagesContainer.innerHTML = messages.map(message => {
+        const isCurrentUser = message.sender_id === state.userProfile.profile_id;
+        const senderName = message.sender?.name || 'Unknown User';
+        const senderUsername = message.sender?.username || 'unknown';
+        const avatar = message.sender?.profile_picture || '/placeholder.svg?height=40&width=40';
+        
+        return `
+          <div class="flex items-start mb-4 ${isCurrentUser ? 'justify-end' : ''}">
+            ${!isCurrentUser ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover mr-3" alt="Sender Avatar">` : ''}
+            <div class="max-w-[70%] p-3 rounded-lg ${isCurrentUser ? 'bg-accent-purple text-white ml-auto' : 'bg-secondary-bg text-text-primary mr-auto'}">
+              <p class="font-semibold text-sm mb-1">${isCurrentUser ? 'You' : senderName} (@${senderUsername})</p>
+              <p class="text-sm">${message.content}</p>
+              <span class="block text-xs opacity-70 mt-1">${new Date(message.created_at).toLocaleTimeString('en-US')}</span>
+            </div>
+            ${isCurrentUser ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover ml-3" alt="Your Avatar">` : ''}
+          </div>
+        `;
+      }).join('');
+      privateChatMessagesContainer.scrollTop = privateChatMessagesContainer.scrollHeight; // Scroll to bottom
+    } else {
+      privateChatMessagesContainer.innerHTML = `
+        <div class="text-center text-text-secondary py-8">
+          <i class="fas fa-comments text-4xl mb-4"></i>
+          <p>No messages yet. Start the conversation!</p>
+        </div>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading private chat messages:', error);
+    privateChatMessagesContainer.innerHTML = `
+      <div class="text-center text-accent-red py-8">
+        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+        <p>Failed to retrieve Chat Messages</p>
+      </div>
+    `;
+  }
+}
+
+async function sendPrivateChatMessage() {
+  const privateChatInput = document.getElementById('private-chat-input');
+  const messageContent = privateChatInput.value.trim();
+
+  if (!messageContent) {
+    showNotification('Message cannot be empty.', 'warning');
+    return;
+  }
+  if (!state.userProfile || !state.userProfile.profile_id || !state.privateChatConversationId) {
+    showNotification('Chat session invalid. Please reopen chat.', 'error');
+    return;
+  }
+
+  try {
+    const { error } = await state.supabase
+      .from('chat_messages')
+      .insert({
+        conversation_id: state.privateChatConversationId,
+        sender_id: state.userProfile.profile_id,
+        content: messageContent,
+        message_type: 'text',
+        expires_at: new Date(Date.now() + CONFIG.CHAT_MESSAGE_LIFESPAN_HOURS * 60 * 60 * 1000).toISOString()
+      });
+
+    if (error) throw error;
+
+    privateChatInput.value = '';
+    showNotification('Message sent!', 'success');
+    loadPrivateChatMessages(state.privateChatConversationId); // Reload messages to show the new one
+  } catch (error) {
+    console.error('Error sending private chat message:', error);
+    showNotification('Failed to send message', 'error');
+  }
+}
+
+function closePrivateChatModal() {
+  document.getElementById('private-chat-modal').classList.add('hidden');
+  state.privateChatPartnerId = null;
+  state.privateChatConversationId = null;
+  if (state.privateChatRealtime) {
+    state.supabase.removeChannel(state.privateChatRealtime);
+    state.privateChatRealtime = null;
+  }
+}
+
 
 async function loadSupportMessages() {
   const supportMessagesContainer = document.getElementById('support-messages');
@@ -2054,11 +3056,32 @@ async function loadMiProfile() {
 
     if (error) throw error;
 
+    state.userProfile = { ...state.userProfile, ...profile }; // Update local state with full profile data
+
     document.getElementById('mi-profile-picture').src = profile.profile_picture || '/placeholder.svg?height=100&width=100';
     document.getElementById('mi-name').textContent = profile.name || 'N/A';
     document.getElementById('mi-username').textContent = `@${profile.username || 'N/A'}`;
     document.getElementById('mi-key-text').value = state.userProfile.key_text || 'N/A';
     document.getElementById('mi-account-status').value = profile.is_banned ? 'BANNED' : 'ACTIVE';
+
+    // KYC Status Display
+    const kycStatusText = document.getElementById('kyc-status-text');
+    const kycAdminNotes = document.getElementById('kyc-admin-notes');
+    const kycFormContainer = document.getElementById('kyc-form-container');
+
+    kycStatusText.textContent = profile.kyc_status ? profile.kyc_status.toUpperCase() : 'NOT SUBMITTED';
+    if (profile.kyc_status === 'rejected' && profile.kyc_admin_notes) {
+      kycAdminNotes.textContent = `Reason: ${profile.kyc_admin_notes}`;
+      kycAdminNotes.classList.remove('hidden');
+    } else {
+      kycAdminNotes.classList.add('hidden');
+    }
+
+    if (profile.kyc_status === 'approved' || profile.is_seller_banned) {
+      kycFormContainer.classList.add('hidden');
+    } else {
+      kycFormContainer.classList.remove('hidden');
+    }
 
   } catch (error) {
     console.error('Error loading Mi profile:', error);
@@ -2069,6 +3092,339 @@ async function loadMiProfile() {
       </div>
     `;
   }
+}
+
+async function loadUserOrders() {
+  const tbody = document.getElementById('purchased-products-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="5" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading purchases...
+      </td>
+    </tr>
+  `;
+
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-text-secondary py-8">
+          Please create a profile to view your purchases.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  try {
+    const { data: orders, error } = await state.supabase
+      .from('orders')
+      .select(`
+        *,
+        products(name, file_url)
+      `)
+      .eq('profile_id', state.userProfile.profile_id)
+      .order('ordered_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (orders && orders.length > 0) {
+      tbody.innerHTML = orders.map(order => {
+        let statusClass = '';
+        let statusText = order.status.toUpperCase();
+        let downloadButton = 'N/A';
+
+        switch (order.status) {
+          case 'pending':
+            statusClass = 'text-yellow-400';
+            break;
+          case 'approved':
+            statusClass = 'text-accent-green';
+            downloadButton = `<a href="${order.products?.file_url}" target="_blank" download class="myanmar-btn btn-small">
+                                <i class="fas fa-download mr-1"></i> DOWNLOAD
+                              </a>`;
+            break;
+          case 'rejected':
+            statusClass = 'text-accent-red';
+            break;
+        }
+
+        return `
+          <tr>
+            <td>${order.products?.name || 'N/A'}</td>
+            <td>${order.amount} MMK</td>
+            <td>${new Date(order.ordered_at).toLocaleDateString('en-US')}</td>
+            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
+            <td>${downloadButton}</td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center text-text-secondary py-8">
+            No Purchases Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading user orders:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-accent-red py-8">
+          Failed to retrieve Purchases
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function loadMySellerPosts() {
+  const tbody = document.getElementById('seller-posts-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="4" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading seller posts...
+      </td>
+    </tr>
+  `;
+
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="text-center text-text-secondary py-8">
+          Please create a profile to view your seller posts.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  try {
+    const { data: products, error } = await state.supabase
+      .from('user_products')
+      .select('*')
+      .eq('profile_id', state.userProfile.profile_id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (products && products.length > 0) {
+      tbody.innerHTML = products.map(product => {
+        let statusClass = '';
+        let statusText = product.status.toUpperCase();
+        switch (product.status) {
+          case 'pending': statusClass = 'text-yellow-400'; break;
+          case 'approved': statusClass = 'text-accent-green'; break;
+          case 'rejected': statusClass = 'text-accent-red'; break;
+        }
+        return `
+          <tr>
+            <td>${product.name}</td>
+            <td>${product.price} MMK</td>
+            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
+            <td>
+              <div class="table-actions">
+                <button onclick="viewUserProduct('${product.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye mr-1"></i> VIEW
+                </button>
+                <button onclick="deleteUserProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i> DELETE
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="text-center text-text-secondary py-8">
+            No Seller Posts Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading seller posts:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="text-center text-accent-red py-8">
+          Failed to retrieve Seller Posts
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function deleteUserProduct(productId) {
+  showConfirmModal(
+    'Are you sure you want to delete this product? All associated orders will also be deleted.',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('user_products')
+          .delete()
+          .eq('id', productId);
+
+        if (error) throw error;
+
+        showNotification('Product deleted successfully!', 'success');
+        loadMySellerPosts();
+        loadUserProductsForBuying();
+      } catch (error) {
+        console.error('Error deleting user product:', error);
+        showNotification('Failed to delete product.', 'error');
+      }
+    }
+  );
+}
+
+async function loadMyBuyerOrders() {
+  const tbody = document.getElementById('buyer-orders-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading buyer orders...
+      </td>
+    </tr>
+  `;
+
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-text-secondary py-8">
+          Please create a profile to view your buyer orders.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  try {
+    const { data: orders, error } = await state.supabase
+      .from('user_product_orders')
+      .select(`
+        *,
+        buyer:profiles(username, name, profile_picture),
+        product:user_products(name)
+      `)
+      .eq('seller_product_id', state.userProfile.profile_id) // Orders for products posted by current user
+      .order('ordered_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (orders && orders.length > 0) {
+      tbody.innerHTML = orders.map(order => {
+        let statusClass = '';
+        let statusText = order.status.toUpperCase();
+        switch (order.status) {
+          case 'pending': statusClass = 'text-yellow-400'; break;
+          case 'approved': statusClass = 'text-accent-green'; break;
+          case 'rejected': statusClass = 'text-accent-red'; break;
+        }
+        const buyerAvatar = order.buyer?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr>
+            <td>
+              <div class="flex items-center">
+                <img src="${buyerAvatar}" class="w-8 h-8 rounded-full object-cover mr-2">
+                <span>${order.buyer?.name || 'N/A'} (@${order.buyer?.username || 'N/A'})</span>
+                <button onclick="openPrivateChat('${order.buyer.id}', '${order.buyer.username}')" class="ml-2 myanmar-btn btn-small"><i class="fas fa-comments"></i></button>
+              </div>
+            </td>
+            <td>${order.product?.name || 'N/A'}</td>
+            <td>${order.amount} MMK</td>
+            <td><a href="${order.receipt_url}" target="_blank" class="text-accent-purple hover:underline">VIEW RECEIPT</a></td>
+            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
+            <td>
+              <div class="table-actions">
+                ${order.status === 'pending' ? `
+                  <button onclick="approveUserProductOrder('${order.id}')" class="myanmar-btn btn-small">
+                    <i class="fas fa-check mr-1"></i> APPROVE
+                  </button>
+                  <button onclick="rejectUserProductOrder('${order.id}')" class="btn-danger myanmar-btn btn-small">
+                    <i class="fas fa-times mr-1"></i> REJECT
+                  </button>
+                ` : 'N/A'}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            No Buyer Orders Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading buyer orders:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve Buyer Orders
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function approveUserProductOrder(orderId) {
+  showConfirmModal(
+    'Are you sure you want to approve this order?',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('user_product_orders')
+          .update({ status: 'approved', approved_at: new Date().toISOString() })
+          .eq('id', orderId);
+        if (error) throw error;
+        showNotification('Order approved successfully!', 'success');
+        loadMyBuyerOrders();
+        loadUserProductPurchaseHistory(); // Update buyer's view
+      } catch (error) {
+        console.error('Error approving user product order:', error);
+        showNotification('Failed to approve order.', 'error');
+      }
+    }
+  );
+}
+
+async function rejectUserProductOrder(orderId) {
+  const reason = prompt('Reason for rejection?', 'Invalid receipt');
+  if (!reason) return;
+
+  showConfirmModal(
+    'Are you sure you want to reject this order?',
+    async () => {
+      try {
+        const { error } = await state.supabase
+          .from('user_product_orders')
+          .update({ status: 'rejected', rejected_at: new Date().toISOString(), seller_notes: reason })
+          .eq('id', orderId);
+        if (error) throw error;
+        showNotification('Order rejected successfully!', 'success');
+        loadMyBuyerOrders();
+        loadUserProductPurchaseHistory(); // Update buyer's view
+      } catch (error) {
+        console.error('Error rejecting user product order:', error);
+        showNotification('Failed to reject order.', 'error');
+      }
+    }
+  );
+}
+
+async function loadUserProductPurchaseHistory() {
+  const tbody = document.getElementById('purchased-products-table-body'); // Reusing this for admin products, but will add a new one for user products
+  // For now, this function is for admin products. User product purchase history will be added to Mi section.
 }
 
 async function updateProfile() {
@@ -2084,6 +3440,10 @@ async function updateProfile() {
     let profilePictureUrl = state.userProfile.profile_picture; // Keep existing if no new file
 
     if (newProfilePictureFile) {
+      if (!utils.validateFileSize(newProfilePictureFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
+        showLoading(false);
+        return;
+      }
       const fileExt = newProfilePictureFile.name.split('.').pop();
       const fileName = `profile_pictures/${state.userProfile.profile_id}_${Date.now()}.${fileExt}`;
       
@@ -2122,6 +3482,152 @@ async function updateProfile() {
   }
 }
 
+function toggleKycIdFields() {
+  const idType = document.getElementById('kyc-id-type').value;
+  document.getElementById('kyc-passport-fields').classList.add('hidden');
+  document.getElementById('kyc-nrc-driving-fields').classList.add('hidden');
+
+  if (idType === 'passport') {
+    document.getElementById('kyc-passport-fields').classList.remove('hidden');
+  } else if (idType === 'nrc' || idType === 'driving_license') {
+    document.getElementById('kyc-nrc-driving-fields').classList.remove('hidden');
+  }
+}
+
+async function submitKyc() {
+  if (!state.userProfile || !state.userProfile.profile_id) {
+    showNotification('Please create a profile to submit KYC.', 'warning');
+    return;
+  }
+  if (state.userProfile.kyc_status === 'pending' || state.userProfile.kyc_status === 'approved') {
+    showNotification('Your KYC is already submitted or approved.', 'info');
+    return;
+  }
+
+  const fullName = document.getElementById('kyc-full-name').value.trim();
+  const dob = document.getElementById('kyc-dob').value;
+  const idType = document.getElementById('kyc-id-type').value;
+  const address = document.getElementById('kyc-address').value.trim();
+
+  if (!fullName || !dob || !idType || !address) {
+    showNotification('Please fill all required KYC fields.', 'warning');
+    return;
+  }
+
+  let idNumber = null;
+  let passportExpiry = null;
+  let idPhotoFiles = [];
+  let faceVideoFile = null;
+
+  if (idType === 'passport') {
+    idNumber = document.getElementById('kyc-passport-number').value.trim();
+    passportExpiry = document.getElementById('kyc-passport-expiry').value;
+    const passportPhoto = document.getElementById('kyc-passport-photo').files[0];
+    faceVideoFile = document.getElementById('kyc-face-video').files[0];
+
+    if (!idNumber || !passportExpiry || !passportPhoto || !faceVideoFile) {
+      showNotification('Please fill all required Passport KYC fields.', 'warning');
+      return;
+    }
+    if (!utils.validateFileSize(passportPhoto, CONFIG.MAX_IMAGE_SIZE_MB)) return;
+    if (!utils.validateFileSize(faceVideoFile, CONFIG.MAX_VIDEO_SIZE_MB)) return;
+    idPhotoFiles.push(passportPhoto);
+
+  } else if (idType === 'nrc' || idType === 'driving_license') {
+    idNumber = document.getElementById('kyc-nrc-driving-number').value.trim();
+    idPhotoFiles = Array.from(document.getElementById('kyc-id-photo').files);
+
+    if (!idNumber || idPhotoFiles.length === 0) {
+      showNotification('Please fill all required ID KYC fields and upload photos.', 'warning');
+      return;
+    }
+    for (const file of idPhotoFiles) {
+      if (!utils.validateFileSize(file, CONFIG.MAX_IMAGE_SIZE_MB)) return;
+    }
+  }
+
+  showLoading(true);
+
+  try {
+    let idPhotoUrls = [];
+    for (const file of idPhotoFiles) {
+      const fileExt = file.name.split('.').pop();
+      const fileName = `kyc_id_photos/${state.userProfile.profile_id}_${Date.now()}_${file.name}.${fileExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('kyc_documents')
+        .upload(fileName, file);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('kyc_documents').getPublicUrl(fileName);
+      idPhotoUrls.push({ url: urlData.publicUrl, type: file.type, size: file.size });
+    }
+
+    let faceVideoUrl = null;
+    if (faceVideoFile) {
+      const fileExt = faceVideoFile.name.split('.').pop();
+      const fileName = `kyc_face_videos/${state.userProfile.profile_id}_${Date.now()}.${fileExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('kyc_documents')
+        .upload(fileName, faceVideoFile);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('kyc_documents').getPublicUrl(fileName);
+      faceVideoUrl = urlData.publicUrl;
+    }
+
+    // Check video duration if it's a passport submission
+    if (idType === 'passport' && faceVideoFile) {
+      await new Promise((resolve, reject) => {
+        utils.validateVideoDuration(faceVideoFile, 10, 20, (isValid) => {
+          if (isValid) resolve();
+          else reject(new Error('Video duration invalid.'));
+        });
+      });
+    }
+
+    const { error } = await state.supabase
+      .from('kyc_submissions')
+      .insert({
+        profile_id: state.userProfile.profile_id,
+        full_name: fullName,
+        date_of_birth: dob,
+        id_type: idType,
+        id_number: idNumber,
+        passport_expiry_date: passportExpiry || null,
+        id_photo_urls: idPhotoUrls,
+        face_video_url: faceVideoUrl,
+        address: address,
+        status: 'pending'
+      });
+
+    if (error) throw error;
+
+    // Update profile's kyc_status
+    await state.supabase.from('profiles').update({ kyc_status: 'pending' }).eq('id', state.userProfile.profile_id);
+    state.userProfile.kyc_status = 'pending'; // Update local state
+
+    showNotification('KYC submitted successfully for review!', 'success');
+    // Clear form
+    document.getElementById('kyc-full-name').value = '';
+    document.getElementById('kyc-dob').value = '';
+    document.getElementById('kyc-id-type').value = '';
+    document.getElementById('kyc-passport-number').value = '';
+    document.getElementById('kyc-passport-expiry').value = '';
+    document.getElementById('kyc-passport-photo').value = '';
+    document.getElementById('kyc-face-video').value = '';
+    document.getElementById('kyc-nrc-driving-number').value = '';
+    document.getElementById('kyc-id-photo').value = '';
+    document.getElementById('kyc-address').value = '';
+    toggleKycIdFields(); // Hide fields
+
+    loadMiProfile(); // Reload to show updated KYC status
+  } catch (error) {
+    console.error('Error submitting KYC:', error);
+    showNotification('Failed to submit KYC: ' + error.message, 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+
 function userLogout() {
   showConfirmModal(
     'Are you sure you want to logout?',
@@ -2136,6 +3642,11 @@ function userLogout() {
       if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
       if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
       if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+      if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
+      if (state.userProductOrdersRealtime) state.supabase.removeChannel(state.userProductOrdersRealtime);
+      if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
+      if (state.privateChatRealtime) state.supabase.removeChannel(state.privateChatRealtime);
+
 
       document.getElementById('app-content').classList.add('hidden');
       document.getElementById('profile-creation-section').classList.add('hidden'); // Hide profile creation too
@@ -2183,10 +3694,24 @@ window.shareNews = shareNews;
 window.initiatePurchase = initiatePurchase;
 window.closePaymentModal = closePaymentModal;
 window.submitPurchase = submitPurchase;
+window.postUserProduct = postUserProduct;
+window.viewUserProduct = viewUserProduct;
+window.closeUserProductModal = closeUserProductModal;
+window.initiateUserProductPurchase = initiateUserProductPurchase;
+window.closeUserProductPaymentModal = closeUserProductPaymentModal;
+window.submitUserProductPurchase = submitUserProductPurchase;
+window.deleteUserProduct = deleteUserProduct;
+window.approveUserProductOrder = approveUserProductOrder;
+window.rejectUserProductOrder = rejectUserProductOrder;
 window.sendChatMessage = sendChatMessage;
+window.openPrivateChat = openPrivateChat;
+window.closePrivateChatModal = closePrivateChatModal;
+window.sendPrivateChatMessage = sendPrivateChatMessage;
 window.sendSupportMessage = sendSupportMessage;
 window.loadMiProfile = loadMiProfile;
 window.updateProfile = updateProfile;
+window.toggleKycIdFields = toggleKycIdFields;
+window.submitKyc = submitKyc;
 window.userLogout = userLogout;
 window.showConfirmModal = showConfirmModal;
 window.closeConfirmModal = closeConfirmModal;
