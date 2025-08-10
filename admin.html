@@ -358,6 +358,9 @@ body {
 .status-active { color: var(--accent-green); }
 .status-inactive { color: var(--accent-red); }
 .status-banned { color: var(--accent-red); }
+.status-pending { color: var(--accent-purple); }
+.status-approved { color: var(--accent-green); }
+.status-rejected { color: var(--accent-red); }
 
 .news-card {
   background: rgba(255, 255, 255, 0.05);
@@ -471,14 +474,14 @@ body {
 <div class="myanmar-pattern"></div>
 <div class="myanmar-waves"></div>
 
-<!-- Connection Status -->
+ Connection Status 
 <div id="connection-status" class="connection-status status-connecting">
 <i class="fas fa-wifi"></i> CONNECTING...
 </div>
 
-<!-- Main Container -->
+ Main Container 
 <div class="container mx-auto px-2 py-4 max-w-6xl">
-<!-- Header -->
+ Header 
 <div class="text-center mb-6 fade-in">
 <h1 class="text-2xl md:text-3xl lg:text-4xl font-orbitron font-bold mb-2 text-accent-purple">
   <i class="fas fa-shield-alt mr-2"></i>
@@ -492,10 +495,10 @@ body {
 </div>
 </div>
 
-<!-- Notification Container -->
+ Notification Container 
 <div id="notification-container"></div>
 
-<!-- Login Section -->
+ Login Section 
 <div id="login-section" class="max-w-md mx-auto fade-in">
 <div class="admin-card p-6">
   <h3 class="text-xl md:text-2xl font-orbitron font-bold text-center mb-6 text-accent-purple">
@@ -524,9 +527,9 @@ body {
 </div>
 </div>
 
-<!-- Admin Content -->
+ Admin Content 
 <div id="admin-content" class="hidden">
-<!-- Stats Section -->
+ Stats Section 
 <div id="stats-section" class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-6 mb-6">
   <div class="stats-card p-4 text-center">
     <i class="fas fa-users text-2xl md:text-3xl text-blue-400 mb-2"></i>
@@ -548,9 +551,24 @@ body {
     <h3 class="text-xs md:text-sm font-semibold text-text-secondary">SUPPORT MESSAGES</h3>
     <p id="total-support" class="text-lg md:text-xl font-bold text-accent-red">0</p>
   </div>
+  <div class="stats-card p-4 text-center">
+    <i class="fas fa-user-check text-2xl md:text-3xl text-yellow-400 mb-2"></i>
+    <h3 class="text-xs md:text-sm font-semibold text-text-secondary">PENDING KYC</h3>
+    <p id="pending-kyc" class="text-lg md:text-xl font-bold text-accent-purple">0</p>
+  </div>
+  <div class="stats-card p-4 text-center">
+    <i class="fas fa-store text-2xl md:text-3xl text-orange-400 mb-2"></i>
+    <h3 class="text-xs md:text-sm font-semibold text-text-secondary">PENDING PRODUCTS</h3>
+    <p id="pending-products" class="text-lg md:text-xl font-bold text-accent-green">0</p>
+  </div>
+  <div class="stats-card p-4 text-center">
+    <i class="fas fa-shopping-cart text-2xl md:text-3xl text-cyan-400 mb-2"></i>
+    <h3 class="text-xs md:text-sm font-semibold text-text-secondary">PENDING ORDERS</h3>
+    <p id="pending-user-orders" class="text-lg md:text-xl font-bold text-accent-red">0</p>
+  </div>
 </div>
 
-<!-- Navigation -->
+ Navigation 
 <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
   <button onclick="showSection('about', this)" class="nav-btn active">
     <i class="fas fa-info-circle mr-1"></i>
@@ -587,6 +605,26 @@ body {
     <span class="hidden sm:inline">SUPPORT</span>
     <span class="sm:hidden">Support</span>
   </button>
+  <button onclick="showSection('kyc', this)" class="nav-btn">
+    <i class="fas fa-user-shield mr-1"></i>
+    <span class="hidden sm:inline">KYC</span>
+    <span class="sm:hidden">KYC</span>
+  </button>
+  <button onclick="showSection('user-products', this)" class="nav-btn">
+    <i class="fas fa-store mr-1"></i>
+    <span class="hidden sm:inline">USER PRODUCTS</span>
+    <span class="sm:hidden">U. Prod</span>
+  </button>
+  <button onclick="showSection('user-orders', this)" class="nav-btn">
+    <i class="fas fa-shopping-cart mr-1"></i>
+    <span class="hidden sm:inline">USER ORDERS</span>
+    <span class="sm:hidden">U. Orders</span>
+  </button>
+  <button onclick="showSection('chat-management', this)" class="nav-btn">
+    <i class="fas fa-comments mr-1"></i>
+    <span class="hidden sm:inline">CHAT MGMT</span>
+    <span class="sm:hidden">Chat</span>
+  </button>
   <button onclick="adminLogout()" class="nav-btn btn-danger">
     <i class="fas fa-sign-out-alt mr-1"></i>
     <span class="hidden sm:inline">LOGOUT</span>
@@ -594,7 +632,7 @@ body {
   </button>
 </div>
 
-<!-- About Management -->
+ About Management 
 <div id="about-section" class="admin-section">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -637,14 +675,6 @@ body {
         <input type="email" id="about-email" placeholder="support@example.com" 
                class="admin-input w-full">
       </div>
-      <div class="md:col-span-2">
-        <label class="block text-sm font-medium mb-2 text-text-secondary">SOCIAL LINKS (JSON Array)</label>
-        <textarea id="about-social-links" rows="4" placeholder='[{"name": "Telegram", "url": "...", "icon_url": "..."}]'
-                  class="admin-input w-full resize-none font-share-tech"></textarea>
-        <p class="text-xs text-text-secondary mt-1">
-          JSON array format: `[{'name': 'Telegram', 'url': 'https://t.me/yourchannel', 'icon_url': '/placeholder.svg?height=24&width=24'}]`
-        </p>
-      </div>
       <div class="md:col-span-2 flex items-end">
         <button onclick="updateAbout()" 
                 class="myanmar-btn w-full flex items-center justify-center space-x-2">
@@ -656,7 +686,7 @@ body {
   </div>
 </div>
 
-<!-- Keys Management -->
+ Keys Management 
 <div id="keys-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -664,7 +694,7 @@ body {
       ACCESS KEY MANAGEMENT
     </h3>
     
-    <!-- Create Key Form -->
+     Create Key Form 
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
       <input type="text" id="key-text" placeholder="Key Text" 
              class="admin-input col-span-full md:col-span-2 lg:col-span-4 font-share-tech">
@@ -675,13 +705,13 @@ body {
       <span>CREATE NEW KEY</span>
     </button>
 
-    <!-- Search Input for Keys -->
+     Search Input for Keys 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-keys" placeholder="Search Keys..." class="admin-input w-full" onkeyup="filterTable('keys-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Keys Table -->
+     Keys Table 
     <div class="overflow-x-auto">
       <table class="admin-table w-full">
         <thead>
@@ -704,7 +734,7 @@ body {
   </div>
 </div>
 
-<!-- Users Management -->
+ Users Management 
 <div id="users-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -712,13 +742,13 @@ body {
       USER MANAGEMENT
     </h3>
 
-    <!-- Search Input for Users -->
+     Search Input for Users 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-users" placeholder="Search Users..." class="admin-input w-full" onkeyup="filterTable('users-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Users Table -->
+     Users Table 
     <div class="overflow-x-auto">
       <table class="admin-table w-full">
         <thead>
@@ -728,12 +758,13 @@ body {
             <th class="text-left">NAME</th>
             <th class="text-left">CREATED AT</th>
             <th class="text-left">STATUS</th>
+            <th class="text-left">CAN SELL</th>
             <th class="text-left">ACTIONS</th>
           </tr>
         </thead>
         <tbody id="users-table-body">
           <tr>
-            <td colspan="6" class="text-center text-text-secondary py-8">
+            <td colspan="7" class="text-center text-text-secondary py-8">
               <div class="loading-spinner mx-auto mb-2"></div>
               Loading users...
             </td>
@@ -744,7 +775,7 @@ body {
   </div>
 </div>
 
-<!-- News Management -->
+ News Management 
 <div id="news-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -752,7 +783,7 @@ body {
       NEWS MANAGEMENT
     </h3>
 
-    <!-- Post News Form -->
+     Post News Form 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">TITLE</label>
@@ -798,13 +829,13 @@ body {
       </div>
     </div>
 
-    <!-- Search Input for News -->
+     Search Input for News 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-news" placeholder="Search News..." class="admin-input w-full" onkeyup="filterNewsList(this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- News List -->
+     News List 
     <div id="news-list" class="space-y-4">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading news...</p>
@@ -812,7 +843,7 @@ body {
   </div>
 </div>
 
-<!-- Products Management -->
+ Products Management 
 <div id="products-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -820,7 +851,7 @@ body {
       PRODUCTS & APKS MANAGEMENT
     </h3>
 
-    <!-- Upload Product Form -->
+     Upload Product Form 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT NAME</label>
@@ -865,13 +896,13 @@ body {
       </div>
     </div>
 
-    <!-- Search Input for Products -->
+     Search Input for Products 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-products" placeholder="Search Products..." class="admin-input w-full" onkeyup="filterTable('products-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Products List -->
+     Products List 
     <div class="overflow-x-auto">
       <table class="admin-table w-full">
         <thead>
@@ -897,7 +928,7 @@ body {
   </div>
 </div>
 
-<!-- Payments Management -->
+ Payments Management 
 <div id="payments-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -905,7 +936,7 @@ body {
       PAYMENTS MANAGEMENT
     </h3>
 
-    <!-- Payment Methods Management -->
+     Payment Methods Management 
     <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
       <i class="fas fa-wallet mr-2"></i>
       PAYMENT METHODS
@@ -940,7 +971,7 @@ body {
       </div>
     </div>
 
-    <!-- Search Input for Payment Methods -->
+     Search Input for Payment Methods 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-payment-methods" placeholder="Search Payment Methods..." class="admin-input w-full" onkeyup="filterTable('payment-methods-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
@@ -968,13 +999,13 @@ body {
       </table>
     </div>
 
-    <!-- Pending Orders -->
+     Pending Orders 
     <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
       <i class="fas fa-hourglass-half mr-2"></i>
       PENDING ORDERS
     </h4>
 
-    <!-- Search Input for Pending Orders -->
+     Search Input for Pending Orders 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-pending-orders" placeholder="Search Pending Orders..." class="admin-input w-full" onkeyup="filterTable('pending-orders-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
@@ -1006,7 +1037,7 @@ body {
   </div>
 </div>
 
-<!-- Support Management -->
+ Support Management 
 <div id="support-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
@@ -1014,19 +1045,19 @@ body {
       SUPPORT MESSAGES
     </h3>
 
-    <!-- Search Input for Support Messages -->
+     Search Input for Support Messages 
     <div class="relative search-input-container mb-4">
       <input type="text" id="search-support-messages" placeholder="Search Support Messages..." class="admin-input w-full" onkeyup="filterSupportMessages(this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-    <!-- Support Messages -->
+     Support Messages 
     <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading messages...</p>
     </div>
 
-    <!-- Reply Form -->
+     Reply Form 
     <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
       <textarea id="admin-support-input" placeholder="Write your support message..." rows="3"
                 class="admin-input flex-1 resize-none"></textarea>
@@ -1038,10 +1069,154 @@ body {
     </div>
   </div>
 </div>
+
+ KYC Management 
+<div id="kyc-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-user-shield mr-3"></i>
+      KYC REQUESTS
+    </h3>
+
+     Search Input for KYC 
+    <div class="relative search-input-container mb-4">
+      <input type="text" id="search-kyc" placeholder="Search KYC Requests..." class="admin-input w-full" onkeyup="filterTable('kyc-table-body', this.value)">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+     KYC Table 
+    <div class="overflow-x-auto">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th class="text-left">USER</th>
+            <th class="text-left">NAME</th>
+            <th class="text-left">ID TYPE</th>
+            <th class="text-left">SUBMITTED AT</th>
+            <th class="text-left">STATUS</th>
+            <th class="text-left">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="kyc-table-body">
+          <tr>
+            <td colspan="6" class="text-center text-text-secondary py-8">
+              <div class="loading-spinner mx-auto mb-2"></div>
+              Loading KYC requests...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+ User Products Management 
+<div id="user-products-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-store mr-3"></i>
+      USER POSTED PRODUCTS
+    </h3>
+
+     Search Input for User Products 
+    <div class="relative search-input-container mb-4">
+      <input type="text" id="search-user-products" placeholder="Search User Products..." class="admin-input w-full" onkeyup="filterTable('user-products-table-body', this.value)">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+     User Products Table 
+    <div class="overflow-x-auto">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th class="text-left">PRODUCT</th>
+            <th class="text-left">SELLER</th>
+            <th class="text-left">PRICE</th>
+            <th class="text-left">POSTED AT</th>
+            <th class="text-left">STATUS</th>
+            <th class="text-left">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="user-products-table-body">
+          <tr>
+            <td colspan="6" class="text-center text-text-secondary py-8">
+              <div class="loading-spinner mx-auto mb-2"></div>
+              Loading user products...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+ User Orders Management 
+<div id="user-orders-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-shopping-cart mr-3"></i>
+      USER-TO-USER ORDERS
+    </h3>
+
+     Search Input for User Orders 
+    <div class="relative search-input-container mb-4">
+      <input type="text" id="search-user-orders" placeholder="Search User Orders..." class="admin-input w-full" onkeyup="filterTable('user-orders-table-body', this.value)">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+     User Orders Table 
+    <div class="overflow-x-auto">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th class="text-left">ORDER ID</th>
+            <th class="text-left">BUYER</th>
+            <th class="text-left">SELLER</th>
+            <th class="text-left">PRODUCT</th>
+            <th class="text-left">AMOUNT</th>
+            <th class="text-left">STATUS</th>
+            <th class="text-left">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="user-orders-table-body">
+          <tr>
+            <td colspan="7" class="text-center text-text-secondary py-8">
+              <div class="loading-spinner mx-auto mb-2"></div>
+              Loading user orders...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+ Chat Management 
+<div id="chat-management-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-comments mr-3"></i>
+      CHAT MANAGEMENT
+    </h3>
+
+    <p class="text-text-secondary mb-4">
+      This section allows you to manage chat data. You can clear chat messages older than 24 hours.
+    </p>
+
+    <div class="flex flex-col md:flex-row space-y-4 md:space-y-0 md:space-x-4 items-center">
+      <button onclick="clearAllOldChatMessages()" 
+              class="myanmar-btn btn-danger flex items-center justify-center space-x-2">
+        <i class="fas fa-broom"></i>
+        <span>CLEAR ALL OLD CHATS (24+ HOURS)</span>
+      </button>
+    </div>
+  </div>
+</div>
+
 </div>
 </div>
 
-<!-- News Detail Modal -->
+ News Detail Modal 
 <div id="news-modal" class="modal hidden">
 <div class="modal-content max-w-2xl">
 <div class="flex justify-between items-center mb-4">
@@ -1057,7 +1232,55 @@ body {
 </div>
 </div>
 
-<!-- Confirm Delete Modal -->
+ KYC Detail Modal 
+<div id="kyc-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">KYC DETAILS</h2>
+      <button onclick="closeKycModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="kyc-modal-content">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
+ User Product Detail Modal 
+<div id="user-product-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">PRODUCT DETAILS</h2>
+      <button onclick="closeUserProductModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="user-product-modal-content">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
+ User Order Detail Modal 
+<div id="user-order-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">ORDER DETAILS</h2>
+      <button onclick="closeUserOrderModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="user-order-modal-content">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
+ Confirm Delete Modal 
 <div id="confirm-modal" class="modal hidden">
 <div class="modal-content max-w-md">
 <div class="text-center">
@@ -1078,7 +1301,7 @@ body {
 </div>
 </div>
 
-<!-- Loading Overlay -->
+ Loading Overlay 
 <div id="loading-overlay" class="fixed inset-0 loading-overlay flex items-center justify-center z-50 hidden">
 <div class="admin-card p-8 text-center">
 <div class="loading-spinner mx-auto mb-4" style="width: 40px; height: 40px;"></div>
@@ -1086,7 +1309,7 @@ body {
 </div>
 </div>
 
-<!-- Scripts -->
+ Scripts 
   <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
   <script>
     // Configuration
@@ -1095,7 +1318,9 @@ body {
       SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
       ADMIN_KEY: 'Opper_FPS',
       MAX_RETRY_ATTEMPTS: 3,
-      RETRY_DELAY: 2000
+      RETRY_DELAY: 2000,
+      MAX_IMAGE_SIZE_MB: 5, // Max size per image for user products
+      MAX_VIDEO_SIZE_MB: 10 // Max size for KYC video
     };
 
 // State
@@ -1110,6 +1335,10 @@ newsRealtime: null,
 supportRealtime: null,
 productsRealtime: null,
 ordersRealtime: null,
+kycRealtime: null,
+userProductsRealtime: null,
+userOrdersRealtime: null,
+chatMessagesRealtime: null,
 adminProfileId: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' // Hardcoded admin_profile_id for news posting, assuming a default admin user exists in admin_profiles table.
 };
 
@@ -1127,6 +1356,12 @@ getMediaType(fileType) {
   if (fileType.startsWith('video/')) return 'video';
   if (fileType.startsWith('audio/')) return 'audio';
   return 'file';
+},
+formatDate(dateString) {
+  return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
+},
+formatDateTime(dateString) {
+  return new Date(dateString).toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
 }
 };
 
@@ -1156,7 +1391,7 @@ try {
     // Test connection
     const { data, error } = await state.supabase.from('about').select('id').limit(1);
     
-    if (error && error.code !== 'PGRST116') {
+    if (error && error.code !== 'PGRST116') { // PGRST116 means table not found, which is fine for initial setup
       throw new Error(`Database connection failed: ${error.message}`);
     }
 
@@ -1302,17 +1537,23 @@ try {
 async function loadDashboardData() {
 try {
   // Load stats
-  const [usersResult, keysResult, newsResult, supportResult] = await Promise.all([
+  const [usersResult, keysResult, newsResult, supportResult, kycResult, userProductsResult, userOrdersResult] = await Promise.all([
     state.supabase.from('profiles').select('id', { count: 'exact' }),
     state.supabase.from('keys').select('id', { count: 'exact' }).eq('is_active', true),
     state.supabase.from('news').select('id', { count: 'exact' }),
-    state.supabase.from('support_messages').select('id', { count: 'exact' }).eq('is_read', false) // Unread support messages
+    state.supabase.from('support_messages').select('id', { count: 'exact' }).eq('is_read', false), // Unread support messages
+    state.supabase.from('kyc_requests').select('id', { count: 'exact' }).eq('status', 'pending'),
+    state.supabase.from('user_products').select('id', { count: 'exact' }).eq('status', 'pending'),
+    state.supabase.from('user_orders').select('id', { count: 'exact' }).eq('status', 'pending')
   ]);
 
   document.getElementById('total-users').textContent = usersResult.count || 0;
   document.getElementById('active-keys').textContent = keysResult.count || 0;
   document.getElementById('total-news').textContent = newsResult.count || 0;
   document.getElementById('total-support').textContent = supportResult.count || 0;
+  document.getElementById('pending-kyc').textContent = kycResult.count || 0;
+  document.getElementById('pending-products').textContent = userProductsResult.count || 0;
+  document.getElementById('pending-user-orders').textContent = userOrdersResult.count || 0;
 
 } catch (error) {
   console.error('Error loading dashboard data:', error);
@@ -1326,6 +1567,11 @@ if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
 if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
 if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
 if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
+if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
+if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
+if (state.chatMessagesRealtime) state.supabase.removeChannel(state.chatMessagesRealtime);
+
 
 // News realtime updates
 state.newsRealtime = state.supabase
@@ -1355,7 +1601,7 @@ state.supportRealtime = state.supabase
   )
   .subscribe();
 
-// Products realtime
+// Products realtime (admin-posted products)
 state.productsRealtime = state.supabase
   .channel('products_changes')
   .on('postgres_changes', 
@@ -1368,7 +1614,7 @@ state.productsRealtime = state.supabase
   )
   .subscribe();
 
-// Orders realtime
+// Orders realtime (admin-posted product orders)
 state.ordersRealtime = state.supabase
   .channel('orders_changes')
   .on('postgres_changes', 
@@ -1377,6 +1623,60 @@ state.ordersRealtime = state.supabase
       if (state.currentSection === 'payments') {
         loadPendingOrders();
       }
+    }
+  )
+  .subscribe();
+
+// KYC requests realtime
+state.kycRealtime = state.supabase
+  .channel('kyc_requests_changes')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'kyc_requests' }, 
+    (payload) => {
+      if (state.currentSection === 'kyc') {
+        loadKycRequests();
+      }
+      loadDashboardData(); // Update stats
+    }
+  )
+  .subscribe();
+
+// User Products realtime
+state.userProductsRealtime = state.supabase
+  .channel('user_products_changes')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'user_products' }, 
+    (payload) => {
+      if (state.currentSection === 'user-products') {
+        loadUserProducts();
+      }
+      loadDashboardData(); // Update stats
+    }
+  )
+  .subscribe();
+
+// User Orders realtime
+state.userOrdersRealtime = state.supabase
+  .channel('user_orders_changes')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'user_orders' }, 
+    (payload) => {
+      if (state.currentSection === 'user-orders') {
+        loadUserOrders();
+      }
+      loadDashboardData(); // Update stats
+    }
+  )
+  .subscribe();
+
+// Chat Messages realtime (for admin to see changes, not for live chat)
+state.chatMessagesRealtime = state.supabase
+  .channel('chat_messages_changes')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'chat_messages' }, 
+    (payload) => {
+      // No specific load function for chat management, but useful for debugging
+      console.log('Chat message change detected:', payload);
     }
   )
   .subscribe();
@@ -1429,6 +1729,18 @@ switch (section) {
     break;
   case 'support':
     loadSupportMessages();
+    break;
+  case 'kyc':
+    loadKycRequests();
+    break;
+  case 'user-products':
+    loadUserProducts();
+    break;
+  case 'user-orders':
+    loadUserOrders();
+    break;
+  case 'chat-management':
+    // No specific data to load for chat management, just the section
     break;
 }
 }
@@ -1664,7 +1976,7 @@ async function loadUsersData() {
 const tbody = document.getElementById('users-table-body');
 tbody.innerHTML = `
   <tr>
-    <td colspan="6" class="text-center text-text-secondary py-8">
+    <td colspan="7" class="text-center text-text-secondary py-8">
       <div class="loading-spinner mx-auto mb-2"></div>
       Loading users...
     </td>
@@ -1686,6 +1998,8 @@ try {
     tbody.innerHTML = data.map(profile => {
       const statusClass = profile.is_banned ? 'status-banned' : 'status-active';
       const statusText = profile.is_banned ? 'BANNED' : 'ACTIVE';
+      const canSellClass = profile.can_sell ? 'status-active' : 'status-inactive';
+      const canSellText = profile.can_sell ? 'YES' : 'NO';
       const avatar = profile.profile_picture || '/placeholder.svg?height=40&width=40';
 
       return `
@@ -1695,9 +2009,12 @@ try {
           </td>
           <td class="font-medium">${profile.username || 'N/A'}</td>
           <td>${profile.name || 'N/A'}</td>
-          <td class="text-sm">${new Date(profile.created_at).toLocaleDateString('en-US')}</td>
+          <td class="text-sm">${utils.formatDate(profile.created_at)}</td>
           <td>
             <span class="${statusClass} font-semibold">${statusText}</span>
+          </td>
+          <td>
+            <span class="${canSellClass} font-semibold">${canSellText}</span>
           </td>
           <td>
             <div class="table-actions">
@@ -1718,7 +2035,7 @@ try {
   } else {
     tbody.innerHTML = `
       <tr>
-        <td colspan="6" class="text-center text-text-secondary py-8">
+        <td colspan="7" class="text-center text-text-secondary py-8">
           No Users Found
         </td>
       </tr>
@@ -1728,7 +2045,7 @@ try {
   console.error('Error loading users:', error);
   tbody.innerHTML = `
     <tr>
-      <td colspan="6" class="text-center text-accent-red py-8">
+      <td colspan="7" class="text-center text-accent-red py-8">
         Failed to retrieve Users
       </td>
     </tr>
@@ -1821,7 +2138,7 @@ try {
               <p class="text-sm text-text-secondary">
                 <i class="fas fa-user mr-1"></i> ${authorName} (@${authorUsername})
                 <span class="ml-3">
-                  <i class="fas fa-calendar mr-1"></i> ${new Date(news.created_at).toLocaleDateString('en-US')}
+                  <i class="fas fa-calendar mr-1"></i> ${utils.formatDate(news.created_at)}
                 </span>
               </p>
             </div>
@@ -2024,7 +2341,7 @@ try {
           <span><i class="fas fa-eye mr-1"></i> ${data.views || 0} VIEWS</span>
           <span><i class="fas fa-heart mr-1"></i> ${data.likes || 0} LIKES</span>
         </div>
-        <span><i class="fas fa-calendar mr-1"></i> ${new Date(data.created_at).toLocaleString('en-US')}</span>
+        <span><i class="fas fa-calendar mr-1"></i> ${utils.formatDateTime(data.created_at)}</span>
       </div>
     </div>
   `;
@@ -2459,7 +2776,7 @@ try {
         <td>${order.amount} MMK</td>
         <td>
           ${order.payment_methods?.method_name || 'N/A'}
-          <span class="block text-xs text-text-secondary">${new Date(order.ordered_at).toLocaleString('en-US')}</span>
+          <span class="block text-xs text-text-secondary">${utils.formatDateTime(order.ordered_at)}</span>
         </td>
         <td>
           ${order.receipt_url ? `<a href="${order.receipt_url}" target="_blank" class="text-accent-green hover:underline">VIEW RECEIPT</a>` : 'N/A'}
@@ -2580,7 +2897,7 @@ try {
               <i class="fas fa-${isFromUser ? 'user' : 'headset'} text-sm"></i>
               <span class="font-semibold text-sm">${senderName}</span>
             </div>
-            <span class="text-xs text-text-secondary">${new Date(message.created_at).toLocaleString('en-US')}</span>
+            <span class="text-xs text-text-secondary">${utils.formatDateTime(message.created_at)}</span>
           </div>
           <p class="text-sm text-text-secondary whitespace-pre-wrap">${message.content}</p>
         </div>
@@ -2641,6 +2958,697 @@ try {
 }
 }
 
+// KYC Management Functions
+async function loadKycRequests() {
+  const tbody = document.getElementById('kyc-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading KYC requests...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('kyc_requests')
+      .select(`
+        *,
+        profiles(username, name, profile_picture, key_id)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(kyc => {
+        const statusClass = `status-${kyc.status}`;
+        const avatar = kyc.profiles?.profile_picture || '/placeholder.svg?height=40&width=40';
+        const userName = kyc.profiles?.name || 'N/A';
+        const userUsername = kyc.profiles?.username || 'N/A';
+
+        return `
+          <tr data-search-terms="${userName.toLowerCase()} ${userUsername.toLowerCase()} ${kyc.id_type.toLowerCase()} ${kyc.status.toLowerCase()}">
+            <td>
+              <img src="${avatar}" alt="Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              ${userName} (@${userUsername})
+            </td>
+            <td>${kyc.full_name || 'N/A'}</td>
+            <td>${kyc.id_type.toUpperCase()}</td>
+            <td class="text-sm">${utils.formatDate(kyc.created_at)}</td>
+            <td><span class="${statusClass} font-semibold">${kyc.status.toUpperCase()}</span></td>
+            <td>
+              <div class="table-actions">
+                <button onclick="viewKycDetails('${kyc.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye mr-1"></i>
+                  <span class="hidden sm:inline">VIEW</span>
+                </button>
+                ${kyc.status === 'pending' ? `
+                <button onclick="approveKyc('${kyc.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-check mr-1"></i>
+                  <span class="hidden sm:inline">APPROVE</span>
+                </button>
+                <button onclick="rejectKyc('${kyc.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-times mr-1"></i>
+                  <span class="hidden sm:inline">REJECT</span>
+                </button>
+                ` : ''}
+                <button onclick="deleteKycPermanently('${kyc.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i>
+                  <span class="hidden sm:inline">DELETE KYC</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            No KYC Requests Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading KYC requests:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve KYC Requests
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function viewKycDetails(kycId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('kyc_requests')
+      .select(`
+        *,
+        profiles(username, name, profile_picture, key_id)
+      `)
+      .eq('id', kycId)
+      .single();
+
+    if (error) throw error;
+
+    const userProfile = data.profiles;
+    const avatar = userProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    let idPhotoHtml = data.id_photo_url ? `<img src="${data.id_photo_url}" class="w-full rounded-lg mb-3" alt="ID Photo">` : 'N/A';
+    let videoHtml = data.video_url ? `
+      <div class="video-container mb-3">
+        <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+          <source src="${data.video_url}" type="video/mp4">
+        </video>
+      </div>
+    ` : 'N/A';
+
+    document.getElementById('kyc-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="${avatar}" alt="User Profile" class="w-12 h-12 rounded-full object-cover">
+          <div>
+            <h4 class="font-semibold text-text-primary">${userProfile?.name || 'N/A'} (@${userProfile?.username || 'N/A'})</h4>
+            <p class="text-sm text-text-secondary">Key ID: ${userProfile?.key_id || 'N/A'}</p>
+          </div>
+        </div>
+        
+        <h3 class="text-xl font-bold text-accent-purple">KYC Information</h3>
+        <p class="text-text-secondary"><strong>Status:</strong> <span class="status-${data.status} font-semibold">${data.status.toUpperCase()}</span></p>
+        <p class="text-text-secondary"><strong>Full Name:</strong> ${data.full_name || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Date of Birth:</strong> ${data.date_of_birth || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>ID Type:</strong> ${data.id_type.toUpperCase()}</p>
+        <p class="text-text-secondary"><strong>ID Number:</strong> ${data.id_number || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Expiry Date:</strong> ${data.expiry_date || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Address:</strong> ${data.address || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Submitted At:</strong> ${utils.formatDateTime(data.created_at)}</p>
+
+        <h3 class="text-xl font-bold text-accent-purple mt-6">Documents</h3>
+        <p class="text-text-secondary"><strong>ID Photo:</strong></p>
+        ${idPhotoHtml}
+        <p class="text-text-secondary"><strong>Verification Video:</strong></p>
+        ${videoHtml}
+      </div>
+    `;
+    document.getElementById('kyc-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing KYC details:', error);
+    showNotification('Failed to view KYC details', 'error');
+  }
+}
+
+function closeKycModal() {
+  document.getElementById('kyc-modal').classList.add('hidden');
+}
+
+async function approveKyc(kycId) {
+  showConfirmModal(
+    'Are you sure you want to APPROVE this KYC request? This will enable the user to sell products.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('approve_kyc', { kyc_id_param: kycId });
+        if (error) throw error;
+        showNotification('KYC request approved successfully! User can now sell.', 'success');
+        loadKycRequests();
+        loadUsersData(); // Update user's can_sell status
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error approving KYC:', error);
+        showNotification('Failed to approve KYC request', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+async function rejectKyc(kycId) {
+  const reason = prompt('Reason for rejecting KYC?', 'Documents unclear or invalid.');
+  if (!reason) return;
+
+  showConfirmModal(
+    'Are you sure you want to REJECT this KYC request? The user will not be able to sell.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('reject_kyc', { kyc_id_param: kycId, reason_param: reason });
+        if (error) throw error;
+        showNotification('KYC request rejected successfully!', 'success');
+        loadKycRequests();
+        loadUsersData(); // Update user's can_sell status
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error rejecting KYC:', error);
+        showNotification('Failed to reject KYC request', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+async function deleteKycPermanently(kycId) {
+  showConfirmModal(
+    'WARNING: Deleting this KYC request permanently will prevent the user from re-submitting KYC for selling. Are you sure?',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('delete_kyc_permanently', { kyc_id_param: kycId });
+        if (error) throw error;
+        showNotification('KYC request permanently deleted. User cannot re-submit KYC for selling.', 'success');
+        loadKycRequests();
+        loadUsersData(); // Update user's can_sell status
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error deleting KYC permanently:', error);
+        showNotification('Failed to delete KYC permanently', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+// User Products Management Functions
+async function loadUserProducts() {
+  const tbody = document.getElementById('user-products-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading user products...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('user_products')
+      .select(`
+        *,
+        profiles(username, name, profile_picture)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(product => {
+        const statusClass = `status-${product.status}`;
+        const sellerName = product.profiles?.name || 'N/A';
+        const sellerUsername = product.profiles?.username || 'N/A';
+        const sellerAvatar = product.profiles?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr data-search-terms="${product.name.toLowerCase()} ${sellerName.toLowerCase()} ${sellerUsername.toLowerCase()} ${product.status.toLowerCase()}">
+            <td>${product.name}</td>
+            <td>
+              <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              ${sellerName} (@${sellerUsername})
+            </td>
+            <td>${product.price} MMK</td>
+            <td class="text-sm">${utils.formatDate(product.created_at)}</td>
+            <td><span class="${statusClass} font-semibold">${product.status.toUpperCase()}</span></td>
+            <td>
+              <div class="table-actions">
+                <button onclick="viewUserProductDetails('${product.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye mr-1"></i>
+                  <span class="hidden sm:inline">VIEW</span>
+                </button>
+                ${product.status === 'pending' ? `
+                <button onclick="approveUserProduct('${product.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-check mr-1"></i>
+                  <span class="hidden sm:inline">APPROVE</span>
+                </button>
+                <button onclick="rejectUserProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-times mr-1"></i>
+                  <span class="hidden sm:inline">REJECT</span>
+                </button>
+                ` : ''}
+                <button onclick="deleteUserProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i>
+                  <span class="hidden sm:inline">DELETE</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            No User Products Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading user products:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve User Products
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function viewUserProductDetails(productId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('user_products')
+      .select(`
+        *,
+        profiles(username, name, profile_picture),
+        user_product_images(image_url),
+        user_product_payments(method_name, account_info, qr_code_url)
+      `)
+      .eq('id', productId)
+      .single();
+
+    if (error) throw error;
+
+    const sellerProfile = data.profiles;
+    const sellerAvatar = sellerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    let imagesHtml = '';
+    if (data.user_product_images && data.user_product_images.length > 0) {
+      imagesHtml = data.user_product_images.map(img => `<img src="${img.image_url}" class="w-full rounded-lg mb-2" alt="Product Image">`).join('');
+    } else {
+      imagesHtml = '<p class="text-text-secondary">No images available.</p>';
+    }
+
+    let paymentMethodsHtml = '';
+    if (data.user_product_payments && data.user_product_payments.length > 0) {
+      paymentMethodsHtml = data.user_product_payments.map(pm => `
+        <div class="border border-border-color p-3 rounded-md mb-2">
+          <p class="font-semibold">${pm.method_name}</p>
+          <p class="text-sm text-text-secondary">${pm.account_info}</p>
+          ${pm.qr_code_url ? `<img src="${pm.qr_code_url}" class="w-24 h-24 object-contain mt-2 rounded-md" alt="QR Code">` : ''}
+        </div>
+      `).join('');
+    } else {
+      paymentMethodsHtml = '<p class="text-text-secondary">No payment methods specified.</p>';
+    }
+
+    document.getElementById('user-product-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="${sellerAvatar}" alt="Seller Profile" class="w-12 h-12 rounded-full object-cover">
+          <div>
+            <h4 class="font-semibold text-text-primary">${sellerProfile?.name || 'N/A'} (@${sellerProfile?.username || 'N/A'})</h4>
+            <p class="text-sm text-text-secondary">Posted: ${utils.formatDateTime(data.created_at)}</p>
+          </div>
+        </div>
+        
+        <h3 class="text-xl font-bold text-accent-purple">${data.name}</h3>
+        <p class="text-text-secondary"><strong>Price:</strong> ${data.price} MMK</p>
+        <p class="text-text-secondary whitespace-pre-wrap">${data.description}</p>
+        
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Images</h4>
+        ${imagesHtml}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Seller Contact</h4>
+        <p class="text-text-secondary"><strong>Social Platform:</strong> ${data.contact_platform || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Contact Link:</strong> ${data.contact_link ? `<a href="${data.contact_link}" target="_blank" class="text-accent-purple hover:underline">${data.contact_link}</a>` : 'N/A'}</p>
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Payment Methods</h4>
+        ${paymentMethodsHtml}
+
+        <p class="text-text-secondary mt-4"><strong>Status:</strong> <span class="status-${data.status} font-semibold">${data.status.toUpperCase()}</span></p>
+        ${data.admin_notes ? `<p class="text-text-secondary"><strong>Admin Notes:</strong> ${data.admin_notes}</p>` : ''}
+      </div>
+    `;
+    document.getElementById('user-product-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing user product details:', error);
+    showNotification('Failed to view Product details', 'error');
+  }
+}
+
+function closeUserProductModal() {
+  document.getElementById('user-product-modal').classList.add('hidden');
+}
+
+async function approveUserProduct(productId) {
+  showConfirmModal(
+    'Are you sure you want to APPROVE this user product? It will become visible to buyers.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('approve_user_product', { product_id_param: productId });
+        if (error) throw error;
+        showNotification('User product approved successfully!', 'success');
+        loadUserProducts();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error approving user product:', error);
+        showNotification('Failed to approve user product', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+async function rejectUserProduct(productId) {
+  const reason = prompt('Reason for rejecting this user product?', 'Product content inappropriate or incomplete.');
+  if (!reason) return;
+
+  showConfirmModal(
+    'Are you sure you want to REJECT this user product? It will not be visible to buyers.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('reject_user_product', { product_id_param: productId, reason_param: reason });
+        if (error) throw error;
+        showNotification('User product rejected successfully!', 'success');
+        loadUserProducts();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error rejecting user product:', error);
+        showNotification('Failed to reject user product', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+function deleteUserProduct(productId) {
+  showConfirmModal(
+    'Deleting this user product will permanently remove it and all associated orders. Are you sure?',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase
+          .from('user_products')
+          .delete()
+          .eq('id', productId);
+
+        if (error) throw error;
+
+        showNotification('User product deleted successfully!', 'success');
+        loadUserProducts();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error deleting user product:', error);
+        showNotification('Failed to delete user product', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+// User Orders Management Functions
+async function loadUserOrders() {
+  const tbody = document.getElementById('user-orders-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="7" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading user orders...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('user_orders')
+      .select(`
+        *,
+        buyer_profile:profiles!fk_buyer_profile_id(username, name, profile_picture),
+        seller_profile:profiles!fk_seller_profile_id(username, name, profile_picture),
+        user_products(name),
+        user_product_payments(method_name)
+      `)
+      .order('ordered_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(order => {
+        const statusClass = `status-${order.status}`;
+        const buyerName = order.buyer_profile?.name || 'N/A';
+        const buyerUsername = order.buyer_profile?.username || 'N/A';
+        const buyerAvatar = order.buyer_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
+        const sellerName = order.seller_profile?.name || 'N/A';
+        const sellerUsername = order.seller_profile?.username || 'N/A';
+        const sellerAvatar = order.seller_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr data-search-terms="${order.id.toLowerCase()} ${buyerName.toLowerCase()} ${buyerUsername.toLowerCase()} ${sellerName.toLowerCase()} ${sellerUsername.toLowerCase()} ${order.user_products?.name.toLowerCase()} ${order.status.toLowerCase()}">
+            <td class="font-share-tech text-sm">${order.id.substring(0, 8)}...</td>
+            <td>
+              <img src="${buyerAvatar}" alt="Buyer Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              ${buyerName} (@${buyerUsername})
+            </td>
+            <td>
+              <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              ${sellerName} (@${sellerUsername})
+            </td>
+            <td>${order.user_products?.name || 'N/A'}</td>
+            <td>${order.amount} MMK</td>
+            <td><span class="${statusClass} font-semibold">${order.status.toUpperCase()}</span></td>
+            <td>
+              <div class="table-actions">
+                ${order.receipt_url ? `
+                <a href="${order.receipt_url}" target="_blank" class="myanmar-btn btn-small">
+                  <i class="fas fa-receipt mr-1"></i>
+                  <span class="hidden sm:inline">RECEIPT</span>
+                </a>
+                ` : ''}
+                ${order.status === 'pending' ? `
+                <button onclick="approveUserOrder('${order.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-check mr-1"></i>
+                  <span class="hidden sm:inline">APPROVE</span>
+                </button>
+                <button onclick="rejectUserOrder('${order.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-times mr-1"></i>
+                  <span class="hidden sm:inline">REJECT</span>
+                </button>
+                ` : ''}
+                <button onclick="viewUserOrderDetails('${order.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye mr-1"></i>
+                  <span class="hidden sm:inline">VIEW</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="7" class="text-center text-text-secondary py-8">
+            No User Orders Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading user orders:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="7" class="text-center text-accent-red py-8">
+          Failed to retrieve User Orders
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function viewUserOrderDetails(orderId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('user_orders')
+      .select(`
+        *,
+        buyer_profile:profiles!fk_buyer_profile_id(username, name, profile_picture),
+        seller_profile:profiles!fk_seller_profile_id(username, name, profile_picture),
+        user_products(name, description, price, contact_platform, contact_link),
+        user_product_payments(method_name, account_info, qr_code_url)
+      `)
+      .eq('id', orderId)
+      .single();
+
+    if (error) throw error;
+
+    const buyerProfile = data.buyer_profile;
+    const sellerProfile = data.seller_profile;
+    const product = data.user_products;
+    const paymentMethod = data.user_product_payments;
+
+    const buyerAvatar = buyerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+    const sellerAvatar = sellerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+    const paymentQrCode = paymentMethod?.qr_code_url ? `<img src="${paymentMethod.qr_code_url}" class="w-24 h-24 object-contain mt-2 rounded-md" alt="QR Code">` : 'N/A';
+
+    document.getElementById('user-order-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <h3 class="text-xl font-bold text-accent-purple">Order ID: <span class="font-share-tech">${data.id}</span></h3>
+        <p class="text-text-secondary"><strong>Status:</strong> <span class="status-${data.status} font-semibold">${data.status.toUpperCase()}</span></p>
+        <p class="text-text-secondary"><strong>Ordered At:</strong> ${utils.formatDateTime(data.ordered_at)}</p>
+        ${data.approved_at ? `<p class="text-text-secondary"><strong>Approved At:</strong> ${utils.formatDateTime(data.approved_at)}</p>` : ''}
+        ${data.rejected_at ? `<p class="text-text-secondary"><strong>Rejected At:</strong> ${utils.formatDateTime(data.rejected_at)}</p>` : ''}
+        ${data.admin_notes ? `<p class="text-text-secondary"><strong>Admin Notes:</strong> ${data.admin_notes}</p>` : ''}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Buyer Information</h4>
+        <div class="flex items-center space-x-3">
+          <img src="${buyerAvatar}" alt="Buyer Profile" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <p class="font-semibold text-text-primary">${buyerProfile?.name || 'N/A'} (@${buyerProfile?.username || 'N/A'})</p>
+          </div>
+        </div>
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Seller Information</h4>
+        <div class="flex items-center space-x-3">
+          <img src="${sellerAvatar}" alt="Seller Profile" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <p class="font-semibold text-text-primary">${sellerProfile?.name || 'N/A'} (@${sellerProfile?.username || 'N/A'})</p>
+          </div>
+        </div>
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Details</h4>
+        <p class="text-text-secondary"><strong>Product Name:</strong> ${product?.name || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Description:</strong> ${product?.description || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Price:</strong> ${product?.price || 'N/A'} MMK</p>
+        <p class="text-text-secondary"><strong>Seller Contact:</strong> ${product?.contact_platform || 'N/A'} - ${product?.contact_link ? `<a href="${product.contact_link}" target="_blank" class="text-accent-purple hover:underline">${product.contact_link}</a>` : 'N/A'}</p>
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Payment Information</h4>
+        <p class="text-text-secondary"><strong>Amount Paid:</strong> ${data.amount} MMK</p>
+        <p class="text-text-secondary"><strong>Payment Method:</strong> ${paymentMethod?.method_name || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Account Info:</strong> ${paymentMethod?.account_info || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>QR Code:</strong> ${paymentQrCode}</p>
+        <p class="text-text-secondary"><strong>Receipt:</strong> ${data.receipt_url ? `<a href="${data.receipt_url}" target="_blank" class="text-accent-green hover:underline">VIEW RECEIPT</a>` : 'N/A'}</p>
+      </div>
+    `;
+    document.getElementById('user-order-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing user order details:', error);
+    showNotification('Failed to view Order details', 'error');
+  }
+}
+
+function closeUserOrderModal() {
+  document.getElementById('user-order-modal').classList.add('hidden');
+}
+
+async function approveUserOrder(orderId) {
+  showConfirmModal(
+    'Are you sure you want to APPROVE this user order? This will mark the order as complete.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('approve_user_order', { order_id_param: orderId });
+        if (error) throw error;
+        showNotification('User order approved successfully!', 'success');
+        loadUserOrders();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error approving user order:', error);
+        showNotification('Failed to approve user order', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+async function rejectUserOrder(orderId) {
+  const reason = prompt('Reason for rejecting this user order?', 'Invalid receipt or payment.');
+  if (!reason) return;
+
+  showConfirmModal(
+    'Are you sure you want to REJECT this user order? This will mark the order as rejected.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('reject_user_order', { order_id_param: orderId, reason_param: reason });
+        if (error) throw error;
+        showNotification('User order rejected successfully!', 'success');
+        loadUserOrders();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error rejecting user order:', error);
+        showNotification('Failed to reject user order', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+// Chat Management Functions
+async function clearAllOldChatMessages() {
+  showConfirmModal(
+    'Are you sure you want to clear all chat messages older than 24 hours? This action cannot be undone.',
+    async () => {
+      try {
+        showLoading(true);
+        const { data, error } = await state.supabase.rpc('clear_old_chat_messages');
+        if (error) throw error;
+        showNotification(`Cleared ${data || 0} old chat messages.`, 'success');
+      } catch (error) {
+        console.error('Error clearing old chat messages:', error);
+        showNotification('Failed to clear old chat messages', 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+
 function showConfirmModal(message, callback) {
 document.getElementById('confirm-message').textContent = message;
 state.confirmCallback = callback;
@@ -2680,6 +3688,10 @@ if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
 if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
 if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
 if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
+if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
+if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
+if (state.chatMessagesRealtime) state.supabase.removeChannel(state.chatMessagesRealtime);
 }
 
 // Generic table filtering function
