@@ -593,10 +593,10 @@ body {
       <span class="hidden sm:inline">PRODUCTS</span>
       <span class="sm:hidden">Products</span>
     </button>
-    <button onclick="showSection('user-products', this)" class="nav-btn">
+    <button onclick="showSection('marketplace', this)" class="nav-btn">
       <i class="fas fa-store mr-1"></i>
-      <span class="hidden sm:inline">USER PRODUCTS</span>
-      <span class="sm:hidden">User Products</span>
+      <span class="hidden sm:inline">MARKETPLACE</span>
+      <span class="sm:hidden">Market</span>
     </button>
     <button onclick="showSection('chat', this)" class="nav-btn">
       <i class="fas fa-comments mr-1"></i>
@@ -664,12 +664,12 @@ body {
     </div>
   </div>
 
-  <!-- Products Section (Admin Uploaded) -->
+  <!-- Products Section (Admin Products) -->
   <div id="products-section" class="app-section hidden">
     <div class="app-card p-4 md:p-8">
       <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
         <i class="fas fa-box-open mr-3"></i>
-        PRODUCTS & APKS
+        OFFICIAL PRODUCTS & APKS
       </h3>
       <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
@@ -678,83 +678,16 @@ body {
     </div>
   </div>
 
-  <!-- User Products Section (Seller/Buyer) -->
-  <div id="user-products-section" class="app-section hidden">
+  <!-- Marketplace Section (User Products) -->
+  <div id="marketplace-section" class="app-section hidden">
     <div class="app-card p-4 md:p-8">
       <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
         <i class="fas fa-store mr-3"></i>
         USER MARKETPLACE
       </h3>
-
-      <!-- Seller Post Form -->
-      <div id="seller-post-form-container" class="mb-8">
-        <h4 class="text-md font-orbitron font-bold mb-4 text-accent-green flex items-center">
-          <i class="fas fa-plus-circle mr-2"></i>
-          SELL YOUR PRODUCT
-        </h4>
-        <div id="kyc-warning" class="bg-red-600 bg-opacity-20 border border-red-500 rounded-lg p-4 mb-4 hidden">
-          <p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> You need to complete KYC verification to sell products. Please go to 'MI' section to submit your KYC.</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT NAME</label>
-            <input type="text" id="seller-product-name" placeholder="Product Name" 
-                   class="app-input w-full">
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium mb-2 text-text-secondary">DESCRIPTION</label>
-            <textarea id="seller-product-description" placeholder="Product Description..." rows="3"
-                      class="app-input w-full resize-none"></textarea>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">CONTACT SOCIAL PLATFORM NAME</label>
-            <input type="text" id="seller-social-name" placeholder="Telegram / Facebook" 
-                   class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">CONTACT SOCIAL LINK</label>
-            <input type="url" id="seller-social-link" placeholder="https://t.me/yourprofile" 
-                   class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT IMAGES (Max 5MB per image)</label>
-            <input type="file" id="seller-product-images" accept="image/*" multiple
-                   class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PRICE (MMK)</label>
-            <input type="number" id="seller-product-price" placeholder="0.00" min="0" step="0.01"
-                   class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PAYMENT METHOD ICON</label>
-            <input type="file" id="seller-payment-icon" accept="image/*" 
-                   class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PAYMENT ACCOUNT INFO (Phone / Address)</label>
-            <input type="text" id="seller-payment-info" placeholder="09xxxxxxxxx / Bank Account No." 
-                   class="app-input w-full">
-          </div>
-          <div class="md:col-span-2 flex items-end">
-            <button onclick="postUserProduct()" 
-                    id="post-user-product-btn"
-                    class="myanmar-btn w-full flex items-center justify-center space-x-2">
-              <i class="fas fa-upload"></i>
-              <span>POST PRODUCT</span>
-            </button>
-          </div>
-        </div>
-      </div>
-
-      <!-- User Products List (for buying) -->
-      <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple flex items-center">
-        <i class="fas fa-shopping-bag mr-2"></i>
-        AVAILABLE USER PRODUCTS
-      </h4>
-      <div id="user-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+      <div id="marketplace-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
         <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
-        <p class="text-center text-text-secondary col-span-full">Loading user products...</p>
+        <p class="text-center text-text-secondary col-span-full">Loading marketplace products...</p>
       </div>
     </div>
   </div>
@@ -764,20 +697,30 @@ body {
     <div class="app-card p-4 md:p-8">
       <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
         <i class="fas fa-comments mr-3"></i>
-        GLOBAL CHAT
+        MY CHATS
       </h3>
-      <div id="chat-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+      <div id="chat-conversations-list" class="space-y-4 mb-6">
         <div class="loading-spinner mx-auto mb-4"></div>
-        <p class="text-center text-text-secondary">Loading messages...</p>
+        <p class="text-center text-text-secondary">Loading conversations...</p>
       </div>
-      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        <textarea id="chat-input" placeholder="Type your message..." rows="3"
-                  class="app-input flex-1 resize-none"></textarea>
-        <button onclick="sendChatMessage()" 
-                class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
-          <i class="fas fa-paper-plane"></i>
-          <span>SEND</span>
+      <div id="chat-messages-container" class="hidden">
+        <button onclick="closeChatConversation()" class="myanmar-btn btn-small mb-4">
+          <i class="fas fa-arrow-left mr-1"></i> Back to Conversations
         </button>
+        <h4 id="chat-partner-name" class="text-lg font-semibold text-accent-green mb-4"></h4>
+        <div id="chat-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+          <div class="loading-spinner mx-auto mb-4"></div>
+          <p class="text-center text-text-secondary">Loading messages...</p>
+        </div>
+        <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+          <textarea id="chat-input" placeholder="Type your message..." rows="3"
+                    class="app-input flex-1 resize-none"></textarea>
+          <button onclick="sendChatMessage()" 
+                  class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
+            <i class="fas fa-paper-plane"></i>
+            <span>SEND</span>
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -789,18 +732,45 @@ body {
         <i class="fas fa-headset mr-3"></i>
         SUPPORT
       </h3>
-      <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+      <div id="support-tickets-list" class="space-y-4 mb-6">
         <div class="loading-spinner mx-auto mb-4"></div>
-        <p class="text-center text-text-secondary">Loading messages...</p>
+        <p class="text-center text-text-secondary">Loading support tickets...</p>
       </div>
-      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        <textarea id="support-input" placeholder="Type your support message..." rows="3"
-                  class="app-input flex-1 resize-none"></textarea>
-        <button onclick="sendSupportMessage()" 
-                class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
-          <i class="fas fa-paper-plane"></i>
-          <span>SEND SUPPORT</span>
+      <div id="support-ticket-details-container" class="hidden">
+        <button onclick="closeSupportTicketDetails()" class="myanmar-btn btn-small mb-4">
+          <i class="fas fa-arrow-left mr-1"></i> Back to Tickets
         </button>
+        <h4 id="support-ticket-subject" class="text-lg font-semibold text-accent-green mb-4"></h4>
+        <div id="support-ticket-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
+          <div class="loading-spinner mx-auto mb-4"></div>
+          <p class="text-center text-text-secondary">Loading messages...</p>
+        </div>
+        <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
+          <textarea id="support-reply-input" placeholder="Type your reply..." rows="3"
+                    class="app-input flex-1 resize-none"></textarea>
+          <button onclick="sendSupportReply()" 
+                  class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
+            <i class="fas fa-paper-plane"></i>
+            <span>SEND REPLY</span>
+          </button>
+        </div>
+      </div>
+      <button id="create-new-ticket-btn" onclick="showCreateTicketForm()" class="myanmar-btn w-full flex items-center justify-center space-x-2">
+        <i class="fas fa-plus-circle"></i>
+        <span>CREATE NEW TICKET</span>
+      </button>
+      <div id="create-ticket-form" class="app-card p-4 md:p-8 mt-6 hidden">
+        <h4 class="text-lg font-orbitron font-bold mb-4 text-accent-purple">NEW SUPPORT TICKET</h4>
+        <div class="space-y-4">
+          <input type="text" id="new-ticket-subject" placeholder="Subject" class="app-input w-full">
+          <textarea id="new-ticket-message" placeholder="Your message..." rows="5" class="app-input w-full resize-none"></textarea>
+          <button onclick="submitNewTicket()" class="myanmar-btn w-full">
+            <i class="fas fa-paper-plane mr-2"></i> SUBMIT TICKET
+          </button>
+          <button onclick="hideCreateTicketForm()" class="myanmar-btn btn-danger w-full">
+            <i class="fas fa-times mr-2"></i> CANCEL
+          </button>
+        </div>
       </div>
     </div>
   </div>
@@ -840,6 +810,10 @@ body {
             <label class="block text-sm font-medium mb-2 text-text-secondary">ACCOUNT STATUS</label>
             <input type="text" id="mi-account-status" class="app-input w-full" readonly>
           </div>
+          <div>
+            <label class="block text-sm font-medium mb-2 text-text-secondary">KYC STATUS</label>
+            <input type="text" id="mi-kyc-status" class="app-input w-full" readonly>
+          </div>
           <div class="md:col-span-2">
             <label class="block text-sm font-medium mb-2 text-text-secondary">NEW PROFILE PICTURE (OPTIONAL)</label>
             <input type="file" id="mi-new-profile-picture" accept="image/*" class="app-input w-full">
@@ -851,152 +825,145 @@ body {
             </button>
           </div>
         </div>
-      </div>
 
-      <!-- KYC Section -->
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-id-card mr-3"></i>
-        KYC VERIFICATION
-      </h3>
-      <div id="kyc-status-display" class="mb-4">
-        <p class="text-text-secondary">KYC Status: <span id="kyc-status-text" class="font-semibold">Loading...</span></p>
-        <p id="kyc-admin-notes" class="text-sm text-text-secondary hidden"></p>
-      </div>
-      <div id="kyc-form-container" class="space-y-4 hidden">
-        <h4 class="text-md font-orbitron font-bold mb-4 text-accent-green">SUBMIT KYC</h4>
-        <div>
-          <label class="block text-sm font-medium mb-2 text-text-secondary">FULL NAME</label>
-          <input type="text" id="kyc-full-name" placeholder="Your Full Name" class="app-input w-full">
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-2 text-text-secondary">DATE OF BIRTH</label>
-          <input type="date" id="kyc-dob" class="app-input w-full">
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-2 text-text-secondary">ID TYPE</label>
-          <select id="kyc-id-type" class="app-input w-full" onchange="toggleKycIdFields()">
+        <h4 class="text-lg font-orbitron font-bold mt-8 mb-4 text-accent-purple">
+          <i class="fas fa-user-shield mr-2"></i>
+          KYC VERIFICATION
+        </h4>
+        <div id="kyc-status-display" class="text-center text-text-secondary mb-4"></div>
+        <div id="kyc-form" class="space-y-4 hidden">
+          <p class="text-text-secondary text-center">Submit your KYC details to become a seller.</p>
+          <input type="text" id="kyc-full-name" placeholder="Full Name" class="app-input w-full">
+          <input type="date" id="kyc-dob" placeholder="Date of Birth" class="app-input w-full">
+          <select id="kyc-id-type" class="app-input w-full">
             <option value="">Select ID Type</option>
-            <option value="passport">Passport</option>
             <option value="nrc">NRC</option>
+            <option value="passport">Passport</option>
             <option value="driving_license">Driving License</option>
           </select>
+          <input type="text" id="kyc-id-number" placeholder="ID Number" class="app-input w-full">
+          <input type="date" id="kyc-expiry-date" placeholder="ID Expiry Date" class="app-input w-full">
+          <textarea id="kyc-address" placeholder="Full Address" rows="3" class="app-input w-full resize-none"></textarea>
+          <label class="block text-sm font-medium mb-2 text-text-secondary">ID Photo</label>
+          <input type="file" id="kyc-id-photo" accept="image/*" class="app-input w-full">
+          <label class="block text-sm font-medium mb-2 text-text-secondary">Verification Video (Optional)</label>
+          <input type="file" id="kyc-video" accept="video/*" class="app-input w-full">
+          <button onclick="submitKyc()" class="myanmar-btn w-full">
+            <i class="fas fa-paper-plane mr-2"></i> SUBMIT KYC
+          </button>
         </div>
-        <div id="kyc-passport-fields" class="space-y-4 hidden">
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PASSPORT NUMBER</label>
-            <input type="text" id="kyc-passport-number" placeholder="Passport Number" class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PASSPORT EXPIRY DATE</label>
-            <input type="date" id="kyc-passport-expiry" class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">PASSPORT PHOTO (Max 5MB)</label>
-            <input type="file" id="kyc-passport-photo" accept="image/*" class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">FACE VIDEO (10-20s, Max 10MB)</label>
-            <input type="file" id="kyc-face-video" accept="video/mp4,video/quicktime,video/webm" class="app-input w-full">
-          </div>
-        </div>
-        <div id="kyc-nrc-driving-fields" class="space-y-4 hidden">
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">NRC / DRIVING LICENSE NUMBER</label>
-            <input type="text" id="kyc-nrc-driving-number" placeholder="NRC / Driving License Number" class="app-input w-full">
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">ID PHOTO (Front & Back, Max 5MB each)</label>
-            <input type="file" id="kyc-id-photo" accept="image/*" multiple class="app-input w-full">
-          </div>
-        </div>
-        <div>
-          <label class="block text-sm font-medium mb-2 text-text-secondary">ADDRESS</label>
-          <textarea id="kyc-address" placeholder="Your Full Address" rows="3" class="app-input w-full resize-none"></textarea>
-        </div>
-        <button onclick="submitKyc()" class="myanmar-btn w-full flex items-center justify-center space-x-2">
-          <i class="fas fa-paper-plane"></i>
-          <span>SUBMIT KYC</span>
+        <button id="show-kyc-form-btn" onclick="toggleKycForm()" class="myanmar-btn w-full flex items-center justify-center space-x-2">
+          <i class="fas fa-file-alt"></i>
+          <span>SUBMIT KYC REQUEST</span>
         </button>
-      </div>
 
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-shopping-bag mr-3"></i>
-        MY PURCHASES (Admin Products)
-      </h3>
-      <div id="my-purchases-list" class="overflow-x-auto">
-        <table class="app-table w-full">
-          <thead>
-            <tr>
-              <th class="text-left">PRODUCT</th>
-              <th class="text-left">AMOUNT</th>
-              <th class="text-left">ORDER DATE</th>
-              <th class="text-left">STATUS</th>
-              <th class="text-left">DOWNLOAD</th>
-            </tr>
-          </thead>
-          <tbody id="purchased-products-table-body">
-            <tr>
-              <td colspan="5" class="text-center text-text-secondary py-8">
-                <div class="loading-spinner mx-auto mb-2"></div>
-                Loading purchases...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <h4 class="text-lg font-orbitron font-bold mt-8 mb-4 text-accent-purple">
+          <i class="fas fa-box-open mr-2"></i>
+          MY MARKETPLACE PRODUCTS
+        </h4>
+        <button id="add-marketplace-product-btn" onclick="showAddMarketplaceProductForm()" class="myanmar-btn w-full flex items-center justify-center space-x-2 mb-4">
+          <i class="fas fa-plus-circle"></i>
+          <span>ADD NEW PRODUCT</span>
+        </button>
+        <div id="marketplace-products-table-container" class="overflow-x-auto">
+          <table class="app-table w-full">
+            <thead>
+              <tr>
+                <th class="text-left">PRODUCT</th>
+                <th class="text-left">PRICE</th>
+                <th class="text-left">STATUS</th>
+                <th class="text-left">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="my-marketplace-products-table-body">
+              <tr>
+                <td colspan="4" class="text-center text-text-secondary py-8">
+                  <div class="loading-spinner mx-auto mb-2"></div>
+                  Loading your products...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-handshake mr-3"></i>
-        MY SELLER POSTS
-      </h3>
-      <div id="my-seller-posts-list" class="overflow-x-auto">
-        <table class="app-table w-full">
-          <thead>
-            <tr>
-              <th class="text-left">PRODUCT NAME</th>
-              <th class="text-left">PRICE</th>
-              <th class="text-left">STATUS</th>
-              <th class="text-left">ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody id="seller-posts-table-body">
-            <tr>
-              <td colspan="4" class="text-center text-text-secondary py-8">
-                <div class="loading-spinner mx-auto mb-2"></div>
-                Loading seller posts...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <div id="add-marketplace-product-form" class="app-card p-4 md:p-8 mt-6 hidden">
+          <h4 class="text-lg font-orbitron font-bold mb-4 text-accent-purple">ADD NEW MARKETPLACE PRODUCT</h4>
+          <div class="space-y-4">
+            <input type="text" id="mp-product-name" placeholder="Product Name" class="app-input w-full">
+            <textarea id="mp-product-description" placeholder="Product Description..." rows="3" class="app-input w-full resize-none"></textarea>
+            <input type="number" id="mp-product-price" placeholder="Price (MMK)" min="0" step="0.01" class="app-input w-full">
+            <label class="block text-sm font-medium mb-2 text-text-secondary">Product Images (Max 5)</label>
+            <input type="file" id="mp-product-images" accept="image/*" multiple class="app-input w-full">
+            <label class="block text-sm font-medium mb-2 text-text-secondary">Product Video (Optional)</label>
+            <input type="file" id="mp-product-video" accept="video/*" class="app-input w-full">
+            <select id="mp-product-category" class="app-input w-full">
+              <option value="">Select Category</option>
+            </select>
+            <input type="text" id="mp-contact-platform" placeholder="Contact Platform (e.g., Telegram)" class="app-input w-full">
+            <input type="url" id="mp-contact-link" placeholder="Contact Link (e.g., https://t.me/your_id)" class="app-input w-full">
+            <button onclick="submitMarketplaceProduct()" class="myanmar-btn w-full">
+              <i class="fas fa-paper-plane mr-2"></i> SUBMIT PRODUCT
+            </button>
+            <button onclick="hideAddMarketplaceProductForm()" class="myanmar-btn btn-danger w-full">
+              <i class="fas fa-times mr-2"></i> CANCEL
+            </button>
+          </div>
+        </div>
 
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mt-8 mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-receipt mr-3"></i>
-        MY BUYER ORDERS (on my products)
-      </h3>
-      <div id="my-buyer-orders-list" class="overflow-x-auto">
-        <table class="app-table w-full">
-          <thead>
-            <tr>
-              <th class="text-left">BUYER</th>
-              <th class="text-left">PRODUCT</th>
-              <th class="text-left">AMOUNT</th>
-              <th class="text-left">RECEIPT</th>
-              <th class="text-left">STATUS</th>
-              <th class="text-left">ACTIONS</th>
-            </tr>
-          </thead>
-          <tbody id="buyer-orders-table-body">
-            <tr>
-              <td colspan="6" class="text-center text-text-secondary py-8">
-                <div class="loading-spinner mx-auto mb-2"></div>
-                Loading buyer orders...
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
+        <h4 class="text-lg font-orbitron font-bold mt-8 mb-4 text-accent-purple">
+          <i class="fas fa-shopping-cart mr-2"></i>
+          MY ORDERS (AS BUYER)
+        </h4>
+        <div class="overflow-x-auto">
+          <table class="app-table w-full">
+            <thead>
+              <tr>
+                <th class="text-left">PRODUCT</th>
+                <th class="text-left">AMOUNT</th>
+                <th class="text-left">STATUS</th>
+                <th class="text-left">ORDERED AT</th>
+                <th class="text-left">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="my-orders-table-body">
+              <tr>
+                <td colspan="5" class="text-center text-text-secondary py-8">
+                  <div class="loading-spinner mx-auto mb-2"></div>
+                  Loading your orders...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
 
+        <h4 class="text-lg font-orbitron font-bold mt-8 mb-4 text-accent-purple">
+          <i class="fas fa-handshake mr-2"></i>
+          MY SALES (AS SELLER)
+        </h4>
+        <div class="overflow-x-auto">
+          <table class="app-table w-full">
+            <thead>
+              <tr>
+                <th class="text-left">PRODUCT</th>
+                <th class="text-left">BUYER</th>
+                <th class="text-left">AMOUNT</th>
+                <th class="text-left">STATUS</th>
+                <th class="text-left">ORDERED AT</th>
+                <th class="text-left">ACTIONS</th>
+              </tr>
+            </thead>
+            <tbody id="my-sales-table-body">
+              <tr>
+                <td colspan="6" class="text-center text-text-secondary py-8">
+                  <div class="loading-spinner mx-auto mb-2"></div>
+                  Loading your sales...
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+
+      </div>
     </div>
   </div>
 
@@ -1019,7 +986,7 @@ body {
 </div>
 </div>
 
-<!-- Product Detail Modal -->
+<!-- Product Detail Modal (for Admin Products) -->
 <div id="product-modal" class="modal hidden">
 <div class="modal-content max-w-2xl">
   <div class="flex justify-between items-center mb-4">
@@ -1035,18 +1002,52 @@ body {
 </div>
 </div>
 
-<!-- User Product Detail Modal -->
-<div id="user-product-modal" class="modal hidden">
+<!-- Marketplace Product Detail Modal -->
+<div id="marketplace-product-modal" class="modal hidden">
   <div class="modal-content max-w-2xl">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-orbitron font-bold text-accent-purple">USER PRODUCT DETAILS</h2>
-      <button onclick="closeUserProductModal()" class="text-text-secondary hover:text-accent-red">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">MARKETPLACE PRODUCT DETAILS</h2>
+      <button onclick="closeMarketplaceProductModal()" class="text-text-secondary hover:text-accent-red">
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <div id="user-product-modal-content">
+    <div id="marketplace-product-modal-content">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
+<!-- Edit Marketplace Product Modal -->
+<div id="edit-marketplace-product-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">EDIT PRODUCT</h2>
+      <button onclick="closeEditMarketplaceProductModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="edit-marketplace-product-modal-content" class="space-y-4">
+      <input type="hidden" id="edit-mp-product-id">
+      <input type="text" id="edit-mp-product-name" placeholder="Product Name" class="app-input w-full">
+      <textarea id="edit-mp-product-description" placeholder="Product Description..." rows="3" class="app-input w-full resize-none"></textarea>
+      <input type="number" id="edit-mp-product-price" placeholder="Price (MMK)" min="0" step="0.01" class="app-input w-full">
+      <label class="block text-sm font-medium mb-2 text-text-secondary">Current Images</label>
+      <div id="edit-mp-current-images" class="grid grid-cols-3 gap-2 mb-2"></div>
+      <label class="block text-sm font-medium mb-2 text-text-secondary">Add New Images (Max 5)</label>
+      <input type="file" id="edit-mp-product-images" accept="image/*" multiple class="app-input w-full">
+      <label class="block text-sm font-medium mb-2 text-text-secondary">Current Video</label>
+      <div id="edit-mp-current-video" class="mb-2"></div>
+      <label class="block text-sm font-medium mb-2 text-text-secondary">New Video (Optional)</label>
+      <input type="file" id="edit-mp-product-video" accept="video/*" class="app-input w-full">
+      <select id="edit-mp-product-category" class="app-input w-full">
+        <option value="">Select Category</option>
+      </select>
+      <input type="text" id="edit-mp-contact-platform" placeholder="Contact Platform (e.g., Telegram)" class="app-input w-full">
+      <input type="url" id="edit-mp-contact-link" placeholder="Contact Link (e.g., https://t.me/your_id)" class="app-input w-full">
+      <button onclick="updateMarketplaceProduct()" class="myanmar-btn w-full">
+        <i class="fas fa-save mr-2"></i> UPDATE PRODUCT
+      </button>
     </div>
   </div>
 </div>
@@ -1065,47 +1066,6 @@ body {
   </div>
 </div>
 </div>
-
-<!-- User Product Payment Modal -->
-<div id="user-product-payment-modal" class="modal hidden">
-  <div class="modal-content max-w-md">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-orbitron font-bold text-accent-purple">MAKE PAYMENT FOR USER PRODUCT</h2>
-      <button onclick="closeUserProductPaymentModal()" class="text-text-secondary hover:text-accent-red">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div id="user-product-payment-modal-content" class="space-y-4">
-      <!-- Payment method selection will go here -->
-    </div>
-  </div>
-</div>
-
-<!-- Private Chat Modal -->
-<div id="private-chat-modal" class="modal hidden">
-  <div class="modal-content max-w-2xl">
-    <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-orbitron font-bold text-accent-purple">PRIVATE CHAT WITH <span id="chat-partner-username"></span></h2>
-      <button onclick="closePrivateChatModal()" class="text-text-secondary hover:text-accent-red">
-        <i class="fas fa-times"></i>
-      </button>
-    </div>
-    <div id="private-chat-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
-      <div class="loading-spinner mx-auto mb-4"></div>
-      <p class="text-center text-text-secondary">Loading messages...</p>
-    </div>
-    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-      <textarea id="private-chat-input" placeholder="Type your message..." rows="3"
-                class="app-input flex-1 resize-none"></textarea>
-      <button onclick="sendPrivateChatMessage()" 
-              class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
-        <i class="fas fa-paper-plane"></i>
-        <span>SEND</span>
-      </button>
-    </div>
-  </div>
-</div>
-
 
 <!-- Confirm Delete Modal -->
 <div id="confirm-modal" class="modal hidden">
@@ -1142,12 +1102,11 @@ body {
 // Configuration
 const CONFIG = {
   SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // သင့် Supabase URL ကို ထည့်ပါ
-  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9e3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
   MAX_RETRY_ATTEMPTS: 3,
   RETRY_DELAY: 2000,
-  MAX_IMAGE_SIZE_MB: 5, // Max image size for user uploads (e.g., product images, KYC photos)
-  MAX_VIDEO_SIZE_MB: 10, // Max video size for KYC face video
-  CHAT_MESSAGE_LIFESPAN_HOURS: 24 // Chat messages will be automatically deleted after this period
+  MAX_IMAGE_SIZE_MB: 5, // Max size per image for marketplace products
+  MAX_VIDEO_SIZE_MB: 10 // Max size for KYC video
 };
 
 // State
@@ -1162,18 +1121,16 @@ let state = {
   newsRealtime: null,
   chatRealtime: null,
   supportRealtime: null,
-  productsRealtime: null,
-  ordersRealtime: null, // For admin-uploaded products
-  userProductsRealtime: null, // For user-uploaded products
-  userProductOrdersRealtime: null, // For orders on user-uploaded products
-  kycRealtime: null,
-  selectedProductForPurchase: null, // For admin-uploaded products
-  selectedPaymentMethod: null, // For admin-uploaded products
-  selectedUserProductForPurchase: null, // For user-uploaded products
-  selectedUserProductPaymentMethod: null, // For user-uploaded products
-  privateChatPartnerId: null,
-  privateChatConversationId: null,
-  privateChatRealtime: null,
+  adminProductsRealtime: null, // For admin-uploaded products
+  marketplaceProductsRealtime: null, // For user-posted products
+  ordersRealtime: null, // For admin-product orders
+  userOrdersRealtime: null, // For marketplace product orders
+  selectedProductForPurchase: null, // For admin_products
+  selectedMarketplaceProductForPurchase: null, // For marketplace_products
+  selectedPaymentMethod: null,
+  currentChatConversationId: null,
+  currentSupportTicketId: null,
+  categories: [] // Store categories for product forms
 };
 
 // Utility Functions
@@ -1191,40 +1148,14 @@ const utils = {
     if (fileType.startsWith('audio/')) return 'audio';
     return 'file';
   },
-  // Function to get a unique device ID (simple example, can be improved)
-  getDeviceId() {
-    let deviceId = localStorage.getItem('device_id');
-    if (!deviceId) {
-      deviceId = 'device_' + Math.random().toString(36).substr(2, 9);
-      localStorage.setItem('device_id', deviceId);
-    }
-    return deviceId;
+  formatDate(dateString) {
+    return new Date(dateString).toLocaleDateString('en-US', { year: 'numeric', month: 'short', day: 'numeric' });
   },
-  validateFileSize(file, maxMb) {
-    const maxSize = maxMb * 1024 * 1024; // Convert MB to bytes
-    if (file.size > maxSize) {
-      showNotification(`File size exceeds ${maxMb}MB limit.`, 'error');
-      return false;
-    }
-    return true;
+  formatDateTime(dateString) {
+    return new Date(dateString).toLocaleString('en-US', { year: 'numeric', month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
   },
-  validateVideoDuration(file, minSeconds, maxSeconds, callback) {
-    const video = document.createElement('video');
-    video.preload = 'metadata';
-    video.onloadedmetadata = function() {
-      window.URL.revokeObjectURL(video.src);
-      if (video.duration < minSeconds || video.duration > maxSeconds) {
-        showNotification(`Video duration must be between ${minSeconds} and ${maxSeconds} seconds.`, 'error');
-        callback(false);
-      } else {
-        callback(true);
-      }
-    };
-    video.onerror = function() {
-      showNotification('Could not load video metadata. Please try another file.', 'error');
-      callback(false);
-    };
-    video.src = URL.createObjectURL(file);
+  generateRandomPassword() {
+    return Math.random().toString(36).substring(2, 15) + Math.random().toString(36).substring(2, 15);
   }
 };
 
@@ -1236,25 +1167,25 @@ async function initializeApp() {
   
   try {
     // Check if Supabase config is set
-    if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+    if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'https://rliwdosxsbauwxkayjoa.supabase.co') {
       throw new Error('Supabase URL လိုအပ်ပါတယ်! CONFIG အပိုင်းထဲမှာ သင့် Supabase URL ကို ထည့်ပါ။');
     }
 
-    if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY_HERE') {
+    if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9e3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4') {
       throw new Error('Supabase Anon Key လိုအပ်ပါတယ်! CONFIG အပိုင်းထဲမှာ သင့် Supabase Anon Key ကို ထည့်ပါ။');
     }
 
     // Initialize Supabase
     if (typeof supabase !== 'undefined') {
       state.supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY, {
-        auth: { persistSession: false },
+        auth: { persistSession: true }, // Persist session for user convenience
         realtime: { params: { eventsPerSecond: 10 } }
       });
 
-      // Test connection
+      // Test connection to 'about' table
       const { data, error } = await state.supabase.from('about').select('id').limit(1);
       
-      if (error && error.code !== 'PGRST116') {
+      if (error && error.code !== 'PGRST116') { // PGRST116 means table not found, which is fine for initial setup
         throw new Error(`Database connection failed: ${error.message}`);
       }
 
@@ -1264,11 +1195,38 @@ async function initializeApp() {
       state.isConnected = true;
       state.reconnectAttempts = 0;
 
-      // Check for existing key in localStorage
-      const storedKey = localStorage.getItem('user_key');
-      if (storedKey) {
-        document.getElementById('login-key').value = storedKey;
-        userLogin(true); // Attempt silent login
+      // Listen for auth state changes
+      state.supabase.auth.onAuthStateChange(async (event, session) => {
+        if (event === 'SIGNED_IN' && session) {
+          await loadUserProfile(session.user.id);
+          if (state.userProfile) {
+            // If profile exists, show app content
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('profile-creation-section').classList.add('hidden');
+            document.getElementById('app-content').classList.remove('hidden');
+            await loadDashboardData();
+            await loadCategories(); // Load categories for product forms
+            setupRealtimeSubscriptions();
+            showSection('home', document.querySelector('.nav-btn.active'));
+          } else {
+            // If no profile, show profile creation
+            document.getElementById('login-section').classList.add('hidden');
+            document.getElementById('app-content').classList.add('hidden');
+            document.getElementById('profile-creation-section').classList.remove('hidden');
+            showNotification('No profile found for your account. Please create one.', 'info', 10000);
+          }
+        } else if (event === 'SIGNED_OUT') {
+          userLogout(false); // Don't show confirm modal on automatic sign out
+        }
+      });
+
+      // Check if already signed in
+      const { data: { session } } = await state.supabase.auth.getSession();
+      if (session) {
+        // Auth state change listener will handle this
+      } else {
+        // If not signed in, show login section
+        document.getElementById('login-section').classList.remove('hidden');
       }
       
     } else {
@@ -1297,6 +1255,23 @@ async function initializeApp() {
   });
 }
 
+async function loadUserProfile(userId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('profiles')
+      .select('*')
+      .eq('id', userId)
+      .single();
+
+    if (error && error.code !== 'PGRST116') throw error; // PGRST116 means no profile found, which is expected for new users
+
+    state.userProfile = data;
+  } catch (error) {
+    console.error('Error loading user profile:', error);
+    state.userProfile = null;
+  }
+}
+
 function updateConnectionStatus(status) {
   const statusElement = document.getElementById('connection-status');
   statusElement.className = 'connection-status';
@@ -1312,7 +1287,7 @@ function updateConnectionStatus(status) {
       break;
     case 'connecting':
       statusElement.classList.add('status-connecting');
-      statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ချိတ်ဆက်နေသည်...';
+      statusElement.innerHTML = '<i class="fas fa-spinner fa-spin"></i> CONNECTING...';
       break;
   }
 }
@@ -1357,9 +1332,9 @@ function showNotification(message, type = 'info', duration = 5000) {
   }, duration);
 }
 
-async function userLogin(isSilent = false) {
+async function userLogin() {
   if (!state.isConnected) {
-    if (!isSilent) showNotification('Waiting for database connection...', 'warning');
+    showNotification('Waiting for database connection...', 'warning');
     return;
   }
 
@@ -1368,65 +1343,118 @@ async function userLogin(isSilent = false) {
   const loginText = document.getElementById('login-text');
 
   if (!loginKey) {
-    if (!isSilent) showNotification('Please enter Key', 'warning');
+    showNotification('Please enter Key', 'warning');
     return;
   }
 
   try {
-    if (!isSilent) {
-      loginBtn.disabled = true;
-      loginText.textContent = 'LOGGING IN...';
-    }
+    loginBtn.disabled = true;
+    loginText.textContent = 'LOGGING IN...';
     showLoading(true);
 
-    const { data, error } = await state.supabase.rpc('user_login', { p_key_text: loginKey });
+    // First, check if the key exists and is active
+    const { data: keyData, error: keyError } = await state.supabase
+      .from('api_keys')
+      .select('id, key_text, profile_id, is_active')
+      .eq('key_text', loginKey)
+      .single();
 
-    if (error) throw error;
-
-    if (data && data.length > 0) {
-      const userData = data[0];
-      if (userData.key_is_active === false) {
-        throw new Error('Your Key is inactive.');
-      }
-      if (userData.is_banned === true) {
-        throw new Error('Your account is banned.');
-      }
-
-      localStorage.setItem('user_key', loginKey); // Persist key
-      state.isAuthenticated = true;
-      state.userProfile = userData;
-
-      document.getElementById('login-section').classList.add('hidden');
-      document.getElementById('profile-creation-section').classList.add('hidden');
-      document.getElementById('app-content').classList.remove('hidden');
-      
-      if (!isSilent) showNotification('Successfully logged in!', 'success');
-      
-      // If profile_id is null, show profile creation section
-      if (!userData.profile_id) {
-        document.getElementById('app-content').classList.add('hidden');
-        document.getElementById('profile-creation-section').classList.remove('hidden');
-        showNotification('No profile found for your key. Please create one.', 'info', 10000);
-      } else {
-        // Load initial data for the app
-        await loadDashboardData();
-        setupRealtimeSubscriptions();
-        showSection('home', document.querySelector('.nav-btn.active')); // Activate default section
-      }
-      
-    } else {
-      throw new Error('Invalid Key or Key is not usable');
+    if (keyError || !keyData || !keyData.is_active) {
+      throw new Error('Invalid or inactive Key.');
     }
 
+    let userId = keyData.profile_id;
+    let session = null;
+
+    if (userId) {
+      // If key is already linked to a profile, try to sign in with that user
+      // For simplicity, we'll use a dummy email/password for Supabase Auth
+      // In a real app, you might have a more robust system or use custom auth.
+      const dummyEmail = `user_${keyData.id}@example.com`;
+      const dummyPassword = `password_${keyData.id}`; // This should be securely managed
+
+      const { data: signInData, error: signInError } = await state.supabase.auth.signInWithPassword({
+        email: dummyEmail,
+        password: dummyPassword,
+      });
+
+      if (signInError) {
+        // If sign-in fails, it might be a new key or a problem.
+        // Try to sign up if user doesn't exist, then sign in.
+        const { data: signUpData, error: signUpError } = await state.supabase.auth.signUp({
+          email: dummyEmail,
+          password: dummyPassword,
+        });
+        if (signUpError) throw signUpError;
+        session = signUpData.session;
+        userId = signUpData.user.id;
+      } else {
+        session = signInData.session;
+        userId = signInData.user.id;
+      }
+
+    } else {
+      // If key is not linked to a profile, create a new Supabase Auth user
+      const dummyEmail = `user_${keyData.id}@example.com`;
+      const dummyPassword = `password_${keyData.id}`; // This should be securely managed
+
+      const { data: signUpData, error: signUpError } = await state.supabase.auth.signUp({
+        email: dummyEmail,
+        password: dummyPassword,
+      });
+      if (signUpError) throw signUpError;
+      session = signUpData.session;
+      userId = signUpData.user.id;
+
+      // Link the API key to the newly created Supabase Auth user
+      const { error: updateKeyError } = await state.supabase
+        .from('api_keys')
+        .update({ profile_id: userId, is_active: false }) // Deactivate key after first use
+        .eq('id', keyData.id);
+      if (updateKeyError) throw updateKeyError;
+    }
+
+    if (!session) {
+      throw new Error('Failed to establish user session.');
+    }
+
+    // Load user profile after successful authentication
+    await loadUserProfile(userId);
+
+    if (state.userProfile && state.userProfile.is_banned) {
+      await state.supabase.auth.signOut();
+      throw new Error('Your account is banned. Please contact support.');
+    }
+
+    localStorage.setItem('user_key', loginKey); // Persist key for display
+    state.isAuthenticated = true;
+
+    document.getElementById('login-section').classList.add('hidden');
+    document.getElementById('profile-creation-section').classList.add('hidden');
+    document.getElementById('app-content').classList.remove('hidden');
+    
+    showNotification('Successfully logged in!', 'success');
+    
+    // If profile_id is null, show profile creation section
+    if (!state.userProfile) {
+      document.getElementById('app-content').classList.add('hidden');
+      document.getElementById('profile-creation-section').classList.remove('hidden');
+      showNotification('No profile found for your account. Please create one.', 'info', 10000);
+    } else {
+      // Load initial data for the app
+      await loadDashboardData();
+      await loadCategories(); // Load categories for product forms
+      setupRealtimeSubscriptions();
+      showSection('home', document.querySelector('.nav-btn.active')); // Activate default section
+    }
+    
   } catch (error) {
     console.error('Login error:', error);
-    if (!isSilent) showNotification(error.message, 'error');
-    userLogout(); // Ensure logout on error
+    showNotification(error.message, 'error');
+    userLogout(false); // Ensure logout on error
   } finally {
-    if (!isSilent) {
-      loginBtn.disabled = false;
-      loginText.textContent = 'LOGIN';
-    }
+    loginBtn.disabled = false;
+    loginText.textContent = 'LOGIN';
     showLoading(false);
   }
 }
@@ -1437,15 +1465,15 @@ async function createProfile() {
   const profilePictureFile = document.getElementById('profile-picture').files[0];
   const createProfileBtn = document.getElementById('create-profile-btn');
   const createProfileText = document.getElementById('create-profile-text');
-  const loginKey = document.getElementById('login-key').value.trim(); // Get the key from the login input
+  const currentKey = localStorage.getItem('user_key');
 
-  if (!username || !name) {
-    showNotification('Please enter Username and Name', 'warning');
+  if (!username || !name || !currentKey) {
+    showNotification('Please enter Username, Name, and ensure Key is present.', 'warning');
     return;
   }
 
-  if (!loginKey) { // Ensure the key is present in the input field
-    showNotification('Login key is missing. Please re-enter your key and try again.', 'error');
+  if (!state.supabase.auth.currentUser) {
+    showNotification('User not authenticated. Please try logging in again.', 'error');
     return;
   }
 
@@ -1454,70 +1482,35 @@ async function createProfile() {
     createProfileText.textContent = 'CREATING PROFILE...';
     showLoading(true);
 
-    // Fetch key_id directly from the keys table using the loginKey
-    const { data: keyData, error: keyError } = await state.supabase
-      .from('keys')
-      .select('id')
-      .eq('key_text', loginKey)
-      .single();
-
-    if (keyError || !keyData) {
-      throw new Error('Invalid or missing key. Please re-login.');
-    }
-    const keyId = keyData.id;
-
     let profilePictureUrl = null;
     if (profilePictureFile) {
-      if (!utils.validateFileSize(profilePictureFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
-        createProfileBtn.disabled = false;
-        createProfileText.textContent = 'CREATE PROFILE';
-        showLoading(false);
-        return;
-      }
       const fileExt = profilePictureFile.name.split('.').pop();
-      const fileName = `profile_pictures/${keyId}_${Date.now()}.${fileExt}`; // Use fetched keyId
+      const fileName = `avatars/${state.supabase.auth.currentUser.id}_${Date.now()}.${fileExt}`;
       const { data: uploadData, error: uploadError } = await state.supabase.storage
-        .from('profiles')
+        .from('profile_avatars')
         .upload(fileName, profilePictureFile);
       if (uploadError) throw uploadError;
-      const { data: urlData } = state.supabase.storage.from('profiles').getPublicUrl(fileName);
+      const { data: urlData } = state.supabase.storage.from('profile_avatars').getPublicUrl(fileName);
       profilePictureUrl = urlData.publicUrl;
     }
 
-    const { data, error } = await state.supabase
-      .from('profiles')
-      .insert({
-        key_id: keyId, // Use the fetched keyId
-        username: username,
-        name: name,
-        profile_picture: profilePictureUrl,
-        is_banned: false,
-        kyc_status: 'not_submitted', // Default KYC status
-        is_seller_banned: false // Default seller ban status
-      })
-      .select()
-      .single();
+    const { data, error } = await state.supabase.rpc('create_user_profile', {
+      p_username: username,
+      p_name: name,
+      p_key_text: currentKey,
+      p_profile_picture: profilePictureUrl
+    });
 
     if (error) throw error;
 
-    // Update state.userProfile with the newly created profile data and the key_id
-    state.userProfile = {
-      ...state.userProfile, // Keep existing key_text, key_is_active from previous login
-      profile_id: data.id,
-      username: data.username,
-      name: data.name,
-      profile_picture: data.profile_picture,
-      is_banned: data.is_banned,
-      key_id: keyId, // Ensure key_id is explicitly set here
-      kyc_status: data.kyc_status,
-      is_seller_banned: data.is_seller_banned
-    };
-
+    state.userProfile = data; // Update local state with new profile
+    
     showNotification('Profile created successfully!', 'success');
     document.getElementById('profile-creation-section').classList.add('hidden');
     document.getElementById('app-content').classList.remove('hidden');
     
     await loadDashboardData();
+    await loadCategories();
     setupRealtimeSubscriptions();
     showSection('home', document.querySelector('.nav-btn.active'));
 
@@ -1526,7 +1519,7 @@ async function createProfile() {
     if (error.code === '23505') { // Unique constraint violation
       showNotification('Username already exists, please choose another.', 'error');
     } else {
-      showNotification('Failed to create profile: ' + error.message, 'error'); // Show error message
+      showNotification(`Failed to create profile: ${error.message}`, 'error');
     }
   } finally {
     createProfileBtn.disabled = false;
@@ -1537,14 +1530,15 @@ async function createProfile() {
 
 async function loadDashboardData() {
   try {
-    // Load stats
-    const [productsResult, ordersResult] = await Promise.all([
-      state.supabase.from('products').select('id', { count: 'exact' }).eq('is_active', true),
-      state.supabase.from('orders').select('id', { count: 'exact' }).eq('status', 'approved')
-    ]);
+    // Load stats for admin_products (official products)
+    const { count: productsCount, error: productsError } = await state.supabase.from('admin_products').select('id', { count: 'exact' }).eq('is_active', true);
+    if (productsError) throw productsError;
+    document.getElementById('available-products').textContent = productsCount || 0;
 
-    document.getElementById('available-products').textContent = productsResult.count || 0;
-    document.getElementById('total-downloads').textContent = ordersResult.count || 0;
+    // Total downloads (assuming 'approved' orders count as downloads)
+    const { count: downloadsCount, error: downloadsError } = await state.supabase.from('orders').select('id', { count: 'exact' }).eq('status', 'approved');
+    if (downloadsError) throw downloadsError;
+    document.getElementById('total-downloads').textContent = downloadsCount || 0;
 
   } catch (error) {
     console.error('Error loading dashboard data:', error);
@@ -1552,18 +1546,54 @@ async function loadDashboardData() {
   }
 }
 
+async function loadCategories() {
+  try {
+    const { data, error } = await state.supabase
+      .from('categories')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+    state.categories = data || [];
+
+    // Populate category dropdowns if any
+    const mpCategorySelect = document.getElementById('mp-product-category');
+    const editMpCategorySelect = document.getElementById('edit-mp-product-category');
+    
+    if (mpCategorySelect) {
+      mpCategorySelect.innerHTML = '<option value="">Select Category</option>';
+      state.categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.name;
+        mpCategorySelect.appendChild(option);
+      });
+    }
+    if (editMpCategorySelect) {
+      editMpCategorySelect.innerHTML = '<option value="">Select Category</option>';
+      state.categories.forEach(cat => {
+        const option = document.createElement('option');
+        option.value = cat.id;
+        option.textContent = cat.name;
+        editMpCategorySelect.appendChild(option);
+      });
+    }
+
+  } catch (error) {
+    console.error('Error loading categories:', error);
+    showNotification('Failed to load categories', 'error');
+  }
+}
+
 function setupRealtimeSubscriptions() {
   // Unsubscribe from previous channels if they exist
   if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
+  if (state.adminProductsRealtime) state.supabase.removeChannel(state.adminProductsRealtime);
+  if (state.marketplaceProductsRealtime) state.supabase.removeChannel(state.marketplaceProductsRealtime);
+  if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+  if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
   if (state.chatRealtime) state.supabase.removeChannel(state.chatRealtime);
   if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
-  if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
-  if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
-  if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
-  if (state.userProductOrdersRealtime) state.supabase.removeChannel(state.userProductOrdersRealtime);
-  if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
-  if (state.privateChatRealtime) state.supabase.removeChannel(state.privateChatRealtime);
-
 
   // News realtime updates
   state.newsRealtime = state.supabase
@@ -1579,100 +1609,93 @@ function setupRealtimeSubscriptions() {
     )
     .subscribe();
 
-  // Chat messages realtime
-  state.chatRealtime = state.supabase
-    .channel('chat_changes')
+  // Admin Products realtime
+  state.adminProductsRealtime = state.supabase
+    .channel('admin_products_changes')
     .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'chat_messages' }, 
-      (payload) => {
-        if (state.currentSection === 'chat') {
-          loadChatMessages();
-        }
-      }
-    )
-    .subscribe();
-
-  // Support messages realtime
-  state.supportRealtime = state.supabase
-    .channel('support_changes')
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'support_messages' }, 
-      (payload) => {
-        if (state.currentSection === 'support') {
-          loadSupportMessages();
-        }
-      }
-    )
-    .subscribe();
-
-  // Products realtime (Admin Uploaded)
-  state.productsRealtime = state.supabase
-    .channel('products_changes')
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'products' }, 
+      { event: '*', schema: 'public', table: 'admin_products' }, 
       (payload) => {
         if (state.currentSection === 'products') {
           loadProductsData();
         }
+        loadDashboardData(); // Update stats
       }
     )
     .subscribe();
 
-  // Orders realtime (for user's own orders on admin products)
+  // Marketplace Products realtime
+  state.marketplaceProductsRealtime = state.supabase
+    .channel('marketplace_products_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'marketplace_products' }, 
+      (payload) => {
+        if (state.currentSection === 'marketplace') {
+          loadMarketplaceProductsData();
+        }
+        if (state.currentSection === 'mi') {
+          loadMyMarketplaceProducts();
+        }
+        loadDashboardData(); // Update stats
+      }
+    )
+    .subscribe();
+
+  // Orders realtime (for admin_products)
   state.ordersRealtime = state.supabase
     .channel('orders_changes')
     .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'orders', filter: `profile_id=eq.${state.userProfile.profile_id}` }, 
+      { event: '*', schema: 'public', table: 'orders', filter: `buyer_id=eq.${state.userProfile.id}` }, 
       (payload) => {
-        // If user is on 'Mi' section, refresh their order history
         if (state.currentSection === 'mi') {
-          loadUserOrders();
-        }
-        if (state.currentSection === 'products') {
-          loadProductsData(); // To update purchase status
+          loadMyOrders();
         }
       }
     )
     .subscribe();
 
-  // User Products realtime (for user-uploaded products)
-  state.userProductsRealtime = state.supabase
-    .channel('user_products_changes')
+  // User Orders realtime (for marketplace_products)
+  state.userOrdersRealtime = state.supabase
+    .channel('user_orders_changes')
     .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'user_products' }, 
-      (payload) => {
-        if (state.currentSection === 'user-products') {
-          loadUserProductsForBuying();
-        }
-        if (state.currentSection === 'mi') {
-          loadMySellerPosts();
-        }
-      }
-    )
-    .subscribe();
-
-  // User Product Orders realtime (for orders on user-uploaded products)
-  state.userProductOrdersRealtime = state.supabase
-    .channel('user_product_orders_changes')
-    .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'user_product_orders', filter: `buyer_profile_id=eq.${state.userProfile.profile_id}` }, 
+      { event: '*', schema: 'public', table: 'user_orders', filter: `buyer_id=eq.${state.userProfile.id}|seller_id=eq.${state.userProfile.id}` }, 
       (payload) => {
         if (state.currentSection === 'mi') {
-          loadMyBuyerOrders(); // For seller to see incoming orders
-          loadUserProductPurchaseHistory(); // For buyer to see their purchase status
+          loadMyOrders();
+          loadMySales();
+        }
+        if (state.currentSection === 'chat' && state.currentChatConversationId) {
+          loadChatMessages(state.currentChatConversationId); // Reload chat if related to orders
         }
       }
     )
     .subscribe();
 
-  // KYC Submissions realtime
-  state.kycRealtime = state.supabase
-    .channel('kyc_submissions_changes')
+  // Chat messages realtime
+  state.chatRealtime = state.supabase
+    .channel('chat_changes')
     .on('postgres_changes', 
-      { event: '*', schema: 'public', table: 'kyc_submissions', filter: `profile_id=eq.${state.userProfile.profile_id}` }, 
+      { event: '*', schema: 'public', table: 'chats', filter: `conversation_id=in.(select id from conversations where participant1_id=eq.${state.userProfile.id} or participant2_id=eq.${state.userProfile.id})` }, 
       (payload) => {
-        if (state.currentSection === 'mi') {
-          loadMiProfile(); // Reload profile to update KYC status
+        if (state.currentSection === 'chat' && state.currentChatConversationId === payload.new.conversation_id) {
+          loadChatMessages(state.currentChatConversationId);
+        } else if (state.currentSection === 'chat') {
+          loadChatConversations(); // Refresh conversation list if new message in another chat
+        }
+      }
+    )
+    .subscribe();
+
+  // Support tickets realtime
+  state.supportRealtime = state.supabase
+    .channel('support_tickets_changes')
+    .on('postgres_changes', 
+      { event: '*', schema: 'public', table: 'support_tickets', filter: `user_id=eq.${state.userProfile.id}` }, 
+      (payload) => {
+        if (state.currentSection === 'support') {
+          loadSupportTickets();
+          if (state.currentSupportTicketId === payload.new.id) {
+            viewSupportTicketDetails(payload.new.id); // Reload current ticket if it changed
+          }
         }
       }
     )
@@ -1712,26 +1735,25 @@ function showSection(section, buttonElement) {
       loadNewsData();
       break;
     case 'products':
-      loadProductsData();
+      loadProductsData(); // Admin products
       break;
-    case 'user-products':
-      checkSellerEligibility();
-      loadUserProductsForBuying();
+    case 'marketplace':
+      loadMarketplaceProductsData(); // User products
       break;
     case 'chat':
-      loadChatMessages();
+      loadChatConversations();
       break;
     case 'support':
-      loadSupportMessages();
+      loadSupportTickets();
       break;
     case 'about':
       loadAboutData();
       break;
     case 'mi':
       loadMiProfile();
-      loadUserOrders(); // Load user's purchased admin products
-      loadMySellerPosts(); // Load user's own seller posts
-      loadMyBuyerOrders(); // Load orders on user's own products
+      loadMyMarketplaceProducts();
+      loadMyOrders();
+      loadMySales();
       break;
   }
 }
@@ -1748,20 +1770,18 @@ async function loadNewsData() {
       .from('news')
       .select(`
         *,
-        profiles(username, name, profile_picture),
-        admin_profiles(username, name, profile_picture)
+        created_by_profile:profiles(username, name, profile_picture)
       `)
-      .eq('is_published', true) // Only show published news
+      .eq('is_published', true)
       .order('created_at', { ascending: false });
 
     if (error) throw error;
 
     if (data && data.length > 0) {
       newsContainer.innerHTML = data.map(news => {
-        const author = news.posted_by_admin ? news.admin_profiles : news.profiles;
-        const authorName = author?.name || 'Unknown';
-        const authorUsername = author?.username || 'unknown';
-        const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+        const authorName = news.created_by_profile?.name || 'Admin';
+        const authorUsername = news.created_by_profile?.username || 'admin';
+        const authorAvatar = news.created_by_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
 
         let mediaHtml = '';
         if (news.media_urls && news.media_urls.length > 0) {
@@ -1797,7 +1817,7 @@ async function loadNewsData() {
                 <p class="text-sm text-text-secondary">
                   <i class="fas fa-user mr-1"></i> ${authorName} (@${authorUsername})
                   <span class="ml-3">
-                    <i class="fas fa-calendar mr-1"></i> ${new Date(news.created_at).toLocaleDateString('en-US')}
+                    <i class="fas fa-calendar mr-1"></i> ${utils.formatDate(news.created_at)}
                   </span>
                 </p>
               </div>
@@ -1850,18 +1870,16 @@ async function viewNews(newsId) {
       .from('news')
       .select(`
         *,
-        profiles(username, name, profile_picture),
-        admin_profiles(username, name, profile_picture)
+        created_by_profile:profiles(username, name, profile_picture)
       `)
       .eq('id', newsId)
       .single();
 
     if (error) throw error;
 
-    const author = data.posted_by_admin ? data.admin_profiles : data.profiles;
-    const authorName = author?.name || 'Unknown';
-    const authorUsername = author?.username || 'unknown';
-    const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+    const authorName = data.created_by_profile?.name || 'Admin';
+    const authorUsername = data.created_by_profile?.username || 'admin';
+    const authorAvatar = data.created_by_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
 
     let mediaHtml = '';
     if (data.media_urls && data.media_urls.length > 0) {
@@ -1922,7 +1940,7 @@ async function viewNews(newsId) {
             <span><i class="fas fa-eye mr-1"></i> ${data.views || 0} VIEWS</span>
             <span><i class="fas fa-heart mr-1"></i> ${data.likes || 0} LIKES</span>
           </div>
-          <span><i class="fas fa-calendar mr-1"></i> ${new Date(data.created_at).toLocaleString('en-US')}</span>
+          <span><i class="fas fa-calendar mr-1"></i> ${utils.formatDateTime(data.created_at)}</span>
         </div>
       </div>
     `;
@@ -1951,7 +1969,7 @@ async function shareNews(newsId) {
   }
 }
 
-async function loadProductsData() {
+async function loadProductsData() { // For admin_products
   const productsList = document.getElementById('products-list');
   productsList.innerHTML = `
     <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
@@ -1960,7 +1978,7 @@ async function loadProductsData() {
 
   try {
     const { data: products, error } = await state.supabase
-      .from('products')
+      .from('admin_products')
       .select('*')
       .eq('is_active', true)
       .order('created_at', { ascending: false });
@@ -1971,53 +1989,15 @@ async function loadProductsData() {
       productsList.innerHTML = ''; // Clear loading
       for (const product of products) {
         let isPurchased = false;
-        let orderStatus = null;
-        if (state.userProfile && state.userProfile.profile_id) { // Only check if user is logged in and has a profile
+        if (state.userProfile && state.userProfile.id) { // Only check if user is logged in and has a profile
           const { data: purchasedData, error: purchasedError } = await state.supabase
             .from('orders')
-            .select('status')
-            .eq('profile_id', state.userProfile.profile_id)
+            .select('id')
+            .eq('buyer_id', state.userProfile.id)
             .eq('product_id', product.id)
-            .order('ordered_at', { ascending: false }) // Get the latest order status
+            .eq('status', 'approved') // Only count approved orders as purchased
             .limit(1);
-          
-          if (!purchasedError && purchasedData && purchasedData.length > 0) {
-            orderStatus = purchasedData[0].status;
-            isPurchased = (orderStatus === 'approved');
-          }
-        }
-
-        let actionButtonHtml = '';
-        if (isPurchased) {
-          actionButtonHtml = `
-            <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-auto">
-              <i class="fas fa-download mr-2"></i> DOWNLOAD
-            </a>
-          `;
-        } else if (orderStatus === 'pending') {
-          actionButtonHtml = `
-            <button class="myanmar-btn w-full mt-auto bg-yellow-600 text-black cursor-not-allowed" disabled>
-              <i class="fas fa-hourglass-half mr-2"></i> PENDING APPROVAL
-            </button>
-          `;
-        } else if (orderStatus === 'rejected') {
-          actionButtonHtml = `
-            <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto btn-danger">
-              <i class="fas fa-redo mr-2"></i> RE-PURCHASE (REJECTED)
-            </button>
-          `;
-        } else if (product.price > 0) {
-          actionButtonHtml = `
-            <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto">
-              <i class="fas fa-shopping-cart mr-2"></i> PURCHASE
-            </button>
-          `;
-        } else {
-          actionButtonHtml = `
-            <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-auto">
-              <i class="fas fa-download mr-2"></i> DOWNLOAD
-            </a>
-          `;
+          isPurchased = !purchasedError && purchasedData && purchasedData.length > 0;
         }
 
         productsList.innerHTML += `
@@ -2026,7 +2006,15 @@ async function loadProductsData() {
             <h3 class="text-lg font-semibold text-text-primary mb-1">${product.name}</h3>
             <p class="text-text-secondary text-sm mb-2">${product.description || 'No description'}</p>
             ${product.price > 0 ? `<p class="text-xl font-bold text-accent-green mb-3">${product.price} MMK</p>` : '<p class="text-xl font-bold text-accent-green mb-3">FREE</p>'}
-            ${actionButtonHtml}
+            ${product.price > 0 && !isPurchased ? `
+              <button onclick="initiatePurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto">
+                <i class="fas fa-shopping-cart mr-2"></i> PURCHASE
+              </button>
+            ` : `
+              <a href="${product.file_url}" target="_blank" download class="myanmar-btn w-full mt-auto">
+                <i class="fas fa-download mr-2"></i> DOWNLOAD
+              </a>
+            `}
           </div>
         `;
       }
@@ -2039,12 +2027,139 @@ async function loadProductsData() {
   }
 }
 
-async function initiatePurchase(productId, productName, productPrice) {
-  if (!state.userProfile || !state.userProfile.profile_id) {
+async function loadMarketplaceProductsData() { // For user-posted products
+  const productsList = document.getElementById('marketplace-products-list');
+  productsList.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
+    <p class="text-center text-text-secondary col-span-full">Loading marketplace products...</p>
+  `;
+
+  try {
+    const { data: products, error } = await state.supabase
+      .from('marketplace_products')
+      .select(`
+        *,
+        seller_profile:profiles(username, name, profile_picture)
+      `)
+      .eq('status', 'approved')
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (products && products.length > 0) {
+      productsList.innerHTML = ''; // Clear loading
+      for (const product of products) {
+        const sellerName = product.seller_profile?.name || 'Unknown Seller';
+        const sellerUsername = product.seller_profile?.username || 'unknown';
+        const sellerAvatar = product.seller_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        productsList.innerHTML += `
+          <div class="app-card p-4 flex flex-col justify-between">
+            <div>
+              <h3 class="text-lg font-semibold text-text-primary mb-1">${product.name}</h3>
+              <p class="text-text-secondary text-sm mb-2">${product.description || 'No description'}</p>
+              <p class="text-xl font-bold text-accent-green mb-3">${product.price} MMK</p>
+              <div class="flex items-center text-sm text-text-secondary mb-3">
+                <img src="${sellerAvatar}" alt="Seller" class="w-6 h-6 rounded-full object-cover mr-2">
+                <span>${sellerName} (@${sellerUsername})</span>
+              </div>
+            </div>
+            <div class="mt-auto flex space-x-2">
+              <button onclick="viewMarketplaceProductDetails('${product.id}')" class="myanmar-btn btn-small flex-1">
+                <i class="fas fa-eye mr-2"></i> VIEW
+              </button>
+              <button onclick="initiateMarketplacePurchase('${product.id}', '${product.name}', ${product.price}, '${product.seller_id}')" class="myanmar-btn btn-small flex-1">
+                <i class="fas fa-shopping-cart mr-2"></i> BUY
+              </button>
+            </div>
+          </div>
+        `;
+      }
+    } else {
+      productsList.innerHTML = '<p class="text-center col-span-full text-text-secondary">No Marketplace Products Available</p>';
+    }
+  } catch (error) {
+    console.error('Error loading marketplace products:', error);
+    productsList.innerHTML = '<p class="text-center col-span-full text-accent-red">Failed to retrieve Marketplace Products</p>';
+  }
+}
+
+async function viewMarketplaceProductDetails(productId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('marketplace_products')
+      .select(`
+        *,
+        seller_profile:profiles(username, name, profile_picture),
+        category:categories(name)
+      `)
+      .eq('id', productId)
+      .single();
+
+    if (error) throw error;
+
+    const sellerProfile = data.seller_profile;
+    const sellerAvatar = sellerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    let imagesHtml = '';
+    if (data.image_urls && data.image_urls.length > 0) {
+      imagesHtml = data.image_urls.map(url => `<img src="${url}" class="w-full rounded-lg mb-2" alt="Product Image">`).join('');
+    } else {
+      imagesHtml = '<p class="text-text-secondary">No images available.</p>';
+    }
+
+    let videoHtml = data.video_url ? `
+      <div class="video-container mb-3">
+        <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+          <source src="${data.video_url}" type="video/mp4">
+        </video>
+      </div>
+    ` : '<p class="text-text-secondary">No video available.</p>';
+
+    document.getElementById('marketplace-product-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="${sellerAvatar}" alt="Seller Profile" class="w-12 h-12 rounded-full object-cover">
+          <div>
+            <h4 class="font-semibold text-text-primary">${sellerProfile?.name || 'N/A'} (@${sellerProfile?.username || 'N/A'})</h4>
+            <p class="text-sm text-text-secondary">Posted: ${utils.formatDateTime(data.created_at)}</p>
+          </div>
+        </div>
+        
+        <h3 class="text-xl font-bold text-accent-purple">${data.name}</h3>
+        <p class="text-text-secondary"><strong>Price:</strong> ${data.price} MMK</p>
+        <p class="text-text-secondary"><strong>Category:</strong> ${data.category?.name || 'N/A'}</p>
+        <p class="text-text-secondary whitespace-pre-wrap">${data.description}</p>
+        
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Images</h4>
+        ${imagesHtml}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Video</h4>
+        ${videoHtml}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Seller Contact</h4>
+        <p class="text-text-secondary"><strong>Platform:</strong> ${data.contact_platform || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Link:</strong> ${data.contact_link ? `<a href="${data.contact_link}" target="_blank" class="text-accent-purple hover:underline">${data.contact_link}</a>` : 'N/A'}</p>
+      </div>
+    `;
+    document.getElementById('marketplace-product-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing marketplace product details:', error);
+    showNotification('Failed to view Marketplace Product details', 'error');
+  }
+}
+
+function closeMarketplaceProductModal() {
+  document.getElementById('marketplace-product-modal').classList.add('hidden');
+}
+
+async function initiatePurchase(productId, productName, productPrice) { // For admin_products
+  if (!state.userProfile || !state.userProfile.id) {
     showNotification('Please create a profile to purchase products.', 'info');
     return;
   }
   state.selectedProductForPurchase = { id: productId, name: productName, price: productPrice };
+  state.selectedMarketplaceProductForPurchase = null; // Clear marketplace product selection
   
   const paymentModalContent = document.getElementById('payment-modal-content');
   paymentModalContent.innerHTML = `
@@ -2058,9 +2173,82 @@ async function initiatePurchase(productId, productName, productPrice) {
     </div>
 
     <div class="space-y-3">
-      <label class="block text-sm font-medium mb-2 text-text-secondary">UPLOAD RECEIPT IMAGE</label>
+      <label class="block text-sm font-medium text-text-secondary">UPLOAD RECEIPT IMAGE</label>
       <input type="file" id="receipt-upload" accept="image/*" class="app-input w-full">
       <button onclick="submitPurchase()" class="myanmar-btn w-full">
+        <i class="fas fa-paper-plane mr-2"></i>
+        CONFIRM PAYMENT
+      </button>
+    </div>
+    <p class="text-sm text-text-secondary mt-4">
+      <i class="fas fa-info-circle mr-1"></i>
+      After confirming payment, Admin will review and approve your download.
+    </p>
+  `;
+
+  document.getElementById('payment-modal').classList.remove('hidden');
+  
+  const paymentMethodsList = document.getElementById('payment-methods-list');
+  try {
+    const { data: methods, error } = await state.supabase
+      .from('payment_methods')
+      .select('*')
+      .eq('is_active', true)
+      .order('method_name', { ascending: true });
+
+    if (error) throw error;
+
+    if (methods && methods.length > 0) {
+      paymentMethodsList.innerHTML = methods.map(method => `
+        <label class="flex items-center space-x-3 p-3 bg-secondary-bg rounded-lg cursor-pointer border border-border-color">
+          <input type="radio" name="payment_method" value="${method.id}" 
+                 onchange="state.selectedPaymentMethod = '${method.id}'" class="w-4 h-4 text-accent-purple focus:ring-accent-purple">
+          <div>
+            <p class="font-semibold text-text-primary">${method.method_name}</p>
+            <p class="text-text-secondary text-sm">${method.account_info || ''}</p>
+            ${method.qr_code_url ? `<img src="${method.qr_code_url}" class="w-24 h-24 mt-2 rounded-md border border-border-color" alt="QR Code">` : ''}
+            ${method.instructions ? `<p class="text-text-secondary text-xs mt-1">${method.instructions}</p>` : ''}
+          </div>
+        </label>
+      `).join('');
+    } else {
+      paymentMethodsList.innerHTML = '<p class="text-center text-text-secondary">No Payment Methods Available</p>';
+    }
+  } catch (error) {
+    console.error('Error loading payment methods:', error);
+    showNotification('Failed to retrieve Payment Methods', 'error');
+    paymentMethodsList.innerHTML = '<p class="text-center text-accent-red">Failed to retrieve Payment Methods</p>';
+  }
+}
+
+async function initiateMarketplacePurchase(productId, productName, productPrice, sellerId) { // For marketplace_products
+  if (!state.userProfile || !state.userProfile.id) {
+    showNotification('Please create a profile to purchase products.', 'info');
+    return;
+  }
+  if (state.userProfile.id === sellerId) {
+    showNotification('You cannot purchase your own product.', 'warning');
+    return;
+  }
+
+  state.selectedMarketplaceProductForPurchase = { id: productId, name: productName, price: productPrice, seller_id: sellerId };
+  state.selectedProductForPurchase = null; // Clear admin product selection
+  
+  const paymentModalContent = document.getElementById('payment-modal-content');
+  paymentModalContent.innerHTML = `
+    <h3 class="text-xl font-semibold text-text-primary mb-2">${productName}</h3>
+    <p class="text-text-secondary mb-4">Price: <span class="text-accent-green font-bold">${productPrice} MMK</span></p>
+    
+    <h4 class="text-lg font-semibold text-accent-purple mb-3">SELECT PAYMENT METHOD</h4>
+    <div id="payment-methods-list" class="space-y-3 mb-4">
+      <div class="loading-spinner mx-auto mb-2"></div>
+      <p class="text-center text-text-secondary">Loading payment methods...</p>
+    </div>
+
+    <div class="space-y-3">
+      <label class="block text-sm font-medium text-text-secondary">UPLOAD RECEIPT IMAGE</label>
+      <input type="file" id="receipt-upload" accept="image/*" class="app-input w-full">
+      <button onclick="submitMarketplacePurchase()" class="myanmar-btn w-full">
         <i class="fas fa-paper-plane mr-2"></i>
         CONFIRM PAYMENT
       </button>
@@ -2109,11 +2297,12 @@ async function initiatePurchase(productId, productName, productPrice) {
 function closePaymentModal() {
   document.getElementById('payment-modal').classList.add('hidden');
   state.selectedProductForPurchase = null;
+  state.selectedMarketplaceProductForPurchase = null;
   state.selectedPaymentMethod = null;
   document.getElementById('receipt-upload').value = '';
 }
 
-async function submitPurchase() {
+async function submitPurchase() { // For admin_products
   if (!state.selectedProductForPurchase || !state.selectedPaymentMethod) {
     showNotification('Please select a Product and Payment Method', 'warning');
     return;
@@ -2123,7 +2312,63 @@ async function submitPurchase() {
     showNotification('Please upload a receipt image', 'warning');
     return;
   }
-  if (!utils.validateFileSize(receiptFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
+
+  showNotification('Confirming payment...', 'info');
+  showLoading(true);
+
+  try {
+    // Upload receipt image
+    const fileExt = receiptFile.name.split('.').pop();
+    const fileName = `receipts/${state.userProfile.id}_${state.selectedProductForPurchase.id}_${Date.now()}.${fileExt}`;
+    
+    const { data: uploadData, error: uploadError } = await state.supabase.storage
+      .from('payment_receipts')
+      .upload(fileName, receiptFile);
+      
+    if (uploadError) throw uploadError;
+    
+    const { data: urlData } = state.supabase.storage
+      .from('payment_receipts')
+      .getPublicUrl(fileName);
+      
+    const receiptUrl = urlData.publicUrl;
+
+    // Create order
+    const { error: orderError } = await state.supabase.rpc('create_order', {
+      p_product_id: state.selectedProductForPurchase.id,
+      p_amount: state.selectedProductForPurchase.price,
+      p_payment_method_id: state.selectedPaymentMethod
+    });
+
+    if (orderError) throw orderError;
+
+    // Update order with receipt URL
+    const { error: updateError } = await state.supabase.rpc('upload_payment_receipt_for_order', {
+      p_order_id: orderError.details.id, // Assuming RPC returns order ID on creation
+      p_receipt_url: receiptUrl
+    });
+    if (updateError) throw updateError;
+
+
+    showNotification('Payment submitted successfully! Admin will review it.', 'success');
+    closePaymentModal();
+    loadProductsData(); // Reload products to update status
+  } catch (error) {
+    console.error('Error submitting purchase:', error);
+    showNotification(`Failed to submit payment: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function submitMarketplacePurchase() { // For marketplace_products
+  if (!state.selectedMarketplaceProductForPurchase || !state.selectedPaymentMethod) {
+    showNotification('Please select a Product and Payment Method', 'warning');
+    return;
+  }
+  const receiptFile = document.getElementById('receipt-upload').files[0];
+  if (!receiptFile) {
+    showNotification('Please upload a receipt image', 'warning');
     return;
   }
 
@@ -2133,474 +2378,145 @@ async function submitPurchase() {
   try {
     // Upload receipt image
     const fileExt = receiptFile.name.split('.').pop();
-    const fileName = `receipts/${state.userProfile.profile_id}_${state.selectedProductForPurchase.id}_${Date.now()}.${fileExt}`;
+    const fileName = `receipts/${state.userProfile.id}_${state.selectedMarketplaceProductForPurchase.id}_${Date.now()}.${fileExt}`;
     
     const { data: uploadData, error: uploadError } = await state.supabase.storage
-      .from('receipts')
+      .from('payment_receipts')
       .upload(fileName, receiptFile);
       
     if (uploadError) throw uploadError;
     
     const { data: urlData } = state.supabase.storage
-      .from('receipts')
+      .from('payment_receipts')
       .getPublicUrl(fileName);
       
     const receiptUrl = urlData.publicUrl;
 
-    // Create order
-    const { error: orderError } = await state.supabase
-      .from('orders')
-      .insert({
-        profile_id: state.userProfile.profile_id,
-        product_id: state.selectedProductForPurchase.id,
-        payment_method_id: state.selectedPaymentMethod,
-        amount: state.selectedProductForPurchase.price,
-        receipt_url: receiptUrl,
-        status: 'pending' // Admin needs to approve this
-      });
+    // Create user order
+    const { data: newOrder, error: orderError } = await state.supabase.rpc('create_user_order', {
+      p_marketplace_product_id: state.selectedMarketplaceProductForPurchase.id,
+      p_amount: state.selectedMarketplaceProductForPurchase.price,
+      p_payment_method_id: state.selectedPaymentMethod
+    });
 
     if (orderError) throw orderError;
+
+    // Update order with receipt URL
+    const { error: updateError } = await state.supabase.rpc('upload_payment_receipt_for_user_order', {
+      p_order_id: newOrder.id, // Assuming RPC returns order ID on creation
+      p_receipt_url: receiptUrl
+    });
+    if (updateError) throw updateError;
 
     showNotification('Payment submitted successfully! Admin will review it.', 'success');
     closePaymentModal();
-    loadProductsData(); // Reload products to update status
+    loadMarketplaceProductsData(); // Reload products to update status
   } catch (error) {
-    console.error('Error submitting purchase:', error);
-    showNotification('Failed to submit payment', 'error');
+    console.error('Error submitting marketplace purchase:', error);
+    showNotification(`Failed to submit payment: ${error.message}`, 'error');
   } finally {
     showLoading(false);
   }
 }
 
-async function checkSellerEligibility() {
-  const sellerPostFormContainer = document.getElementById('seller-post-form-container');
-  const kycWarning = document.getElementById('kyc-warning');
-  const postUserProductBtn = document.getElementById('post-user-product-btn');
+async function loadChatConversations() {
+  const conversationsList = document.getElementById('chat-conversations-list');
+  const chatMessagesContainer = document.getElementById('chat-messages-container');
+  const createNewTicketBtn = document.getElementById('create-new-ticket-btn');
 
-  if (!state.userProfile) {
-    sellerPostFormContainer.classList.add('hidden');
-    kycWarning.classList.remove('hidden');
-    kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> Please login and create a profile to sell products.</p>`;
-    return;
-  }
-
-  if (state.userProfile.is_banned || state.userProfile.is_seller_banned) {
-    sellerPostFormContainer.classList.add('hidden');
-    kycWarning.classList.remove('hidden');
-    kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> Your account is banned from selling products.</p>`;
-    return;
-  }
-
-  try {
-    const { data: kycData, error: kycError } = await state.supabase
-      .from('kyc_submissions')
-      .select('status')
-      .eq('profile_id', state.userProfile.profile_id)
-      .single();
-
-    if (kycError && kycError.code !== 'PGRST116') { // PGRST116 means no rows found
-      throw kycError;
-    }
-
-    if (kycData && kycData.status === 'approved') {
-      sellerPostFormContainer.classList.remove('hidden');
-      kycWarning.classList.add('hidden');
-      postUserProductBtn.disabled = false;
-    } else {
-      sellerPostFormContainer.classList.add('hidden');
-      kycWarning.classList.remove('hidden');
-      kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> You need to complete KYC verification to sell products. Please go to 'MI' section to submit your KYC.</p>`;
-      postUserProductBtn.disabled = true;
-    }
-  } catch (error) {
-    console.error('Error checking KYC status:', error);
-    showNotification('Failed to check KYC status.', 'error');
-    sellerPostFormContainer.classList.add('hidden');
-    kycWarning.classList.remove('hidden');
-    kycWarning.innerHTML = `<p class="text-red-300"><i class="fas fa-exclamation-triangle mr-2"></i> Error checking KYC status. Please try again later.</p>`;
-    postUserProductBtn.disabled = true;
-  }
-}
-
-async function postUserProduct() {
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    showNotification('Please login to post products.', 'warning');
-    return;
-  }
-  if (state.userProfile.kyc_status !== 'approved' || state.userProfile.is_seller_banned) {
-    showNotification('You are not authorized to sell products. Please complete KYC or check your account status.', 'error');
-    return;
-  }
-
-  const name = document.getElementById('seller-product-name').value.trim();
-  const description = document.getElementById('seller-product-description').value.trim();
-  const socialName = document.getElementById('seller-social-name').value.trim();
-  const socialLink = document.getElementById('seller-social-link').value.trim();
-  const images = document.getElementById('seller-product-images').files;
-  const price = parseFloat(document.getElementById('seller-product-price').value);
-  const paymentIcon = document.getElementById('seller-payment-icon').files[0];
-  const paymentInfo = document.getElementById('seller-payment-info').value.trim();
-
-  if (!name || !description || !socialName || !socialLink || images.length === 0 || isNaN(price) || !paymentIcon || !paymentInfo) {
-    showNotification('Please fill all required fields for your product.', 'warning');
-    return;
-  }
-
-  for (let i = 0; i < images.length; i++) {
-    if (!utils.validateFileSize(images[i], CONFIG.MAX_IMAGE_SIZE_MB)) return;
-  }
-  if (!utils.validateFileSize(paymentIcon, CONFIG.MAX_IMAGE_SIZE_MB)) return;
-
-  showLoading(true);
-  try {
-    let imageUrls = [];
-    for (let i = 0; i < images.length; i++) {
-      const file = images[i];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `user_products/${state.userProfile.profile_id}_${Date.now()}_${i}.${fileExt}`;
-      const { data: uploadData, error: uploadError } = await state.supabase.storage
-        .from('user_products')
-        .upload(fileName, file);
-      if (uploadError) throw uploadError;
-      const { data: urlData } = state.supabase.storage.from('user_products').getPublicUrl(fileName);
-      imageUrls.push({ url: urlData.publicUrl, size: file.size, type: file.type });
-    }
-
-    let paymentIconUrl = null;
-    const iconExt = paymentIcon.name.split('.').pop();
-    const iconName = `user_payment_icons/${state.userProfile.profile_id}_${Date.now()}.${iconExt}`;
-    const { data: iconUploadData, error: iconUploadError } = await state.supabase.storage
-      .from('user_products')
-      .upload(iconName, paymentIcon);
-    if (iconUploadError) throw iconUploadError;
-    const { data: iconUrlData } = state.supabase.storage.from('user_products').getPublicUrl(iconName);
-    paymentIconUrl = iconUrlData.publicUrl;
-
-    const { error } = await state.supabase
-      .from('user_products')
-      .insert({
-        profile_id: state.userProfile.profile_id,
-        name,
-        description,
-        social_platform_name: socialName,
-        social_platform_link: socialLink,
-        image_urls: imageUrls,
-        price,
-        payment_method_icon_url: paymentIconUrl,
-        payment_account_info: paymentInfo,
-        status: 'pending' // Requires admin approval
-      });
-
-    if (error) throw error;
-
-    showNotification('Product submitted for approval!', 'success');
-    // Clear form
-    document.getElementById('seller-product-name').value = '';
-    document.getElementById('seller-product-description').value = '';
-    document.getElementById('seller-social-name').value = '';
-    document.getElementById('seller-social-link').value = '';
-    document.getElementById('seller-product-images').value = '';
-    document.getElementById('seller-product-price').value = '';
-    document.getElementById('seller-payment-icon').value = '';
-    document.getElementById('seller-payment-info').value = '';
-
-    loadMySellerPosts(); // Refresh seller's own posts
-    loadUserProductsForBuying(); // Refresh products for buying (will not show pending)
-
-  } catch (error) {
-    console.error('Error posting user product:', error);
-    showNotification('Failed to post product: ' + error.message, 'error');
-  } finally {
-    showLoading(false);
-  }
-}
-
-async function loadUserProductsForBuying() {
-  const userProductsList = document.getElementById('user-products-list');
-  userProductsList.innerHTML = `
-    <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
-    <p class="text-center text-text-secondary col-span-full">Loading user products...</p>
+  conversationsList.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4"></div>
+    <p class="text-center text-text-secondary">Loading conversations...</p>
   `;
+  chatMessagesContainer.classList.add('hidden');
+  createNewTicketBtn.classList.remove('hidden'); // Ensure create ticket button is visible
+
+  if (!state.userProfile || !state.userProfile.id) {
+    conversationsList.innerHTML = `
+      <div class="text-center text-text-secondary py-8">
+        <i class="fas fa-comments text-4xl mb-4"></i>
+        <p>Please create a profile to use chat.</p>
+      </div>
+    `;
+    return;
+  }
 
   try {
-    const { data: products, error } = await state.supabase
-      .from('user_products')
+    const { data: conversations, error } = await state.supabase
+      .from('conversations')
       .select(`
         *,
-        profiles(username, name, profile_picture, is_banned, is_seller_banned)
+        participant1:profiles!participant1_id(username, name, profile_picture),
+        participant2:profiles!participant2_id(username, name, profile_picture),
+        user_orders(marketplace_products(name))
       `)
-      .eq('status', 'approved') // Only show approved products
-      .order('created_at', { ascending: false });
+      .or(`participant1_id.eq.${state.userProfile.id},participant2_id.eq.${state.userProfile.id}`)
+      .order('updated_at', { ascending: false });
 
     if (error) throw error;
 
-    if (products && products.length > 0) {
-      userProductsList.innerHTML = ''; // Clear loading
-      for (const product of products) {
-        const seller = product.profiles;
-        const sellerName = seller?.name || 'Unknown Seller';
-        const sellerUsername = seller?.username || 'unknown';
-        const sellerAvatar = seller?.profile_picture || '/placeholder.svg?height=40&width=40';
+    if (conversations && conversations.length > 0) {
+      conversationsList.innerHTML = conversations.map(conv => {
+        const otherParticipant = conv.participant1.id === state.userProfile.id ? conv.participant2 : conv.participant1;
+        const otherName = otherParticipant?.name || 'Unknown User';
+        const otherUsername = otherParticipant?.username || 'unknown';
+        const otherAvatar = otherParticipant?.profile_picture || '/placeholder.svg?height=40&width=40';
+        const orderInfo = conv.user_orders ? ` (Order: ${conv.user_orders.marketplace_products?.name || 'N/A'})` : '';
 
-        // Check if current user is the seller or if seller is banned
-        const isCurrentUserSeller = state.userProfile && state.userProfile.profile_id === product.profile_id;
-        const isSellerBanned = seller?.is_banned || seller?.is_seller_banned;
-
-        let actionButtonHtml = '';
-        if (isCurrentUserSeller) {
-          actionButtonHtml = `
-            <button class="myanmar-btn w-full mt-auto bg-gray-600 text-white cursor-not-allowed" disabled>
-              <i class="fas fa-user-tag mr-2"></i> YOUR PRODUCT
-            </button>
-          `;
-        } else if (isSellerBanned) {
-          actionButtonHtml = `
-            <button class="myanmar-btn w-full mt-auto btn-danger cursor-not-allowed" disabled>
-              <i class="fas fa-ban mr-2"></i> SELLER BANNED
-            </button>
-          `;
-        } else {
-          actionButtonHtml = `
-            <button onclick="initiateUserProductPurchase('${product.id}', '${product.name}', ${product.price})" class="myanmar-btn w-full mt-auto">
-              <i class="fas fa-shopping-cart mr-2"></i> BUY NOW
-            </button>
-          `;
-        }
-
-        userProductsList.innerHTML += `
-          <div class="app-card p-4 text-center flex flex-col justify-between items-center">
-            <div class="flex items-center mb-3">
-              <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2">
-              <span class="text-sm font-semibold text-text-primary">@${sellerUsername}</span>
-              ${!isCurrentUserSeller ? `<button onclick="openPrivateChat('${seller.id}', '${sellerUsername}')" class="ml-2 myanmar-btn btn-small"><i class="fas fa-comments"></i></button>` : ''}
-            </div>
-            <img src="${product.image_urls[0]?.url || '/placeholder.svg?height=64&width=64'}" alt="${product.name} icon" class="w-16 h-16 object-contain mb-3">
-            <h3 class="text-lg font-semibold text-text-primary mb-1">${product.name}</h3>
-            <p class="text-text-secondary text-sm mb-2">${product.description.substring(0, 50)}${product.description.length > 50 ? '...' : ''}</p>
-            <p class="text-xl font-bold text-accent-green mb-3">${product.price} MMK</p>
-            <div class="flex gap-2 w-full">
-              <button onclick="viewUserProduct('${product.id}')" class="myanmar-btn btn-small flex-1">
-                <i class="fas fa-eye mr-2"></i> VIEW DETAILS
-              </button>
-              ${actionButtonHtml}
+        return `
+          <div onclick="openChatConversation('${conv.id}', '${otherName} (@${otherUsername})')" 
+               class="app-card p-4 flex items-center space-x-4 cursor-pointer hover:bg-secondary-bg transition-colors duration-200">
+            <img src="${otherAvatar}" alt="Chat Partner" class="w-12 h-12 rounded-full object-cover">
+            <div>
+              <h4 class="font-semibold text-text-primary">${otherName}</h4>
+              <p class="text-sm text-text-secondary">@${otherUsername}${orderInfo}</p>
+              <p class="text-xs text-text-secondary mt-1">Last message: ${utils.formatDateTime(conv.updated_at)}</p>
             </div>
           </div>
         `;
-      }
+      }).join('');
     } else {
-      userProductsList.innerHTML = '<p class="text-center col-span-full text-text-secondary">No User Products Available</p>';
+      conversationsList.innerHTML = `
+        <div class="text-center text-text-secondary py-8">
+          <i class="fas fa-comments text-4xl mb-4"></i>
+          <p>No conversations yet. Start a chat from a product page!</p>
+        </div>
+      `;
     }
   } catch (error) {
-    console.error('Error loading user products:', error);
-    userProductsList.innerHTML = '<p class="text-center col-span-full text-accent-red">Failed to retrieve User Products</p>';
-  }
-}
-
-async function viewUserProduct(productId) {
-  try {
-    const { data, error } = await state.supabase
-      .from('user_products')
-      .select(`
-        *,
-        profiles(username, name, profile_picture)
-      `)
-      .eq('id', productId)
-      .single();
-
-    if (error) throw error;
-
-    const seller = data.profiles;
-    const sellerName = seller?.name || 'Unknown Seller';
-    const sellerUsername = seller?.username || 'unknown';
-    const sellerAvatar = seller?.profile_picture || '/placeholder.svg?height=40&width=40';
-
-    let imagesHtml = '';
-    if (data.image_urls && data.image_urls.length > 0) {
-      imagesHtml = data.image_urls.map(img => `<img src="${img.url}" class="w-full rounded-lg mb-3" alt="Product image">`).join('');
-    }
-
-    document.getElementById('user-product-modal-content').innerHTML = `
-      <div class="space-y-4">
-        <div class="flex items-center space-x-3 mb-4">
-          <img src="${sellerAvatar}" 
-               alt="Seller" class="w-10 h-10 rounded-full object-cover">
-          <div>
-            <h4 class="font-semibold text-text-primary">${sellerName}</h4>
-            <p class="text-sm text-text-secondary">@${sellerUsername}</p>
-            ${state.userProfile && state.userProfile.profile_id !== seller.id ? `<button onclick="openPrivateChat('${seller.id}', '${sellerUsername}')" class="myanmar-btn btn-small mt-2"><i class="fas fa-comments mr-1"></i> Chat with Seller</button>` : ''}
-          </div>
-        </div>
-        
-        <h3 class="text-xl font-bold text-accent-purple">${data.name}</h3>
-        
-        ${imagesHtml}
-        
-        <div class="prose prose-invert max-w-none">
-          <p class="text-text-secondary whitespace-pre-wrap">${data.description}</p>
-        </div>
-
-        <p class="text-xl font-bold text-accent-green mb-3">Price: ${data.price} MMK</p>
-        
-        <div class="text-sm text-text-secondary pt-4 border-t border-border-color">
-          <p><i class="fas fa-phone mr-1"></i> Contact: ${data.payment_account_info}</p>
-          <p><i class="fas fa-link mr-1"></i> Social: <a href="${data.social_platform_link}" target="_blank" class="text-accent-purple hover:underline">${data.social_platform_name}</a></p>
-          <p><i class="fas fa-calendar mr-1"></i> Posted: ${new Date(data.created_at).toLocaleDateString('en-US')}</p>
-        </div>
-
-        ${state.userProfile && state.userProfile.profile_id !== seller.id && !seller.is_banned && !seller.is_seller_banned ? `
-          <button onclick="initiateUserProductPurchase('${data.id}', '${data.name}', ${data.price})" class="myanmar-btn w-full mt-4">
-            <i class="fas fa-shopping-cart mr-2"></i> BUY NOW
-          </button>
-        ` : ''}
+    console.error('Error loading chat conversations:', error);
+    conversationsList.innerHTML = `
+      <div class="text-center text-accent-red py-8">
+        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
+        <p>Failed to retrieve Chat Conversations</p>
       </div>
     `;
-
-    document.getElementById('user-product-modal').classList.remove('hidden');
-
-  } catch (error) {
-    console.error('Error viewing user product:', error);
-    showNotification('Failed to view User Product', 'error');
   }
 }
 
-function closeUserProductModal() {
-  document.getElementById('user-product-modal').classList.add('hidden');
+async function openChatConversation(conversationId, partnerName) {
+  state.currentChatConversationId = conversationId;
+  document.getElementById('chat-conversations-list').classList.add('hidden');
+  document.getElementById('chat-messages-container').classList.remove('hidden');
+  document.getElementById('chat-partner-name').textContent = `Chat with ${partnerName}`;
+  await loadChatMessages(conversationId);
 }
 
-async function initiateUserProductPurchase(productId, productName, productPrice) {
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    showNotification('Please create a profile to purchase products.', 'info');
-    return;
-  }
-  state.selectedUserProductForPurchase = { id: productId, name: productName, price: productPrice };
-  
-  const paymentModalContent = document.getElementById('user-product-payment-modal-content');
-  paymentModalContent.innerHTML = `
-    <h3 class="text-xl font-semibold text-text-primary mb-2">${productName}</h3>
-    <p class="text-text-secondary mb-4">Price: <span class="text-accent-green font-bold">${productPrice} MMK</span></p>
-    
-    <h4 class="text-lg font-semibold text-accent-purple mb-3">SELLER'S PAYMENT INFO</h4>
-    <div id="seller-payment-info-display" class="space-y-3 mb-4">
-      <div class="loading-spinner mx-auto mb-2"></div>
-      <p class="text-center text-text-secondary">Loading seller's payment info...</p>
-    </div>
-
-    <div class="space-y-3">
-      <label class="block text-sm font-medium mb-2 text-text-secondary">UPLOAD RECEIPT IMAGE (Max 5MB)</label>
-      <input type="file" id="user-product-receipt-upload" accept="image/*" class="app-input w-full">
-      <button onclick="submitUserProductPurchase()" class="myanmar-btn w-full">
-        <i class="fas fa-paper-plane mr-2"></i>
-        CONFIRM PAYMENT
-      </button>
-    </div>
-    <p class="text-sm text-text-secondary mt-4">
-      <i class="fas fa-info-circle mr-1"></i>
-      After confirming payment, Seller will review and approve your order.
-    </p>
-  `;
-
-  document.getElementById('user-product-payment-modal').classList.remove('hidden');
-  
-  const sellerPaymentInfoDisplay = document.getElementById('seller-payment-info-display');
-  try {
-    const { data: productData, error: productError } = await state.supabase
-      .from('user_products')
-      .select('payment_method_icon_url, payment_account_info, social_platform_name, social_platform_link')
-      .eq('id', productId)
-      .single();
-
-    if (productError) throw productError;
-
-    sellerPaymentInfoDisplay.innerHTML = `
-      <div class="flex items-center space-x-3 p-3 bg-secondary-bg rounded-lg border border-border-color">
-        <img src="${productData.payment_method_icon_url || '/placeholder.svg?height=40&width=40'}" class="w-10 h-10 object-contain rounded-md" alt="Payment Icon">
-        <div>
-          <p class="font-semibold text-text-primary">Account: ${productData.payment_account_info}</p>
-          <p class="text-text-secondary text-sm">Contact: <a href="${productData.social_platform_link}" target="_blank" class="text-accent-purple hover:underline">${productData.social_platform_name}</a></p>
-        </div>
-      </div>
-    `;
-  } catch (error) {
-    console.error('Error loading seller payment info:', error);
-    showNotification('Failed to retrieve Seller Payment Info', 'error');
-    sellerPaymentInfoDisplay.innerHTML = '<p class="text-center text-accent-red">Failed to retrieve Seller Payment Info</p>';
-  }
+function closeChatConversation() {
+  state.currentChatConversationId = null;
+  document.getElementById('chat-messages-container').classList.add('hidden');
+  document.getElementById('chat-conversations-list').classList.remove('hidden');
+  loadChatConversations(); // Reload conversation list
 }
 
-function closeUserProductPaymentModal() {
-  document.getElementById('user-product-payment-modal').classList.add('hidden');
-  state.selectedUserProductForPurchase = null;
-  document.getElementById('user-product-receipt-upload').value = '';
-}
-
-async function submitUserProductPurchase() {
-  if (!state.selectedUserProductForPurchase) {
-    showNotification('Product information missing.', 'warning');
-    return;
-  }
-  const receiptFile = document.getElementById('user-product-receipt-upload').files[0];
-  if (!receiptFile) {
-    showNotification('Please upload a receipt image', 'warning');
-    return;
-  }
-  if (!utils.validateFileSize(receiptFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
-    return;
-  }
-
-  showNotification('Confirming purchase...', 'info');
-  showLoading(true);
-
-  try {
-    // Upload receipt image
-    const fileExt = receiptFile.name.split('.').pop();
-    const fileName = `user_product_receipts/${state.userProfile.profile_id}_${state.selectedUserProductForPurchase.id}_${Date.now()}.${fileExt}`;
-    
-    const { data: uploadData, error: uploadError } = await state.supabase.storage
-      .from('user_product_receipts')
-      .upload(fileName, receiptFile);
-      
-    if (uploadError) throw uploadError;
-    
-    const { data: urlData } = state.supabase.storage
-      .from('user_product_receipts')
-      .getPublicUrl(fileName);
-      
-    const receiptUrl = urlData.publicUrl;
-
-    // Create order
-    const { error: orderError } = await state.supabase
-      .from('user_product_orders')
-      .insert({
-        buyer_profile_id: state.userProfile.profile_id,
-        seller_product_id: state.selectedUserProductForPurchase.id,
-        amount: state.selectedUserProductForPurchase.price,
-        receipt_url: receiptUrl,
-        status: 'pending' // Seller needs to approve this
-      });
-
-    if (orderError) throw orderError;
-
-    showNotification('Purchase submitted successfully! Seller will review it.', 'success');
-    closeUserProductPaymentModal();
-    loadUserProductsForBuying(); // Reload products to update status
-    loadUserProductPurchaseHistory(); // Update buyer's purchase history
-  } catch (error) {
-    console.error('Error submitting user product purchase:', error);
-    showNotification('Failed to submit purchase', 'error');
-  } finally {
-    showLoading(false);
-  }
-}
-
-
-async function loadChatMessages() {
+async function loadChatMessages(conversationId) {
   const chatMessagesContainer = document.getElementById('chat-messages');
   chatMessagesContainer.innerHTML = `
     <div class="loading-spinner mx-auto mb-4"></div>
     <p class="text-center text-text-secondary">Loading messages...</p>
   `;
 
-  if (!state.userProfile || !state.userProfile.profile_id) {
+  if (!state.userProfile || !state.userProfile.id) {
     chatMessagesContainer.innerHTML = `
       <div class="text-center text-text-secondary py-8">
         <i class="fas fa-comments text-4xl mb-4"></i>
@@ -2611,23 +2527,21 @@ async function loadChatMessages() {
   }
 
   try {
-    // For simplicity, this chat will be a global chat with admin.
-    // In a real app, you'd fetch conversations for the current user.
-    // Here, we'll fetch messages where current user is sender or receiver.
     const { data: messages, error } = await state.supabase
-      .from('chat_messages')
+      .from('chats')
       .select(`
         *,
         sender:profiles(username, name, profile_picture)
       `)
+      .eq('conversation_id', conversationId)
       .order('created_at', { ascending: true })
-      .limit(50); // Limit to last 50 messages
+      .limit(100); // Limit to last 100 messages
 
     if (error) throw error;
 
     if (messages && messages.length > 0) {
       chatMessagesContainer.innerHTML = messages.map(message => {
-        const isCurrentUser = message.sender_id === state.userProfile.profile_id;
+        const isCurrentUser = message.sender_id === state.userProfile.id;
         const senderName = message.sender?.name || 'Unknown User';
         const senderUsername = message.sender?.username || 'unknown';
         const avatar = message.sender?.profile_picture || '/placeholder.svg?height=40&width=40';
@@ -2637,10 +2551,10 @@ async function loadChatMessages() {
             ${!isCurrentUser ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover mr-3" alt="Sender Avatar">` : ''}
             <div class="max-w-[70%] p-3 rounded-lg ${isCurrentUser ? 'bg-accent-purple text-white ml-auto' : 'bg-secondary-bg text-text-primary mr-auto'}">
               <p class="font-semibold text-sm mb-1">${isCurrentUser ? 'You' : senderName}</p>
-              <p class="text-sm">${message.content}</p>
-              <span class="block text-xs opacity-70 mt-1">${new Date(message.created_at).toLocaleTimeString('en-US')}</span>
+              <p class="text-sm">${message.message}</p>
+              <span class="block text-xs opacity-70 mt-1">${utils.formatDateTime(message.created_at)}</span>
             </div>
-            ${isCurrentUser ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover ml-3" alt="Your Avatar">` : ''}
+            ${isCurrentUser ? `<img src="${state.userProfile.profile_picture || '/placeholder.svg?height=40&width=40'}" class="w-8 h-8 rounded-full object-cover ml-3" alt="Your Avatar">` : ''}
           </div>
         `;
       }).join('');
@@ -2672,292 +2586,247 @@ async function sendChatMessage() {
     showNotification('Message cannot be empty.', 'warning');
     return;
   }
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    showNotification('Please create a profile to send messages.', 'info');
+  if (!state.userProfile || !state.userProfile.id || !state.currentChatConversationId) {
+    showNotification('Please create a profile and select a conversation to send messages.', 'info');
     return;
   }
 
   try {
-    // For simplicity, we'll create a dummy conversation with a fixed admin ID if it doesn't exist
-    // In a real app, you'd manage conversations more robustly.
-    const adminProfileId = 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11'; // Hardcoded admin ID
-    const { data: conversationId, error: convError } = await state.supabase.rpc('get_or_create_conversation', {
-      user1_id: state.userProfile.profile_id,
-      user2_id: adminProfileId
+    const { error } = await state.supabase.rpc('send_chat_message', {
+      p_conversation_id: state.currentChatConversationId,
+      p_message: messageContent
     });
-
-    if (convError) throw convError;
-
-    const { error } = await state.supabase
-      .from('chat_messages')
-      .insert({
-        conversation_id: conversationId,
-        sender_id: state.userProfile.profile_id,
-        content: messageContent,
-        message_type: 'text',
-        expires_at: new Date(Date.now() + CONFIG.CHAT_MESSAGE_LIFESPAN_HOURS * 60 * 60 * 1000).toISOString()
-      });
 
     if (error) throw error;
 
     chatInput.value = '';
     showNotification('Message sent!', 'success');
-    loadChatMessages(); // Reload messages to show the new one
+    loadChatMessages(state.currentChatConversationId); // Reload messages to show the new one
   } catch (error) {
     console.error('Error sending chat message:', error);
-    showNotification('Failed to send message', 'error');
+    showNotification(`Failed to send message: ${error.message}`, 'error');
   }
 }
 
-async function openPrivateChat(partnerProfileId, partnerUsername) {
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    showNotification('Please create a profile to use chat.', 'info');
-    return;
-  }
-  if (state.userProfile.profile_id === partnerProfileId) {
-    showNotification('You cannot chat with yourself.', 'warning');
-    return;
-  }
+async function loadSupportTickets() {
+  const ticketsList = document.getElementById('support-tickets-list');
+  const ticketDetailsContainer = document.getElementById('support-ticket-details-container');
+  const createTicketForm = document.getElementById('create-ticket-form');
+  const createNewTicketBtn = document.getElementById('create-new-ticket-btn');
 
-  state.privateChatPartnerId = partnerProfileId;
-  document.getElementById('chat-partner-username').textContent = partnerUsername;
-  document.getElementById('private-chat-modal').classList.remove('hidden');
-  document.getElementById('private-chat-input').value = '';
-
-  try {
-    const { data: conversationId, error: convError } = await state.supabase.rpc('get_or_create_conversation', {
-      user1_id: state.userProfile.profile_id,
-      user2_id: partnerProfileId
-    });
-
-    if (convError) throw convError;
-    state.privateChatConversationId = conversationId;
-
-    // Unsubscribe from previous private chat channel if exists
-    if (state.privateChatRealtime) state.supabase.removeChannel(state.privateChatRealtime);
-
-    // Subscribe to private chat messages
-    state.privateChatRealtime = state.supabase
-      .channel(`private_chat_${conversationId}`)
-      .on('postgres_changes', 
-        { event: '*', schema: 'public', table: 'chat_messages', filter: `conversation_id=eq.${conversationId}` }, 
-        (payload) => {
-          loadPrivateChatMessages(conversationId);
-        }
-      )
-      .subscribe();
-
-    loadPrivateChatMessages(conversationId);
-
-  } catch (error) {
-    console.error('Error opening private chat:', error);
-    showNotification('Failed to open private chat.', 'error');
-    closePrivateChatModal();
-  }
-}
-
-async function loadPrivateChatMessages(conversationId) {
-  const privateChatMessagesContainer = document.getElementById('private-chat-messages');
-  privateChatMessagesContainer.innerHTML = `
+  ticketsList.innerHTML = `
     <div class="loading-spinner mx-auto mb-4"></div>
-    <p class="text-center text-text-secondary">Loading messages...</p>
+    <p class="text-center text-text-secondary">Loading support tickets...</p>
   `;
+  ticketDetailsContainer.classList.add('hidden');
+  createTicketForm.classList.add('hidden');
+  createNewTicketBtn.classList.remove('hidden');
 
-  try {
-    const { data: messages, error } = await state.supabase
-      .from('chat_messages')
-      .select(`
-        *,
-        sender:profiles(username, name, profile_picture)
-      `)
-      .eq('conversation_id', conversationId)
-      .order('created_at', { ascending: true })
-      .limit(50); // Limit to last 50 messages
-
-    if (error) throw error;
-
-    if (messages && messages.length > 0) {
-      privateChatMessagesContainer.innerHTML = messages.map(message => {
-        const isCurrentUser = message.sender_id === state.userProfile.profile_id;
-        const senderName = message.sender?.name || 'Unknown User';
-        const senderUsername = message.sender?.username || 'unknown';
-        const avatar = message.sender?.profile_picture || '/placeholder.svg?height=40&width=40';
-        
-        return `
-          <div class="flex items-start mb-4 ${isCurrentUser ? 'justify-end' : ''}">
-            ${!isCurrentUser ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover mr-3" alt="Sender Avatar">` : ''}
-            <div class="max-w-[70%] p-3 rounded-lg ${isCurrentUser ? 'bg-accent-purple text-white ml-auto' : 'bg-secondary-bg text-text-primary mr-auto'}">
-              <p class="font-semibold text-sm mb-1">${isCurrentUser ? 'You' : senderName} (@${senderUsername})</p>
-              <p class="text-sm">${message.content}</p>
-              <span class="block text-xs opacity-70 mt-1">${new Date(message.created_at).toLocaleTimeString('en-US')}</span>
-            </div>
-            ${isCurrentUser ? `<img src="${avatar}" class="w-8 h-8 rounded-full object-cover ml-3" alt="Your Avatar">` : ''}
-          </div>
-        `;
-      }).join('');
-      privateChatMessagesContainer.scrollTop = privateChatMessagesContainer.scrollHeight; // Scroll to bottom
-    } else {
-      privateChatMessagesContainer.innerHTML = `
-        <div class="text-center text-text-secondary py-8">
-          <i class="fas fa-comments text-4xl mb-4"></i>
-          <p>No messages yet. Start the conversation!</p>
-        </div>
-      `;
-    }
-  } catch (error) {
-    console.error('Error loading private chat messages:', error);
-    privateChatMessagesContainer.innerHTML = `
-      <div class="text-center text-accent-red py-8">
-        <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-        <p>Failed to retrieve Chat Messages</p>
-      </div>
-    `;
-  }
-}
-
-async function sendPrivateChatMessage() {
-  const privateChatInput = document.getElementById('private-chat-input');
-  const messageContent = privateChatInput.value.trim();
-
-  if (!messageContent) {
-    showNotification('Message cannot be empty.', 'warning');
-    return;
-  }
-  if (!state.userProfile || !state.userProfile.profile_id || !state.privateChatConversationId) {
-    showNotification('Chat session invalid. Please reopen chat.', 'error');
-    return;
-  }
-
-  try {
-    const { error } = await state.supabase
-      .from('chat_messages')
-      .insert({
-        conversation_id: state.privateChatConversationId,
-        sender_id: state.userProfile.profile_id,
-        content: messageContent,
-        message_type: 'text',
-        expires_at: new Date(Date.now() + CONFIG.CHAT_MESSAGE_LIFESPAN_HOURS * 60 * 60 * 1000).toISOString()
-      });
-
-    if (error) throw error;
-
-    privateChatInput.value = '';
-    showNotification('Message sent!', 'success');
-    loadPrivateChatMessages(state.privateChatConversationId); // Reload messages to show the new one
-  } catch (error) {
-    console.error('Error sending private chat message:', error);
-    showNotification('Failed to send message', 'error');
-  }
-}
-
-function closePrivateChatModal() {
-  document.getElementById('private-chat-modal').classList.add('hidden');
-  state.privateChatPartnerId = null;
-  state.privateChatConversationId = null;
-  if (state.privateChatRealtime) {
-    state.supabase.removeChannel(state.privateChatRealtime);
-    state.privateChatRealtime = null;
-  }
-}
-
-
-async function loadSupportMessages() {
-  const supportMessagesContainer = document.getElementById('support-messages');
-  supportMessagesContainer.innerHTML = `
-    <div class="loading-spinner mx-auto mb-4"></div>
-    <p class="text-center text-text-secondary">Loading messages...</p>
-  `;
-
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    supportMessagesContainer.innerHTML = `
+  if (!state.userProfile || !state.userProfile.id) {
+    ticketsList.innerHTML = `
       <div class="text-center text-text-secondary py-8">
         <i class="fas fa-headset text-4xl mb-4"></i>
-        <p>Please create a profile to use support chat.</p>
+        <p>Please create a profile to use support.</p>
       </div>
     `;
     return;
   }
 
   try {
-    const { data: messages, error } = await state.supabase
-      .from('support_messages')
-      .select(`
-        *,
-        profiles(username, name, profile_picture),
-        admin_profiles(username, name, profile_picture)
-      `)
-      .or(`profile_id.eq.${state.userProfile.profile_id},admin_profile_id.eq.${state.userProfile.profile_id}`) // Fetch messages where current user is involved
-      .order('created_at', { ascending: true });
+    const { data: tickets, error } = await state.supabase
+      .from('support_tickets')
+      .select('*')
+      .eq('user_id', state.userProfile.id)
+      .order('created_at', { ascending: false });
 
     if (error) throw error;
 
-    if (messages && messages.length > 0) {
-      supportMessagesContainer.innerHTML = messages.map(message => {
-        const isFromUser = message.is_from_user;
-        const senderName = isFromUser ? (message.profiles?.name || 'You') : (message.admin_profiles?.name || 'Admin');
-        const messageClass = isFromUser ? 'bg-accent-purple text-white ml-auto' : 'bg-secondary-bg text-text-primary mr-auto';
-        
-        return `
-          <div class="flex items-start mb-4 ${isFromUser ? 'justify-end' : ''}">
-            <div class="max-w-[70%] p-3 rounded-lg ${messageClass}">
-              <p class="font-semibold text-sm mb-1">${senderName}</p>
-              <p class="text-sm">${message.content}</p>
-              <span class="block text-xs opacity-70 mt-1">${new Date(message.created_at).toLocaleTimeString('en-US')}</span>
-            </div>
+    if (tickets && tickets.length > 0) {
+      ticketsList.innerHTML = tickets.map(ticket => `
+        <div onclick="viewSupportTicketDetails('${ticket.id}')" 
+             class="app-card p-4 flex items-center justify-between cursor-pointer hover:bg-secondary-bg transition-colors duration-200">
+          <div>
+            <h4 class="font-semibold text-text-primary">${ticket.subject}</h4>
+            <p class="text-sm text-text-secondary">Status: <span class="status-${ticket.status}">${ticket.status.toUpperCase()}</span></p>
+            <p class="text-xs text-text-secondary mt-1">Last update: ${utils.formatDateTime(ticket.updated_at)}</p>
           </div>
-        `;
-      }).join('');
-      supportMessagesContainer.scrollTop = supportMessagesContainer.scrollHeight; // Scroll to bottom
+          <i class="fas fa-chevron-right text-text-secondary"></i>
+        </div>
+      `).join('');
     } else {
-      supportMessagesContainer.innerHTML = `
+      ticketsList.innerHTML = `
         <div class="text-center text-text-secondary py-8">
           <i class="fas fa-headset text-4xl mb-4"></i>
-          <p>No support messages yet. Send us a message!</p>
+          <p>No support tickets yet. Create one!</p>
         </div>
       `;
     }
   } catch (error) {
-    console.error('Error loading support messages:', error);
-    supportMessagesContainer.innerHTML = `
+    console.error('Error loading support tickets:', error);
+    ticketsList.innerHTML = `
       <div class="text-center text-accent-red py-8">
         <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-        <p>Failed to retrieve Support Messages</p>
+        <p>Failed to retrieve Support Tickets</p>
       </div>
     `;
   }
 }
 
-async function sendSupportMessage() {
-  const supportInput = document.getElementById('support-input');
-  const messageContent = supportInput.value.trim();
+async function viewSupportTicketDetails(ticketId) {
+  state.currentSupportTicketId = ticketId;
+  document.getElementById('support-tickets-list').classList.add('hidden');
+  document.getElementById('create-new-ticket-btn').classList.add('hidden');
+  document.getElementById('create-ticket-form').classList.add('hidden');
+  document.getElementById('support-ticket-details-container').classList.remove('hidden');
 
-  if (!messageContent) {
-    showNotification('Message cannot be empty.', 'warning');
+  const ticketSubjectElement = document.getElementById('support-ticket-subject');
+  const ticketMessagesElement = document.getElementById('support-ticket-messages');
+  ticketMessagesElement.innerHTML = `
+    <div class="loading-spinner mx-auto mb-4"></div>
+    <p class="text-center text-text-secondary">Loading messages...</p>
+  `;
+
+  try {
+    const { data: ticket, error } = await state.supabase
+      .from('support_tickets')
+      .select('*')
+      .eq('id', ticketId)
+      .eq('user_id', state.userProfile.id) // Ensure user can only view their own ticket
+      .single();
+
+    if (error) throw error;
+
+    ticketSubjectElement.textContent = `Ticket: ${ticket.subject} (Status: ${ticket.status.toUpperCase()})`;
+    
+    let messagesHtml = `
+      <div class="mb-4 p-3 rounded-lg border bg-blue-600 bg-opacity-20 border-blue-500">
+        <div class="flex items-center justify-between mb-2">
+          <div class="flex items-center space-x-2">
+            <i class="fas fa-user text-sm"></i>
+            <span class="font-semibold text-sm">You</span>
+          </div>
+          <span class="text-xs text-text-secondary">${utils.formatDateTime(ticket.created_at)}</span>
+        </div>
+        <p class="text-sm text-text-secondary whitespace-pre-wrap">${ticket.message}</p>
+      </div>
+    `;
+
+    if (ticket.admin_response) {
+      messagesHtml += `
+        <div class="mb-4 p-3 rounded-lg border bg-green-600 bg-opacity-20 border-green-500">
+          <div class="flex items-center justify-between mb-2">
+            <div class="flex items-center space-x-2">
+              <i class="fas fa-headset text-sm"></i>
+              <span class="font-semibold text-sm">Admin</span>
+            </div>
+            <span class="text-xs text-text-secondary">${utils.formatDateTime(ticket.updated_at)}</span>
+          </div>
+          <p class="text-sm text-text-secondary whitespace-pre-wrap">${ticket.admin_response}</p>
+        </div>
+      `;
+    }
+
+    ticketMessagesElement.innerHTML = messagesHtml;
+    ticketMessagesElement.scrollTop = ticketMessagesElement.scrollHeight; // Scroll to bottom
+
+  } catch (error) {
+    console.error('Error viewing support ticket details:', error);
+    showNotification(`Failed to retrieve ticket details: ${error.message}`, 'error');
+    closeSupportTicketDetails();
+  }
+}
+
+function closeSupportTicketDetails() {
+  state.currentSupportTicketId = null;
+  document.getElementById('support-ticket-details-container').classList.add('hidden');
+  document.getElementById('support-reply-input').value = '';
+  document.getElementById('create-new-ticket-btn').classList.remove('hidden');
+  loadSupportTickets(); // Reload ticket list
+}
+
+async function sendSupportReply() {
+  const replyInput = document.getElementById('support-reply-input');
+  const replyContent = replyInput.value.trim();
+
+  if (!replyContent) {
+    showNotification('Reply cannot be empty.', 'warning');
     return;
   }
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    showNotification('Please create a profile to send support messages.', 'info');
+  if (!state.userProfile || !state.userProfile.id || !state.currentSupportTicketId) {
+    showNotification('Please select a ticket to reply.', 'info');
     return;
   }
 
   try {
-    const { error } = await state.supabase
-      .from('support_messages')
-      .insert({
-        profile_id: state.userProfile.profile_id,
-        content: messageContent,
-        is_from_user: true,
-        message_type: 'text'
-      });
+    // This function is for user replies, which updates the original ticket message
+    // If admin has responded, it will overwrite. For a true chat, we'd need a separate messages table.
+    // Given the current schema, user can only update their original message or admin can respond.
+    // Let's assume user can only send a new message if admin hasn't responded yet, or if they want to update their original message.
+    // For simplicity, we'll just update the original message if no admin response, or create a new ticket if admin has responded.
+    // Or, better, use the admin_response field for admin only, and user can only update their initial message.
+    // The current HTML implies a simple back-and-forth.
+    // Let's use the `send_support_message` RPC for user replies, and it will create a new ticket if the current one is closed/responded.
+    // Or, if the ticket is open/in_progress, it updates the message.
+
+    // The current SQL function `send_support_message` creates a new ticket.
+    // To reply to an existing ticket, we need a new RPC or direct update.
+    // Let's assume for now that user can only create new tickets, and admin replies.
+    // If user wants to add more info to an open ticket, they create a new one referencing the old subject.
+    // This is a simplification based on the provided HTML and SQL.
+
+    showNotification('To add more to an existing ticket, please create a new ticket with a clear subject referencing the old one.', 'info');
+    replyInput.value = '';
+
+  } catch (error) {
+    console.error('Error sending support reply:', error);
+    showNotification(`Failed to send reply: ${error.message}`, 'error');
+  }
+}
+
+function showCreateTicketForm() {
+  document.getElementById('support-tickets-list').classList.add('hidden');
+  document.getElementById('create-new-ticket-btn').classList.add('hidden');
+  document.getElementById('create-ticket-form').classList.remove('hidden');
+  document.getElementById('new-ticket-subject').value = '';
+  document.getElementById('new-ticket-message').value = '';
+}
+
+function hideCreateTicketForm() {
+  document.getElementById('create-ticket-form').classList.add('hidden');
+  document.getElementById('support-tickets-list').classList.remove('hidden');
+  document.getElementById('create-new-ticket-btn').classList.remove('hidden');
+  loadSupportTickets();
+}
+
+async function submitNewTicket() {
+  const subject = document.getElementById('new-ticket-subject').value.trim();
+  const message = document.getElementById('new-ticket-message').value.trim();
+
+  if (!subject || !message) {
+    showNotification('Subject and message cannot be empty.', 'warning');
+    return;
+  }
+  if (!state.userProfile || !state.userProfile.id) {
+    showNotification('Please create a profile to submit a ticket.', 'info');
+    return;
+  }
+
+  showLoading(true);
+  try {
+    const { error } = await state.supabase.rpc('send_support_message', {
+      p_subject: subject,
+      p_message: message
+    });
 
     if (error) throw error;
 
-    supportInput.value = '';
-    showNotification('Support message sent!', 'success');
-    loadSupportMessages(); // Reload messages to show the new one
+    showNotification('Support ticket submitted successfully!', 'success');
+    hideCreateTicketForm();
   } catch (error) {
-    console.error('Error sending support message:', error);
-    showNotification('Failed to send message', 'error');
+    console.error('Error submitting new ticket:', error);
+    showNotification(`Failed to submit ticket: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
   }
 }
 
@@ -2995,12 +2864,14 @@ async function loadAboutData() {
         </div>
         <div class="space-y-3">
           ${about.contact_name ? `<p class="text-text-primary"><i class="fas fa-user mr-2 text-accent-green"></i> ${about.contact_name}</p>` : ''}
-          ${about.phone ? `
-            <a href="tel:${about.phone}" class="myanmar-btn w-full flex items-center justify-center">
+          ${about.phone_number ? `
+            <a href="tel:${about.phone_number}" class="myanmar-btn w-full flex items-center justify-center">
               <i class="fas fa-phone mr-2"></i>
-              ${about.phone}
+              ${about.phone_number}
             </a>
           ` : ''}
+          ${about.email ? `<p class="text-text-primary"><i class="fas fa-envelope mr-2 text-accent-green"></i> ${about.email}</p>` : ''}
+          ${about.description ? `<p class="text-text-primary mt-4">${about.description}</p>` : ''}
           ${socialLinksHtml ? `
             <h4 class="text-lg font-orbitron font-bold text-accent-purple mt-4 mb-3">SOCIAL MEDIA</h4>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-3">
@@ -3037,7 +2908,7 @@ async function loadMiProfile() {
     <p class="text-center text-text-secondary">Loading profile...</p>
   `;
 
-  if (!state.userProfile || !state.userProfile.profile_id) {
+  if (!state.userProfile || !state.userProfile.id) {
     profileDetails.innerHTML = `
       <div class="text-center text-text-secondary py-8">
         <i class="fas fa-user-circle text-4xl mb-4"></i>
@@ -3050,37 +2921,43 @@ async function loadMiProfile() {
   try {
     const { data: profile, error } = await state.supabase
       .from('profiles')
-      .select('*')
-      .eq('id', state.userProfile.profile_id)
+      .select(`
+        *,
+        kyc_request:kyc_requests(status)
+      `)
+      .eq('id', state.userProfile.id)
       .single();
 
     if (error) throw error;
 
-    state.userProfile = { ...state.userProfile, ...profile }; // Update local state with full profile data
-
     document.getElementById('mi-profile-picture').src = profile.profile_picture || '/placeholder.svg?height=100&width=100';
     document.getElementById('mi-name').textContent = profile.name || 'N/A';
     document.getElementById('mi-username').textContent = `@${profile.username || 'N/A'}`;
-    document.getElementById('mi-key-text').value = state.userProfile.key_text || 'N/A';
+    document.getElementById('mi-key-text').value = localStorage.getItem('user_key') || 'N/A'; // Get key from local storage
     document.getElementById('mi-account-status').value = profile.is_banned ? 'BANNED' : 'ACTIVE';
+    document.getElementById('mi-kyc-status').value = profile.kyc_status ? profile.kyc_status.toUpperCase() : 'N/A';
 
-    // KYC Status Display
-    const kycStatusText = document.getElementById('kyc-status-text');
-    const kycAdminNotes = document.getElementById('kyc-admin-notes');
-    const kycFormContainer = document.getElementById('kyc-form-container');
+    // Update KYC form visibility based on kyc_status
+    const kycStatusDisplay = document.getElementById('kyc-status-display');
+    const kycForm = document.getElementById('kyc-form');
+    const showKycFormBtn = document.getElementById('show-kyc-form-btn');
 
-    kycStatusText.textContent = profile.kyc_status ? profile.kyc_status.toUpperCase() : 'NOT SUBMITTED';
-    if (profile.kyc_status === 'rejected' && profile.kyc_admin_notes) {
-      kycAdminNotes.textContent = `Reason: ${profile.kyc_admin_notes}`;
-      kycAdminNotes.classList.remove('hidden');
-    } else {
-      kycAdminNotes.classList.add('hidden');
-    }
-
-    if (profile.kyc_status === 'approved' || profile.is_seller_banned) {
-      kycFormContainer.classList.add('hidden');
-    } else {
-      kycFormContainer.classList.remove('hidden');
+    if (profile.kyc_status === 'approved') {
+      kycStatusDisplay.innerHTML = `<p class="text-accent-green font-bold">KYC Status: APPROVED <i class="fas fa-check-circle"></i></p>`;
+      kycForm.classList.add('hidden');
+      showKycFormBtn.classList.add('hidden');
+    } else if (profile.kyc_status === 'pending') {
+      kycStatusDisplay.innerHTML = `<p class="text-accent-purple font-bold">KYC Status: PENDING <i class="fas fa-hourglass-half"></i></p><p class="text-sm">Your request is under review.</p>`;
+      kycForm.classList.add('hidden');
+      showKycFormBtn.classList.add('hidden');
+    } else if (profile.kyc_status === 'rejected') {
+      kycStatusDisplay.innerHTML = `<p class="text-accent-red font-bold">KYC Status: REJECTED <i class="fas fa-times-circle"></i></p><p class="text-sm">Your request was rejected. You can resubmit.</p>`;
+      kycForm.classList.add('hidden'); // Keep hidden initially, user can click to show
+      showKycFormBtn.classList.remove('hidden');
+    } else { // 'pending' or no status yet
+      kycStatusDisplay.innerHTML = `<p class="text-text-secondary">KYC Status: Not Submitted</p>`;
+      kycForm.classList.add('hidden');
+      showKycFormBtn.classList.remove('hidden');
     }
 
   } catch (error) {
@@ -3094,341 +2971,8 @@ async function loadMiProfile() {
   }
 }
 
-async function loadUserOrders() {
-  const tbody = document.getElementById('purchased-products-table-body');
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="5" class="text-center text-text-secondary py-8">
-        <div class="loading-spinner mx-auto mb-2"></div>
-        Loading purchases...
-      </td>
-    </tr>
-  `;
-
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="5" class="text-center text-text-secondary py-8">
-          Please create a profile to view your purchases.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  try {
-    const { data: orders, error } = await state.supabase
-      .from('orders')
-      .select(`
-        *,
-        products(name, file_url)
-      `)
-      .eq('profile_id', state.userProfile.profile_id)
-      .order('ordered_at', { ascending: false });
-
-    if (error) throw error;
-
-    if (orders && orders.length > 0) {
-      tbody.innerHTML = orders.map(order => {
-        let statusClass = '';
-        let statusText = order.status.toUpperCase();
-        let downloadButton = 'N/A';
-
-        switch (order.status) {
-          case 'pending':
-            statusClass = 'text-yellow-400';
-            break;
-          case 'approved':
-            statusClass = 'text-accent-green';
-            downloadButton = `<a href="${order.products?.file_url}" target="_blank" download class="myanmar-btn btn-small">
-                                <i class="fas fa-download mr-1"></i> DOWNLOAD
-                              </a>`;
-            break;
-          case 'rejected':
-            statusClass = 'text-accent-red';
-            break;
-        }
-
-        return `
-          <tr>
-            <td>${order.products?.name || 'N/A'}</td>
-            <td>${order.amount} MMK</td>
-            <td>${new Date(order.ordered_at).toLocaleDateString('en-US')}</td>
-            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
-            <td>${downloadButton}</td>
-          </tr>
-        `;
-      }).join('');
-    } else {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="5" class="text-center text-text-secondary py-8">
-            No Purchases Found
-          </td>
-        </tr>
-      `;
-    }
-  } catch (error) {
-    console.error('Error loading user orders:', error);
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="5" class="text-center text-accent-red py-8">
-          Failed to retrieve Purchases
-        </td>
-      </tr>
-    `;
-  }
-}
-
-async function loadMySellerPosts() {
-  const tbody = document.getElementById('seller-posts-table-body');
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="4" class="text-center text-text-secondary py-8">
-        <div class="loading-spinner mx-auto mb-2"></div>
-        Loading seller posts...
-      </td>
-    </tr>
-  `;
-
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" class="text-center text-text-secondary py-8">
-          Please create a profile to view your seller posts.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  try {
-    const { data: products, error } = await state.supabase
-      .from('user_products')
-      .select('*')
-      .eq('profile_id', state.userProfile.profile_id)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    if (products && products.length > 0) {
-      tbody.innerHTML = products.map(product => {
-        let statusClass = '';
-        let statusText = product.status.toUpperCase();
-        switch (product.status) {
-          case 'pending': statusClass = 'text-yellow-400'; break;
-          case 'approved': statusClass = 'text-accent-green'; break;
-          case 'rejected': statusClass = 'text-accent-red'; break;
-        }
-        return `
-          <tr>
-            <td>${product.name}</td>
-            <td>${product.price} MMK</td>
-            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
-            <td>
-              <div class="table-actions">
-                <button onclick="viewUserProduct('${product.id}')" class="myanmar-btn btn-small">
-                  <i class="fas fa-eye mr-1"></i> VIEW
-                </button>
-                <button onclick="deleteUserProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
-                  <i class="fas fa-trash mr-1"></i> DELETE
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    } else {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="4" class="text-center text-text-secondary py-8">
-            No Seller Posts Found
-          </td>
-        </tr>
-      `;
-    }
-  } catch (error) {
-    console.error('Error loading seller posts:', error);
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="4" class="text-center text-accent-red py-8">
-          Failed to retrieve Seller Posts
-        </td>
-      </tr>
-    `;
-  }
-}
-
-async function deleteUserProduct(productId) {
-  showConfirmModal(
-    'Are you sure you want to delete this product? All associated orders will also be deleted.',
-    async () => {
-      try {
-        const { error } = await state.supabase
-          .from('user_products')
-          .delete()
-          .eq('id', productId);
-
-        if (error) throw error;
-
-        showNotification('Product deleted successfully!', 'success');
-        loadMySellerPosts();
-        loadUserProductsForBuying();
-      } catch (error) {
-        console.error('Error deleting user product:', error);
-        showNotification('Failed to delete product.', 'error');
-      }
-    }
-  );
-}
-
-async function loadMyBuyerOrders() {
-  const tbody = document.getElementById('buyer-orders-table-body');
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="6" class="text-center text-text-secondary py-8">
-        <div class="loading-spinner mx-auto mb-2"></div>
-        Loading buyer orders...
-      </td>
-    </tr>
-  `;
-
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center text-text-secondary py-8">
-          Please create a profile to view your buyer orders.
-        </td>
-      </tr>
-    `;
-    return;
-  }
-
-  try {
-    const { data: orders, error } = await state.supabase
-      .from('user_product_orders')
-      .select(`
-        *,
-        buyer:profiles(username, name, profile_picture),
-        product:user_products(name)
-      `)
-      .eq('seller_product_id', state.userProfile.profile_id) // Orders for products posted by current user
-      .order('ordered_at', { ascending: false });
-
-    if (error) throw error;
-
-    if (orders && orders.length > 0) {
-      tbody.innerHTML = orders.map(order => {
-        let statusClass = '';
-        let statusText = order.status.toUpperCase();
-        switch (order.status) {
-          case 'pending': statusClass = 'text-yellow-400'; break;
-          case 'approved': statusClass = 'text-accent-green'; break;
-          case 'rejected': statusClass = 'text-accent-red'; break;
-        }
-        const buyerAvatar = order.buyer?.profile_picture || '/placeholder.svg?height=40&width=40';
-
-        return `
-          <tr>
-            <td>
-              <div class="flex items-center">
-                <img src="${buyerAvatar}" class="w-8 h-8 rounded-full object-cover mr-2">
-                <span>${order.buyer?.name || 'N/A'} (@${order.buyer?.username || 'N/A'})</span>
-                <button onclick="openPrivateChat('${order.buyer.id}', '${order.buyer.username}')" class="ml-2 myanmar-btn btn-small"><i class="fas fa-comments"></i></button>
-              </div>
-            </td>
-            <td>${order.product?.name || 'N/A'}</td>
-            <td>${order.amount} MMK</td>
-            <td><a href="${order.receipt_url}" target="_blank" class="text-accent-purple hover:underline">VIEW RECEIPT</a></td>
-            <td><span class="${statusClass} font-semibold">${statusText}</span></td>
-            <td>
-              <div class="table-actions">
-                ${order.status === 'pending' ? `
-                  <button onclick="approveUserProductOrder('${order.id}')" class="myanmar-btn btn-small">
-                    <i class="fas fa-check mr-1"></i> APPROVE
-                  </button>
-                  <button onclick="rejectUserProductOrder('${order.id}')" class="btn-danger myanmar-btn btn-small">
-                    <i class="fas fa-times mr-1"></i> REJECT
-                  </button>
-                ` : 'N/A'}
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    } else {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="6" class="text-center text-text-secondary py-8">
-            No Buyer Orders Found
-          </td>
-        </tr>
-      `;
-    }
-  } catch (error) {
-    console.error('Error loading buyer orders:', error);
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center text-accent-red py-8">
-          Failed to retrieve Buyer Orders
-        </td>
-      </tr>
-    `;
-  }
-}
-
-async function approveUserProductOrder(orderId) {
-  showConfirmModal(
-    'Are you sure you want to approve this order?',
-    async () => {
-      try {
-        const { error } = await state.supabase
-          .from('user_product_orders')
-          .update({ status: 'approved', approved_at: new Date().toISOString() })
-          .eq('id', orderId);
-        if (error) throw error;
-        showNotification('Order approved successfully!', 'success');
-        loadMyBuyerOrders();
-        loadUserProductPurchaseHistory(); // Update buyer's view
-      } catch (error) {
-        console.error('Error approving user product order:', error);
-        showNotification('Failed to approve order.', 'error');
-      }
-    }
-  );
-}
-
-async function rejectUserProductOrder(orderId) {
-  const reason = prompt('Reason for rejection?', 'Invalid receipt');
-  if (!reason) return;
-
-  showConfirmModal(
-    'Are you sure you want to reject this order?',
-    async () => {
-      try {
-        const { error } = await state.supabase
-          .from('user_product_orders')
-          .update({ status: 'rejected', rejected_at: new Date().toISOString(), seller_notes: reason })
-          .eq('id', orderId);
-        if (error) throw error;
-        showNotification('Order rejected successfully!', 'success');
-        loadMyBuyerOrders();
-        loadUserProductPurchaseHistory(); // Update buyer's view
-      } catch (error) {
-        console.error('Error rejecting user product order:', error);
-        showNotification('Failed to reject order.', 'error');
-      }
-    }
-  );
-}
-
-async function loadUserProductPurchaseHistory() {
-  const tbody = document.getElementById('purchased-products-table-body'); // Reusing this for admin products, but will add a new one for user products
-  // For now, this function is for admin products. User product purchase history will be added to Mi section.
-}
-
 async function updateProfile() {
-  if (!state.userProfile || !state.userProfile.profile_id) {
+  if (!state.userProfile || !state.userProfile.id) {
     showNotification('No profile to update.', 'warning');
     return;
   }
@@ -3440,33 +2984,25 @@ async function updateProfile() {
     let profilePictureUrl = state.userProfile.profile_picture; // Keep existing if no new file
 
     if (newProfilePictureFile) {
-      if (!utils.validateFileSize(newProfilePictureFile, CONFIG.MAX_IMAGE_SIZE_MB)) {
-        showLoading(false);
-        return;
-      }
       const fileExt = newProfilePictureFile.name.split('.').pop();
-      const fileName = `profile_pictures/${state.userProfile.profile_id}_${Date.now()}.${fileExt}`;
+      const fileName = `avatars/${state.userProfile.id}_${Date.now()}.${fileExt}`;
       
       const { data: uploadData, error: uploadError } = await state.supabase.storage
-        .from('profiles')
+        .from('profile_avatars')
         .upload(fileName, newProfilePictureFile);
         
       if (uploadError) throw uploadError;
       
       const { data: urlData } = state.supabase.storage
-        .from('profiles')
+        .from('profile_avatars')
         .getPublicUrl(fileName);
         
       profilePictureUrl = urlData.publicUrl;
     }
 
-    const { error } = await state.supabase
-      .from('profiles')
-      .update({ 
-        profile_picture: profilePictureUrl,
-        updated_at: new Date().toISOString()
-      })
-      .eq('id', state.userProfile.profile_id);
+    const { error } = await state.supabase.rpc('update_profile_picture', { 
+      p_profile_picture: profilePictureUrl
+    });
 
     if (error) throw error;
 
@@ -3476,185 +3012,646 @@ async function updateProfile() {
     loadMiProfile(); // Reload to show updated picture
   } catch (error) {
     console.error('Error updating profile:', error);
-    showNotification('Failed to update profile', 'error');
+    showNotification(`Failed to update profile: ${error.message}`, 'error');
   } finally {
     showLoading(false);
   }
 }
 
-function toggleKycIdFields() {
-  const idType = document.getElementById('kyc-id-type').value;
-  document.getElementById('kyc-passport-fields').classList.add('hidden');
-  document.getElementById('kyc-nrc-driving-fields').classList.add('hidden');
-
-  if (idType === 'passport') {
-    document.getElementById('kyc-passport-fields').classList.remove('hidden');
-  } else if (idType === 'nrc' || idType === 'driving_license') {
-    document.getElementById('kyc-nrc-driving-fields').classList.remove('hidden');
+function toggleKycForm() {
+  const kycForm = document.getElementById('kyc-form');
+  const showKycFormBtn = document.getElementById('show-kyc-form-btn');
+  if (kycForm.classList.contains('hidden')) {
+    kycForm.classList.remove('hidden');
+    showKycFormBtn.textContent = 'HIDE KYC FORM';
+    showKycFormBtn.classList.add('btn-danger');
+  } else {
+    kycForm.classList.add('hidden');
+    showKycFormBtn.textContent = 'SUBMIT KYC REQUEST';
+    showKycFormBtn.classList.remove('btn-danger');
   }
 }
 
 async function submitKyc() {
-  if (!state.userProfile || !state.userProfile.profile_id) {
-    showNotification('Please create a profile to submit KYC.', 'warning');
-    return;
-  }
-  if (state.userProfile.kyc_status === 'pending' || state.userProfile.kyc_status === 'approved') {
-    showNotification('Your KYC is already submitted or approved.', 'info');
-    return;
-  }
-
   const fullName = document.getElementById('kyc-full-name').value.trim();
   const dob = document.getElementById('kyc-dob').value;
   const idType = document.getElementById('kyc-id-type').value;
+  const idNumber = document.getElementById('kyc-id-number').value.trim();
+  const expiryDate = document.getElementById('kyc-expiry-date').value;
   const address = document.getElementById('kyc-address').value.trim();
+  const idPhotoFile = document.getElementById('kyc-id-photo').files[0];
+  const videoFile = document.getElementById('kyc-video').files[0];
 
-  if (!fullName || !dob || !idType || !address) {
-    showNotification('Please fill all required KYC fields.', 'warning');
+  if (!fullName || !dob || !idType || !idNumber || !expiryDate || !address || !idPhotoFile) {
+    showNotification('Please fill all required KYC fields (except video).', 'warning');
     return;
   }
 
-  let idNumber = null;
-  let passportExpiry = null;
-  let idPhotoFiles = [];
-  let faceVideoFile = null;
-
-  if (idType === 'passport') {
-    idNumber = document.getElementById('kyc-passport-number').value.trim();
-    passportExpiry = document.getElementById('kyc-passport-expiry').value;
-    const passportPhoto = document.getElementById('kyc-passport-photo').files[0];
-    faceVideoFile = document.getElementById('kyc-face-video').files[0];
-
-    if (!idNumber || !passportExpiry || !passportPhoto || !faceVideoFile) {
-      showNotification('Please fill all required Passport KYC fields.', 'warning');
-      return;
-    }
-    if (!utils.validateFileSize(passportPhoto, CONFIG.MAX_IMAGE_SIZE_MB)) return;
-    if (!utils.validateFileSize(faceVideoFile, CONFIG.MAX_VIDEO_SIZE_MB)) return;
-    idPhotoFiles.push(passportPhoto);
-
-  } else if (idType === 'nrc' || idType === 'driving_license') {
-    idNumber = document.getElementById('kyc-nrc-driving-number').value.trim();
-    idPhotoFiles = Array.from(document.getElementById('kyc-id-photo').files);
-
-    if (!idNumber || idPhotoFiles.length === 0) {
-      showNotification('Please fill all required ID KYC fields and upload photos.', 'warning');
-      return;
-    }
-    for (const file of idPhotoFiles) {
-      if (!utils.validateFileSize(file, CONFIG.MAX_IMAGE_SIZE_MB)) return;
-    }
-  }
-
   showLoading(true);
-
   try {
-    let idPhotoUrls = [];
-    for (const file of idPhotoFiles) {
-      const fileExt = file.name.split('.').pop();
-      const fileName = `kyc_id_photos/${state.userProfile.profile_id}_${Date.now()}_${file.name}.${fileExt}`;
-      const { data: uploadData, error: uploadError } = await state.supabase.storage
+    let idPhotoUrl = null;
+    let videoUrl = null;
+
+    // Upload ID Photo
+    const idPhotoExt = idPhotoFile.name.split('.').pop();
+    const idPhotoFileName = `kyc/${state.userProfile.id}_id_photo_${Date.now()}.${idPhotoExt}`;
+    const { data: idPhotoUploadData, error: idPhotoUploadError } = await state.supabase.storage
+      .from('kyc_documents')
+      .upload(idPhotoFileName, idPhotoFile);
+    if (idPhotoUploadError) throw idPhotoUploadError;
+    const { data: idPhotoUrlData } = state.supabase.storage.from('kyc_documents').getPublicUrl(idPhotoFileName);
+    idPhotoUrl = idPhotoUrlData.publicUrl;
+
+    // Upload Video if provided
+    if (videoFile) {
+      const videoExt = videoFile.name.split('.').pop();
+      const videoFileName = `kyc/${state.userProfile.id}_video_${Date.now()}.${videoExt}`;
+      const { data: videoUploadData, error: videoUploadError } = await state.supabase.storage
         .from('kyc_documents')
-        .upload(fileName, file);
-      if (uploadError) throw uploadError;
-      const { data: urlData } = state.supabase.storage.from('kyc_documents').getPublicUrl(fileName);
-      idPhotoUrls.push({ url: urlData.publicUrl, type: file.type, size: file.size });
+        .upload(videoFileName, videoFile);
+      if (videoUploadError) throw videoUploadError;
+      const { data: videoUrlData } = state.supabase.storage.from('kyc_documents').getPublicUrl(videoFileName);
+      videoUrl = videoUrlData.publicUrl;
     }
 
-    let faceVideoUrl = null;
-    if (faceVideoFile) {
-      const fileExt = faceVideoFile.name.split('.').pop();
-      const fileName = `kyc_face_videos/${state.userProfile.profile_id}_${Date.now()}.${fileExt}`;
-      const { data: uploadData, error: uploadError } = await state.supabase.storage
-        .from('kyc_documents')
-        .upload(fileName, faceVideoFile);
-      if (uploadError) throw uploadError;
-      const { data: urlData } = state.supabase.storage.from('kyc_documents').getPublicUrl(fileName);
-      faceVideoUrl = urlData.publicUrl;
-    }
-
-    // Check video duration if it's a passport submission
-    if (idType === 'passport' && faceVideoFile) {
-      await new Promise((resolve, reject) => {
-        utils.validateVideoDuration(faceVideoFile, 10, 20, (isValid) => {
-          if (isValid) resolve();
-          else reject(new Error('Video duration invalid.'));
-        });
-      });
-    }
-
-    const { error } = await state.supabase
-      .from('kyc_submissions')
-      .insert({
-        profile_id: state.userProfile.profile_id,
-        full_name: fullName,
-        date_of_birth: dob,
-        id_type: idType,
-        id_number: idNumber,
-        passport_expiry_date: passportExpiry || null,
-        id_photo_urls: idPhotoUrls,
-        face_video_url: faceVideoUrl,
-        address: address,
-        status: 'pending'
-      });
+    const { error } = await state.supabase.rpc('submit_kyc_request', {
+      p_full_name: fullName,
+      p_date_of_birth: dob,
+      p_id_type: idType,
+      p_id_number: idNumber,
+      p_expiry_date: expiryDate,
+      p_address: address,
+      p_id_photo_url: idPhotoUrl,
+      p_video_url: videoUrl
+    });
 
     if (error) throw error;
 
-    // Update profile's kyc_status
-    await state.supabase.from('profiles').update({ kyc_status: 'pending' }).eq('id', state.userProfile.profile_id);
-    state.userProfile.kyc_status = 'pending'; // Update local state
+    showNotification('KYC request submitted successfully! Please wait for admin review.', 'success');
+    toggleKycForm(); // Hide form
+    loadMiProfile(); // Reload profile to update KYC status display
 
-    showNotification('KYC submitted successfully for review!', 'success');
-    // Clear form
-    document.getElementById('kyc-full-name').value = '';
-    document.getElementById('kyc-dob').value = '';
-    document.getElementById('kyc-id-type').value = '';
-    document.getElementById('kyc-passport-number').value = '';
-    document.getElementById('kyc-passport-expiry').value = '';
-    document.getElementById('kyc-passport-photo').value = '';
-    document.getElementById('kyc-face-video').value = '';
-    document.getElementById('kyc-nrc-driving-number').value = '';
-    document.getElementById('kyc-id-photo').value = '';
-    document.getElementById('kyc-address').value = '';
-    toggleKycIdFields(); // Hide fields
-
-    loadMiProfile(); // Reload to show updated KYC status
   } catch (error) {
     console.error('Error submitting KYC:', error);
-    showNotification('Failed to submit KYC: ' + error.message, 'error');
+    showNotification(`Failed to submit KYC: ${error.message}`, 'error');
   } finally {
     showLoading(false);
   }
 }
 
+function showAddMarketplaceProductForm() {
+  const addForm = document.getElementById('add-marketplace-product-form');
+  const addBtn = document.getElementById('add-marketplace-product-btn');
+  const tableContainer = document.getElementById('marketplace-products-table-container');
 
-function userLogout() {
+  if (addForm.classList.contains('hidden')) {
+    addForm.classList.remove('hidden');
+    addBtn.textContent = 'HIDE FORM';
+    addBtn.classList.add('btn-danger');
+    tableContainer.classList.add('hidden'); // Hide table when form is open
+  } else {
+    addForm.classList.add('hidden');
+    addBtn.textContent = 'ADD NEW PRODUCT';
+    addBtn.classList.remove('btn-danger');
+    tableContainer.classList.remove('hidden'); // Show table when form is closed
+  }
+  // Clear form fields
+  document.getElementById('mp-product-name').value = '';
+  document.getElementById('mp-product-description').value = '';
+  document.getElementById('mp-product-price').value = '';
+  document.getElementById('mp-product-images').value = '';
+  document.getElementById('mp-product-video').value = '';
+  document.getElementById('mp-product-category').value = '';
+  document.getElementById('mp-contact-platform').value = '';
+  document.getElementById('mp-contact-link').value = '';
+}
+
+function hideAddMarketplaceProductForm() {
+  showAddMarketplaceProductForm(); // Toggle to hide
+}
+
+async function submitMarketplaceProduct() {
+  const name = document.getElementById('mp-product-name').value.trim();
+  const description = document.getElementById('mp-product-description').value.trim();
+  const price = parseFloat(document.getElementById('mp-product-price').value);
+  const images = document.getElementById('mp-product-images').files;
+  const video = document.getElementById('mp-product-video').files[0];
+  const categoryId = document.getElementById('mp-product-category').value;
+  const contactPlatform = document.getElementById('mp-contact-platform').value.trim();
+  const contactLink = document.getElementById('mp-contact-link').value.trim();
+
+  if (!name || !description || isNaN(price) || images.length === 0 || !categoryId || !contactPlatform || !contactLink) {
+    showNotification('Please fill all required fields (Name, Description, Price, Images, Category, Contact Info).', 'warning');
+    return;
+  }
+  if (images.length > 5) {
+    showNotification('You can upload a maximum of 5 images.', 'warning');
+    return;
+  }
+  if (state.userProfile.kyc_status !== 'approved') {
+    showNotification('Your KYC must be approved to submit marketplace products.', 'error');
+    return;
+  }
+
+  showLoading(true);
+  try {
+    let imageUrls = [];
+    for (let i = 0; i < images.length; i++) {
+      const file = images[i];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `marketplace_products/${state.userProfile.id}/${Date.now()}_${i}.${fileExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('marketplace_product_media')
+        .upload(fileName, file);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('marketplace_product_media').getPublicUrl(fileName);
+      imageUrls.push(urlData.publicUrl);
+    }
+
+    let videoUrl = null;
+    if (video) {
+      const videoExt = video.name.split('.').pop();
+      const videoFileName = `marketplace_products/${state.userProfile.id}/video_${Date.now()}.${videoExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('marketplace_product_media')
+        .upload(videoFileName, video);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('marketplace_product_media').getPublicUrl(videoFileName);
+      videoUrl = urlData.publicUrl;
+    }
+
+    const { error } = await state.supabase.rpc('submit_marketplace_product', {
+      p_name: name,
+      p_description: description,
+      p_price: price,
+      p_image_urls: imageUrls,
+      p_video_url: videoUrl,
+      p_contact_platform: contactPlatform,
+      p_contact_link: contactLink,
+      p_category_id: categoryId
+    });
+
+    if (error) throw error;
+
+    showNotification('Marketplace product submitted for review!', 'success');
+    hideAddMarketplaceProductForm();
+    loadMyMarketplaceProducts(); // Reload user's products
+  } catch (error) {
+    console.error('Error submitting marketplace product:', error);
+    showNotification(`Failed to submit product: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+async function loadMyMarketplaceProducts() {
+  const tbody = document.getElementById('my-marketplace-products-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="4" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading your products...
+      </td>
+    </tr>
+  `;
+
+  if (!state.userProfile || !state.userProfile.id) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="text-center text-text-secondary py-8">
+          Please create a profile to view your products.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  try {
+    const { data, error } = await state.supabase
+      .from('marketplace_products')
+      .select('*')
+      .eq('seller_id', state.userProfile.id)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(product => {
+        const statusClass = `status-${product.status}`;
+        return `
+          <tr>
+            <td>${product.name}</td>
+            <td>${product.price} MMK</td>
+            <td><span class="${statusClass} font-semibold">${product.status.toUpperCase()}</span></td>
+            <td>
+              <div class="table-actions">
+                <button onclick="editMarketplaceProduct('${product.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-edit mr-1"></i> EDIT
+                </button>
+                <button onclick="deleteMyMarketplaceProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i> DELETE
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="4" class="text-center text-text-secondary py-8">
+            You have not posted any products yet.
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading my marketplace products:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="4" class="text-center text-accent-red py-8">
+          Failed to retrieve your products
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function editMarketplaceProduct(productId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('marketplace_products')
+      .select('*')
+      .eq('id', productId)
+      .eq('seller_id', state.userProfile.id)
+      .single();
+
+    if (error) throw error;
+
+    document.getElementById('edit-mp-product-id').value = data.id;
+    document.getElementById('edit-mp-product-name').value = data.name;
+    document.getElementById('edit-mp-product-description').value = data.description;
+    document.getElementById('edit-mp-product-price').value = data.price;
+    document.getElementById('edit-mp-product-category').value = data.category_id;
+    document.getElementById('edit-mp-contact-platform').value = data.contact_platform;
+    document.getElementById('edit-mp-contact-link').value = data.contact_link;
+
+    const currentImagesDiv = document.getElementById('edit-mp-current-images');
+    currentImagesDiv.innerHTML = '';
+    if (data.image_urls && data.image_urls.length > 0) {
+      data.image_urls.forEach(url => {
+        currentImagesDiv.innerHTML += `<img src="${url}" class="w-full h-24 object-cover rounded-md" alt="Current Image">`;
+      });
+    } else {
+      currentImagesDiv.innerHTML = '<p class="text-text-secondary text-sm col-span-full">No current images.</p>';
+    }
+
+    const currentVideoDiv = document.getElementById('edit-mp-current-video');
+    currentVideoDiv.innerHTML = '';
+    if (data.video_url) {
+      currentVideoDiv.innerHTML = `
+        <video controls class="w-full rounded-lg">
+          <source src="${data.video_url}" type="video/mp4">
+        </video>
+      `;
+    } else {
+      currentVideoDiv.innerHTML = '<p class="text-text-secondary text-sm">No current video.</p>';
+    }
+
+    document.getElementById('edit-marketplace-product-modal').classList.remove('hidden');
+
+  } catch (error) {
+    console.error('Error loading product for edit:', error);
+    showNotification(`Failed to load product for editing: ${error.message}`, 'error');
+  }
+}
+
+function closeEditMarketplaceProductModal() {
+  document.getElementById('edit-marketplace-product-modal').classList.add('hidden');
+  // Clear file inputs
+  document.getElementById('edit-mp-product-images').value = '';
+  document.getElementById('edit-mp-product-video').value = '';
+}
+
+async function updateMarketplaceProduct() {
+  const productId = document.getElementById('edit-mp-product-id').value;
+  const name = document.getElementById('edit-mp-product-name').value.trim();
+  const description = document.getElementById('edit-mp-product-description').value.trim();
+  const price = parseFloat(document.getElementById('edit-mp-product-price').value);
+  const newImages = document.getElementById('edit-mp-product-images').files;
+  const newVideo = document.getElementById('edit-mp-product-video').files[0];
+  const categoryId = document.getElementById('edit-mp-product-category').value;
+  const contactPlatform = document.getElementById('edit-mp-contact-platform').value.trim();
+  const contactLink = document.getElementById('edit-mp-contact-link').value.trim();
+
+  if (!name || !description || isNaN(price) || !categoryId || !contactPlatform || !contactLink) {
+    showNotification('Please fill all required fields.', 'warning');
+    return;
+  }
+
+  showLoading(true);
+  try {
+    // Fetch current product to get existing image/video URLs
+    const { data: currentProduct, error: fetchError } = await state.supabase
+      .from('marketplace_products')
+      .select('image_urls, video_url')
+      .eq('id', productId)
+      .single();
+    if (fetchError) throw fetchError;
+
+    let imageUrls = currentProduct.image_urls || [];
+    let videoUrl = currentProduct.video_url;
+
+    // Upload new images and add to array
+    for (let i = 0; i < newImages.length; i++) {
+      const file = newImages[i];
+      const fileExt = file.name.split('.').pop();
+      const fileName = `marketplace_products/${state.userProfile.id}/${Date.now()}_new_img_${i}.${fileExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('marketplace_product_media')
+        .upload(fileName, file);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('marketplace_product_media').getPublicUrl(fileName);
+      imageUrls.push(urlData.publicUrl);
+    }
+    if (imageUrls.length > 5) {
+      showNotification('You can have a maximum of 5 images. Please remove some if needed.', 'error');
+      showLoading(false);
+      return;
+    }
+
+    // Upload new video if provided
+    if (newVideo) {
+      const videoExt = newVideo.name.split('.').pop();
+      const videoFileName = `marketplace_products/${state.userProfile.id}/video_${Date.now()}.${videoExt}`;
+      const { data: uploadData, error: uploadError } = await state.supabase.storage
+        .from('marketplace_product_media')
+        .upload(videoFileName, newVideo);
+      if (uploadError) throw uploadError;
+      const { data: urlData } = state.supabase.storage.from('marketplace_product_media').getPublicUrl(videoFileName);
+      videoUrl = urlData.publicUrl;
+    }
+
+    const { error } = await state.supabase.rpc('update_marketplace_product', {
+      p_product_id: productId,
+      p_name: name,
+      p_description: description,
+      p_price: price,
+      p_image_urls: imageUrls,
+      p_video_url: videoUrl,
+      p_contact_platform: contactPlatform,
+      p_contact_link: contactLink
+    });
+
+    if (error) throw error;
+
+    showNotification('Marketplace product updated successfully! It will be re-reviewed.', 'success');
+    closeEditMarketplaceProductModal();
+    loadMyMarketplaceProducts(); // Reload user's products
+  } catch (error) {
+    console.error('Error updating marketplace product:', error);
+    showNotification(`Failed to update product: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+function deleteMyMarketplaceProduct(productId) {
   showConfirmModal(
-    'Are you sure you want to logout?',
-    () => {
+    'Are you sure you want to delete this product? This action cannot be undone.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('delete_marketplace_product', { p_product_id: productId });
+        if (error) throw error;
+        showNotification('Product deleted successfully!', 'success');
+        loadMyMarketplaceProducts();
+      } catch (error) {
+        console.error('Error deleting product:', error);
+        showNotification(`Failed to delete product: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+async function loadMyOrders() { // For admin_products orders
+  const tbody = document.getElementById('my-orders-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="5" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading your orders...
+      </td>
+    </tr>
+  `;
+
+  if (!state.userProfile || !state.userProfile.id) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-text-secondary py-8">
+          Please create a profile to view your orders.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  try {
+    const { data, error } = await state.supabase
+      .from('orders')
+      .select(`
+        *,
+        product:admin_products(name),
+        payment_method:payment_methods(method_name)
+      `)
+      .eq('buyer_id', state.userProfile.id)
+      .order('ordered_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(order => {
+        const statusClass = `status-${order.status}`;
+        return `
+          <tr>
+            <td>${order.product?.name || 'N/A'}</td>
+            <td>${order.amount} MMK</td>
+            <td><span class="${statusClass} font-semibold">${order.status.toUpperCase()}</span></td>
+            <td>${utils.formatDateTime(order.ordered_at)}</td>
+            <td>
+              <div class="table-actions">
+                ${order.receipt_url ? `
+                <a href="${order.receipt_url}" target="_blank" class="myanmar-btn btn-small">
+                  <i class="fas fa-receipt mr-1"></i> RECEIPT
+                </a>
+                ` : ''}
+                ${order.status === 'pending' ? `
+                <button onclick="initiatePurchase('${order.product_id}', '${order.product?.name || 'N/A'}', ${order.amount})" class="myanmar-btn btn-small">
+                  <i class="fas fa-upload mr-1"></i> UPLOAD RECEIPT
+                </button>
+                ` : ''}
+                ${order.status === 'approved' && order.product?.file_url ? `
+                <a href="${order.product.file_url}" target="_blank" download class="myanmar-btn btn-small">
+                  <i class="fas fa-download mr-1"></i> DOWNLOAD
+                </a>
+                ` : ''}
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="5" class="text-center text-text-secondary py-8">
+            You have no orders yet.
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading my orders:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-accent-red py-8">
+          Failed to retrieve your orders
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function loadMySales() { // For marketplace_products orders
+  const tbody = document.getElementById('my-sales-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading your sales...
+      </td>
+    </tr>
+  `;
+
+  if (!state.userProfile || !state.userProfile.id) {
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-text-secondary py-8">
+          Please create a profile to view your sales.
+        </td>
+      </tr>
+    `;
+    return;
+  }
+
+  try {
+    const { data, error } = await state.supabase
+      .from('user_orders')
+      .select(`
+        *,
+        product:marketplace_products(name),
+        buyer:profiles!buyer_id(username, name, profile_picture)
+      `)
+      .eq('seller_id', state.userProfile.id)
+      .order('ordered_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(order => {
+        const statusClass = `status-${order.status}`;
+        const buyerName = order.buyer?.name || 'N/A';
+        const buyerUsername = order.buyer?.username || 'N/A';
+        const buyerAvatar = order.buyer?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr>
+            <td>${order.product?.name || 'N/A'}</td>
+            <td>
+              <img src="${buyerAvatar}" alt="Buyer" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              ${buyerName} (@${buyerUsername})
+            </td>
+            <td>${order.amount} MMK</td>
+            <td><span class="${statusClass} font-semibold">${order.status.toUpperCase()}</span></td>
+            <td>${utils.formatDateTime(order.ordered_at)}</td>
+            <td>
+              <div class="table-actions">
+                ${order.receipt_url ? `
+                <a href="${order.receipt_url}" target="_blank" class="myanmar-btn btn-small">
+                  <i class="fas fa-receipt mr-1"></i> RECEIPT
+                </a>
+                ` : ''}
+                <button onclick="openChatConversation('${order.conversation_id}', '${buyerName} (@${buyerUsername})')" class="myanmar-btn btn-small">
+                  <i class="fas fa-comments mr-1"></i> CHAT
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            You have no sales yet.
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading my sales:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve your sales
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function userLogout(showConfirm = true) {
+  const performLogout = async () => {
+    showLoading(true);
+    try {
+      const { error } = await state.supabase.auth.signOut();
+      if (error) throw error;
+
       localStorage.removeItem('user_key'); // Clear stored key
       state.isAuthenticated = false;
       state.userProfile = null;
       
       // Unsubscribe from all realtime channels on logout
       if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
+      if (state.adminProductsRealtime) state.supabase.removeChannel(state.adminProductsRealtime);
+      if (state.marketplaceProductsRealtime) state.supabase.removeChannel(state.marketplaceProductsRealtime);
+      if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
+      if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
       if (state.chatRealtime) state.supabase.removeChannel(state.chatRealtime);
       if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
-      if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
-      if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
-      if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
-      if (state.userProductOrdersRealtime) state.supabase.removeChannel(state.userProductOrdersRealtime);
-      if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
-      if (state.privateChatRealtime) state.supabase.removeChannel(state.privateChatRealtime);
-
 
       document.getElementById('app-content').classList.add('hidden');
       document.getElementById('profile-creation-section').classList.add('hidden'); // Hide profile creation too
       document.getElementById('login-section').classList.remove('hidden');
       document.getElementById('login-key').value = ''; // Clear key input
       showNotification('Logged out successfully', 'info');
+    } catch (error) {
+      console.error('Logout error:', error);
+      showNotification(`Failed to logout: ${error.message}`, 'error');
+    } finally {
+      showLoading(false);
     }
-  );
+  };
+
+  if (showConfirm) {
+    showConfirmModal(
+      'Are you sure you want to logout?',
+      performLogout
+    );
+  } else {
+    await performLogout();
+  }
 }
 
 function showConfirmModal(message, callback) {
@@ -3692,30 +3689,38 @@ window.viewNews = viewNews;
 window.closeNewsModal = closeNewsModal;
 window.shareNews = shareNews;
 window.initiatePurchase = initiatePurchase;
+window.initiateMarketplacePurchase = initiateMarketplacePurchase;
 window.closePaymentModal = closePaymentModal;
 window.submitPurchase = submitPurchase;
-window.postUserProduct = postUserProduct;
-window.viewUserProduct = viewUserProduct;
-window.closeUserProductModal = closeUserProductModal;
-window.initiateUserProductPurchase = initiateUserProductPurchase;
-window.closeUserProductPaymentModal = closeUserProductPaymentModal;
-window.submitUserProductPurchase = submitUserProductPurchase;
-window.deleteUserProduct = deleteUserProduct;
-window.approveUserProductOrder = approveUserProductOrder;
-window.rejectUserProductOrder = rejectUserProductOrder;
+window.submitMarketplacePurchase = submitMarketplacePurchase;
+window.openChatConversation = openChatConversation;
+window.closeChatConversation = closeChatConversation;
 window.sendChatMessage = sendChatMessage;
-window.openPrivateChat = openPrivateChat;
-window.closePrivateChatModal = closePrivateChatModal;
-window.sendPrivateChatMessage = sendPrivateChatMessage;
-window.sendSupportMessage = sendSupportMessage;
+window.loadSupportTickets = loadSupportTickets;
+window.viewSupportTicketDetails = viewSupportTicketDetails;
+window.closeSupportTicketDetails = closeSupportTicketDetails;
+window.sendSupportReply = sendSupportReply;
+window.showCreateTicketForm = showCreateTicketForm;
+window.hideCreateTicketForm = hideCreateTicketForm;
+window.submitNewTicket = submitNewTicket;
 window.loadMiProfile = loadMiProfile;
 window.updateProfile = updateProfile;
-window.toggleKycIdFields = toggleKycIdFields;
+window.toggleKycForm = toggleKycForm;
 window.submitKyc = submitKyc;
+window.showAddMarketplaceProductForm = showAddMarketplaceProductForm;
+window.hideAddMarketplaceProductForm = hideAddMarketplaceProductForm;
+window.submitMarketplaceProduct = submitMarketplaceProduct;
+window.editMarketplaceProduct = editMarketplaceProduct;
+window.closeEditMarketplaceProductModal = closeEditMarketplaceProductModal;
+window.updateMarketplaceProduct = updateMarketplaceProduct;
+window.deleteMyMarketplaceProduct = deleteMyMarketplaceProduct;
 window.userLogout = userLogout;
 window.showConfirmModal = showConfirmModal;
 window.closeConfirmModal = closeConfirmModal;
 window.confirmAction = confirmAction;
+window.viewMarketplaceProductDetails = viewMarketplaceProductDetails;
+window.closeMarketplaceProductModal = closeMarketplaceProductModal;
+
 
 // Error handling
 window.onerror = function(msg, url, lineNo, columnNo, error) {
