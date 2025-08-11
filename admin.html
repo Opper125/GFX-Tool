@@ -590,10 +590,15 @@ body {
     <span class="hidden sm:inline">NEWS</span>
     <span class="sm:hidden">News</span>
   </button>
-  <button onclick="showSection('products', this)" class="nav-btn">
+  <button onclick="showSection('admin-products', this)" class="nav-btn">
     <i class="fas fa-box-open mr-1"></i>
-    <span class="hidden sm:inline">PRODUCTS</span>
-    <span class="sm:hidden">Products</span>
+    <span class="hidden sm:inline">ADMIN PRODUCTS</span>
+    <span class="sm:hidden">A. Prod</span>
+  </button>
+  <button onclick="showSection('marketplace-products', this)" class="nav-btn">
+    <i class="fas fa-store mr-1"></i>
+    <span class="hidden sm:inline">MARKETPLACE PRODUCTS</span>
+    <span class="sm:hidden">M. Prod</span>
   </button>
   <button onclick="showSection('payments', this)" class="nav-btn">
     <i class="fas fa-money-check-alt mr-1"></i>
@@ -610,13 +615,13 @@ body {
     <span class="hidden sm:inline">KYC</span>
     <span class="sm:hidden">KYC</span>
   </button>
-  <button onclick="showSection('user-products', this)" class="nav-btn">
-    <i class="fas fa-store mr-1"></i>
-    <span class="hidden sm:inline">USER PRODUCTS</span>
-    <span class="sm:hidden">U. Prod</span>
+  <button onclick="showSection('admin-orders', this)" class="nav-btn">
+    <i class="fas fa-shopping-cart mr-1"></i>
+    <span class="hidden sm:inline">ADMIN ORDERS</span>
+    <span class="sm:hidden">A. Orders</span>
   </button>
   <button onclick="showSection('user-orders', this)" class="nav-btn">
-    <i class="fas fa-shopping-cart mr-1"></i>
+    <i class="fas fa-handshake mr-1"></i>
     <span class="hidden sm:inline">USER ORDERS</span>
     <span class="sm:hidden">U. Orders</span>
   </button>
@@ -624,6 +629,11 @@ body {
     <i class="fas fa-comments mr-1"></i>
     <span class="hidden sm:inline">CHAT MGMT</span>
     <span class="sm:hidden">Chat</span>
+  </button>
+  <button onclick="showSection('categories', this)" class="nav-btn">
+    <i class="fas fa-tags mr-1"></i>
+    <span class="hidden sm:inline">CATEGORIES</span>
+    <span class="sm:hidden">Cats</span>
   </button>
   <button onclick="adminLogout()" class="nav-btn btn-danger">
     <i class="fas fa-sign-out-alt mr-1"></i>
@@ -647,33 +657,51 @@ body {
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">PHONE NUMBER</label>
-        <input type="tel" id="about-phone" placeholder="+95..." 
+        <input type="tel" id="about-phone-number" placeholder="+95..." 
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">TELEGRAM LINK</label>
-        <input type="url" id="about-telegram" placeholder="https://t.me/..." 
+        <input type="url" id="about-telegram-link" placeholder="https://t.me/..." 
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">VIBER LINK</label>
-        <input type="url" id="about-viber" placeholder="viber://..." 
+        <input type="url" id="about-viber-link" placeholder="viber://..." 
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">FACEBOOK LINK</label>
-        <input type="url" id="about-facebook" placeholder="https://facebook.com/..." 
+        <input type="url" id="about-facebook-link" placeholder="https://facebook.com/..." 
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">TIKTOK LINK</label>
-        <input type="url" id="about-tiktok" placeholder="https://tiktok.com/@..." 
+        <input type="url" id="about-tiktok-link" placeholder="https://tiktok.com/@..." 
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">EMAIL</label>
         <input type="email" id="about-email" placeholder="support@example.com" 
                class="admin-input w-full">
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-2 text-text-secondary">DESCRIPTION</label>
+        <textarea id="about-description" placeholder="About us description..." rows="3"
+                  class="admin-input w-full resize-none"></textarea>
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-2 text-text-secondary">LOGO URL (OPTIONAL)</label>
+        <input type="url" id="about-logo-url" placeholder="https://your-logo.com/logo.png" 
+               class="admin-input w-full">
+      </div>
+      <div class="md:col-span-2">
+        <label class="block text-sm font-medium mb-2 text-text-secondary">SOCIAL LINKS (JSON Array)</label>
+        <textarea id="about-social-links" placeholder='[{"name": "Telegram", "url": "https://t.me/...", "icon_url": "/placeholder.svg?height=24&width=24"}]' rows="5"
+                  class="admin-input w-full resize-none font-share-tech"></textarea>
+        <p class="text-xs text-text-secondary mt-1">
+          Format: [{"name": "Name", "url": "URL", "icon_url": "Icon URL"}]
+        </p>
       </div>
       <div class="md:col-span-2 flex items-end">
         <button onclick="updateAbout()" 
@@ -717,13 +745,14 @@ body {
         <thead>
           <tr>
             <th class="text-left">KEY TEXT</th>
+            <th class="text-left">PROFILE ID</th>
             <th class="text-left">STATUS</th>
             <th class="text-left">ACTIONS</th>
           </tr>
         </thead>
         <tbody id="keys-table-body">
           <tr>
-            <td colspan="3" class="text-center text-text-secondary py-8">
+            <td colspan="4" class="text-center text-text-secondary py-8">
               <div class="loading-spinner mx-auto mb-2"></div>
               Loading keys...
             </td>
@@ -758,7 +787,7 @@ body {
             <th class="text-left">NAME</th>
             <th class="text-left">CREATED AT</th>
             <th class="text-left">STATUS</th>
-            <th class="text-left">CAN SELL</th>
+            <th class="text-left">KYC</th>
             <th class="text-left">ACTIONS</th>
           </tr>
         </thead>
@@ -843,52 +872,52 @@ body {
   </div>
 </div>
 
- Products Management 
-<div id="products-section" class="admin-section hidden">
+ Admin Products Management 
+<div id="admin-products-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
       <i class="fas fa-box-open mr-3"></i>
-      PRODUCTS & APKS MANAGEMENT
+      OFFICIAL PRODUCTS & APKS MANAGEMENT
     </h3>
 
      Upload Product Form 
     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6 mb-6">
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">PRODUCT NAME</label>
-        <input type="text" id="product-name" placeholder="Product Name" 
+        <input type="text" id="admin-product-name" placeholder="Product Name" 
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">FILE TYPE</label>
-        <select id="product-file-type" class="admin-input w-full">
+        <select id="admin-product-file-type" class="admin-input w-full">
           <option value="apk">APK</option>
           <option value="file">File (ZIP, RAR, etc.)</option>
         </select>
       </div>
       <div class="md:col-span-2">
         <label class="block text-sm font-medium mb-2 text-text-secondary">DESCRIPTION</label>
-        <textarea id="product-description" placeholder="Product Description..." rows="3"
+        <textarea id="admin-product-description" placeholder="Product Description..." rows="3"
                   class="admin-input w-full resize-none"></textarea>
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">FILE (APK/ZIP)</label>
-        <input type="file" id="product-file" class="admin-input w-full">
+        <input type="file" id="admin-product-file" class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">PRICE (MMK)</label>
-        <input type="number" id="product-price" placeholder="0.00" min="0" step="0.01"
+        <input type="number" id="admin-product-price" placeholder="0.00" min="0" step="0.01"
                class="admin-input w-full">
       </div>
       <div>
         <label class="block text-sm font-medium mb-2 text-text-secondary">APK ICON (OPTIONAL)</label>
-        <input type="file" id="product-icon" accept="image/*" 
+        <input type="file" id="admin-product-icon" accept="image/*" 
                class="admin-input w-full">
         <p class="text-xs text-text-secondary mt-1">
           APK icon cannot be extracted directly from client-side. Image upload is required.
         </p>
       </div>
       <div class="flex items-end">
-        <button onclick="uploadProduct()" 
+        <button onclick="uploadAdminProduct()" 
                 class="myanmar-btn w-full flex items-center justify-center space-x-2">
           <i class="fas fa-upload"></i>
           <span>UPLOAD PRODUCT</span>
@@ -898,7 +927,7 @@ body {
 
      Search Input for Products 
     <div class="relative search-input-container mb-4">
-      <input type="text" id="search-products" placeholder="Search Products..." class="admin-input w-full" onkeyup="filterTable('products-table-body', this.value)">
+      <input type="text" id="search-admin-products" placeholder="Search Admin Products..." class="admin-input w-full" onkeyup="filterTable('admin-products-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
@@ -915,11 +944,51 @@ body {
             <th class="text-left">ACTIONS</th>
           </tr>
         </thead>
-        <tbody id="products-table-body">
+        <tbody id="admin-products-table-body">
           <tr>
             <td colspan="6" class="text-center text-text-secondary py-8">
               <div class="loading-spinner mx-auto mb-2"></div>
               Loading products...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+ Marketplace Products Management 
+<div id="marketplace-products-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-store mr-3"></i>
+      MARKETPLACE PRODUCTS MANAGEMENT
+    </h3>
+
+     Search Input for Marketplace Products 
+    <div class="relative search-input-container mb-4">
+      <input type="text" id="search-marketplace-products" placeholder="Search Marketplace Products..." class="admin-input w-full" onkeyup="filterTable('marketplace-products-table-body', this.value)">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+     Marketplace Products Table 
+    <div class="overflow-x-auto">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th class="text-left">PRODUCT</th>
+            <th class="text-left">SELLER</th>
+            <th class="text-left">PRICE</th>
+            <th class="text-left">CATEGORY</th>
+            <th class="text-left">STATUS</th>
+            <th class="text-left">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="marketplace-products-table-body">
+          <tr>
+            <td colspan="6" class="text-center text-text-secondary py-8">
+              <div class="loading-spinner mx-auto mb-2"></div>
+              Loading marketplace products...
             </td>
           </tr>
         </tbody>
@@ -998,16 +1067,20 @@ body {
         </tbody>
       </table>
     </div>
+  </div>
+</div>
 
-     Pending Orders 
-    <h4 class="text-md font-orbitron font-bold mb-4 text-accent-purple">
-      <i class="fas fa-hourglass-half mr-2"></i>
-      PENDING ORDERS
-    </h4>
+ Admin Orders Management 
+<div id="admin-orders-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-shopping-cart mr-3"></i>
+      OFFICIAL PRODUCT ORDERS
+    </h3>
 
-     Search Input for Pending Orders 
+     Search Input for Admin Orders 
     <div class="relative search-input-container mb-4">
-      <input type="text" id="search-pending-orders" placeholder="Search Pending Orders..." class="admin-input w-full" onkeyup="filterTable('pending-orders-table-body', this.value)">
+      <input type="text" id="search-admin-orders" placeholder="Search Admin Orders..." class="admin-input w-full" onkeyup="filterTable('admin-orders-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
@@ -1024,11 +1097,11 @@ body {
             <th class="text-left">ACTIONS</th>
           </tr>
         </thead>
-        <tbody id="pending-orders-table-body">
+        <tbody id="admin-orders-table-body">
           <tr>
             <td colspan="7" class="text-center text-text-secondary py-8">
               <div class="loading-spinner mx-auto mb-2"></div>
-              Loading pending orders...
+              Loading admin orders...
             </td>
           </tr>
         </tbody>
@@ -1047,25 +1120,31 @@ body {
 
      Search Input for Support Messages 
     <div class="relative search-input-container mb-4">
-      <input type="text" id="search-support-messages" placeholder="Search Support Messages..." class="admin-input w-full" onkeyup="filterSupportMessages(this.value)">
+      <input type="text" id="search-support-messages" placeholder="Search Support Messages..." class="admin-input w-full" onkeyup="filterTable('support-tickets-table-body', this.value)">
       <i class="fas fa-search search-icon"></i>
     </div>
 
-     Support Messages 
-    <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
-      <div class="loading-spinner mx-auto mb-4"></div>
-      <p class="text-center text-text-secondary">Loading messages...</p>
-    </div>
-
-     Reply Form 
-    <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-      <textarea id="admin-support-input" placeholder="Write your support message..." rows="3"
-                class="admin-input flex-1 resize-none"></textarea>
-      <button onclick="sendAdminSupportMessage()" 
-              class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
-        <i class="fas fa-paper-plane"></i>
-        <span>SEND SUPPORT</span>
-      </button>
+     Support Tickets Table 
+    <div class="overflow-x-auto">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th class="text-left">USER</th>
+            <th class="text-left">SUBJECT</th>
+            <th class="text-left">STATUS</th>
+            <th class="text-left">CREATED AT</th>
+            <th class="text-left">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="support-tickets-table-body">
+          <tr>
+            <td colspan="5" class="text-center text-text-secondary py-8">
+              <div class="loading-spinner mx-auto mb-2"></div>
+              Loading support tickets...
+            </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
   </div>
 </div>
@@ -1110,51 +1189,11 @@ body {
   </div>
 </div>
 
- User Products Management 
-<div id="user-products-section" class="admin-section hidden">
-  <div class="admin-card p-4 md:p-8">
-    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-      <i class="fas fa-store mr-3"></i>
-      USER POSTED PRODUCTS
-    </h3>
-
-     Search Input for User Products 
-    <div class="relative search-input-container mb-4">
-      <input type="text" id="search-user-products" placeholder="Search User Products..." class="admin-input w-full" onkeyup="filterTable('user-products-table-body', this.value)">
-      <i class="fas fa-search search-icon"></i>
-    </div>
-
-     User Products Table 
-    <div class="overflow-x-auto">
-      <table class="admin-table w-full">
-        <thead>
-          <tr>
-            <th class="text-left">PRODUCT</th>
-            <th class="text-left">SELLER</th>
-            <th class="text-left">PRICE</th>
-            <th class="text-left">POSTED AT</th>
-            <th class="text-left">STATUS</th>
-            <th class="text-left">ACTIONS</th>
-          </tr>
-        </thead>
-        <tbody id="user-products-table-body">
-          <tr>
-            <td colspan="6" class="text-center text-text-secondary py-8">
-              <div class="loading-spinner mx-auto mb-2"></div>
-              Loading user products...
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
-  </div>
-</div>
-
  User Orders Management 
 <div id="user-orders-section" class="admin-section hidden">
   <div class="admin-card p-4 md:p-8">
     <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-      <i class="fas fa-shopping-cart mr-3"></i>
+      <i class="fas fa-handshake mr-3"></i>
       USER-TO-USER ORDERS
     </h3>
 
@@ -1213,6 +1252,54 @@ body {
   </div>
 </div>
 
+ Categories Management 
+<div id="categories-section" class="admin-section hidden">
+  <div class="admin-card p-4 md:p-8">
+    <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
+      <i class="fas fa-tags mr-3"></i>
+      CATEGORIES MANAGEMENT
+    </h3>
+    
+     Create Category Form 
+    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-6">
+      <input type="text" id="category-name" placeholder="Category Name" 
+             class="admin-input col-span-full md:col-span-1">
+      <button onclick="createCategory()" 
+              class="myanmar-btn flex items-center justify-center space-x-2">
+        <i class="fas fa-plus"></i>
+        <span>ADD NEW CATEGORY</span>
+      </button>
+    </div>
+
+     Search Input for Categories 
+    <div class="relative search-input-container mb-4">
+      <input type="text" id="search-categories" placeholder="Search Categories..." class="admin-input w-full" onkeyup="filterTable('categories-table-body', this.value)">
+      <i class="fas fa-search search-icon"></i>
+    </div>
+
+     Categories Table 
+    <div class="overflow-x-auto">
+      <table class="admin-table w-full">
+        <thead>
+          <tr>
+            <th class="text-left">NAME</th>
+            <th class="text-left">CREATED AT</th>
+            <th class="text-left">ACTIONS</th>
+          </tr>
+        </thead>
+        <tbody id="categories-table-body">
+          <tr>
+            <td colspan="3" class="text-center text-text-secondary py-8">
+              <div class="loading-spinner mx-auto mb-2"></div>
+              Loading categories...
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
 </div>
 </div>
 
@@ -1248,16 +1335,32 @@ body {
   </div>
 </div>
 
- User Product Detail Modal 
-<div id="user-product-modal" class="modal hidden">
+ Marketplace Product Detail Modal 
+<div id="marketplace-product-modal" class="modal hidden">
   <div class="modal-content max-w-2xl">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-orbitron font-bold text-accent-purple">PRODUCT DETAILS</h2>
-      <button onclick="closeUserProductModal()" class="text-text-secondary hover:text-accent-red">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">MARKETPLACE PRODUCT DETAILS</h2>
+      <button onclick="closeMarketplaceProductModal()" class="text-text-secondary hover:text-accent-red">
         <i class="fas fa-times"></i>
       </button>
     </div>
-    <div id="user-product-modal-content">
+    <div id="marketplace-product-modal-content">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
+ Admin Order Detail Modal 
+<div id="admin-order-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">OFFICIAL PRODUCT ORDER DETAILS</h2>
+      <button onclick="closeAdminOrderModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="admin-order-modal-content">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading...</p>
     </div>
@@ -1268,12 +1371,28 @@ body {
 <div id="user-order-modal" class="modal hidden">
   <div class="modal-content max-w-2xl">
     <div class="flex justify-between items-center mb-4">
-      <h2 class="text-xl font-orbitron font-bold text-accent-purple">ORDER DETAILS</h2>
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">USER-TO-USER ORDER DETAILS</h2>
       <button onclick="closeUserOrderModal()" class="text-text-secondary hover:text-accent-red">
         <i class="fas fa-times"></i>
       </button>
     </div>
     <div id="user-order-modal-content">
+      <div class="loading-spinner mx-auto mb-4"></div>
+      <p class="text-center text-text-secondary">Loading...</p>
+    </div>
+  </div>
+</div>
+
+ Support Ticket Detail Modal 
+<div id="support-ticket-modal" class="modal hidden">
+  <div class="modal-content max-w-2xl">
+    <div class="flex justify-between items-center mb-4">
+      <h2 class="text-xl font-orbitron font-bold text-accent-purple">SUPPORT TICKET DETAILS</h2>
+      <button onclick="closeSupportTicketModal()" class="text-text-secondary hover:text-accent-red">
+        <i class="fas fa-times"></i>
+      </button>
+    </div>
+    <div id="support-ticket-modal-content">
       <div class="loading-spinner mx-auto mb-4"></div>
       <p class="text-center text-text-secondary">Loading...</p>
     </div>
@@ -1315,8 +1434,8 @@ body {
     // Configuration
     const CONFIG = {
       SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // သင့် Supabase URL ကို ထည့်ပါ
-      SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
-      ADMIN_KEY: 'Opper_FPS',
+      SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9e3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // သင့် Supabase Anon Key ကို ထည့်ပါ
+      ADMIN_KEY: 'Opper_FPS', // This is a simple hardcoded key for demonstration. In production, use a more secure method.
       MAX_RETRY_ATTEMPTS: 3,
       RETRY_DELAY: 2000,
       MAX_IMAGE_SIZE_MB: 5, // Max size per image for user products
@@ -1333,12 +1452,12 @@ isConnected: false,
 confirmCallback: null,
 newsRealtime: null,
 supportRealtime: null,
-productsRealtime: null,
-ordersRealtime: null,
-kycRealtime: null,
-userProductsRealtime: null,
+adminProductsRealtime: null,
+marketplaceProductsRealtime: null,
+adminOrdersRealtime: null,
 userOrdersRealtime: null,
-chatMessagesRealtime: null,
+kycRealtime: null,
+categoriesRealtime: null,
 adminProfileId: 'a0eebc99-9c0b-4ef8-bb6d-6bb9bd380a11' // Hardcoded admin_profile_id for news posting, assuming a default admin user exists in admin_profiles table.
 };
 
@@ -1373,11 +1492,11 @@ updateConnectionStatus('connecting');
 
 try {
   // Check if Supabase config is set
-  if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'YOUR_SUPABASE_URL_HERE') {
+  if (!CONFIG.SUPABASE_URL || CONFIG.SUPABASE_URL === 'https://rliwdosxsbauwxkayjoa.supabase.co') {
     throw new Error('Supabase URL is required! Please set your Supabase URL in the CONFIG section.');
   }
 
-  if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'YOUR_SUPABASE_ANON_KEY_HERE') {
+  if (!CONFIG.SUPABASE_ANON_KEY || CONFIG.SUPABASE_ANON_KEY === 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9e3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4') {
     throw new Error('Supabase Anon Key is required! Please set your Supabase Anon Key in the CONFIG section.');
   }
 
@@ -1508,7 +1627,31 @@ try {
 
   // Direct comparison with hardcoded ADMIN_KEY
   if (adminKey === CONFIG.ADMIN_KEY) {
-    // Admin profile ID is hardcoded in state.adminProfileId
+    // For admin login, we'll directly sign in with a pre-defined admin user in Supabase Auth
+    // This assumes you have an admin user created in Supabase Auth with the ID matching state.adminProfileId
+    const { data: signInData, error: signInError } = await state.supabase.auth.signInWithPassword({
+      email: `admin_${state.adminProfileId}@example.com`, // Use a consistent email for admin
+      password: 'admin_password_here', // Replace with a strong, securely managed password
+    });
+
+    if (signInError) {
+      // If sign-in fails, it might be that the admin user doesn't exist in auth.users yet.
+      // For initial setup, you might need to manually create this user in Supabase Auth.
+      throw new Error(`Admin authentication failed: ${signInError.message}. Ensure admin user exists in Supabase Auth.`);
+    }
+
+    // Verify if the authenticated user is indeed an admin in our profiles table
+    const { data: profileData, error: profileError } = await state.supabase
+      .from('profiles')
+      .select('is_admin')
+      .eq('id', signInData.user.id)
+      .single();
+
+    if (profileError || !profileData || !profileData.is_admin) {
+      await state.supabase.auth.signOut(); // Sign out if not a valid admin profile
+      throw new Error('Authenticated user is not an administrator.');
+    }
+
     state.isAuthenticated = true;
     document.getElementById('login-section').classList.add('hidden');
     document.getElementById('admin-content').classList.remove('hidden');
@@ -1537,13 +1680,14 @@ try {
 async function loadDashboardData() {
 try {
   // Load stats
-  const [usersResult, keysResult, newsResult, supportResult, kycResult, userProductsResult, userOrdersResult] = await Promise.all([
+  const [usersResult, keysResult, newsResult, supportResult, kycResult, marketplaceProductsResult, adminOrdersResult, userOrdersResult] = await Promise.all([
     state.supabase.from('profiles').select('id', { count: 'exact' }),
-    state.supabase.from('keys').select('id', { count: 'exact' }).eq('is_active', true),
+    state.supabase.from('api_keys').select('id', { count: 'exact' }).eq('is_active', true),
     state.supabase.from('news').select('id', { count: 'exact' }),
-    state.supabase.from('support_messages').select('id', { count: 'exact' }).eq('is_read', false), // Unread support messages
+    state.supabase.from('support_tickets').select('id', { count: 'exact' }).eq('status', 'open'), // Open support tickets
     state.supabase.from('kyc_requests').select('id', { count: 'exact' }).eq('status', 'pending'),
-    state.supabase.from('user_products').select('id', { count: 'exact' }).eq('status', 'pending'),
+    state.supabase.from('marketplace_products').select('id', { count: 'exact' }).eq('status', 'pending'),
+    state.supabase.from('orders').select('id', { count: 'exact' }).eq('status', 'pending'),
     state.supabase.from('user_orders').select('id', { count: 'exact' }).eq('status', 'pending')
   ]);
 
@@ -1552,8 +1696,9 @@ try {
   document.getElementById('total-news').textContent = newsResult.count || 0;
   document.getElementById('total-support').textContent = supportResult.count || 0;
   document.getElementById('pending-kyc').textContent = kycResult.count || 0;
-  document.getElementById('pending-products').textContent = userProductsResult.count || 0;
-  document.getElementById('pending-user-orders').textContent = userOrdersResult.count || 0;
+  document.getElementById('pending-products').textContent = marketplaceProductsResult.count || 0;
+  document.getElementById('pending-user-orders').textContent = userOrdersResult.count || 0; // Renamed from pending-user-orders to match HTML
+  document.getElementById('pending-admin-orders').textContent = adminOrdersResult.count || 0; // New stat for admin orders
 
 } catch (error) {
   console.error('Error loading dashboard data:', error);
@@ -1565,12 +1710,12 @@ function setupRealtimeSubscriptions() {
 // Unsubscribe from previous channels if they exist
 if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
 if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
-if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
-if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
-if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
-if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
+if (state.adminProductsRealtime) state.supabase.removeChannel(state.adminProductsRealtime);
+if (state.marketplaceProductsRealtime) state.supabase.removeChannel(state.marketplaceProductsRealtime);
+if (state.adminOrdersRealtime) state.supabase.removeChannel(state.adminOrdersRealtime);
 if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
-if (state.chatMessagesRealtime) state.supabase.removeChannel(state.chatMessagesRealtime);
+if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
+if (state.categoriesRealtime) state.supabase.removeChannel(state.categoriesRealtime);
 
 
 // News realtime updates
@@ -1587,68 +1732,56 @@ state.newsRealtime = state.supabase
   )
   .subscribe();
 
-// Support messages realtime
+// Support tickets realtime
 state.supportRealtime = state.supabase
-  .channel('support_changes')
+  .channel('support_tickets_changes')
   .on('postgres_changes', 
-    { event: '*', schema: 'public', table: 'support_messages' }, 
+    { event: '*', schema: 'public', table: 'support_tickets' }, 
     (payload) => {
       if (state.currentSection === 'support') {
-        loadSupportMessages();
+        loadSupportTickets();
       }
       loadDashboardData(); // Update stats
     }
   )
   .subscribe();
 
-// Products realtime (admin-posted products)
-state.productsRealtime = state.supabase
-  .channel('products_changes')
+// Admin Products realtime
+state.adminProductsRealtime = state.supabase
+  .channel('admin_products_changes')
   .on('postgres_changes', 
-    { event: '*', schema: 'public', table: 'products' }, 
+    { event: '*', schema: 'public', table: 'admin_products' }, 
     (payload) => {
-      if (state.currentSection === 'products') {
-        loadProductsData();
+      if (state.currentSection === 'admin-products') {
+        loadAdminProductsData();
       }
+      loadDashboardData(); // Update stats
     }
   )
   .subscribe();
 
-// Orders realtime (admin-posted product orders)
-state.ordersRealtime = state.supabase
+// Marketplace Products realtime
+state.marketplaceProductsRealtime = state.supabase
+  .channel('marketplace_products_changes')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'marketplace_products' }, 
+    (payload) => {
+      if (state.currentSection === 'marketplace-products') {
+        loadMarketplaceProductsData();
+      }
+      loadDashboardData(); // Update stats
+    }
+  )
+  .subscribe();
+
+// Admin Orders realtime
+state.adminOrdersRealtime = state.supabase
   .channel('orders_changes')
   .on('postgres_changes', 
     { event: '*', schema: 'public', table: 'orders' }, 
     (payload) => {
-      if (state.currentSection === 'payments') {
-        loadPendingOrders();
-      }
-    }
-  )
-  .subscribe();
-
-// KYC requests realtime
-state.kycRealtime = state.supabase
-  .channel('kyc_requests_changes')
-  .on('postgres_changes', 
-    { event: '*', schema: 'public', table: 'kyc_requests' }, 
-    (payload) => {
-      if (state.currentSection === 'kyc') {
-        loadKycRequests();
-      }
-      loadDashboardData(); // Update stats
-    }
-  )
-  .subscribe();
-
-// User Products realtime
-state.userProductsRealtime = state.supabase
-  .channel('user_products_changes')
-  .on('postgres_changes', 
-    { event: '*', schema: 'public', table: 'user_products' }, 
-    (payload) => {
-      if (state.currentSection === 'user-products') {
-        loadUserProducts();
+      if (state.currentSection === 'admin-orders') {
+        loadAdminOrders();
       }
       loadDashboardData(); // Update stats
     }
@@ -1669,14 +1802,29 @@ state.userOrdersRealtime = state.supabase
   )
   .subscribe();
 
-// Chat Messages realtime (for admin to see changes, not for live chat)
-state.chatMessagesRealtime = state.supabase
-  .channel('chat_messages_changes')
+// KYC requests realtime
+state.kycRealtime = state.supabase
+  .channel('kyc_requests_changes')
   .on('postgres_changes', 
-    { event: '*', schema: 'public', table: 'chat_messages' }, 
+    { event: '*', schema: 'public', table: 'kyc_requests' }, 
     (payload) => {
-      // No specific load function for chat management, but useful for debugging
-      console.log('Chat message change detected:', payload);
+      if (state.currentSection === 'kyc') {
+        loadKycRequests();
+      }
+      loadDashboardData(); // Update stats
+    }
+  )
+  .subscribe();
+
+// Categories realtime
+state.categoriesRealtime = state.supabase
+  .channel('categories_changes')
+  .on('postgres_changes', 
+    { event: '*', schema: 'public', table: 'categories' }, 
+    (payload) => {
+      if (state.currentSection === 'categories') {
+        loadCategories();
+      }
     }
   )
   .subscribe();
@@ -1720,27 +1868,32 @@ switch (section) {
   case 'news':
     loadNewsData();
     break;
-  case 'products':
-    loadProductsData();
+  case 'admin-products':
+    loadAdminProductsData();
+    break;
+  case 'marketplace-products':
+    loadMarketplaceProductsData();
     break;
   case 'payments':
     loadPaymentMethods();
-    loadPendingOrders();
+    break;
+  case 'admin-orders':
+    loadAdminOrders();
     break;
   case 'support':
-    loadSupportMessages();
+    loadSupportTickets();
     break;
   case 'kyc':
     loadKycRequests();
-    break;
-  case 'user-products':
-    loadUserProducts();
     break;
   case 'user-orders':
     loadUserOrders();
     break;
   case 'chat-management':
     // No specific data to load for chat management, just the section
+    break;
+  case 'categories':
+    loadCategories();
     break;
 }
 }
@@ -1759,12 +1912,14 @@ try {
 
   if (data) {
     document.getElementById('about-contact-name').value = data.contact_name || '';
-    document.getElementById('about-telegram').value = data.telegram || '';
-    document.getElementById('about-viber').value = data.viber || '';
-    document.getElementById('about-phone').value = data.phone || '';
-    document.getElementById('about-facebook').value = data.facebook || '';
-    document.getElementById('about-tiktok').value = data.tiktok || '';
+    document.getElementById('about-telegram-link').value = data.telegram_link || '';
+    document.getElementById('about-viber-link').value = data.viber_link || '';
+    document.getElementById('about-phone-number').value = data.phone_number || '';
+    document.getElementById('about-facebook-link').value = data.facebook_link || '';
+    document.getElementById('about-tiktok-link').value = data.tiktok_link || '';
     document.getElementById('about-email').value = data.email || '';
+    document.getElementById('about-description').value = data.description || '';
+    document.getElementById('about-logo-url').value = data.logo_url || '';
     document.getElementById('about-social-links').value = JSON.stringify(data.social_links, null, 2) || '[]';
   }
 } catch (error) {
@@ -1776,12 +1931,14 @@ try {
 async function updateAbout() {
 try {
   const contactName = document.getElementById('about-contact-name').value.trim();
-  const telegram = document.getElementById('about-telegram').value.trim();
-  const viber = document.getElementById('about-viber').value.trim();
-  const phone = document.getElementById('about-phone').value.trim();
-  const facebook = document.getElementById('about-facebook').value.trim();
-  const tiktok = document.getElementById('about-tiktok').value.trim();
+  const telegramLink = document.getElementById('about-telegram-link').value.trim();
+  const viberLink = document.getElementById('about-viber-link').value.trim();
+  const phoneNumber = document.getElementById('about-phone-number').value.trim();
+  const facebookLink = document.getElementById('about-facebook-link').value.trim();
+  const tiktokLink = document.getElementById('about-tiktok-link').value.trim();
   const email = document.getElementById('about-email').value.trim();
+  const description = document.getElementById('about-description').value.trim();
+  const logoUrl = document.getElementById('about-logo-url').value.trim();
   let socialLinks = [];
   try {
     socialLinks = JSON.parse(document.getElementById('about-social-links').value);
@@ -1791,27 +1948,25 @@ try {
     return;
   }
 
-  const { error } = await state.supabase
-    .from('about')
-    .upsert({
-      id: 'main',
-      contact_name: contactName,
-      telegram,
-      viber,
-      phone,
-      facebook,
-      tiktok,
-      email,
-      social_links: socialLinks,
-      updated_at: new Date().toISOString()
-    });
+  const { error } = await state.supabase.rpc('update_about_info', {
+    p_contact_name: contactName,
+    p_phone_number: phoneNumber,
+    p_telegram_link: telegramLink,
+    p_viber_link: viberLink,
+    p_facebook_link: facebookLink,
+    p_tiktok_link: tiktokLink,
+    p_email: email,
+    p_description: description,
+    p_logo_url: logoUrl,
+    p_social_links: socialLinks
+  });
 
   if (error) throw error;
 
   showNotification('About information updated successfully!', 'success');
 } catch (error) {
   console.error('Error updating about:', error);
-  showNotification('Failed to update about information', 'error');
+  showNotification(`Failed to update about information: ${error.message}`, 'error');
 }
 }
 
@@ -1819,7 +1974,7 @@ async function loadKeysData() {
 const tbody = document.getElementById('keys-table-body');
 tbody.innerHTML = `
   <tr>
-    <td colspan="3" class="text-center text-text-secondary py-8">
+    <td colspan="4" class="text-center text-text-secondary py-8">
       <div class="loading-spinner mx-auto mb-2"></div>
       Loading keys...
     </td>
@@ -1828,10 +1983,10 @@ tbody.innerHTML = `
 
 try {
   const { data, error } = await state.supabase
-    .from('keys')
+    .from('api_keys')
     .select(`
       *,
-      profiles(id)
+      profile:profiles(username, name)
     `)
     .order('created_at', { ascending: false });
 
@@ -1841,10 +1996,12 @@ try {
     tbody.innerHTML = data.map(key => {
       const statusClass = key.is_active ? 'status-active' : 'status-inactive';
       const statusText = key.is_active ? 'ACTIVE' : 'INACTIVE';
+      const profileInfo = key.profile ? `${key.profile.name} (@${key.profile.username})` : 'Unused';
 
       return `
-        <tr>
+        <tr data-search-terms="${key.key_text.toLowerCase()} ${profileInfo.toLowerCase()} ${statusText.toLowerCase()}">
           <td class="font-share-tech text-sm">${key.key_text}</td>
+          <td>${profileInfo}</td>
           <td class="text-center">
             <span class="${statusClass} font-semibold">${statusText}</span>
           </td>
@@ -1867,7 +2024,7 @@ try {
   } else {
     tbody.innerHTML = `
       <tr>
-        <td colspan="3" class="text-center text-text-secondary py-8">
+        <td colspan="4" class="text-center text-text-secondary py-8">
           No Keys Found
         </td>
       </tr>
@@ -1877,7 +2034,7 @@ try {
   console.error('Error loading keys:', error);
   tbody.innerHTML = `
     <tr>
-      <td colspan="3" class="text-center text-accent-red py-8">
+      <td colspan="4" class="text-center text-accent-red py-8">
         Failed to retrieve Keys
       </td>
     </tr>
@@ -1896,16 +2053,11 @@ try {
 
   showLoading(true);
 
-  const { data: newKey, error: keyError } = await state.supabase
-    .from('keys')
-    .insert({
-      key_text: keyText,
-      is_active: true
-    })
-    .select()
-    .single();
+  const { error } = await state.supabase.rpc('create_api_key', {
+    p_key_text: keyText
+  });
 
-  if (keyError) throw keyError;
+  if (error) throw error;
 
   // Clear form
   document.getElementById('key-text').value = '';
@@ -1919,7 +2071,7 @@ try {
   if (error.code === '23505') {
     showNotification('Key name already exists. Choose another name.', 'error');
   } else {
-    showNotification('Failed to create Key', 'error');
+    showNotification(`Failed to create Key: ${error.message}`, 'error');
   }
 } finally {
   showLoading(false);
@@ -1929,7 +2081,7 @@ try {
 async function toggleKey(keyId, newStatus) {
 try {
   const { error } = await state.supabase
-    .from('keys')
+    .from('api_keys')
     .update({ 
       is_active: newStatus,
       updated_at: new Date().toISOString()
@@ -1944,7 +2096,7 @@ try {
 
 } catch (error) {
   console.error('Error toggling key:', error);
-  showNotification('Failed to change Key status', 'error');
+  showNotification(`Failed to change Key status: ${error.message}`, 'error');
 }
 }
 
@@ -1954,7 +2106,7 @@ showConfirmModal(
   async () => {
     try {
       const { error } = await state.supabase
-        .from('keys')
+        .from('api_keys')
         .delete()
         .eq('id', keyId);
 
@@ -1966,7 +2118,7 @@ showConfirmModal(
 
     } catch (error) {
       console.error('Error deleting key:', error);
-      showNotification('Failed to delete Key', 'error');
+      showNotification(`Failed to delete Key: ${error.message}`, 'error');
     }
   }
 );
@@ -1988,7 +2140,8 @@ try {
     .from('profiles')
     .select(`
       *,
-      keys(key_text, is_active)
+      api_key:api_keys(key_text),
+      kyc_request:kyc_requests(status)
     `)
     .order('created_at', { ascending: false });
 
@@ -1998,12 +2151,12 @@ try {
     tbody.innerHTML = data.map(profile => {
       const statusClass = profile.is_banned ? 'status-banned' : 'status-active';
       const statusText = profile.is_banned ? 'BANNED' : 'ACTIVE';
-      const canSellClass = profile.can_sell ? 'status-active' : 'status-inactive';
-      const canSellText = profile.can_sell ? 'YES' : 'NO';
+      const kycStatusClass = `status-${profile.kyc_status || 'pending'}`;
+      const kycStatusText = (profile.kyc_status || 'N/A').toUpperCase();
       const avatar = profile.profile_picture || '/placeholder.svg?height=40&width=40';
 
       return `
-        <tr>
+        <tr data-search-terms="${profile.username.toLowerCase()} ${profile.name.toLowerCase()} ${statusText.toLowerCase()} ${kycStatusText.toLowerCase()}">
           <td>
             <img src="${avatar}" alt="Profile" class="w-8 h-8 rounded-full object-cover">
           </td>
@@ -2014,7 +2167,7 @@ try {
             <span class="${statusClass} font-semibold">${statusText}</span>
           </td>
           <td>
-            <span class="${canSellClass} font-semibold">${canSellText}</span>
+            <span class="${kycStatusClass} font-semibold">${kycStatusText}</span>
           </td>
           <td>
             <div class="table-actions">
@@ -2055,10 +2208,16 @@ try {
 
 async function toggleUserBan(profileId, banStatus) {
 try {
-  const { data, error } = await state.supabase.rpc('toggle_user_ban', {
-    profile_id_param: profileId,
-    ban_status: banStatus,
-    ban_reason_param: banStatus ? prompt('Reason for banning?', 'Violation of terms') : null
+  const reason = banStatus ? prompt('Reason for banning?', 'Violation of terms') : null;
+  if (banStatus && !reason) {
+    showNotification('Ban reason is required.', 'warning');
+    return;
+  }
+
+  const { error } = await state.supabase.rpc('toggle_user_ban', {
+    p_profile_id: profileId,
+    p_ban_status: banStatus,
+    p_ban_reason: reason
   });
 
   if (error) throw error;
@@ -2069,7 +2228,7 @@ try {
 
 } catch (error) {
   console.error('Error toggling user ban:', error);
-  showNotification('Failed to change user status', 'error');
+  showNotification(`Failed to change user status: ${error.message}`, 'error');
 }
 }
 
@@ -2090,8 +2249,7 @@ try {
     .from('news')
     .select(`
       *,
-      profiles(username, name, profile_picture),
-      admin_profiles(username, name, profile_picture)
+      created_by_profile:profiles(username, name, profile_picture)
     `)
     .order('created_at', { ascending: false });
 
@@ -2099,10 +2257,9 @@ try {
 
   if (data && data.length > 0) {
     newsContainer.innerHTML = data.map(news => {
-      const author = news.posted_by_admin ? news.admin_profiles : news.profiles;
-      const authorName = author?.name || 'Unknown';
-      const authorUsername = author?.username || 'unknown';
-      const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+      const authorName = news.created_by_profile?.name || 'Admin';
+      const authorUsername = news.created_by_profile?.username || 'admin';
+      const authorAvatar = news.created_by_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
 
       let mediaHtml = '';
       if (news.media_urls && news.media_urls.length > 0) {
@@ -2210,13 +2367,13 @@ try {
       const fileName = `news/${state.adminProfileId}_${Date.now()}_${i}.${fileExt}`;
       
       const { data: uploadData, error: uploadError } = await state.supabase.storage
-        .from('news')
+        .from('news_media')
         .upload(fileName, file);
         
       if (uploadError) throw uploadError;
       
       const { data: urlData } = state.supabase.storage
-        .from('news')
+        .from('news_media')
         .getPublicUrl(fileName);
         
       mediaUrls.push({ url: urlData.publicUrl, type: file.type, size: file.size });
@@ -2224,21 +2381,15 @@ try {
   }
 
   // Insert news
-  const { error } = await state.supabase
-    .from('news')
-    .insert({
-      title,
-      content,
-      media_urls: mediaUrls,
-      youtube_link: youtubeLink || null,
-      tiktok_link: tiktokLink || null,
-      telegram_link: telegramLink || null,
-      facebook_link: facebookLink || null,
-      posted_by_admin: true,
-      admin_profile_id: state.adminProfileId,
-      is_featured: false,
-      is_published: true
-    });
+  const { error } = await state.supabase.rpc('create_news_post', {
+    p_title: title,
+    p_content: content,
+    p_media_urls: mediaUrls,
+    p_youtube_link: youtubeLink || null,
+    p_tiktok_link: tiktokLink || null,
+    p_telegram_link: telegramLink || null,
+    p_facebook_link: facebookLink || null
+  });
 
   if (error) throw error;
 
@@ -2257,7 +2408,7 @@ try {
 
 } catch (error) {
   console.error('Error posting admin news:', error);
-  showNotification('Failed to post News', 'error');
+  showNotification(`Failed to post News: ${error.message}`, 'error');
 } finally {
   showLoading(false);
 }
@@ -2269,18 +2420,16 @@ try {
     .from('news')
     .select(`
       *,
-      profiles(username, name, profile_picture),
-      admin_profiles(username, name, profile_picture)
+      created_by_profile:profiles(username, name, profile_picture)
     `)
     .eq('id', newsId)
     .single();
 
   if (error) throw error;
 
-  const author = data.posted_by_admin ? data.admin_profiles : data.profiles;
-  const authorName = author?.name || 'Unknown';
-  const authorUsername = author?.username || 'unknown';
-  const authorAvatar = author?.profile_picture || '/placeholder.svg?height=40&width=40';
+  const authorName = data.created_by_profile?.name || 'Admin';
+  const authorUsername = data.created_by_profile?.username || 'admin';
+  const authorAvatar = data.created_by_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
 
   let mediaHtml = '';
   if (data.media_urls && data.media_urls.length > 0) {
@@ -2350,7 +2499,7 @@ try {
 
 } catch (error) {
   console.error('Error viewing news:', error);
-  showNotification('Failed to view News', 'error');
+  showNotification(`Failed to view News: ${error.message}`, 'error');
 }
 }
 
@@ -2363,10 +2512,7 @@ showConfirmModal(
   'Deleting this News will also delete all associated comments and likes. Are you sure?',
   async () => {
     try {
-      const { error } = await state.supabase
-        .from('news')
-        .delete()
-        .eq('id', newsId);
+      const { error } = await state.supabase.rpc('delete_news_post', { p_news_id: newsId });
 
       if (error) throw error;
 
@@ -2376,14 +2522,14 @@ showConfirmModal(
 
     } catch (error) {
       console.error('Error deleting news:', error);
-      showNotification('Failed to delete News', 'error');
+      showNotification(`Failed to delete News: ${error.message}`, 'error');
     }
   }
 );
 }
 
-async function loadProductsData() {
-const tbody = document.getElementById('products-table-body');
+async function loadAdminProductsData() {
+const tbody = document.getElementById('admin-products-table-body');
 tbody.innerHTML = `
   <tr>
     <td colspan="6" class="text-center text-text-secondary py-8">
@@ -2395,7 +2541,7 @@ tbody.innerHTML = `
 
 try {
   const { data, error } = await state.supabase
-    .from('products')
+    .from('admin_products')
     .select('*')
     .order('created_at', { ascending: false });
 
@@ -2420,12 +2566,12 @@ try {
                 <i class="fas fa-download mr-1"></i>
                 <span class="hidden sm:inline">Download</span>
               </a>
-              <button onclick="toggleProductActive('${product.id}', ${!product.is_active})" 
+              <button onclick="toggleAdminProductActive('${product.id}', ${!product.is_active})" 
                       class="myanmar-btn btn-small ${product.is_active ? 'btn-danger' : ''}">
                 <i class="fas fa-${product.is_active ? 'ban' : 'check'} mr-1"></i>
                 <span class="hidden sm:inline">${product.is_active ? 'DEACTIVATE' : 'ACTIVATE'}</span>
               </button>
-              <button onclick="deleteProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+              <button onclick="deleteAdminProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
                 <i class="fas fa-trash mr-1"></i>
                 <span class="hidden sm:inline">DELETE</span>
               </button>
@@ -2455,14 +2601,14 @@ try {
 }
 }
 
-async function uploadProduct() {
+async function uploadAdminProduct() {
 try {
-  const name = document.getElementById('product-name').value.trim();
-  const fileType = document.getElementById('product-file-type').value;
-  const description = document.getElementById('product-description').value.trim();
-  const productFile = document.getElementById('product-file').files[0];
-  const price = parseFloat(document.getElementById('product-price').value);
-  const iconFile = document.getElementById('product-icon').files[0];
+  const name = document.getElementById('admin-product-name').value.trim();
+  const fileType = document.getElementById('admin-product-file-type').value;
+  const description = document.getElementById('admin-product-description').value.trim();
+  const productFile = document.getElementById('admin-product-file').files[0];
+  const price = parseFloat(document.getElementById('admin-product-price').value);
+  const iconFile = document.getElementById('admin-product-icon').files[0];
 
   if (!name || !productFile || isNaN(price)) {
     showNotification('Please enter Product Name, File, and Price', 'warning');
@@ -2477,103 +2623,321 @@ try {
 
   // Upload product file
   const fileExt = productFile.name.split('.').pop();
-  const fileName = `products/${Date.now()}_${productFile.name}`;
+  const fileName = `admin_products/${Date.now()}_${productFile.name}`;
   const { data: uploadData, error: uploadError } = await state.supabase.storage
-    .from('products')
+    .from('admin_product_files')
     .upload(fileName, productFile);
   if (uploadError) throw uploadError;
-  const { data: fileUrlData } = state.supabase.storage.from('products').getPublicUrl(fileName);
+  const { data: fileUrlData } = state.supabase.storage.from('admin_product_files').getPublicUrl(fileName);
   fileUrl = fileUrlData.publicUrl;
 
   // Upload icon if provided
   if (iconFile) {
     const iconExt = iconFile.name.split('.').pop();
-    const iconName = `product_icons/${Date.now()}_${iconFile.name}`;
+    const iconName = `admin_product_icons/${Date.now()}_${iconFile.name}`;
     const { data: iconUploadData, error: iconUploadError } = await state.supabase.storage
-      .from('products')
+      .from('admin_product_icons')
       .upload(iconName, iconFile);
     if (iconUploadError) throw iconUploadError;
-    const { data: iconUrlData } = state.supabase.storage.from('products').getPublicUrl(iconName);
+    const { data: iconUrlData } = state.supabase.storage.from('admin_product_icons').getPublicUrl(iconName);
     iconUrl = iconUrlData.publicUrl;
   }
 
   // Insert product
-  const { error } = await state.supabase
-    .from('products')
-    .insert({
-      name,
-      description,
-      file_url: fileUrl,
-      file_type: fileType,
-      file_size: fileSize,
-      price,
-      apk_icon_url: iconUrl,
-      is_active: true,
-      uploaded_by: state.adminProfileId
-    });
+  const { error } = await state.supabase.rpc('upload_admin_product', {
+    p_name: name,
+    p_description: description,
+    p_price: price,
+    p_file_url: fileUrl,
+    p_file_type: fileType,
+    p_apk_icon_url: iconUrl
+  });
 
   if (error) throw error;
 
   // Clear form
-  document.getElementById('product-name').value = '';
-  document.getElementById('product-description').value = '';
-  document.getElementById('product-file').value = '';
-  document.getElementById('product-price').value = '';
-  document.getElementById('product-icon').value = '';
+  document.getElementById('admin-product-name').value = '';
+  document.getElementById('admin-product-description').value = '';
+  document.getElementById('admin-product-file').value = '';
+  document.getElementById('admin-product-price').value = '';
+  document.getElementById('admin-product-icon').value = '';
 
   showNotification('Product uploaded successfully!', 'success');
-  loadProductsData();
+  loadAdminProductsData();
+  loadDashboardData();
 
 } catch (error) {
   console.error('Error uploading product:', error);
-  showNotification('Failed to upload Product', 'error');
+  showNotification(`Failed to upload Product: ${error.message}`, 'error');
 } finally {
   showLoading(false);
 }
 }
 
-async function toggleProductActive(productId, newStatus) {
+async function toggleAdminProductActive(productId, newStatus) {
 try {
-  const { error } = await state.supabase
-    .from('products')
-    .update({ 
-      is_active: newStatus,
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', productId);
+  const { error } = await state.supabase.rpc('toggle_admin_product_active', { 
+    p_product_id: productId,
+    p_is_active: newStatus
+  });
 
   if (error) throw error;
 
   showNotification(`Product ${newStatus ? 'activated' : 'deactivated'} successfully!`, 'success');
-  loadProductsData();
+  loadAdminProductsData();
+  loadDashboardData();
 
 } catch (error) {
   console.error('Error toggling product status:', error);
-  showNotification('Failed to change Product status', 'error');
+  showNotification(`Failed to change Product status: ${error.message}`, 'error');
 }
 }
 
-function deleteProduct(productId) {
+function deleteAdminProduct(productId) {
 showConfirmModal(
   'Deleting this Product will also delete all associated orders. Are you sure?',
   async () => {
     try {
-      const { error } = await state.supabase
-        .from('products')
-        .delete()
-        .eq('id', productId);
+      const { error } = await state.supabase.rpc('delete_admin_product', { p_product_id: productId });
 
       if (error) throw error;
 
       showNotification('Product deleted successfully!', 'success');
-      loadProductsData();
+      loadAdminProductsData();
+      loadDashboardData();
 
     } catch (error) {
       console.error('Error deleting product:', error);
-      showNotification('Failed to delete Product', 'error');
+      showNotification(`Failed to delete Product: ${error.message}`, 'error');
     }
   }
 );
+}
+
+async function loadMarketplaceProductsData() {
+  const tbody = document.getElementById('marketplace-products-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="6" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading marketplace products...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('marketplace_products')
+      .select(`
+        *,
+        seller_profile:profiles(username, name, profile_picture),
+        category:categories(name)
+      `)
+      .order('created_at', { ascending: false });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(product => {
+        const statusClass = `status-${product.status}`;
+        const sellerName = product.seller_profile?.name || 'N/A';
+        const sellerUsername = product.seller_profile?.username || 'N/A';
+        const sellerAvatar = product.seller_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+        return `
+          <tr data-search-terms="${product.name.toLowerCase()} ${sellerName.toLowerCase()} ${sellerUsername.toLowerCase()} ${product.status.toLowerCase()}">
+            <td>${product.name}</td>
+            <td>
+              <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              ${sellerName} (@${sellerUsername})
+            </td>
+            <td>${product.price} MMK</td>
+            <td>${product.category?.name || 'N/A'}</td>
+            <td><span class="${statusClass} font-semibold">${product.status.toUpperCase()}</span></td>
+            <td>
+              <div class="table-actions">
+                <button onclick="viewMarketplaceProductDetails('${product.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-eye mr-1"></i>
+                  <span class="hidden sm:inline">VIEW</span>
+                </button>
+                ${product.status === 'pending' ? `
+                <button onclick="approveMarketplaceProduct('${product.id}')" class="myanmar-btn btn-small">
+                  <i class="fas fa-check mr-1"></i>
+                  <span class="hidden sm:inline">APPROVE</span>
+                </button>
+                <button onclick="rejectMarketplaceProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-times mr-1"></i>
+                  <span class="hidden sm:inline">REJECT</span>
+                </button>
+                ` : ''}
+                <button onclick="deleteMarketplaceProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
+                  <i class="fas fa-trash mr-1"></i>
+                  <span class="hidden sm:inline">DELETE</span>
+                </button>
+              </div>
+            </td>
+          </tr>
+        `;
+      }).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="6" class="text-center text-text-secondary py-8">
+            No Marketplace Products Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading marketplace products:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="6" class="text-center text-accent-red py-8">
+          Failed to retrieve Marketplace Products
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function viewMarketplaceProductDetails(productId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('marketplace_products')
+      .select(`
+        *,
+        seller_profile:profiles(username, name, profile_picture),
+        category:categories(name)
+      `)
+      .eq('id', productId)
+      .single();
+
+    if (error) throw error;
+
+    const sellerProfile = data.seller_profile;
+    const sellerAvatar = sellerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    let imagesHtml = '';
+    if (data.image_urls && data.image_urls.length > 0) {
+      imagesHtml = data.image_urls.map(url => `<img src="${url}" class="w-full rounded-lg mb-2" alt="Product Image">`).join('');
+    } else {
+      imagesHtml = '<p class="text-text-secondary">No images available.</p>';
+    }
+
+    let videoHtml = data.video_url ? `
+      <div class="video-container mb-3">
+        <video controls playsinline webkit-playsinline class="w-full rounded-lg">
+          <source src="${data.video_url}" type="video/mp4">
+        </video>
+      </div>
+    ` : '<p class="text-text-secondary">No video available.</p>';
+
+    document.getElementById('marketplace-product-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <div class="flex items-center space-x-3 mb-4">
+          <img src="${sellerAvatar}" alt="Seller Profile" class="w-12 h-12 rounded-full object-cover">
+          <div>
+            <h4 class="font-semibold text-text-primary">${sellerProfile?.name || 'N/A'} (@${sellerProfile?.username || 'N/A'})</h4>
+            <p class="text-sm text-text-secondary">Posted: ${utils.formatDateTime(data.created_at)}</p>
+          </div>
+        </div>
+        
+        <h3 class="text-xl font-bold text-accent-purple">${data.name}</h3>
+        <p class="text-text-secondary"><strong>Price:</strong> ${data.price} MMK</p>
+        <p class="text-text-secondary"><strong>Category:</strong> ${data.category?.name || 'N/A'}</p>
+        <p class="text-text-secondary whitespace-pre-wrap">${data.description}</p>
+        
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Images</h4>
+        ${imagesHtml}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Video</h4>
+        ${videoHtml}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Seller Contact</h4>
+        <p class="text-text-secondary"><strong>Platform:</strong> ${data.contact_platform || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Link:</strong> ${data.contact_link ? `<a href="${data.contact_link}" target="_blank" class="text-accent-purple hover:underline">${data.contact_link}</a>` : 'N/A'}</p>
+      </div>
+    `;
+    document.getElementById('marketplace-product-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing marketplace product details:', error);
+    showNotification(`Failed to view Marketplace Product details: ${error.message}`, 'error');
+  }
+}
+
+function closeMarketplaceProductModal() {
+  document.getElementById('marketplace-product-modal').classList.add('hidden');
+}
+
+async function approveMarketplaceProduct(productId) {
+  showConfirmModal(
+    'Are you sure you want to APPROVE this marketplace product? It will become visible to buyers.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('approve_marketplace_product', { p_product_id: productId });
+        if (error) throw error;
+        showNotification('Marketplace product approved successfully!', 'success');
+        loadMarketplaceProductsData();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error approving marketplace product:', error);
+        showNotification(`Failed to approve marketplace product: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+async function rejectMarketplaceProduct(productId) {
+  const reason = prompt('Reason for rejecting this marketplace product?', 'Product content inappropriate or incomplete.');
+  if (!reason) return;
+
+  showConfirmModal(
+    'Are you sure you want to REJECT this marketplace product? It will not be visible to buyers.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase.rpc('reject_marketplace_product', { p_product_id: productId, p_reason: reason });
+        if (error) throw error;
+        showNotification('Marketplace product rejected successfully!', 'success');
+        loadMarketplaceProductsData();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error rejecting marketplace product:', error);
+        showNotification(`Failed to reject marketplace product: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+function deleteMarketplaceProduct(productId) {
+  showConfirmModal(
+    'Deleting this marketplace product will permanently remove it and all associated orders. Are you sure?',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase
+          .from('marketplace_products')
+          .delete()
+          .eq('id', productId);
+
+        if (error) throw error;
+
+        showNotification('Marketplace product deleted successfully!', 'success');
+        loadMarketplaceProductsData();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error deleting marketplace product:', error);
+        showNotification(`Failed to delete marketplace product: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
 }
 
 async function loadPaymentMethods() {
@@ -2663,22 +3027,19 @@ try {
     const fileExt = qrCodeFile.name.split('.').pop();
     const fileName = `payment_qrs/${Date.now()}_${qrCodeFile.name}`;
     const { data: uploadData, error: uploadError } = await state.supabase.storage
-      .from('payment-qrs')
+      .from('payment_qrs')
       .upload(fileName, qrCodeFile);
     if (uploadError) throw uploadError;
-    const { data: urlData } = state.supabase.storage.from('payment-qrs').getPublicUrl(fileName);
+    const { data: urlData } = state.supabase.storage.from('payment_qrs').getPublicUrl(fileName);
     qrCodeUrl = urlData.publicUrl;
   }
 
-  const { error } = await state.supabase
-    .from('payment_methods')
-    .insert({
-      method_name: methodName,
-      account_info: accountInfo,
-      qr_code_url: qrCodeUrl,
-      instructions: instructions || null,
-      is_active: true
-    });
+  const { error } = await state.supabase.rpc('add_payment_method', {
+    p_method_name: methodName,
+    p_account_info: accountInfo,
+    p_qr_code_url: qrCodeUrl,
+    p_instructions: instructions
+  });
 
   if (error) throw error;
 
@@ -2693,7 +3054,7 @@ try {
 
 } catch (error) {
   console.error('Error adding payment method:', error);
-  showNotification('Failed to add Payment Method', 'error');
+  showNotification(`Failed to add Payment Method: ${error.message}`, 'error');
 } finally {
   showLoading(false);
 }
@@ -2701,13 +3062,10 @@ try {
 
 async function togglePaymentMethodActive(methodId, newStatus) {
 try {
-  const { error } = await state.supabase
-    .from('payment_methods')
-    .update({ 
-      is_active: newStatus,
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', methodId);
+  const { error } = await state.supabase.rpc('toggle_payment_method_active', { 
+    p_method_id: methodId,
+    p_is_active: newStatus
+  });
 
   if (error) throw error;
 
@@ -2716,7 +3074,7 @@ try {
 
 } catch (error) {
   console.error('Error toggling payment method status:', error);
-  showNotification('Failed to change Payment Method status', 'error');
+  showNotification(`Failed to change Payment Method status: ${error.message}`, 'error');
 }
 }
 
@@ -2725,10 +3083,7 @@ showConfirmModal(
   'Deleting this Payment Method will also affect associated orders. Are you sure?',
   async () => {
     try {
-      const { error } = await state.supabase
-        .from('payment_methods')
-        .delete()
-        .eq('id', methodId);
+      const { error } = await state.supabase.rpc('delete_payment_method', { p_method_id: methodId });
 
       if (error) throw error;
 
@@ -2737,19 +3092,19 @@ showConfirmModal(
 
     } catch (error) {
       console.error('Error deleting payment method:', error);
-      showNotification('Failed to delete Payment Method', 'error');
+      showNotification(`Failed to delete Payment Method: ${error.message}`, 'error');
     }
   }
 );
 }
 
-async function loadPendingOrders() {
-const tbody = document.getElementById('pending-orders-table-body');
+async function loadAdminOrders() {
+const tbody = document.getElementById('admin-orders-table-body');
 tbody.innerHTML = `
   <tr>
     <td colspan="7" class="text-center text-text-secondary py-8">
       <div class="loading-spinner mx-auto mb-2"></div>
-      Loading pending orders...
+      Loading admin orders...
     </td>
   </tr>
 `;
@@ -2759,39 +3114,41 @@ try {
     .from('orders')
     .select(`
       *,
-      profiles(username, name),
-      products(name),
-      payment_methods(method_name)
+      buyer_profile:profiles(username, name),
+      product:admin_products(name),
+      payment_method:payment_methods(method_name)
     `)
-    .eq('status', 'pending')
     .order('ordered_at', { ascending: true });
 
   if (error) throw error;
 
   if (data && data.length > 0) {
     tbody.innerHTML = data.map(order => `
-      <tr data-search-terms="${(order.profiles?.name || '').toLowerCase()} ${(order.profiles?.username || '').toLowerCase()} ${(order.products?.name || '').toLowerCase()} ${order.amount} ${(order.payment_methods?.method_name || '').toLowerCase()}">
-        <td>${order.profiles?.name || 'N/A'} (@${order.profiles?.username || 'N/A'})</td>
-        <td>${order.products?.name || 'N/A'}</td>
+      <tr data-search-terms="${(order.buyer_profile?.name || '').toLowerCase()} ${(order.buyer_profile?.username || '').toLowerCase()} ${(order.product?.name || '').toLowerCase()} ${order.amount} ${(order.payment_method?.method_name || '').toLowerCase()} ${order.status.toLowerCase()}">
+        <td>${order.buyer_profile?.name || 'N/A'} (@${order.buyer_profile?.username || 'N/A'})</td>
+        <td>${order.product?.name || 'N/A'}</td>
         <td>${order.amount} MMK</td>
         <td>
-          ${order.payment_methods?.method_name || 'N/A'}
+          ${order.payment_method?.method_name || 'N/A'}
           <span class="block text-xs text-text-secondary">${utils.formatDateTime(order.ordered_at)}</span>
         </td>
         <td>
           ${order.receipt_url ? `<a href="${order.receipt_url}" target="_blank" class="text-accent-green hover:underline">VIEW RECEIPT</a>` : 'N/A'}
         </td>
-        <td><span class="text-accent-purple font-semibold">PENDING</span></td>
+        <td><span class="status-${order.status} font-semibold">${order.status.toUpperCase()}</span></td>
         <td>
           <div class="table-actions">
-            <button onclick="approveOrder('${order.id}')" class="myanmar-btn btn-small">
-              <i class="fas fa-check mr-1"></i>
-              <span class="hidden sm:inline">APPROVE</span>
+            <button onclick="viewAdminOrderDetails('${order.id}')" class="myanmar-btn btn-small">
+              <i class="fas fa-eye mr-1"></i> VIEW
             </button>
-            <button onclick="rejectOrder('${order.id}')" class="btn-danger myanmar-btn btn-small">
-              <i class="fas fa-times mr-1"></i>
-              <span class="hidden sm:inline">REJECT</span>
+            ${order.status === 'paid' ? `
+            <button onclick="approveAdminOrder('${order.id}')" class="myanmar-btn btn-small">
+              <i class="fas fa-check mr-1"></i> APPROVE
             </button>
+            <button onclick="rejectAdminOrder('${order.id}')" class="btn-danger myanmar-btn btn-small">
+              <i class="fas fa-times mr-1"></i> REJECT
+            </button>
+            ` : ''}
           </div>
         </td>
       </tr>
@@ -2800,162 +3157,342 @@ try {
     tbody.innerHTML = `
       <tr>
         <td colspan="7" class="text-center text-text-secondary py-8">
-          No Pending Orders
+          No Admin Orders
         </td>
       </tr>
     `;
   }
 } catch (error) {
-  console.error('Error loading pending orders:', error);
+  console.error('Error loading admin orders:', error);
   tbody.innerHTML = `
     <tr>
       <td colspan="7" class="text-center text-accent-red py-8">
-        Failed to retrieve Orders
+        Failed to retrieve Admin Orders
       </td>
     </tr>
   `;
 }
 }
 
-async function approveOrder(orderId) {
+async function viewAdminOrderDetails(orderId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('orders')
+      .select(`
+        *,
+        buyer_profile:profiles(username, name, profile_picture),
+        product:admin_products(name, description, file_url),
+        payment_method:payment_methods(method_name, account_info, qr_code_url)
+      `)
+      .eq('id', orderId)
+      .single();
+
+    if (error) throw error;
+
+    const buyerProfile = data.buyer_profile;
+    const product = data.product;
+    const paymentMethod = data.payment_method;
+
+    const buyerAvatar = buyerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+    const paymentQrCode = paymentMethod?.qr_code_url ? `<img src="${paymentMethod.qr_code_url}" class="w-24 h-24 object-contain mt-2 rounded-md" alt="QR Code">` : 'N/A';
+
+    document.getElementById('admin-order-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <h3 class="text-xl font-bold text-accent-purple">Order ID: <span class="font-share-tech">${data.id}</span></h3>
+        <p class="text-text-secondary"><strong>Status:</strong> <span class="status-${data.status} font-semibold">${data.status.toUpperCase()}</span></p>
+        <p class="text-text-secondary"><strong>Ordered At:</strong> ${utils.formatDateTime(data.ordered_at)}</p>
+        ${data.approved_at ? `<p class="text-text-secondary"><strong>Approved At:</strong> ${utils.formatDateTime(data.approved_at)}</p>` : ''}
+        ${data.rejected_at ? `<p class="text-text-secondary"><strong>Rejected At:</strong> ${utils.formatDateTime(data.rejected_at)}</p>` : ''}
+        ${data.admin_notes ? `<p class="text-text-secondary"><strong>Admin Notes:</strong> ${data.admin_notes}</p>` : ''}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Buyer Information</h4>
+        <div class="flex items-center space-x-3">
+          <img src="${buyerAvatar}" alt="Buyer Profile" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <p class="font-semibold text-text-primary">${buyerProfile?.name || 'N/A'} (@${buyerProfile?.username || 'N/A'})</p>
+          </div>
+        </div>
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Product Details</h4>
+        <p class="text-text-secondary"><strong>Product Name:</strong> ${product?.name || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Description:</strong> ${product?.description || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>File:</strong> ${product?.file_url ? `<a href="${product.file_url}" target="_blank" class="text-accent-purple hover:underline">DOWNLOAD LINK</a>` : 'N/A'}</p>
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">Payment Information</h4>
+        <p class="text-text-secondary"><strong>Amount Paid:</strong> ${data.amount} MMK</p>
+        <p class="text-text-secondary"><strong>Payment Method:</strong> ${paymentMethod?.method_name || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>Account Info:</strong> ${paymentMethod?.account_info || 'N/A'}</p>
+        <p class="text-text-secondary"><strong>QR Code:</strong> ${paymentQrCode}</p>
+        <p class="text-text-secondary"><strong>Receipt:</strong> ${data.receipt_url ? `<a href="${data.receipt_url}" target="_blank" class="text-accent-green hover:underline">VIEW RECEIPT</a>` : 'N/A'}</p>
+      </div>
+    `;
+    document.getElementById('admin-order-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing admin order details:', error);
+    showNotification(`Failed to view Order details: ${error.message}`, 'error');
+  }
+}
+
+function closeAdminOrderModal() {
+  document.getElementById('admin-order-modal').classList.add('hidden');
+}
+
+async function approveAdminOrder(orderId) {
 try {
-  const { error } = await state.supabase
-    .from('orders')
-    .update({ 
-      status: 'approved',
-      approved_at: new Date().toISOString(),
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', orderId);
+  const { error } = await state.supabase.rpc('approve_order', { p_order_id: orderId });
 
   if (error) throw error;
 
   showNotification('Order approved successfully!', 'success');
-  loadPendingOrders();
+  loadAdminOrders();
+  loadDashboardData();
 
 } catch (error) {
   console.error('Error approving order:', error);
-  showNotification('Failed to approve Order', 'error');
+  showNotification(`Failed to approve Order: ${error.message}`, 'error');
 }
 }
 
-async function rejectOrder(orderId) {
+async function rejectAdminOrder(orderId) {
 try {
   const reason = prompt('Reason for rejection?', 'Invalid receipt');
-  if (!reason) return;
+  if (!reason) {
+    showNotification('Rejection reason is required.', 'warning');
+    return;
+  }
 
-  const { error } = await state.supabase
-    .from('orders')
-    .update({ 
-      status: 'rejected',
-      rejected_at: new Date().toISOString(),
-      admin_notes: reason,
-      updated_at: new Date().toISOString()
-    })
-    .eq('id', orderId);
+  const { error } = await state.supabase.rpc('reject_order', { p_order_id: orderId, p_reason: reason });
 
   if (error) throw error;
 
   showNotification('Order rejected successfully!', 'success');
-  loadPendingOrders();
+  loadAdminOrders();
+  loadDashboardData();
 
 } catch (error) {
   console.error('Error rejecting order:', error);
-  showNotification('Failed to reject Order', 'error');
+  showNotification(`Failed to reject Order: ${error.message}`, 'error');
 }
 }
 
-async function loadSupportMessages() {
-const container = document.getElementById('support-messages');
-container.innerHTML = `
-  <div class="loading-spinner mx-auto mb-4"></div>
-  <p class="text-center text-text-secondary">Loading messages...</p>
+async function loadSupportTickets() {
+const tbody = document.getElementById('support-tickets-table-body');
+tbody.innerHTML = `
+  <tr>
+    <td colspan="5" class="text-center text-text-secondary py-8">
+      <div class="loading-spinner mx-auto mb-2"></div>
+      Loading support tickets...
+    </td>
+  </tr>
 `;
 
 try {
   const { data, error } = await state.supabase
-    .from('support_messages')
+    .from('support_tickets')
     .select(`
       *,
-      profiles(username, name, profile_picture),
-      admin_profiles(username, name, profile_picture)
+      user_profile:profiles(username, name, profile_picture)
     `)
-    .order('created_at', { ascending: true });
+    .order('created_at', { ascending: false });
 
   if (error) throw error;
 
   if (data && data.length > 0) {
-    container.innerHTML = data.map(message => {
-      const isFromUser = message.is_from_user;
-      const senderName = isFromUser ? (message.profiles?.name || 'User') : (message.admin_profiles?.name || 'Admin');
-      const messageClass = isFromUser ? 'bg-blue-600 bg-opacity-20 border-blue-500' : 'bg-green-600 bg-opacity-20 border-green-500';
-      
+    tbody.innerHTML = data.map(ticket => {
+      const statusClass = `status-${ticket.status}`;
+      const userName = ticket.user_profile?.name || 'N/A';
+      const userUsername = ticket.user_profile?.username || 'N/A';
+      const userAvatar = ticket.user_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
       return `
-        <div class="mb-4 p-3 rounded-lg border ${messageClass}" data-search-terms="${message.content.toLowerCase()} ${senderName.toLowerCase()}">
-          <div class="flex items-center justify-between mb-2">
-            <div class="flex items-center space-x-2">
-              <i class="fas fa-${isFromUser ? 'user' : 'headset'} text-sm"></i>
-              <span class="font-semibold text-sm">${senderName}</span>
+        <tr data-search-terms="${ticket.subject.toLowerCase()} ${userName.toLowerCase()} ${userUsername.toLowerCase()} ${ticket.status.toLowerCase()}">
+          <td>
+            <img src="${userAvatar}" alt="User Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+            ${userName} (@${userUsername})
+          </td>
+          <td>${ticket.subject}</td>
+          <td><span class="${statusClass} font-semibold">${ticket.status.toUpperCase()}</span></td>
+          <td class="text-sm">${utils.formatDateTime(ticket.created_at)}</td>
+          <td>
+            <div class="table-actions">
+              <button onclick="viewSupportTicketDetails('${ticket.id}')" class="myanmar-btn btn-small">
+                <i class="fas fa-eye mr-1"></i> VIEW
+              </button>
+              ${ticket.status !== 'closed' ? `
+              <button onclick="closeSupportTicket('${ticket.id}')" class="myanmar-btn btn-small">
+                <i class="fas fa-check-circle mr-1"></i> CLOSE
+              </button>
+              ` : ''}
+              <button onclick="deleteSupportTicket('${ticket.id}')" class="btn-danger myanmar-btn btn-small">
+                <i class="fas fa-trash mr-1"></i> DELETE
+              </button>
             </div>
-            <span class="text-xs text-text-secondary">${utils.formatDateTime(message.created_at)}</span>
-          </div>
-          <p class="text-sm text-text-secondary whitespace-pre-wrap">${message.content}</p>
-        </div>
+          </td>
+        </tr>
       `;
     }).join('');
-    
-    // Scroll to bottom
-    container.scrollTop = container.scrollHeight;
   } else {
-    container.innerHTML = `
-      <div class="text-center text-text-secondary py-8">
-        <i class="fas fa-comments text-4xl mb-4"></i>
-        <p>No Messages Yet</p>
-      </div>
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="5" class="text-center text-text-secondary py-8">
+          No Support Tickets Found
+        </td>
+      </tr>
     `;
   }
 } catch (error) {
-  console.error('Error loading support messages:', error);
-  container.innerHTML = `
-    <div class="text-center text-accent-red py-8">
-      <i class="fas fa-exclamation-triangle text-4xl mb-4"></i>
-      <p>Failed to retrieve Messages</p>
-    </div>
+  console.error('Error loading support tickets:', error);
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="5" class="text-center text-accent-red py-8">
+        Failed to retrieve Support Tickets
+      </td>
+    </tr>
   `;
 }
 }
 
-async function sendAdminSupportMessage() {
-try {
-  const content = document.getElementById('admin-support-input').value.trim();
-  
-  if (!content) {
-    showNotification('Please enter a message', 'warning');
+async function viewSupportTicketDetails(ticketId) {
+  try {
+    const { data, error } = await state.supabase
+      .from('support_tickets')
+      .select(`
+        *,
+        user_profile:profiles(username, name, profile_picture)
+      `)
+      .eq('id', ticketId)
+      .single();
+
+    if (error) throw error;
+
+    const userProfile = data.user_profile;
+    const userAvatar = userProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
+
+    document.getElementById('support-ticket-modal-content').innerHTML = `
+      <div class="space-y-4">
+        <h3 class="text-xl font-bold text-accent-purple">Subject: ${data.subject}</h3>
+        <p class="text-text-secondary"><strong>Status:</strong> <span class="status-${data.status} font-semibold">${data.status.toUpperCase()}</span></p>
+        <p class="text-text-secondary"><strong>Created At:</strong> ${utils.formatDateTime(data.created_at)}</p>
+        ${data.updated_at !== data.created_at ? `<p class="text-text-secondary"><strong>Last Updated:</strong> ${utils.formatDateTime(data.updated_at)}</p>` : ''}
+
+        <h4 class="text-lg font-bold text-accent-green mt-6">User Message</h4>
+        <div class="flex items-start space-x-3 p-3 rounded-lg bg-blue-600 bg-opacity-20 border border-blue-500">
+          <img src="${userAvatar}" alt="User Profile" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <p class="font-semibold text-text-primary">${userProfile?.name || 'N/A'} (@${userProfile?.username || 'N/A'})</p>
+            <p class="text-sm text-text-secondary whitespace-pre-wrap">${data.message}</p>
+          </div>
+        </div>
+
+        ${data.admin_response ? `
+        <h4 class="text-lg font-bold text-accent-green mt-6">Admin Response</h4>
+        <div class="flex items-start space-x-3 p-3 rounded-lg bg-green-600 bg-opacity-20 border border-green-500">
+          <img src="/placeholder.svg?height=40&width=40" alt="Admin Avatar" class="w-10 h-10 rounded-full object-cover">
+          <div>
+            <p class="font-semibold text-text-primary">Admin</p>
+            <p class="text-sm text-text-secondary whitespace-pre-wrap">${data.admin_response}</p>
+          </div>
+        </div>
+        ` : ''}
+
+        ${data.status !== 'closed' ? `
+        <h4 class="text-lg font-bold text-accent-purple mt-6">Reply to User</h4>
+        <textarea id="admin-support-reply-input" placeholder="Type your reply..." rows="4" class="admin-input w-full resize-none mb-4"></textarea>
+        <button onclick="sendAdminSupportResponse('${data.id}')" class="myanmar-btn w-full">
+          <i class="fas fa-paper-plane mr-2"></i> SEND REPLY
+        </button>
+        ` : ''}
+      </div>
+    `;
+    document.getElementById('support-ticket-modal').classList.remove('hidden');
+  } catch (error) {
+    console.error('Error viewing support ticket details:', error);
+    showNotification(`Failed to view Support Ticket details: ${error.message}`, 'error');
+  }
+}
+
+function closeSupportTicketModal() {
+  document.getElementById('support-ticket-modal').classList.add('hidden');
+}
+
+async function sendAdminSupportResponse(ticketId) {
+  const replyContent = document.getElementById('admin-support-reply-input').value.trim();
+  if (!replyContent) {
+    showNotification('Reply cannot be empty.', 'warning');
     return;
   }
 
-  const { error } = await state.supabase
-    .from('support_messages')
-    .insert({
-      content,
-      is_from_user: false,
-      is_read: true,
-      priority: 'normal',
-      status: 'in_progress',
-      admin_profile_id: state.adminProfileId // Assign admin_profile_id
+  showLoading(true);
+  try {
+    const { error } = await state.supabase.rpc('send_admin_support_response', {
+      p_ticket_id: ticketId,
+      p_admin_response: replyContent
     });
 
-  if (error) throw error;
+    if (error) throw error;
 
-  document.getElementById('admin-support-input').value = '';
-  showNotification('Support message sent!', 'success');
-  loadSupportMessages();
-  loadDashboardData();
-
-} catch (error) {
-  console.error('Error sending support message:', error);
-  showNotification('Failed to send message', 'error');
+    showNotification('Reply sent successfully!', 'success');
+    closeSupportTicketModal();
+    loadSupportTickets();
+    loadDashboardData();
+  } catch (error) {
+    console.error('Error sending admin support response:', error);
+    showNotification(`Failed to send reply: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
+  }
 }
+
+async function closeSupportTicket(ticketId) {
+  showConfirmModal(
+    'Are you sure you want to close this support ticket?',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase
+          .from('support_tickets')
+          .update({ status: 'closed', updated_at: new Date().toISOString() })
+          .eq('id', ticketId);
+
+        if (error) throw error;
+
+        showNotification('Support ticket closed successfully!', 'success');
+        loadSupportTickets();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error closing support ticket:', error);
+        showNotification(`Failed to close ticket: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+function deleteSupportTicket(ticketId) {
+  showConfirmModal(
+    'Are you sure you want to delete this support ticket permanently?',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase
+          .from('support_tickets')
+          .delete()
+          .eq('id', ticketId);
+
+        if (error) throw error;
+
+        showNotification('Support ticket deleted permanently!', 'success');
+        loadSupportTickets();
+        loadDashboardData();
+      } catch (error) {
+        console.error('Error deleting support ticket:', error);
+        showNotification(`Failed to delete ticket: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
 }
 
 // KYC Management Functions
@@ -2975,7 +3512,7 @@ async function loadKycRequests() {
       .from('kyc_requests')
       .select(`
         *,
-        profiles(username, name, profile_picture, key_id)
+        profiles(username, name, profile_picture, id)
       `)
       .order('created_at', { ascending: false });
 
@@ -2984,14 +3521,14 @@ async function loadKycRequests() {
     if (data && data.length > 0) {
       tbody.innerHTML = data.map(kyc => {
         const statusClass = `status-${kyc.status}`;
-        const avatar = kyc.profiles?.profile_picture || '/placeholder.svg?height=40&width=40';
         const userName = kyc.profiles?.name || 'N/A';
         const userUsername = kyc.profiles?.username || 'N/A';
+        const userAvatar = kyc.profiles?.profile_picture || '/placeholder.svg?height=40&width=40';
 
         return `
           <tr data-search-terms="${userName.toLowerCase()} ${userUsername.toLowerCase()} ${kyc.id_type.toLowerCase()} ${kyc.status.toLowerCase()}">
             <td>
-              <img src="${avatar}" alt="Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
+              <img src="${userAvatar}" alt="Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
               ${userName} (@${userUsername})
             </td>
             <td>${kyc.full_name || 'N/A'}</td>
@@ -3050,7 +3587,7 @@ async function viewKycDetails(kycId) {
       .from('kyc_requests')
       .select(`
         *,
-        profiles(username, name, profile_picture, key_id)
+        profiles(username, name, profile_picture, id)
       `)
       .eq('id', kycId)
       .single();
@@ -3075,7 +3612,7 @@ async function viewKycDetails(kycId) {
           <img src="${avatar}" alt="User Profile" class="w-12 h-12 rounded-full object-cover">
           <div>
             <h4 class="font-semibold text-text-primary">${userProfile?.name || 'N/A'} (@${userProfile?.username || 'N/A'})</h4>
-            <p class="text-sm text-text-secondary">Key ID: ${userProfile?.key_id || 'N/A'}</p>
+            <p class="text-sm text-text-secondary">Profile ID: ${userProfile?.id || 'N/A'}</p>
           </div>
         </div>
         
@@ -3088,6 +3625,7 @@ async function viewKycDetails(kycId) {
         <p class="text-text-secondary"><strong>Expiry Date:</strong> ${data.expiry_date || 'N/A'}</p>
         <p class="text-text-secondary"><strong>Address:</strong> ${data.address || 'N/A'}</p>
         <p class="text-text-secondary"><strong>Submitted At:</strong> ${utils.formatDateTime(data.created_at)}</p>
+        ${data.admin_notes ? `<p class="text-text-secondary"><strong>Admin Notes:</strong> ${data.admin_notes}</p>` : ''}
 
         <h3 class="text-xl font-bold text-accent-purple mt-6">Documents</h3>
         <p class="text-text-secondary"><strong>ID Photo:</strong></p>
@@ -3099,7 +3637,7 @@ async function viewKycDetails(kycId) {
     document.getElementById('kyc-modal').classList.remove('hidden');
   } catch (error) {
     console.error('Error viewing KYC details:', error);
-    showNotification('Failed to view KYC details', 'error');
+    showNotification(`Failed to view KYC details: ${error.message}`, 'error');
   }
 }
 
@@ -3113,15 +3651,15 @@ async function approveKyc(kycId) {
     async () => {
       try {
         showLoading(true);
-        const { error } = await state.supabase.rpc('approve_kyc', { kyc_id_param: kycId });
+        const { error } = await state.supabase.rpc('approve_kyc', { p_kyc_id: kycId });
         if (error) throw error;
         showNotification('KYC request approved successfully! User can now sell.', 'success');
         loadKycRequests();
-        loadUsersData(); // Update user's can_sell status
+        loadUsersData(); // Update user's kyc_status
         loadDashboardData();
       } catch (error) {
         console.error('Error approving KYC:', error);
-        showNotification('Failed to approve KYC request', 'error');
+        showNotification(`Failed to approve KYC request: ${error.message}`, 'error');
       } finally {
         showLoading(false);
       }
@@ -3131,22 +3669,25 @@ async function approveKyc(kycId) {
 
 async function rejectKyc(kycId) {
   const reason = prompt('Reason for rejecting KYC?', 'Documents unclear or invalid.');
-  if (!reason) return;
+  if (!reason) {
+    showNotification('Rejection reason is required.', 'warning');
+    return;
+  }
 
   showConfirmModal(
     'Are you sure you want to REJECT this KYC request? The user will not be able to sell.',
     async () => {
       try {
         showLoading(true);
-        const { error } = await state.supabase.rpc('reject_kyc', { kyc_id_param: kycId, reason_param: reason });
+        const { error } = await state.supabase.rpc('reject_kyc', { p_kyc_id: kycId, p_reason: reason });
         if (error) throw error;
         showNotification('KYC request rejected successfully!', 'success');
         loadKycRequests();
-        loadUsersData(); // Update user's can_sell status
+        loadUsersData(); // Update user's kyc_status
         loadDashboardData();
       } catch (error) {
         console.error('Error rejecting KYC:', error);
-        showNotification('Failed to reject KYC request', 'error');
+        showNotification(`Failed to reject KYC request: ${error.message}`, 'error');
       } finally {
         showLoading(false);
       }
@@ -3160,249 +3701,15 @@ async function deleteKycPermanently(kycId) {
     async () => {
       try {
         showLoading(true);
-        const { error } = await state.supabase.rpc('delete_kyc_permanently', { kyc_id_param: kycId });
+        const { error } = await state.supabase.rpc('delete_kyc_permanently', { p_kyc_id: kycId });
         if (error) throw error;
-        showNotification('KYC request permanently deleted. User cannot re-submit KYC for selling.', 'success');
+        showNotification('KYC request permanently deleted. User can re-submit KYC for selling.', 'success');
         loadKycRequests();
-        loadUsersData(); // Update user's can_sell status
+        loadUsersData(); // Update user's kyc_status
         loadDashboardData();
       } catch (error) {
         console.error('Error deleting KYC permanently:', error);
-        showNotification('Failed to delete KYC permanently', 'error');
-      } finally {
-        showLoading(false);
-      }
-    }
-  );
-}
-
-// User Products Management Functions
-async function loadUserProducts() {
-  const tbody = document.getElementById('user-products-table-body');
-  tbody.innerHTML = `
-    <tr>
-      <td colspan="6" class="text-center text-text-secondary py-8">
-        <div class="loading-spinner mx-auto mb-2"></div>
-        Loading user products...
-      </td>
-    </tr>
-  `;
-
-  try {
-    const { data, error } = await state.supabase
-      .from('user_products')
-      .select(`
-        *,
-        profiles(username, name, profile_picture)
-      `)
-      .order('created_at', { ascending: false });
-
-    if (error) throw error;
-
-    if (data && data.length > 0) {
-      tbody.innerHTML = data.map(product => {
-        const statusClass = `status-${product.status}`;
-        const sellerName = product.profiles?.name || 'N/A';
-        const sellerUsername = product.profiles?.username || 'N/A';
-        const sellerAvatar = product.profiles?.profile_picture || '/placeholder.svg?height=40&width=40';
-
-        return `
-          <tr data-search-terms="${product.name.toLowerCase()} ${sellerName.toLowerCase()} ${sellerUsername.toLowerCase()} ${product.status.toLowerCase()}">
-            <td>${product.name}</td>
-            <td>
-              <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
-              ${sellerName} (@${sellerUsername})
-            </td>
-            <td>${product.price} MMK</td>
-            <td class="text-sm">${utils.formatDate(product.created_at)}</td>
-            <td><span class="${statusClass} font-semibold">${product.status.toUpperCase()}</span></td>
-            <td>
-              <div class="table-actions">
-                <button onclick="viewUserProductDetails('${product.id}')" class="myanmar-btn btn-small">
-                  <i class="fas fa-eye mr-1"></i>
-                  <span class="hidden sm:inline">VIEW</span>
-                </button>
-                ${product.status === 'pending' ? `
-                <button onclick="approveUserProduct('${product.id}')" class="myanmar-btn btn-small">
-                  <i class="fas fa-check mr-1"></i>
-                  <span class="hidden sm:inline">APPROVE</span>
-                </button>
-                <button onclick="rejectUserProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
-                  <i class="fas fa-times mr-1"></i>
-                  <span class="hidden sm:inline">REJECT</span>
-                </button>
-                ` : ''}
-                <button onclick="deleteUserProduct('${product.id}')" class="btn-danger myanmar-btn btn-small">
-                  <i class="fas fa-trash mr-1"></i>
-                  <span class="hidden sm:inline">DELETE</span>
-                </button>
-              </div>
-            </td>
-          </tr>
-        `;
-      }).join('');
-    } else {
-      tbody.innerHTML = `
-        <tr>
-          <td colspan="6" class="text-center text-text-secondary py-8">
-            No User Products Found
-          </td>
-        </tr>
-      `;
-    }
-  } catch (error) {
-    console.error('Error loading user products:', error);
-    tbody.innerHTML = `
-      <tr>
-        <td colspan="6" class="text-center text-accent-red py-8">
-          Failed to retrieve User Products
-        </td>
-      </tr>
-    `;
-  }
-}
-
-async function viewUserProductDetails(productId) {
-  try {
-    const { data, error } = await state.supabase
-      .from('user_products')
-      .select(`
-        *,
-        profiles(username, name, profile_picture),
-        user_product_images(image_url),
-        user_product_payments(method_name, account_info, qr_code_url)
-      `)
-      .eq('id', productId)
-      .single();
-
-    if (error) throw error;
-
-    const sellerProfile = data.profiles;
-    const sellerAvatar = sellerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
-
-    let imagesHtml = '';
-    if (data.user_product_images && data.user_product_images.length > 0) {
-      imagesHtml = data.user_product_images.map(img => `<img src="${img.image_url}" class="w-full rounded-lg mb-2" alt="Product Image">`).join('');
-    } else {
-      imagesHtml = '<p class="text-text-secondary">No images available.</p>';
-    }
-
-    let paymentMethodsHtml = '';
-    if (data.user_product_payments && data.user_product_payments.length > 0) {
-      paymentMethodsHtml = data.user_product_payments.map(pm => `
-        <div class="border border-border-color p-3 rounded-md mb-2">
-          <p class="font-semibold">${pm.method_name}</p>
-          <p class="text-sm text-text-secondary">${pm.account_info}</p>
-          ${pm.qr_code_url ? `<img src="${pm.qr_code_url}" class="w-24 h-24 object-contain mt-2 rounded-md" alt="QR Code">` : ''}
-        </div>
-      `).join('');
-    } else {
-      paymentMethodsHtml = '<p class="text-text-secondary">No payment methods specified.</p>';
-    }
-
-    document.getElementById('user-product-modal-content').innerHTML = `
-      <div class="space-y-4">
-        <div class="flex items-center space-x-3 mb-4">
-          <img src="${sellerAvatar}" alt="Seller Profile" class="w-12 h-12 rounded-full object-cover">
-          <div>
-            <h4 class="font-semibold text-text-primary">${sellerProfile?.name || 'N/A'} (@${sellerProfile?.username || 'N/A'})</h4>
-            <p class="text-sm text-text-secondary">Posted: ${utils.formatDateTime(data.created_at)}</p>
-          </div>
-        </div>
-        
-        <h3 class="text-xl font-bold text-accent-purple">${data.name}</h3>
-        <p class="text-text-secondary"><strong>Price:</strong> ${data.price} MMK</p>
-        <p class="text-text-secondary whitespace-pre-wrap">${data.description}</p>
-        
-        <h4 class="text-lg font-bold text-accent-green mt-6">Product Images</h4>
-        ${imagesHtml}
-
-        <h4 class="text-lg font-bold text-accent-green mt-6">Seller Contact</h4>
-        <p class="text-text-secondary"><strong>Social Platform:</strong> ${data.contact_platform || 'N/A'}</p>
-        <p class="text-text-secondary"><strong>Contact Link:</strong> ${data.contact_link ? `<a href="${data.contact_link}" target="_blank" class="text-accent-purple hover:underline">${data.contact_link}</a>` : 'N/A'}</p>
-
-        <h4 class="text-lg font-bold text-accent-green mt-6">Payment Methods</h4>
-        ${paymentMethodsHtml}
-
-        <p class="text-text-secondary mt-4"><strong>Status:</strong> <span class="status-${data.status} font-semibold">${data.status.toUpperCase()}</span></p>
-        ${data.admin_notes ? `<p class="text-text-secondary"><strong>Admin Notes:</strong> ${data.admin_notes}</p>` : ''}
-      </div>
-    `;
-    document.getElementById('user-product-modal').classList.remove('hidden');
-  } catch (error) {
-    console.error('Error viewing user product details:', error);
-    showNotification('Failed to view Product details', 'error');
-  }
-}
-
-function closeUserProductModal() {
-  document.getElementById('user-product-modal').classList.add('hidden');
-}
-
-async function approveUserProduct(productId) {
-  showConfirmModal(
-    'Are you sure you want to APPROVE this user product? It will become visible to buyers.',
-    async () => {
-      try {
-        showLoading(true);
-        const { error } = await state.supabase.rpc('approve_user_product', { product_id_param: productId });
-        if (error) throw error;
-        showNotification('User product approved successfully!', 'success');
-        loadUserProducts();
-        loadDashboardData();
-      } catch (error) {
-        console.error('Error approving user product:', error);
-        showNotification('Failed to approve user product', 'error');
-      } finally {
-        showLoading(false);
-      }
-    }
-  );
-}
-
-async function rejectUserProduct(productId) {
-  const reason = prompt('Reason for rejecting this user product?', 'Product content inappropriate or incomplete.');
-  if (!reason) return;
-
-  showConfirmModal(
-    'Are you sure you want to REJECT this user product? It will not be visible to buyers.',
-    async () => {
-      try {
-        showLoading(true);
-        const { error } = await state.supabase.rpc('reject_user_product', { product_id_param: productId, reason_param: reason });
-        if (error) throw error;
-        showNotification('User product rejected successfully!', 'success');
-        loadUserProducts();
-        loadDashboardData();
-      } catch (error) {
-        console.error('Error rejecting user product:', error);
-        showNotification('Failed to reject user product', 'error');
-      } finally {
-        showLoading(false);
-      }
-    }
-  );
-}
-
-function deleteUserProduct(productId) {
-  showConfirmModal(
-    'Deleting this user product will permanently remove it and all associated orders. Are you sure?',
-    async () => {
-      try {
-        showLoading(true);
-        const { error } = await state.supabase
-          .from('user_products')
-          .delete()
-          .eq('id', productId);
-
-        if (error) throw error;
-
-        showNotification('User product deleted successfully!', 'success');
-        loadUserProducts();
-        loadDashboardData();
-      } catch (error) {
-        console.error('Error deleting user product:', error);
-        showNotification('Failed to delete user product', 'error');
+        showNotification(`Failed to delete KYC permanently: ${error.message}`, 'error');
       } finally {
         showLoading(false);
       }
@@ -3427,10 +3734,10 @@ async function loadUserOrders() {
       .from('user_orders')
       .select(`
         *,
-        buyer_profile:profiles!fk_buyer_profile_id(username, name, profile_picture),
-        seller_profile:profiles!fk_seller_profile_id(username, name, profile_picture),
-        user_products(name),
-        user_product_payments(method_name)
+        buyer_profile:profiles!buyer_id(username, name, profile_picture),
+        seller_profile:profiles!seller_id(username, name, profile_picture),
+        marketplace_product:marketplace_products(name),
+        payment_method:payment_methods(method_name)
       `)
       .order('ordered_at', { ascending: false });
 
@@ -3447,7 +3754,7 @@ async function loadUserOrders() {
         const sellerAvatar = order.seller_profile?.profile_picture || '/placeholder.svg?height=40&width=40';
 
         return `
-          <tr data-search-terms="${order.id.toLowerCase()} ${buyerName.toLowerCase()} ${buyerUsername.toLowerCase()} ${sellerName.toLowerCase()} ${sellerUsername.toLowerCase()} ${order.user_products?.name.toLowerCase()} ${order.status.toLowerCase()}">
+          <tr data-search-terms="${order.id.toLowerCase()} ${buyerName.toLowerCase()} ${buyerUsername.toLowerCase()} ${sellerName.toLowerCase()} ${sellerUsername.toLowerCase()} ${(order.marketplace_product?.name || '').toLowerCase()} ${order.status.toLowerCase()}">
             <td class="font-share-tech text-sm">${order.id.substring(0, 8)}...</td>
             <td>
               <img src="${buyerAvatar}" alt="Buyer Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
@@ -3457,7 +3764,7 @@ async function loadUserOrders() {
               <img src="${sellerAvatar}" alt="Seller Profile" class="w-8 h-8 rounded-full object-cover mr-2 inline-block">
               ${sellerName} (@${sellerUsername})
             </td>
-            <td>${order.user_products?.name || 'N/A'}</td>
+            <td>${order.marketplace_product?.name || 'N/A'}</td>
             <td>${order.amount} MMK</td>
             <td><span class="${statusClass} font-semibold">${order.status.toUpperCase()}</span></td>
             <td>
@@ -3468,7 +3775,7 @@ async function loadUserOrders() {
                   <span class="hidden sm:inline">RECEIPT</span>
                 </a>
                 ` : ''}
-                ${order.status === 'pending' ? `
+                ${order.status === 'paid' ? `
                 <button onclick="approveUserOrder('${order.id}')" class="myanmar-btn btn-small">
                   <i class="fas fa-check mr-1"></i>
                   <span class="hidden sm:inline">APPROVE</span>
@@ -3514,10 +3821,10 @@ async function viewUserOrderDetails(orderId) {
       .from('user_orders')
       .select(`
         *,
-        buyer_profile:profiles!fk_buyer_profile_id(username, name, profile_picture),
-        seller_profile:profiles!fk_seller_profile_id(username, name, profile_picture),
-        user_products(name, description, price, contact_platform, contact_link),
-        user_product_payments(method_name, account_info, qr_code_url)
+        buyer_profile:profiles!buyer_id(username, name, profile_picture),
+        seller_profile:profiles!seller_id(username, name, profile_picture),
+        marketplace_product:marketplace_products(name, description, price, contact_platform, contact_link),
+        payment_method:payment_methods(method_name, account_info, qr_code_url)
       `)
       .eq('id', orderId)
       .single();
@@ -3526,8 +3833,8 @@ async function viewUserOrderDetails(orderId) {
 
     const buyerProfile = data.buyer_profile;
     const sellerProfile = data.seller_profile;
-    const product = data.user_products;
-    const paymentMethod = data.user_product_payments;
+    const product = data.marketplace_product;
+    const paymentMethod = data.payment_method;
 
     const buyerAvatar = buyerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
     const sellerAvatar = sellerProfile?.profile_picture || '/placeholder.svg?height=40&width=40';
@@ -3575,7 +3882,7 @@ async function viewUserOrderDetails(orderId) {
     document.getElementById('user-order-modal').classList.remove('hidden');
   } catch (error) {
     console.error('Error viewing user order details:', error);
-    showNotification('Failed to view Order details', 'error');
+    showNotification(`Failed to view Order details: ${error.message}`, 'error');
   }
 }
 
@@ -3589,14 +3896,14 @@ async function approveUserOrder(orderId) {
     async () => {
       try {
         showLoading(true);
-        const { error } = await state.supabase.rpc('approve_user_order', { order_id_param: orderId });
+        const { error } = await state.supabase.rpc('approve_user_order', { p_order_id: orderId });
         if (error) throw error;
         showNotification('User order approved successfully!', 'success');
         loadUserOrders();
         loadDashboardData();
       } catch (error) {
         console.error('Error approving user order:', error);
-        showNotification('Failed to approve user order', 'error');
+        showNotification(`Failed to approve user order: ${error.message}`, 'error');
       } finally {
         showLoading(false);
       }
@@ -3606,21 +3913,24 @@ async function approveUserOrder(orderId) {
 
 async function rejectUserOrder(orderId) {
   const reason = prompt('Reason for rejecting this user order?', 'Invalid receipt or payment.');
-  if (!reason) return;
+  if (!reason) {
+    showNotification('Rejection reason is required.', 'warning');
+    return;
+  }
 
   showConfirmModal(
     'Are you sure you want to REJECT this user order? This will mark the order as rejected.',
     async () => {
       try {
         showLoading(true);
-        const { error } = await state.supabase.rpc('reject_user_order', { order_id_param: orderId, reason_param: reason });
+        const { error } = await state.supabase.rpc('reject_user_order', { p_order_id: orderId, p_reason: reason });
         if (error) throw error;
         showNotification('User order rejected successfully!', 'success');
         loadUserOrders();
         loadDashboardData();
       } catch (error) {
         console.error('Error rejecting user order:', error);
-        showNotification('Failed to reject user order', 'error');
+        showNotification(`Failed to reject user order: ${error.message}`, 'error');
       } finally {
         showLoading(false);
       }
@@ -3640,7 +3950,113 @@ async function clearAllOldChatMessages() {
         showNotification(`Cleared ${data || 0} old chat messages.`, 'success');
       } catch (error) {
         console.error('Error clearing old chat messages:', error);
-        showNotification('Failed to clear old chat messages', 'error');
+        showNotification(`Failed to clear old chat messages: ${error.message}`, 'error');
+      } finally {
+        showLoading(false);
+      }
+    }
+  );
+}
+
+// Categories Management Functions
+async function loadCategories() {
+  const tbody = document.getElementById('categories-table-body');
+  tbody.innerHTML = `
+    <tr>
+      <td colspan="3" class="text-center text-text-secondary py-8">
+        <div class="loading-spinner mx-auto mb-2"></div>
+        Loading categories...
+      </td>
+    </tr>
+  `;
+
+  try {
+    const { data, error } = await state.supabase
+      .from('categories')
+      .select('*')
+      .order('name', { ascending: true });
+
+    if (error) throw error;
+
+    if (data && data.length > 0) {
+      tbody.innerHTML = data.map(category => `
+        <tr data-search-terms="${category.name.toLowerCase()}">
+          <td>${category.name}</td>
+          <td class="text-sm">${utils.formatDateTime(category.created_at)}</td>
+          <td>
+            <div class="table-actions">
+              <button onclick="deleteCategory('${category.id}')" class="btn-danger myanmar-btn btn-small">
+                <i class="fas fa-trash mr-1"></i> DELETE
+              </button>
+            </div>
+          </td>
+        </tr>
+      `).join('');
+    } else {
+      tbody.innerHTML = `
+        <tr>
+          <td colspan="3" class="text-center text-text-secondary py-8">
+            No Categories Found
+          </td>
+        </tr>
+      `;
+    }
+  } catch (error) {
+    console.error('Error loading categories:', error);
+    tbody.innerHTML = `
+      <tr>
+        <td colspan="3" class="text-center text-accent-red py-8">
+          Failed to retrieve Categories
+        </td>
+      </tr>
+    `;
+  }
+}
+
+async function createCategory() {
+  const categoryName = document.getElementById('category-name').value.trim();
+  if (!categoryName) {
+    showNotification('Category name cannot be empty.', 'warning');
+    return;
+  }
+
+  showLoading(true);
+  try {
+    const { error } = await state.supabase
+      .from('categories')
+      .insert({ name: categoryName });
+
+    if (error) throw error;
+
+    showNotification('Category created successfully!', 'success');
+    document.getElementById('category-name').value = '';
+    loadCategories();
+  } catch (error) {
+    console.error('Error creating category:', error);
+    showNotification(`Failed to create category: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
+  }
+}
+
+function deleteCategory(categoryId) {
+  showConfirmModal(
+    'Are you sure you want to delete this category? Products associated with this category will have their category set to NULL.',
+    async () => {
+      try {
+        showLoading(true);
+        const { error } = await state.supabase
+          .from('categories')
+          .delete()
+          .eq('id', categoryId);
+
+        if (error) throw error;
+
+        showNotification('Category deleted successfully!', 'success');
+        loadCategories();
+      } catch (error) {
+        console.error('Error deleting category:', error);
+        showNotification(`Failed to delete category: ${error.message}`, 'error');
       } finally {
         showLoading(false);
       }
@@ -3676,22 +4092,34 @@ if (show) {
 }
 }
 
-function adminLogout() {
-state.isAuthenticated = false;
-document.getElementById('admin-content').classList.add('hidden');
-document.getElementById('login-section').classList.remove('hidden');
-document.getElementById('admin-key').value = '';
-showNotification('Logged out from Admin account', 'info');
+async function adminLogout() {
+  showLoading(true);
+  try {
+    const { error } = await state.supabase.auth.signOut();
+    if (error) throw error;
 
-// Unsubscribe from all realtime channels on logout
-if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
-if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
-if (state.productsRealtime) state.supabase.removeChannel(state.productsRealtime);
-if (state.ordersRealtime) state.supabase.removeChannel(state.ordersRealtime);
-if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
-if (state.userProductsRealtime) state.supabase.removeChannel(state.userProductsRealtime);
-if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
-if (state.chatMessagesRealtime) state.supabase.removeChannel(state.chatMessagesRealtime);
+    state.isAuthenticated = false;
+    document.getElementById('admin-content').classList.add('hidden');
+    document.getElementById('login-section').classList.remove('hidden');
+    document.getElementById('admin-key').value = '';
+    showNotification('Logged out from Admin account', 'info');
+
+    // Unsubscribe from all realtime channels on logout
+    if (state.newsRealtime) state.supabase.removeChannel(state.newsRealtime);
+    if (state.supportRealtime) state.supabase.removeChannel(state.supportRealtime);
+    if (state.adminProductsRealtime) state.supabase.removeChannel(state.adminProductsRealtime);
+    if (state.marketplaceProductsRealtime) state.supabase.removeChannel(state.marketplaceProductsRealtime);
+    if (state.adminOrdersRealtime) state.supabase.removeChannel(state.adminOrdersRealtime);
+    if (state.userOrdersRealtime) state.supabase.removeChannel(state.userOrdersRealtime);
+    if (state.kycRealtime) state.supabase.removeChannel(state.kycRealtime);
+    if (state.categoriesRealtime) state.supabase.removeChannel(state.categoriesRealtime);
+
+  } catch (error) {
+    console.error('Admin logout error:', error);
+    showNotification(`Failed to logout: ${error.message}`, 'error');
+  } finally {
+    showLoading(false);
+  }
 }
 
 // Generic table filtering function
@@ -3736,26 +4164,6 @@ for (let i = 0; i < newsCards.length; i++) {
   }
 }
 }
-
-// Specific filter for support messages (since it's not a table)
-function filterSupportMessages(query) {
-const supportMessagesContainer = document.getElementById('support-messages');
-if (!supportMessagesContainer) return;
-
-const messages = supportMessagesContainer.querySelectorAll('.mb-4.p-3.rounded-lg.border'); // Select message divs
-const lowerCaseQuery = query.toLowerCase();
-
-for (let i = 0; i < messages.length; i++) {
-  const message = messages[i];
-  const searchTerms = message.getAttribute('data-search-terms');
-  if (searchTerms && searchTerms.includes(lowerCaseQuery)) {
-    message.style.display = '';
-  } else {
-    message.style.display = 'none';
-  }
-}
-}
-
 
 // Error handling
 window.onerror = function(msg, url, lineNo, columnNo, error) {
