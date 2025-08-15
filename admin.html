@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>FPS GFX Tool - Admin Dashboard</title>
+<title>FPS GFX Tool - Enhanced Admin Dashboard</title>
 <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
 <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
@@ -85,6 +85,11 @@ body {
 .btn-warning {
   background: linear-gradient(135deg, var(--accent-yellow), #d97706);
   color: #1f2937;
+}
+
+.btn-sm {
+  padding: 4px 8px !important;
+  font-size: 11px !important;
 }
 
 .admin-input {
@@ -192,6 +197,7 @@ body {
   font-weight: 600;
   z-index: 1000;
   animation: slideIn 0.3s ease;
+  max-width: 400px;
 }
 
 @keyframes slideIn {
@@ -273,6 +279,10 @@ body {
 .badge-approved { background: var(--accent-green); color: white; }
 .badge-rejected { background: var(--accent-red); color: white; }
 .badge-banned { background: var(--accent-red); color: white; }
+.badge-published { background: var(--accent-green); color: white; }
+.badge-draft { background: var(--accent-yellow); color: #1f2937; }
+.badge-info { background: var(--accent-blue); color: white; }
+.badge-success { background: var(--accent-green); color: white; }
 
 /* Responsive Design */
 @media (max-width: 768px) {
@@ -282,6 +292,7 @@ body {
   .admin-table th, .admin-table td { padding: 8px 4px; }
   .nav-btn { padding: 6px 12px; font-size: 12px; margin: 2px; }
   .modal-content { padding: 16px; }
+  .notification { top: 70px; right: 10px; left: 10px; max-width: none; }
 }
 
 /* Print Styles for PDF Export */
@@ -293,6 +304,23 @@ body {
   .admin-table th { background: #f3f4f6 !important; color: black !important; }
   .connection-status, .notification { display: none !important; }
   .modal { display: none !important; }
+}
+
+.search-input {
+  position: relative;
+  margin-bottom: 1rem;
+}
+
+.search-input input {
+  padding-left: 2.5rem;
+}
+
+.search-input .search-icon {
+  position: absolute;
+  left: 0.75rem;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--text-secondary);
 }
 </style>
 </head>
@@ -479,6 +507,11 @@ body {
           </button>
         </div>
 
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-keys" class="admin-input w-full" placeholder="Search keys..." onkeyup="filterTable('keys-table', this.value)">
+        </div>
+
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
             <thead>
@@ -509,6 +542,11 @@ body {
         <h3 class="text-lg font-orbitron font-bold mb-4 text-purple-400 flex items-center">
           <i class="fas fa-users mr-2"></i>USER MANAGEMENT
         </h3>
+        
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-users" class="admin-input w-full" placeholder="Search users..." onkeyup="filterTable('users-table', this.value)">
+        </div>
         
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
@@ -629,6 +667,11 @@ body {
           </div>
         </div>
 
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-products" class="admin-input w-full" placeholder="Search products..." onkeyup="filterTable('products-table', this.value)">
+        </div>
+
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
             <thead>
@@ -716,6 +759,11 @@ body {
           <i class="fas fa-user-shield mr-2"></i>KYC VERIFICATION MANAGEMENT
         </h3>
         
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-kyc" class="admin-input w-full" placeholder="Search KYC submissions..." onkeyup="filterTable('kyc-table', this.value)">
+        </div>
+        
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
             <thead>
@@ -749,6 +797,11 @@ body {
           <i class="fas fa-headset mr-2"></i>SUPPORT MESSAGES MANAGEMENT
         </h3>
         
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-support" class="admin-input w-full" placeholder="Search support messages..." onkeyup="filterTable('support-table', this.value)">
+        </div>
+        
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
             <thead>
@@ -780,6 +833,11 @@ body {
         <h3 class="text-lg font-orbitron font-bold mb-4 text-purple-400 flex items-center">
           <i class="fas fa-store mr-2"></i>USER PRODUCTS MANAGEMENT
         </h3>
+        
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-user-products" class="admin-input w-full" placeholder="Search user products..." onkeyup="filterTable('user-products-table', this.value)">
+        </div>
         
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
@@ -813,6 +871,11 @@ body {
         <h3 class="text-lg font-orbitron font-bold mb-4 text-purple-400 flex items-center">
           <i class="fas fa-shopping-cart mr-2"></i>ORDERS MANAGEMENT
         </h3>
+        
+        <div class="search-input">
+          <i class="fas fa-search search-icon"></i>
+          <input type="text" id="search-orders" class="admin-input w-full" placeholder="Search orders..." onkeyup="filterTable('orders-table', this.value)">
+        </div>
         
         <div class="overflow-x-auto">
           <table class="admin-table w-full">
@@ -889,9 +952,9 @@ body {
 <script>
 // Configuration
 const CONFIG = {
-  SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co', // Replace with your Supabase URL
-  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4', // Replace with your Supabase Anon Key
-  ADMIN_PASSWORD: 'Opper_FPS' // Change this to your admin password
+  SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co',
+  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4',
+  ADMIN_PASSWORD: 'Opper_FPS'
 };
 
 // Global Variables
@@ -907,11 +970,9 @@ async function initializeApp() {
   updateConnectionStatus('connecting');
   
   try {
-    // Initialize Supabase
     if (typeof supabase !== 'undefined') {
       supabaseClient = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
       
-      // Test connection
       const { data, error } = await supabaseClient.from('about').select('id').limit(1);
       
       if (error && error.code !== 'PGRST116') {
@@ -930,7 +991,6 @@ async function initializeApp() {
     showNotification(`Connection failed: ${error.message}`, 'error');
   }
 
-  // Add enter key listener
   document.getElementById('admin-password').addEventListener('keypress', function(event) {
     if (event.key === 'Enter') {
       adminLogin();
@@ -1030,7 +1090,6 @@ function adminLogout() {
 
 async function loadDashboardData() {
   try {
-    // Load statistics
     await Promise.all([
       loadStats(),
       loadCurrentSection()
@@ -1065,15 +1124,13 @@ async function loadStats() {
 }
 
 function showSection(section, buttonElement) {
-  // Hide all sections
   document.querySelectorAll('.admin-section').forEach(el => el.classList.add('hidden'));
-  
-  // Show selected section
   document.getElementById(section + '-section').classList.remove('hidden');
   
-  // Update navigation buttons
   document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-  if (buttonElement) buttonElement.classList.add('active');
+  if (buttonElement && !buttonElement.classList.contains('btn-danger')) {
+    buttonElement.classList.add('active');
+  }
   
   currentSection = section;
   loadCurrentSection();
@@ -1157,17 +1214,31 @@ async function updateAbout() {
       updated_at: new Date().toISOString()
     };
 
-    const { data, error } = await supabaseClient
+    // Try to update first, if no rows exist, insert
+    const { data: existingData } = await supabaseClient
       .from('about')
-      .upsert(aboutData, { onConflict: 'id' });
+      .select('id')
+      .limit(1);
 
-    if (error) throw error;
+    let result;
+    if (existingData && existingData.length > 0) {
+      result = await supabaseClient
+        .from('about')
+        .update(aboutData)
+        .eq('id', existingData[0].id);
+    } else {
+      result = await supabaseClient
+        .from('about')
+        .insert([aboutData]);
+    }
+
+    if (result.error) throw result.error;
 
     showNotification('About information updated successfully', 'success');
     
   } catch (error) {
     console.error('Error updating about:', error);
-    showNotification('Error updating about information', 'error');
+    showNotification('Error updating about information: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1227,7 +1298,7 @@ async function loadKeys() {
     
   } catch (error) {
     console.error('Error loading keys:', error);
-    showNotification('Error loading keys', 'error');
+    showNotification('Error loading keys: ' + error.message, 'error');
   }
 }
 
@@ -1271,7 +1342,7 @@ async function createKey() {
     if (error.code === '23505') {
       showNotification('Key already exists', 'error');
     } else {
-      showNotification('Error creating key', 'error');
+      showNotification('Error creating key: ' + error.message, 'error');
     }
   } finally {
     hideLoading();
@@ -1294,7 +1365,7 @@ async function banKey(keyId) {
       await loadStats();
     } catch (error) {
       console.error('Error banning key:', error);
-      showNotification('Error banning key', 'error');
+      showNotification('Error banning key: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -1316,7 +1387,7 @@ async function activateKey(keyId) {
     await loadStats();
   } catch (error) {
     console.error('Error activating key:', error);
-    showNotification('Error activating key', 'error');
+    showNotification('Error activating key: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1338,7 +1409,7 @@ async function deleteKey(keyId) {
       await loadStats();
     } catch (error) {
       console.error('Error deleting key:', error);
-      showNotification('Error deleting key', 'error');
+      showNotification('Error deleting key: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -1364,7 +1435,7 @@ async function loadUsers() {
       tbody.innerHTML = data.map(user => `
         <tr>
           <td>
-            <img src="${user.profile_picture || '/placeholder.svg?height=40&width=40'}" 
+            <img src="${user.profile_picture || 'https://via.placeholder.com/40x40'}" 
                  alt="Profile" class="w-8 h-8 rounded-full object-cover">
           </td>
           <td class="font-semibold">${user.username || 'N/A'}</td>
@@ -1408,7 +1479,7 @@ async function loadUsers() {
     
   } catch (error) {
     console.error('Error loading users:', error);
-    showNotification('Error loading users', 'error');
+    showNotification('Error loading users: ' + error.message, 'error');
   }
 }
 
@@ -1427,7 +1498,7 @@ async function banUser(userId) {
       await loadUsers();
     } catch (error) {
       console.error('Error banning user:', error);
-      showNotification('Error banning user', 'error');
+      showNotification('Error banning user: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -1448,7 +1519,7 @@ async function unbanUser(userId) {
     await loadUsers();
   } catch (error) {
     console.error('Error unbanning user:', error);
-    showNotification('Error unbanning user', 'error');
+    showNotification('Error unbanning user: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1470,7 +1541,7 @@ async function deleteUser(userId) {
       await loadStats();
     } catch (error) {
       console.error('Error deleting user:', error);
-      showNotification('Error deleting user', 'error');
+      showNotification('Error deleting user: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -1533,7 +1604,7 @@ async function loadNews() {
     
   } catch (error) {
     console.error('Error loading news:', error);
-    showNotification('Error loading news', 'error');
+    showNotification('Error loading news: ' + error.message, 'error');
   }
 }
 
@@ -1562,8 +1633,6 @@ async function createNews() {
 
     const mediaFile = document.getElementById('news-media').files[0];
     if (mediaFile) {
-      // In a real implementation, you would upload the file to Supabase storage
-      // For this demo, we'll use a placeholder
       newsData.media_url = '/placeholder-media-url';
       newsData.media_type = mediaFile.type.startsWith('image') ? 'image' : 
                            mediaFile.type.startsWith('video') ? 'video' : 'audio';
@@ -1575,7 +1644,6 @@ async function createNews() {
 
     if (error) throw error;
 
-    // Clear form
     document.getElementById('news-title').value = '';
     document.getElementById('news-content').value = '';
     document.getElementById('news-media').value = '';
@@ -1590,7 +1658,7 @@ async function createNews() {
     
   } catch (error) {
     console.error('Error creating news:', error);
-    showNotification('Error creating news', 'error');
+    showNotification('Error creating news: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1612,7 +1680,7 @@ async function deleteNews(newsId) {
       await loadStats();
     } catch (error) {
       console.error('Error deleting news:', error);
-      showNotification('Error deleting news', 'error');
+      showNotification('Error deleting news: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -1635,7 +1703,7 @@ async function loadProducts() {
       tbody.innerHTML = data.map(product => `
         <tr>
           <td>
-            <img src="${product.icon_url || '/placeholder.svg?height=32&width=32'}" 
+            <img src="${product.icon_url || 'https://via.placeholder.com/32x32'}" 
                  alt="Icon" class="w-8 h-8 rounded object-cover">
           </td>
           <td class="font-semibold">${product.product_name}</td>
@@ -1673,7 +1741,7 @@ async function loadProducts() {
     
   } catch (error) {
     console.error('Error loading products:', error);
-    showNotification('Error loading products', 'error');
+    showNotification('Error loading products: ' + error.message, 'error');
   }
 }
 
@@ -1704,7 +1772,6 @@ async function createProduct() {
       price: parseFloat(price),
       status: 'active',
       created_at: new Date().toISOString(),
-      // In a real implementation, you would upload files to Supabase storage
       file_url: '/placeholder-file-url',
       icon_url: '/placeholder-icon-url'
     };
@@ -1715,7 +1782,6 @@ async function createProduct() {
 
     if (error) throw error;
 
-    // Clear form
     document.getElementById('product-name').value = '';
     document.getElementById('product-price').value = '';
     document.getElementById('product-description').value = '';
@@ -1728,7 +1794,7 @@ async function createProduct() {
     
   } catch (error) {
     console.error('Error creating product:', error);
-    showNotification('Error creating product', 'error');
+    showNotification('Error creating product: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1748,7 +1814,7 @@ async function activateProduct(productId) {
     await loadProducts();
   } catch (error) {
     console.error('Error activating product:', error);
-    showNotification('Error activating product', 'error');
+    showNotification('Error activating product: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1768,7 +1834,7 @@ async function deactivateProduct(productId) {
     await loadProducts();
   } catch (error) {
     console.error('Error deactivating product:', error);
-    showNotification('Error deactivating product', 'error');
+    showNotification('Error deactivating product: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1790,7 +1856,7 @@ async function deleteProduct(productId) {
       await loadStats();
     } catch (error) {
       console.error('Error deleting product:', error);
-      showNotification('Error deleting product', 'error');
+      showNotification('Error deleting product: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -1848,7 +1914,7 @@ async function loadPaymentMethods() {
     
   } catch (error) {
     console.error('Error loading payment methods:', error);
-    showNotification('Error loading payment methods', 'error');
+    showNotification('Error loading payment methods: ' + error.message, 'error');
   }
 }
 
@@ -1871,7 +1937,6 @@ async function createPaymentMethod() {
       instructions: instructions || null,
       status: 'active',
       created_at: new Date().toISOString(),
-      // In a real implementation, you would upload QR code to Supabase storage
       qr_code_image: null
     };
 
@@ -1881,7 +1946,6 @@ async function createPaymentMethod() {
 
     if (error) throw error;
 
-    // Clear form
     document.getElementById('payment-method-name').value = '';
     document.getElementById('payment-account-info').value = '';
     document.getElementById('payment-instructions').value = '';
@@ -1892,7 +1956,7 @@ async function createPaymentMethod() {
     
   } catch (error) {
     console.error('Error creating payment method:', error);
-    showNotification('Error creating payment method', 'error');
+    showNotification('Error creating payment method: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1912,7 +1976,7 @@ async function activatePaymentMethod(methodId) {
     await loadPaymentMethods();
   } catch (error) {
     console.error('Error activating payment method:', error);
-    showNotification('Error activating payment method', 'error');
+    showNotification('Error activating payment method: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1932,7 +1996,7 @@ async function deactivatePaymentMethod(methodId) {
     await loadPaymentMethods();
   } catch (error) {
     console.error('Error deactivating payment method:', error);
-    showNotification('Error deactivating payment method', 'error');
+    showNotification('Error deactivating payment method: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -1953,7 +2017,7 @@ async function deletePaymentMethod(methodId) {
       await loadPaymentMethods();
     } catch (error) {
       console.error('Error deleting payment method:', error);
-      showNotification('Error deleting payment method', 'error');
+      showNotification('Error deleting payment method: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -2020,7 +2084,7 @@ async function loadKyc() {
     
   } catch (error) {
     console.error('Error loading KYC:', error);
-    showNotification('Error loading KYC submissions', 'error');
+    showNotification('Error loading KYC submissions: ' + error.message, 'error');
   }
 }
 
@@ -2044,7 +2108,7 @@ async function viewKycDetails(kycId) {
           <h4 class="text-lg font-bold mb-4 text-purple-400">User Information</h4>
           <div class="space-y-3">
             <div class="flex items-center space-x-3">
-              <img src="${data.user_profiles?.profile_picture || '/placeholder.svg?height=50&width=50'}" 
+              <img src="${data.user_profiles?.profile_picture || 'https://via.placeholder.com/50x50'}" 
                    alt="Profile" class="w-12 h-12 rounded-full object-cover">
               <div>
                 <p class="font-semibold">${data.user_profiles?.display_name || 'N/A'}</p>
@@ -2074,17 +2138,17 @@ async function viewKycDetails(kycId) {
           <div class="space-y-4">
             <div>
               <label class="block text-sm font-medium text-gray-400 mb-2">Front Image</label>
-              <img src="${data.front_image}" alt="ID Front" class="w-full h-32 object-cover rounded border">
+              <img src="${data.front_image}" alt="ID Front" class="w-full h-32 object-cover rounded border" onerror="this.src='https://via.placeholder.com/300x150'">
             </div>
             ${data.back_image ? `
               <div>
                 <label class="block text-sm font-medium text-gray-400 mb-2">Back Image</label>
-                <img src="${data.back_image}" alt="ID Back" class="w-full h-32 object-cover rounded border">
+                <img src="${data.back_image}" alt="ID Back" class="w-full h-32 object-cover rounded border" onerror="this.src='https://via.placeholder.com/300x150'">
               </div>
             ` : ''}
             <div>
               <label class="block text-sm font-medium text-gray-400 mb-2">Selfie Image</label>
-              <img src="${data.selfie_image}" alt="Selfie" class="w-full h-32 object-cover rounded border">
+              <img src="${data.selfie_image}" alt="Selfie" class="w-full h-32 object-cover rounded border" onerror="this.src='https://via.placeholder.com/300x150'">
             </div>
           </div>
         </div>
@@ -2123,7 +2187,7 @@ async function viewKycDetails(kycId) {
     
   } catch (error) {
     console.error('Error loading KYC details:', error);
-    showNotification('Error loading KYC details', 'error');
+    showNotification('Error loading KYC details: ' + error.message, 'error');
   }
 }
 
@@ -2134,7 +2198,8 @@ function closeKycModal() {
 async function approveKyc(kycId) {
   showLoading();
   try {
-    const { error } = await supabaseClient
+    // Update KYC status
+    const { error: kycError } = await supabaseClient
       .from('kyc_documents')
       .update({ 
         status: 'approved',
@@ -2143,14 +2208,33 @@ async function approveKyc(kycId) {
       })
       .eq('id', kycId);
 
-    if (error) throw error;
+    if (kycError) throw kycError;
 
-    showNotification('KYC approved successfully', 'success');
+    // Enable selling for the user
+    const { data: kycData } = await supabaseClient
+      .from('kyc_documents')
+      .select('user_id')
+      .eq('id', kycId)
+      .single();
+
+    if (kycData) {
+      const { error: userError } = await supabaseClient
+        .from('user_profiles')
+        .update({ 
+          can_sell: true,
+          kyc_status: 'approved'
+        })
+        .eq('id', kycData.user_id);
+
+      if (userError) throw userError;
+    }
+
+    showNotification('KYC approved successfully - User can now sell products', 'success');
     await loadKyc();
     await loadStats();
   } catch (error) {
     console.error('Error approving KYC:', error);
-    showNotification('Error approving KYC', 'error');
+    showNotification('Error approving KYC: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2162,7 +2246,8 @@ async function rejectKyc(kycId) {
   
   showLoading();
   try {
-    const { error } = await supabaseClient
+    // Update KYC status
+    const { error: kycError } = await supabaseClient
       .from('kyc_documents')
       .update({ 
         status: 'rejected',
@@ -2171,14 +2256,33 @@ async function rejectKyc(kycId) {
       })
       .eq('id', kycId);
 
-    if (error) throw error;
+    if (kycError) throw kycError;
+
+    // Update user profile
+    const { data: kycData } = await supabaseClient
+      .from('kyc_documents')
+      .select('user_id')
+      .eq('id', kycId)
+      .single();
+
+    if (kycData) {
+      const { error: userError } = await supabaseClient
+        .from('user_profiles')
+        .update({ 
+          can_sell: false,
+          kyc_status: 'rejected'
+        })
+        .eq('id', kycData.user_id);
+
+      if (userError) throw userError;
+    }
 
     showNotification('KYC rejected successfully', 'success');
     await loadKyc();
     await loadStats();
   } catch (error) {
     console.error('Error rejecting KYC:', error);
-    showNotification('Error rejecting KYC', 'error');
+    showNotification('Error rejecting KYC: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2239,7 +2343,7 @@ async function loadSupport() {
     
   } catch (error) {
     console.error('Error loading support messages:', error);
-    showNotification('Error loading support messages', 'error');
+    showNotification('Error loading support messages: ' + error.message, 'error');
   }
 }
 
@@ -2261,7 +2365,7 @@ async function closeSupportMessage(messageId) {
     await loadStats();
   } catch (error) {
     console.error('Error closing support message:', error);
-    showNotification('Error closing support message', 'error');
+    showNotification('Error closing support message: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2285,7 +2389,7 @@ async function reopenSupportMessage(messageId) {
     await loadStats();
   } catch (error) {
     console.error('Error reopening support message:', error);
-    showNotification('Error reopening support message', 'error');
+    showNotification('Error reopening support message: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2307,7 +2411,7 @@ async function deleteSupportMessage(messageId) {
       await loadStats();
     } catch (error) {
       console.error('Error deleting support message:', error);
-      showNotification('Error deleting support message', 'error');
+      showNotification('Error deleting support message: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -2370,7 +2474,7 @@ async function loadUserProducts() {
     
   } catch (error) {
     console.error('Error loading user products:', error);
-    showNotification('Error loading user products', 'error');
+    showNotification('Error loading user products: ' + error.message, 'error');
   }
 }
 
@@ -2392,7 +2496,7 @@ async function approveUserProduct(productId) {
     await loadStats();
   } catch (error) {
     console.error('Error approving user product:', error);
-    showNotification('Error approving user product', 'error');
+    showNotification('Error approving user product: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2413,7 +2517,7 @@ async function rejectUserProduct(productId) {
     await loadStats();
   } catch (error) {
     console.error('Error rejecting user product:', error);
-    showNotification('Error rejecting user product', 'error');
+    showNotification('Error rejecting user product: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2435,7 +2539,7 @@ async function deleteUserProduct(productId) {
       await loadStats();
     } catch (error) {
       console.error('Error deleting user product:', error);
-      showNotification('Error deleting user product', 'error');
+      showNotification('Error deleting user product: ' + error.message, 'error');
     } finally {
       hideLoading();
     }
@@ -2507,7 +2611,7 @@ async function loadOrders() {
     
   } catch (error) {
     console.error('Error loading orders:', error);
-    showNotification('Error loading orders', 'error');
+    showNotification('Error loading orders: ' + error.message, 'error');
   }
 }
 
@@ -2529,7 +2633,7 @@ async function approveOrder(orderId) {
     await loadStats();
   } catch (error) {
     console.error('Error approving order:', error);
-    showNotification('Error approving order', 'error');
+    showNotification('Error approving order: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2550,7 +2654,7 @@ async function rejectOrder(orderId) {
     await loadStats();
   } catch (error) {
     console.error('Error rejecting order:', error);
-    showNotification('Error rejecting order', 'error');
+    showNotification('Error rejecting order: ' + error.message, 'error');
   } finally {
     hideLoading();
   }
@@ -2579,15 +2683,27 @@ function confirmAction() {
   closeConfirmModal();
 }
 
-// Add custom styles for smaller buttons
-const style = document.createElement('style');
-style.textContent = `
-  .btn-sm {
-    padding: 4px 8px !important;
-    font-size: 11px !important;
+// Table filter function
+function filterTable(tableId, searchTerm) {
+  const table = document.getElementById(tableId);
+  const rows = table.getElementsByTagName('tr');
+  
+  for (let i = 0; i < rows.length; i++) {
+    const row = rows[i];
+    const cells = row.getElementsByTagName('td');
+    let found = false;
+    
+    for (let j = 0; j < cells.length; j++) {
+      const cell = cells[j];
+      if (cell.textContent.toLowerCase().includes(searchTerm.toLowerCase())) {
+        found = true;
+        break;
+      }
+    }
+    
+    row.style.display = found ? '' : 'none';
   }
-`;
-document.head.appendChild(style);
+}
 </script>
 
 </body>
