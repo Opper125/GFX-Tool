@@ -1,1413 +1,1820 @@
 <!DOCTYPE html>
 <html lang="my">
 <head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-<title>FPS GFX Tool - မြန်မာ</title>
-<link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-<link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;500;600;700;800;900&family=Share+Tech+Mono&family=Noto+Sans+Myanmar:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-<style>
-/* Custom Fonts */
-body {
-  font-family: 'Noto Sans Myanmar', 'Inter', sans-serif;
-}
-h1, h2, h3, .font-orbitron {
-  font-family: 'Orbitron', sans-serif;
-}
-.font-share-tech {
-  font-family: 'Share Tech Mono', monospace;
-}
-
-/* New Color Palette */
-:root {
-  --primary-bg: hsl(220 20% 8%); /* Deep Dark Blue-Grey */
-  --secondary-bg: hsl(220 20% 12%); /* Slightly Lighter Dark Blue-Grey */
-  --accent-purple: hsl(280 80% 60%); /* Vibrant Purple */
-  --accent-green: hsl(160 80% 50%); /* Neon Green */
-  --accent-red: hsl(0 80% 60%); /* Vibrant Red */
-  --text-primary: hsl(220 20% 90%); /* Light Grey */
-  --text-secondary: hsl(220 15% 60%); /* Medium Grey */
-  --border-color: hsl(220 15% 20%); /* Dark Grey */
-  --card-bg: rgba(20, 25, 35, 0.7); /* Dark Translucent */
-  --input-bg: rgba(30, 35, 45, 0.6); /* Darker Translucent */
-  --table-header-bg: rgba(var(--accent-purple-rgb), 0.15);
-  --table-row-hover-bg: rgba(var(--accent-purple-rgb), 0.08);
-
-  /* RGB values for easier use in rgba() */
-  --accent-purple-rgb: 199, 56, 255; /* From hsl(280 80% 60%) */
-  --accent-green-rgb: 0, 204, 136; /* From hsl(160 80% 50%) */
-  --accent-red-rgb: 255, 51, 51; /* From hsl(0 80% 60%) */
-}
-
-body {
-  background: linear-gradient(135deg, var(--primary-bg) 0%, var(--secondary-bg) 100%);
-  min-height: 100vh;
-  position: relative;
-  overflow-x: hidden;
-  color: var(--text-primary);
-}
-
-.myanmar-pattern {
-  background-image: 
-    radial-gradient(circle at 25% 25%, rgba(var(--accent-purple-rgb), 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 75% 75%, rgba(var(--accent-green-rgb), 0.15) 0%, transparent 50%),
-    radial-gradient(circle at 50% 50%, rgba(var(--accent-red-rgb), 0.1) 0%, transparent 50%);
-  animation: patternMove 25s ease-in-out infinite;
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  z-index: -2;
-}
-
-@keyframes patternMove {
-  0%, 100% { background-position: 0% 0%, 100% 100%, 50% 50%; }
-  33% { background-position: 100% 100%, 0% 0%, 75% 25%; }
-  66% { background-position: 50% 50%, 75% 25%, 25% 75%; }
-}
-
-.myanmar-waves {
-  position: fixed;
-  bottom: 0;
-  left: 0;
-  right: 0;
-  height: 80px;
-  background: linear-gradient(45deg, 
-    rgba(var(--accent-purple-rgb), 0.2), 
-    rgba(var(--accent-green-rgb), 0.2), 
-    rgba(var(--accent-red-rgb), 0.2));
-  clip-path: polygon(0 100%, 0 60%, 25% 40%, 50% 60%, 75% 30%, 100% 50%, 100% 100%);
-  animation: waveFloat 12s ease-in-out infinite;
-  z-index: -1;
-}
-
-@keyframes waveFloat {
-  0%, 100% { transform: translateY(0px) scaleY(1); }
-  50% { transform: translateY(-10px) scaleY(1.1); }
-}
-
-.app-card {
-  backdrop-filter: blur(20px);
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  box-shadow: 
-    0 20px 40px -12px rgba(0, 0, 0, 0.8),
-    0 0 0 1px rgba(var(--accent-purple-rgb), 0.1),
-    inset 0 1px 0 rgba(255, 255, 255, 0.05);
-  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  border-radius: 16px;
-}
-
-.app-card:hover {
-  transform: translateY(-2px);
-  box-shadow: 
-    0 25px 50px -12px rgba(var(--accent-purple-rgb), 0.25),
-    0 0 0 1px rgba(var(--accent-purple-rgb), 0.2),
-    inset 0 1px 0 rgba(255, 255, 255, 0.1);
-  border-color: rgba(var(--accent-purple-rgb), 0.5);
-}
-
-.myanmar-btn {
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-green));
-  color: #000;
-  font-weight: 700;
-  position: relative;
-  overflow: hidden;
-  transition: all 0.3s ease;
-  text-shadow: 0 1px 2px rgba(0,0,0,0.1);
-  border: none;
-  border-radius: 12px;
-  padding: 12px 20px;
-  cursor: pointer;
-  box-shadow: 0 5px 15px rgba(var(--accent-purple-rgb), 0.2);
-}
-
-.myanmar-btn::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: -100%;
-  width: 100%;
-  height: 100%;
-  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.4), transparent);
-  transition: left 0.6s ease;
-}
-
-.myanmar-btn:hover::before {
-  left: 100%;
-}
-
-.myanmar-btn:hover {
-  background: linear-gradient(135deg, var(--accent-green), var(--accent-purple));
-  transform: translateY(-1px);
-  box-shadow: 0 10px 25px rgba(var(--accent-green-rgb), 0.4);
-}
-
-.btn-danger {
-  background: linear-gradient(135deg, var(--accent-red), #FF6B6B);
-  color: white;
-  box-shadow: 0 5px 15px rgba(var(--accent-red-rgb), 0.2);
-}
-
-.btn-danger:hover {
-  background: linear-gradient(135deg, #FF6B6B, var(--accent-red));
-  box-shadow: 0 10px 25px rgba(var(--accent-red-rgb), 0.4);
-}
-
-.connection-status {
-  position: fixed;
-  top: 15px;
-  right: 15px;
-  z-index: 1000;
-  padding: 8px 16px;
-  border-radius: 20px;
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  backdrop-filter: blur(10px);
-  animation: statusPulse 2s infinite;
-  color: var(--text-primary);
-}
-
-.status-online {
-  background: linear-gradient(135deg, var(--accent-green), #4ADE80);
-  color: white;
-  box-shadow: 0 0 20px rgba(var(--accent-green-rgb), 0.5);
-}
-
-.status-offline {
-  background: linear-gradient(135deg, var(--accent-red), #EF4444);
-  color: white;
-  animation: statusShake 0.5s ease-in-out;
-}
-
-.status-connecting {
-  background: linear-gradient(135deg, var(--accent-purple), #FCD34D);
-  color: #000;
-  animation: statusSpin 1s linear infinite;
-}
-
-@keyframes statusPulse {
-  0%, 100% { opacity: 1; transform: scale(1); }
-  50% { opacity: 0.8; transform: scale(1.05); }
-}
-
-@keyframes statusShake {
-  0%, 100% { transform: translateX(0); }
-  25% { transform: translateX(-3px); }
-  75% { transform: translateX(3px); }
-}
-
-@keyframes statusSpin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
-}
-
-.stats-card {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  transition: all 0.3s ease;
-  position: relative;
-  overflow: hidden;
-  border-radius: 12px;
-}
-
-.stats-card::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  right: 0;
-  height: 3px;
-  background: linear-gradient(90deg, var(--accent-purple), var(--accent-green), var(--accent-red));
-  opacity: 0;
-  transition: opacity 0.3s ease;
-}
-
-.stats-card:hover::before {
-  opacity: 1;
-}
-
-.stats-card:hover {
-  transform: translateY(-3px) scale(1.02);
-  box-shadow: 0 15px 35px rgba(var(--accent-purple-rgb), 0.2);
-  border-color: rgba(var(--accent-purple-rgb), 0.3);
-}
-
-.app-input {
-  background: var(--input-bg);
-  border: 2px solid var(--border-color);
-  backdrop-filter: blur(10px);
-  color: var(--text-primary);
-  transition: all 0.3s ease;
-  border-radius: 12px;
-  padding: 12px 16px;
-}
-
-.app-input:focus {
-  border-color: var(--accent-purple);
-  background: rgba(30, 35, 45, 0.8);
-  outline: none;
-  box-shadow: 0 0 25px rgba(var(--accent-purple-rgb), 0.3);
-}
-
-.app-input::placeholder {
-  color: var(--text-secondary);
-}
-
-.app-table {
-  backdrop-filter: blur(10px);
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  overflow: hidden;
-}
-
-.app-table th {
-  background: var(--table-header-bg);
-  color: var(--accent-purple);
-  font-weight: 700;
-  text-transform: uppercase;
-  font-size: 12px;
-  letter-spacing: 0.5px;
-  padding: 12px 8px;
-}
-
-.app-table td {
-  padding: 12px 8px;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-  color: var(--text-primary);
-}
-
-.app-table tr:hover {
-  background: var(--table-row-hover-bg);
-}
-
-.loading-spinner {
-  border: 3px solid rgba(var(--accent-purple-rgb), 0.3);
-  border-top: 3px solid var(--accent-purple);
-  border-radius: 50%;
-  width: 24px;
-  height: 24px;
-  animation: spin 1s linear infinite;
-}
-
-@keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
-}
-
-.notification {
-  position: fixed;
-  top: 70px;
-  right: 15px;
-  left: 15px;
-  max-width: 400px;
-  margin: 0 auto;
-  padding: 12px 16px;
-  border-radius: 10px;
-  color: white;
-  font-weight: 600;
-  z-index: 1001;
-  animation: slideInRight 0.4s ease-out;
-  backdrop-filter: blur(15px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-@keyframes slideInRight {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
-}
-
-.nav-btn {
-  transition: all 0.3s ease;
-  position: relative;
-  border-radius: 8px;
-  padding: 8px 12px;
-  font-size: 14px;
-  color: var(--text-secondary);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.nav-btn.active {
-  background: linear-gradient(135deg, var(--accent-purple), var(--accent-green)) !important;
-  color: #000 !important;
-  box-shadow: 0 5px 15px rgba(var(--accent-purple-rgb), 0.4);
-  border-color: var(--accent-purple) !important;
-}
-
-.nav-btn:not(.active):hover {
-  background: rgba(var(--accent-purple-rgb), 0.1);
-  color: var(--accent-purple);
-  border-color: rgba(var(--accent-purple-rgb), 0.3);
-}
-
-.fade-in {
-  animation: fadeInUp 0.6s ease-out forwards;
-}
-
-@keyframes fadeInUp {
-  from { opacity: 0; transform: translateY(20px); }
-  to { opacity: 1; transform: translateY(0); }
-}
-
-.status-active { color: var(--accent-green); }
-.status-inactive, .status-banned, .status-rejected { color: var(--accent-red); }
-.status-pending { color: #f59e0b; }
-
-
-.news-card {
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
-  transition: all 0.3s ease;
-  margin-bottom: 16px;
-}
-
-.news-card:hover {
-  border-color: rgba(var(--accent-purple-rgb), 0.3);
-  transform: translateY(-2px);
-}
-
-.modal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  right: 0;
-  bottom: 0;
-  background: rgba(0, 0, 0, 0.8);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  z-index: 2000;
-  padding: 20px;
-}
-
-.modal-content {
-  background: var(--card-bg);
-  border: 1px solid var(--border-color);
-  border-radius: 16px;
-  padding: 24px;
-  max-width: 90vw;
-  max-height: 90vh;
-  overflow-y: auto;
-  backdrop-filter: blur(20px);
-  box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-}
-
-/* Mobile optimizations */
-@media (max-width: 768px) {
-  .container { padding: 8px; }
-  .app-card { padding: 16px; margin: 8px; }
-  .connection-status { top: 10px; right: 10px; font-size: 9px; padding: 6px 12px; }
-  .notification { top: 50px; right: 10px; left: 10px; max-width: none; }
-  .stats-card { margin-bottom: 12px; }
-  .myanmar-btn { padding: 10px 16px; font-size: 14px; }
-  .app-table { font-size: 12px; }
-  .app-table th, .app-table td { padding: 8px 4px; }
-  h1 { font-size: 20px; }
-  h2 { font-size: 18px; }
-  h3 { font-size: 16px; }
-  .nav-btn { padding: 6px 10px; font-size: 12px; margin: 2px; }
-  .modal-content { padding: 16px; max-width: 95vw; }
-}
-
-@media (max-width: 480px) {
-  .myanmar-pattern { opacity: 0.7; }
-  .myanmar-waves { height: 60px; }
-  .app-card { padding: 12px; margin: 4px; }
-  .grid { gap: 8px; }
-  .stats-card { padding: 12px; }
-  .app-table th, .app-table td { padding: 6px 2px; font-size: 11px; }
-}
-
-/* Scrollbar styling */
-::-webkit-scrollbar { width: 6px; }
-::-webkit-scrollbar-track { background: rgba(255,255,255,0.1); }
-::-webkit-scrollbar-thumb { background: var(--accent-purple); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--accent-green); }
-
-/* Loading overlay */
-.loading-overlay {
-  backdrop-filter: blur(8px);
-  background: rgba(0,0,0,0.7);
-}
-
-.btn-small {
-  padding: 6px 12px;
-  font-size: 12px;
-  border-radius: 8px;
-}
-
-.table-actions {
-  display: flex;
-  gap: 4px;
-  flex-wrap: wrap;
-}
-
-.hidden { display: none !important; }
-
-/* Search input specific styles */
-.search-input-container {
-  position: relative;
-}
-.search-input-container .app-input {
-  padding-left: 40px; /* Space for icon */
-}
-.search-input-container .search-icon {
-  position: absolute;
-  left: 12px;
-  top: 50%;
-  transform: translateY(-50%);
-  color: var(--text-secondary);
-  pointer-events: none;
-}
-</style>
-</head>
-<body class="text-white">
-<div class="myanmar-pattern"></div>
-<div class="myanmar-waves"></div>
-
-<div id="connection-status" class="connection-status status-connecting">
-<i class="fas fa-wifi"></i> ချိတ်ဆက်နေသည်...
-</div>
-
-<div class="container mx-auto px-2 py-4 max-w-6xl">
-<div class="text-center mb-6 fade-in">
-  <h1 class="text-2xl md:text-3xl lg:text-4xl font-orbitron font-bold mb-2 text-accent-purple">
-    <i class="fas fa-shield-alt mr-2"></i>
-    FPS GFX Tool
-  </h1>
-  <h2 class="text-lg md:text-xl lg:text-2xl font-orbitron font-semibold text-accent-green mb-2">
-    MOBILE APPLICATION
-  </h2>
-  <div class="inline-block px-4 py-2 bg-gradient-to-r from-accent-purple to-accent-green text-black rounded-full font-bold text-sm">
-    <i class="fas fa-mobile-alt mr-1"></i> USER INTERFACE
-  </div>
-</div>
-
-<div id="notification-container"></div>
-
-<div id="login-section" class="max-w-md mx-auto fade-in">
-  <div class="app-card p-6">
-    <h3 class="text-xl md:text-2xl font-orbitron font-bold text-center mb-6 text-accent-purple">
-      <i class="fas fa-sign-in-alt mr-2"></i>
-      KEY LOGIN
-    </h3>
-    <div class="space-y-4">
-      <div class="relative search-input-container">
-        <input 
-          type="text" 
-          id="login-key" 
-          placeholder="Enter Your Key..." 
-          class="app-input w-full"
-        >
-        <i class="fas fa-key search-icon"></i>
-      </div>
-      <button 
-        onclick="userLogin()" 
-        id="login-btn"
-        class="myanmar-btn w-full flex items-center justify-center space-x-2"
-      >
-        <i class="fas fa-sign-in-alt"></i>
-        <span id="login-text">LOGIN</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="profile-creation-section" class="max-w-md mx-auto fade-in hidden">
-  <div class="app-card p-6">
-    <h3 class="text-xl md:text-2xl font-orbitron font-bold text-center mb-6 text-accent-green">
-      <i class="fas fa-user-plus mr-2"></i>
-      CREATE PROFILE
-    </h3>
-    <p class="text-center text-text-secondary mb-4">
-      သင်၏ Key အတွက် Profile မရှိသေးပါ။ Profile အသစ် ပြုလုပ်ပေးပါ။
-    </p>
-    <div class="space-y-4">
-      <div class="relative search-input-container">
-        <input 
-          type="text" 
-          id="profile-username" 
-          placeholder="Username (တစ်ယောက်သုံးသာ)" 
-          class="app-input w-full"
-        >
-        <i class="fas fa-user search-icon"></i>
-      </div>
-      <div class="relative search-input-container">
-        <input 
-          type="text" 
-          id="profile-display-name" 
-          placeholder="သင်၏ အမည်" 
-          class="app-input w-full"
-        >
-        <i class="fas fa-signature search-icon"></i>
-      </div>
-      <div class="relative">
-        <label for="profile-picture" class="block text-sm font-medium mb-2 text-text-secondary">Profile ပုံ (ထည့်ချင်မှထည့်ပါ)</label>
-        <input 
-          type="file" 
-          id="profile-picture" 
-          accept="image/*" 
-          class="app-input w-full"
-        >
-      </div>
-      <button 
-        onclick="createProfile()" 
-        id="create-profile-btn"
-        class="myanmar-btn w-full flex items-center justify-center space-x-2"
-      >
-        <i class="fas fa-plus-circle"></i>
-        <span id="create-profile-text">CREATE PROFILE</span>
-      </button>
-    </div>
-  </div>
-</div>
-
-<div id="app-content" class="hidden">
-  <div class="flex flex-wrap justify-center gap-2 md:gap-4 mb-6">
-    <button onclick="showSection('home', this)" class="nav-btn active">
-      <i class="fas fa-home mr-1"></i>
-      <span class="hidden sm:inline">HOME</span>
-      <span class="sm:hidden">Home</span>
-    </button>
-    <button onclick="showSection('news', this)" class="nav-btn">
-      <i class="fas fa-newspaper mr-1"></i>
-      <span class="hidden sm:inline">NEWS</span>
-      <span class="sm:hidden">News</span>
-    </button>
-    <button onclick="showSection('products', this)" class="nav-btn">
-      <i class="fas fa-box-open mr-1"></i>
-      <span class="hidden sm:inline">PRODUCTS</span>
-      <span class="sm:hidden">Products</span>
-    </button>
-    <button onclick="showSection('chat', this)" class="nav-btn">
-      <i class="fas fa-comments mr-1"></i>
-      <span class="hidden sm:inline">CHAT</span>
-      <span class="sm:hidden">Chat</span>
-    </button>
-    <button onclick="showSection('support', this)" class="nav-btn">
-      <i class="fas fa-headset mr-1"></i>
-      <span class="hidden sm:inline">SUPPORT</span>
-      <span class="sm:hidden">Support</span>
-    </button>
-    <button onclick="showSection('about', this)" class="nav-btn">
-      <i class="fas fa-info-circle mr-1"></i>
-      <span class="hidden sm:inline">ABOUT</span>
-      <span class="sm:hidden">About</span>
-    </button>
-    <button onclick="showSection('mi', this)" class="nav-btn">
-      <i class="fas fa-user-circle mr-1"></i>
-      <span class="hidden sm:inline">MI</span>
-      <span class="sm:hidden">Mi</span>
-    </button>
-    <button onclick="userLogout()" class="nav-btn btn-danger">
-      <i class="fas fa-sign-out-alt mr-1"></i>
-      <span class="hidden sm:inline">LOGOUT</span>
-      <span class="sm:hidden">Logout</span>
-    </button>
-  </div>
-
-  <div id="home-section" class="app-section">
-    <div class="app-card p-4 md:p-8 text-center">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-4 text-accent-purple">
-        <i class="fas fa-home mr-2"></i>
-        DASHBOARD OVERVIEW
-      </h3>
-      <p class="text-text-secondary">
-        Welcome to FPS GFX Tool.
-      </p>
-      <div class="mt-6 grid grid-cols-1 md:grid-cols-2 gap-4">
-        <div class="stats-card p-4">
-          <i class="fas fa-download text-2xl text-blue-400 mb-2"></i>
-          <h4 class="text-sm font-semibold text-text-secondary">TOTAL DOWNLOADS</h4>
-          <p id="total-downloads" class="text-lg font-bold text-accent-purple">0</p>
-        </div>
-        <div class="stats-card p-4">
-          <i class="fas fa-box-open text-2xl text-purple-400 mb-2"></i>
-          <h4 class="text-sm font-semibold text-text-secondary">AVAILABLE PRODUCTS</h4>
-          <p id="available-products" class="text-lg font-bold text-accent-green">0</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div id="news-section" class="app-section hidden">
-    <div class="app-card p-4 md:p-8">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-newspaper mr-3"></i>
-        LATEST NEWS
-      </h3>
-      <div id="news-list" class="space-y-4">
-        <div class="loading-spinner mx-auto mb-4"></div>
-        <p class="text-center text-text-secondary">Loading news...</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="products-section" class="app-section hidden">
-    <div class="app-card p-4 md:p-8">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-box-open mr-3"></i>
-        PRODUCTS & APKS
-      </h3>
-      <div id="products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-        <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
-        <p class="text-center text-text-secondary col-span-full">Loading products...</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="chat-section" class="app-section hidden">
-    <div class="app-card p-4 md:p-8">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-comments mr-3"></i>
-        GLOBAL CHAT
-      </h3>
-      <div id="chat-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
-        <div class="loading-spinner mx-auto mb-4"></div>
-        <p class="text-center text-text-secondary">Loading messages...</p>
-      </div>
-      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        <textarea id="chat-input" placeholder="Type your message..." rows="3"
-                  class="app-input flex-1 resize-none"></textarea>
-        <button onclick="sendChatMessage()" 
-                class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
-          <i class="fas fa-paper-plane"></i>
-          <span>SEND</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="support-section" class="app-section hidden">
-    <div class="app-card p-4 md:p-8">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-headset mr-3"></i>
-        SUPPORT
-      </h3>
-      <div id="support-messages" class="bg-black bg-opacity-30 rounded-xl p-4 h-64 md:h-96 overflow-y-auto mb-6 border border-gray-700">
-        <div class="loading-spinner mx-auto mb-4"></div>
-        <p class="text-center text-text-secondary">Loading messages...</p>
-      </div>
-      <div class="flex flex-col md:flex-row space-y-2 md:space-y-0 md:space-x-4">
-        <textarea id="support-input" placeholder="Type your support message..." rows="3"
-                  class="app-input flex-1 resize-none"></textarea>
-        <button onclick="sendSupportMessage()" 
-                class="myanmar-btn flex items-center justify-center space-x-2 md:self-end">
-          <i class="fas fa-paper-plane"></i>
-          <span>SEND SUPPORT</span>
-        </button>
-      </div>
-    </div>
-  </div>
-
-  <div id="about-section" class="app-section hidden">
-    <div class="app-card p-4 md:p-8">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-info-circle mr-3"></i>
-        ABOUT US
-      </h3>
-      <div id="about-content" class="space-y-4 text-text-secondary">
-        <p>Loading about information...</p>
-      </div>
-    </div>
-  </div>
-
-  <div id="mi-section" class="app-section hidden">
-    <div class="app-card p-4 md:p-8">
-      <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-        <i class="fas fa-user-circle mr-3"></i>
-        MY PROFILE
-      </h3>
-      <div id="profile-details" class="space-y-4">
-        <div class="flex flex-col items-center mb-6">
-          <img id="mi-profile-picture" src="/placeholder.svg?height=100&width=100" alt="Profile Picture" class="w-24 h-24 rounded-full object-cover border-4 border-accent-purple mb-4">
-          <h4 id="mi-display-name" class="text-xl font-bold text-text-primary"></h4>
-          <p id="mi-username" class="text-text-secondary">@</p>
-        </div>
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">KEY</label>
-            <input type="text" id="mi-key-text" class="app-input w-full font-share-tech" readonly>
-          </div>
-          <div>
-            <label class="block text-sm font-medium mb-2 text-text-secondary">ACCOUNT STATUS</label>
-            <input type="text" id="mi-account-status" class="app-input w-full" readonly>
-          </div>
-          <div class="md:col-span-2">
-            <label class="block text-sm font-medium mb-2 text-text-secondary">NEW PROFILE PICTURE (OPTIONAL)</label>
-            <input type="file" id="mi-new-profile-picture" accept="image/*" class="app-input w-full">
-          </div>
-          <div class="md:col-span-2">
-            <button onclick="updateProfile()" class="myanmar-btn w-full flex items-center justify-center space-x-2">
-              <i class="fas fa-save"></i>
-              <span>UPDATE PROFILE</span>
-            </button>
-          </div>
-        </div>
-      </div>
-       <div class="mt-8">
-        <h3 class="text-lg md:text-xl font-orbitron font-bold mb-6 text-accent-purple flex items-center">
-          <i class="fas fa-shopping-bag mr-3"></i>
-          MY PURCHASED ADMIN PRODUCTS
-        </h3>
-        <div id="my-purchased-products-list" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
-          <div class="loading-spinner mx-auto mb-4 col-span-full"></div>
-          <p class="text-center text-text-secondary col-span-full">Loading your purchased products...</p>
-        </div>
-      </div>
-    </div>
-  </div>
-
-</div>
-</div>
-
-<div id="news-modal" class="modal hidden">
-<div class="modal-content max-w-2xl">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-orbitron font-bold text-accent-purple">NEWS DETAILS</h2>
-    <button onclick="closeModal('news-modal')" class="text-text-secondary hover:text-accent-red">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div id="news-modal-content">
-    </div>
-</div>
-</div>
-
-<div id="payment-modal" class="modal hidden">
-<div class="modal-content max-w-md">
-  <div class="flex justify-between items-center mb-4">
-    <h2 class="text-xl font-orbitron font-bold text-accent-purple">MAKE PAYMENT</h2>
-    <button onclick="closeModal('payment-modal')" class="text-text-secondary hover:text-accent-red">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div id="payment-modal-content" class="space-y-4">
-    </div>
-</div>
-</div>
-
-
-<div id="confirm-modal" class="modal hidden">
-<div class="modal-content max-w-md">
-  <div class="text-center">
-    <i class="fas fa-exclamation-triangle text-4xl text-accent-red mb-4"></i>
-    <h3 id="confirm-title" class="text-xl font-orbitron font-bold text-text-primary mb-4">ARE YOU SURE?</h3>
-    <p id="confirm-message" class="text-text-secondary mb-6">This action cannot be undone.</p>
-    <div class="flex space-x-4">
-      <button onclick="closeConfirmModal()" class="myanmar-btn flex-1">
-        <i class="fas fa-times mr-2"></i>
-        CANCEL
-      </button>
-      <button id="confirm-action-btn" onclick="confirmAction()" class="btn-danger myanmar-btn flex-1">
-        <i class="fas fa-check mr-2"></i>
-        CONFIRM
-      </button>
-    </div>
-  </div>
-</div>
-</div>
-
-<div id="loading-overlay" class="fixed inset-0 loading-overlay flex items-center justify-center z-50 hidden">
-<div class="app-card p-8 text-center">
-  <div class="loading-spinner mx-auto mb-4" style="width: 40px; height: 40px;"></div>
-  <p class="text-text-primary font-semibold">PROCESSING...</p>
-</div>
-</div>
-
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2.45.4/dist/umd/supabase.min.js"></script>
-<script>
-// ===================================================================================
-// CONFIGURATION
-// ===================================================================================
-const CONFIG = {
-  SUPABASE_URL: 'https://rliwdosxsbauwxkayjoa.supabase.co',
-  SUPABASE_ANON_KEY: 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4',
-};
-
-// ===================================================================================
-// STATE MANAGEMENT
-// ===================================================================================
-let state = {
-  supabase: null,
-  isAuthenticated: false,
-  currentSection: 'home',
-  isConnected: false,
-  confirmCallback: null,
-  userProfile: null, // Stores current user's complete profile data from user_login
-  keyInfo: null, // Stores key info when profile creation is needed
-  realtimeChannels: [],
-  selectedPurchase: { // Holds info for the current purchase process
-      type: 'admin_product',
-      product: null,
-      paymentMethodId: null
-  }
-};
-
-// ===================================================================================
-// UTILITY FUNCTIONS
-// ===================================================================================
-const utils = {
-    formatPrice: (price) => `${parseFloat(price || 0).toFixed(2)} MMK`,
-    showLoading: (show) => {
-        document.getElementById('loading-overlay').classList.toggle('hidden', !show);
-    },
-    showNotification: (message, type = 'info', duration = 5000) => {
-        const container = document.getElementById('notification-container');
-        const notification = document.createElement('div');
-        const colors = { success: 'bg-green-600', error: 'bg-red-600', info: 'bg-blue-600', warning: 'bg-yellow-600' };
-        const icons = { success: 'fa-check-circle', error: 'fa-exclamation-triangle', info: 'fa-info-circle', warning: 'fa-exclamation-circle' };
-        notification.className = `notification ${colors[type]}`;
-        notification.innerHTML = `<div class="flex items-center justify-between"><div class="flex items-center"><i class="fas ${icons[type]} mr-2"></i><span>${message}</span></div><button onclick="this.parentElement.parentElement.remove()" class="ml-4"><i class="fas fa-times"></i></button></div>`;
-        container.appendChild(notification);
-        setTimeout(() => { if(notification.parentElement) notification.remove() }, duration);
-    },
-    updateConnectionStatus: (status) => {
-        const el = document.getElementById('connection-status');
-        el.className = 'connection-status';
-        if (status === 'online') {
-            el.classList.add('status-online');
-            el.innerHTML = '<i class="fas fa-check-circle"></i> ONLINE';
-        } else if (status === 'offline') {
-            el.classList.add('status-offline');
-            el.innerHTML = '<i class="fas fa-exclamation-triangle"></i> OFFLINE';
-        } else {
-            el.classList.add('status-connecting');
-            el.innerHTML = '<i class="fas fa-spinner fa-spin"></i> ချိတ်ဆက်နေသည်...';
-        }
-    }
-};
-
-// ===================================================================================
-// INITIALIZATION
-// ===================================================================================
-document.addEventListener('DOMContentLoaded', initializeApp);
-
-async function initializeApp() {
-    utils.updateConnectionStatus('connecting');
-    try {
-        if (!CONFIG.SUPABASE_URL || !CONFIG.SUPABASE_ANON_KEY) throw new Error('Supabase URL or Key is missing!');
-        
-        state.supabase = supabase.createClient(CONFIG.SUPABASE_URL, CONFIG.SUPABASE_ANON_KEY);
-        
-        const { error } = await state.supabase.from('about').select('id').limit(1);
-        if (error && error.code !== 'PGRST116') throw error;
-
-        utils.updateConnectionStatus('online');
-        utils.showNotification('Database connected successfully!', 'success');
-        state.isConnected = true;
-        
-        const storedKey = localStorage.getItem('user_key');
-        if (storedKey) {
-            document.getElementById('login-key').value = storedKey;
-            userLogin(true); // Silent login attempt
-        }
-    } catch (error) {
-        console.error('Initialization Error:', error);
-        utils.updateConnectionStatus('offline');
-        utils.showNotification(`Connection failed: ${error.message}`, 'error');
-    }
-    document.getElementById('login-key').addEventListener('keypress', (e) => e.key === 'Enter' && userLogin());
-}
-
-// ===================================================================================
-// AUTHENTICATION
-// ===================================================================================
-async function userLogin(isSilent = false) {
-    if (!state.isConnected) return utils.showNotification('Database not connected.', 'warning');
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MMR GAMING SHOP - Premium Gaming Platform</title>
     
-    const loginKey = document.getElementById('login-key').value.trim();
-    if (!loginKey) return utils.showNotification('Please enter a key.', 'warning');
+    <!-- CDN Libraries -->
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@300;400;500;600;700;800;900&family=Orbitron:wght@400;700;900&family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <style>
+        :root {
+            --primary: #667eea;
+            --secondary: #764ba2;
+            --accent: #f093fb;
+            --dark: #1a1a2e;
+            --darker: #16213e;
+            --darkest: #0f3460;
+            --glass-bg: rgba(255, 255, 255, 0.1);
+            --glass-border: rgba(255, 255, 255, 0.2);
+            --neon-blue: #00d4ff;
+            --neon-purple: #b721ff;
+            --neon-pink: #ff0080;
+            --gradient-1: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            --gradient-2: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            --gradient-3: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
+            --gradient-4: linear-gradient(135deg, #a8edea 0%, #fed6e3 100%);
+            --gradient-5: linear-gradient(135deg, #ff9a9e 0%, #fecfef 100%);
+            --shadow-neon: 0 0 20px rgba(102, 126, 234, 0.5);
+            --shadow-xl: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+        }
 
-    if (!isSilent) utils.showLoading(true);
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
 
-    try {
-        const { data, error } = await state.supabase.rpc('user_login', { input_key_text: loginKey });
-        
-        if (error) throw error;
-        
-        const result = data[0];
-        if (!result.success) throw new Error(result.message);
-        
-        localStorage.setItem('user_key', loginKey);
+        body {
+            font-family: 'Poppins', 'Noto Sans Myanmar', sans-serif;
+            background: linear-gradient(135deg, var(--dark) 0%, var(--darker) 50%, var(--darkest) 100%);
+            min-height: 100vh;
+            overflow-x: hidden;
+        }
 
-        if (result.needs_profile) {
-            state.keyInfo = result.user_data;
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('app-content').classList.add('hidden');
-            document.getElementById('profile-creation-section').classList.remove('hidden');
-            utils.showNotification(result.message, 'info');
-        } else {
-            state.isAuthenticated = true;
-            state.userProfile = result.user_data;
-            document.getElementById('login-section').classList.add('hidden');
-            document.getElementById('profile-creation-section').classList.add('hidden');
-            document.getElementById('app-content').classList.remove('hidden');
-            if (!isSilent) utils.showNotification(result.message, 'success');
+        /* OPPERGAMING Loading Animation */
+        .loading-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #0c0c0c 0%, #1a1a2e 50%, #16213e 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            z-index: 10000;
+            transition: all 1s ease-out;
+        }
+
+        .loading-text {
+            font-family: 'Orbitron', monospace;
+            font-size: 4.5rem;
+            font-weight: 900;
+            color: #ffffff;
+            text-shadow: 
+                0 0 10px var(--neon-blue),
+                0 0 20px var(--neon-blue),
+                0 0 30px var(--neon-blue),
+                0 0 40px var(--neon-blue);
+            margin-bottom: 2rem;
+            letter-spacing: 0.2em;
+        }
+
+        .loading-letter {
+            display: inline-block;
+            opacity: 0;
+            transform: translateY(100px) rotateX(90deg) scale(0.5);
+            animation: letterReveal 1.2s cubic-bezier(0.25, 0.46, 0.45, 0.94) forwards;
+            transform-origin: center bottom;
+            position: relative;
+        }
+
+        .loading-letter::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transform: translateX(-100%);
+            animation: shimmer 2s infinite 1s;
+        }
+
+        @keyframes letterReveal {
+            0% {
+                opacity: 0;
+                transform: translateY(100px) rotateX(90deg) scale(0.5);
+                filter: blur(20px);
+            }
+            40% {
+                opacity: 0.7;
+                transform: translateY(50px) rotateX(45deg) scale(0.8);
+                filter: blur(10px);
+            }
+            80% {
+                opacity: 0.9;
+                transform: translateY(-10px) rotateX(-5deg) scale(1.1);
+                filter: blur(2px);
+            }
+            100% {
+                opacity: 1;
+                transform: translateY(0) rotateX(0deg) scale(1);
+                filter: blur(0);
+            }
+        }
+
+        @keyframes shimmer {
+            0% { 
+                transform: translateX(-100%);
+                opacity: 0;
+            }
+            50% { 
+                opacity: 1;
+            }
+            100% { 
+                transform: translateX(100%);
+                opacity: 0;
+            }
+        }
+
+        .loading-subtitle {
+            font-size: 1.4rem;
+            color: rgba(255, 255, 255, 0.7);
+            margin-top: 1.5rem;
+            animation: pulse 2s infinite;
+            text-align: center;
+            letter-spacing: 0.1em;
+        }
+
+        .loading-progress {
+            width: 300px;
+            height: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 2px;
+            overflow: hidden;
+            margin-top: 2rem;
+            position: relative;
+        }
+
+        .loading-progress::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 0;
+            height: 100%;
+            background: var(--gradient-3);
+            border-radius: 2px;
+            animation: progressFill 3s ease-out forwards 2s;
+            box-shadow: 0 0 20px var(--neon-blue);
+        }
+
+        @keyframes progressFill {
+            to { width: 100%; }
+        }
+
+        /* Glass Morphism Effects */
+        .glass-morphism {
+            background: rgba(255, 255, 255, 0.05);
+            backdrop-filter: blur(25px);
+            -webkit-backdrop-filter: blur(25px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 25px;
+            box-shadow: 
+                0 8px 32px rgba(0, 0, 0, 0.3),
+                inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        }
+
+        .glass-card {
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            border-radius: 20px;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .glass-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(255, 255, 255, 0.1), transparent);
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            pointer-events: none;
+        }
+
+        .glass-card:hover {
+            transform: translateY(-8px) scale(1.02);
+            box-shadow: 
+                0 20px 60px rgba(0, 0, 0, 0.4),
+                0 0 30px rgba(102, 126, 234, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .glass-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Premium Buttons */
+        .btn-premium {
+            background: var(--gradient-1);
+            color: white;
+            border: none;
+            padding: 16px 32px;
+            border-radius: 50px;
+            font-weight: 600;
+            font-size: 1rem;
+            cursor: pointer;
+            transition: all 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            overflow: hidden;
+            box-shadow: 
+                0 10px 30px rgba(102, 126, 234, 0.4),
+                inset 0 1px 0 rgba(255, 255, 255, 0.2);
+        }
+
+        .btn-premium::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.6s ease;
+        }
+
+        .btn-premium:hover {
+            transform: translateY(-4px) scale(1.05);
+            box-shadow: 
+                0 20px 50px rgba(102, 126, 234, 0.6),
+                0 0 30px rgba(102, 126, 234, 0.5);
+        }
+
+        .btn-premium:hover::before {
+            left: 100%;
+        }
+
+        .btn-danger {
+            background: var(--gradient-2);
+            box-shadow: 0 10px 30px rgba(245, 87, 108, 0.4);
+        }
+
+        .btn-success {
+            background: linear-gradient(135deg, #4ade80 0%, #22c55e 100%);
+            box-shadow: 0 10px 30px rgba(74, 222, 128, 0.4);
+        }
+
+        /* Modern Form Controls */
+        .form-control-premium {
+            width: 100%;
+            padding: 18px 24px;
+            border: 2px solid rgba(255, 255, 255, 0.1);
+            border-radius: 16px;
+            background: rgba(255, 255, 255, 0.05);
+            color: white;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            font-family: inherit;
+        }
+
+        .form-control-premium:focus {
+            outline: none;
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: 
+                0 0 0 4px rgba(102, 126, 234, 0.2),
+                0 10px 30px rgba(0, 0, 0, 0.1);
+            transform: translateY(-2px);
+        }
+
+        .form-control-premium::placeholder {
+            color: rgba(255, 255, 255, 0.5);
+        }
+
+        /* Neon Effects */
+        .neon-text {
+            color: #ffffff;
+            text-shadow: 
+                0 0 5px var(--neon-blue),
+                0 0 10px var(--neon-blue),
+                0 0 15px var(--neon-blue),
+                0 0 20px var(--neon-blue);
+            animation: neonPulse 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes neonPulse {
+            from {
+                text-shadow: 
+                    0 0 5px var(--neon-blue),
+                    0 0 10px var(--neon-blue),
+                    0 0 15px var(--neon-blue),
+                    0 0 20px var(--neon-blue);
+            }
+            to {
+                text-shadow: 
+                    0 0 3px var(--neon-blue),
+                    0 0 7px var(--neon-blue),
+                    0 0 12px var(--neon-blue),
+                    0 0 17px var(--neon-blue);
+            }
+        }
+
+        /* Floating Animation */
+        .floating {
+            animation: floating 3s ease-in-out infinite;
+        }
+
+        @keyframes floating {
+            0%, 100% { 
+                transform: translateY(0px);
+            }
+            50% { 
+                transform: translateY(-20px);
+            }
+        }
+
+        /* Sidebar Modern */
+        .sidebar-modern {
+            position: fixed;
+            left: -400px;
+            top: 0;
+            width: 400px;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.95);
+            backdrop-filter: blur(30px);
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            z-index: 9998;
+            border-right: 1px solid rgba(255, 255, 255, 0.1);
+            box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+        }
+
+        .sidebar-modern.active {
+            left: 0;
+        }
+
+        .sidebar-item {
+            display: flex;
+            align-items: center;
+            padding: 20px 30px;
+            color: rgba(255, 255, 255, 0.7);
+            text-decoration: none;
+            transition: all 0.3s ease;
+            border-radius: 15px;
+            margin: 8px 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .sidebar-item::before {
+            content: '';
+            position: absolute;
+            left: 0;
+            top: 0;
+            width: 0;
+            height: 100%;
+            background: var(--gradient-1);
+            transition: width 0.4s ease;
+            z-index: -1;
+        }
+
+        .sidebar-item:hover,
+        .sidebar-item.active {
+            color: white;
+            transform: translateX(10px);
+        }
+
+        .sidebar-item:hover::before,
+        .sidebar-item.active::before {
+            width: 100%;
+        }
+
+        /* Modal Modern */
+        .modal-premium {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            backdrop-filter: blur(10px);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 9999;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .modal-premium.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        .modal-content {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(30px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 30px;
+            padding: 40px;
+            max-width: 90vw;
+            max-height: 90vh;
+            overflow-y: auto;
+            transform: scale(0.8) translateY(50px);
+            transition: transform 0.4s ease;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+        }
+
+        .modal-premium.active .modal-content {
+            transform: scale(1) translateY(0);
+        }
+
+        /* Product Card Premium */
+        .product-card {
+            background: rgba(255, 255, 255, 0.06);
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.1);
+            border-radius: 20px;
+            overflow: hidden;
+            transition: all 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            position: relative;
+            cursor: pointer;
+        }
+
+        .product-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            z-index: 1;
+            pointer-events: none;
+        }
+
+        .product-card:hover {
+            transform: translateY(-15px) rotateX(5deg);
+            box-shadow: 
+                0 30px 80px rgba(0, 0, 0, 0.4),
+                0 0 40px rgba(102, 126, 234, 0.3);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .product-card:hover::before {
+            opacity: 1;
+        }
+
+        /* Notifications */
+        .notification {
+            position: fixed;
+            top: 30px;
+            right: 30px;
+            z-index: 10001;
+            padding: 20px 30px;
+            border-radius: 20px;
+            color: white;
+            font-weight: 600;
+            backdrop-filter: blur(20px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            animation: slideInNotification 0.5s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+            max-width: 400px;
+        }
+
+        .notification-success { background: linear-gradient(135deg, #4ade80, #22c55e); }
+        .notification-error { background: linear-gradient(135deg, #ef4444, #dc2626); }
+        .notification-warning { background: linear-gradient(135deg, #f59e0b, #d97706); }
+        .notification-info { background: linear-gradient(135deg, #3b82f6, #1d4ed8); }
+
+        @keyframes slideInNotification {
+            from { 
+                transform: translateX(400px) rotateY(30deg);
+                opacity: 0;
+            }
+            to { 
+                transform: translateX(0) rotateY(0deg);
+                opacity: 1;
+            }
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 600;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        .status-pending { 
+            background: rgba(245, 158, 11, 0.2);
+            color: #f59e0b;
+            border: 1px solid rgba(245, 158, 11, 0.3);
+        }
+
+        .status-approved { 
+            background: rgba(34, 197, 94, 0.2);
+            color: #22c55e;
+            border: 1px solid rgba(34, 197, 94, 0.3);
+        }
+
+        .status-rejected { 
+            background: rgba(239, 68, 68, 0.2);
+            color: #ef4444;
+            border: 1px solid rgba(239, 68, 68, 0.3);
+        }
+
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .loading-text {
+                font-size: 2.5rem;
+            }
             
-            await state.supabase.rpc('set_current_user_key', { key_text: loginKey });
-            loadAllAppData();
-            setupRealtimeSubscriptions();
+            .sidebar-modern {
+                width: 320px;
+                left: -320px;
+            }
+            
+            .modal-content {
+                padding: 20px;
+                margin: 20px;
+                max-width: calc(100vw - 40px);
+            }
+            
+            .product-card:hover {
+                transform: translateY(-8px);
+            }
         }
 
-    } catch (error) {
-        console.error('Login Error:', error);
-        if (!isSilent) utils.showNotification(error.message, 'error');
-        userLogout(true); // silent logout to clear state
-    } finally {
-        if (!isSilent) utils.showLoading(false);
-    }
-}
-
-async function createProfile() {
-    const username = document.getElementById('profile-username').value.trim();
-    const displayName = document.getElementById('profile-display-name').value.trim();
-    const profilePictureFile = document.getElementById('profile-picture').files[0];
-
-    if (!username || !displayName) return utils.showNotification('Username and Display Name are required.', 'warning');
-
-    utils.showLoading(true);
-    try {
-        let profilePictureUrl = null;
-        if (profilePictureFile) {
-            const filePath = `profiles/${state.keyInfo.access_key_id}/${Date.now()}`;
-            const { error: uploadError } = await state.supabase.storage.from('profiles').upload(filePath, profilePictureFile);
-            if (uploadError) throw uploadError;
-            const { data: urlData } = state.supabase.storage.from('profiles').getPublicUrl(filePath);
-            profilePictureUrl = urlData.publicUrl;
+        @media (max-width: 480px) {
+            .loading-text {
+                font-size: 2rem;
+            }
+            
+            .btn-premium {
+                padding: 12px 24px;
+                font-size: 0.9rem;
+            }
         }
 
-        const { data, error } = await state.supabase.rpc('create_user_profile', {
-            p_access_key_text: state.keyInfo.key_text,
-            p_username: username,
-            p_display_name: displayName,
-            p_profile_picture: profilePictureUrl
-        });
-
-        if (error) throw error;
-
-        const result = data[0];
-        if (!result.success) throw new Error(result.message);
-
-        state.isAuthenticated = true;
-        state.userProfile = result.user_data;
-        document.getElementById('profile-creation-section').classList.add('hidden');
-        document.getElementById('app-content').classList.remove('hidden');
-        utils.showNotification('Profile created successfully!', 'success');
-        
-        await state.supabase.rpc('set_current_user_key', { key_text: state.keyInfo.key_text });
-        
-        loadAllAppData();
-        setupRealtimeSubscriptions();
-
-    } catch (error) {
-        console.error('Profile Creation Error:', error);
-        utils.showNotification(error.message, 'error');
-    } finally {
-        utils.showLoading(false);
-    }
-}
-
-function userLogout(isSilent = false) {
-    const performLogout = () => {
-        localStorage.removeItem('user_key');
-        state.isAuthenticated = false;
-        state.userProfile = null;
-        state.keyInfo = null;
-        state.realtimeChannels.forEach(channel => state.supabase.removeChannel(channel));
-        state.realtimeChannels = [];
-        
-        document.getElementById('app-content').classList.add('hidden');
-        document.getElementById('profile-creation-section').classList.add('hidden');
-        document.getElementById('login-section').classList.remove('hidden');
-        document.getElementById('login-key').value = '';
-        if (!isSilent) utils.showNotification('Logged out successfully!', 'info');
-    };
-    if (isSilent) {
-        performLogout();
-    } else {
-       showConfirmModal('Are you sure you want to logout?', performLogout);
-    }
-}
-
-// ===================================================================================
-// UI NAVIGATION & LAYOUT
-// ===================================================================================
-function showSection(section, buttonElement) {
-    document.querySelectorAll('.app-section').forEach(sec => sec.classList.add('hidden'));
-    document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-    
-    document.getElementById(`${section}-section`).classList.remove('hidden');
-    buttonElement.classList.add('active');
-    
-    state.currentSection = section;
-    loadSectionData(section);
-}
-
-function closeModal(modalId) {
-    document.getElementById(modalId).classList.add('hidden');
-}
-
-function showConfirmModal(message, callback, title = "ARE YOU SURE?") {
-    document.getElementById('confirm-title').textContent = title;
-    document.getElementById('confirm-message').textContent = message;
-    state.confirmCallback = callback;
-    document.getElementById('confirm-modal').classList.remove('hidden');
-}
-
-function closeConfirmModal() {
-    document.getElementById('confirm-modal').classList.add('hidden');
-    state.confirmCallback = null;
-}
-
-function confirmAction() {
-    if (typeof state.confirmCallback === 'function') {
-        state.confirmCallback();
-    }
-    closeConfirmModal();
-}
-
-// ===================================================================================
-// DATA LOADING
-// ===================================================================================
-function loadAllAppData() {
-    loadSectionData('home');
-    showSection('home', document.querySelector('.nav-btn'));
-}
-
-function loadSectionData(section) {
-    switch (section) {
-        case 'home': loadDashboardData(); break;
-        case 'news': loadNewsData(); break;
-        case 'products': loadAdminProducts(); break;
-        case 'chat': loadChatMessages(); break;
-        case 'support': loadSupportMessages(); break;
-        case 'about': loadAboutData(); break;
-        case 'mi':
-            loadMiProfile();
-            loadMyPurchasedAdminProducts();
-            break;
-    }
-}
-
-async function loadDashboardData() {
-    try {
-        const { data, error } = await state.supabase.rpc('get_dashboard_stats');
-        if (error) throw error;
-        const stats = data[0];
-        document.getElementById('total-downloads').textContent = stats.total_downloads || 0;
-        document.getElementById('available-products').textContent = stats.total_admin_products || 0;
-    } catch (e) {
-        console.error("Error loading dashboard stats:", e);
-    }
-}
-
-async function loadNewsData() {
-    const container = document.getElementById('news-list');
-    container.innerHTML = `<div class="loading-spinner mx-auto"></div>`;
-    try {
-        const { data, error } = await state.supabase.rpc('get_news_list', { p_limit: 20 });
-        if (error) throw error;
-        if (data && data.length > 0) {
-            container.innerHTML = data.map(news => `
-                <div class="news-card p-4">
-                    <h4 class="text-lg font-semibold text-accent-purple mb-1">${news.title}</h4>
-                    <p class="text-sm text-text-secondary">
-                        <i class="fas fa-calendar mr-1"></i> ${new Date(news.created_at).toLocaleDateString()}
-                    </p>
-                    <p class="text-text-secondary text-sm my-2">${news.content.substring(0, 100)}...</p>
-                    <button onclick="viewNewsDetails('${news.id}')" class="myanmar-btn btn-small">Read More</button>
-                </div>
-            `).join('');
-        } else {
-            container.innerHTML = `<p class="text-center text-text-secondary">No news available.</p>`;
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
         }
-    } catch (e) {
-        console.error("Error loading news:", e);
-        container.innerHTML = `<p class="text-center text-accent-red">Failed to load news.</p>`;
-    }
-}
 
-async function loadAdminProducts() {
-    const container = document.getElementById('products-list');
-    container.innerHTML = `<div class="loading-spinner mx-auto col-span-full"></div>`;
-    try {
-        const { data: products, error } = await state.supabase.rpc('get_admin_products');
-        if (error) throw error;
+        ::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 10px;
+        }
 
-        const { data: orders, error: orderError } = await state.supabase.from('orders').select('admin_product_id').eq('buyer_id', state.userProfile.id).eq('status', 'approved');
-        if (orderError) throw orderError;
-        const purchasedIds = orders.map(o => o.admin_product_id);
+        ::-webkit-scrollbar-thumb {
+            background: var(--gradient-1);
+            border-radius: 10px;
+        }
 
-        if (products && products.length > 0) {
-            container.innerHTML = products.map(p => {
-                const isPurchased = purchasedIds.includes(p.id);
-                return `
-                <div class="app-card p-4 text-center flex flex-col">
-                    <img src="${p.icon_url || 'https://via.placeholder.com/64'}" class="w-16 h-16 mx-auto mb-2 object-contain">
-                    <h3 class="font-semibold">${p.product_name}</h3>
-                    <p class="text-accent-green font-bold text-lg my-2">${p.price > 0 ? utils.formatPrice(p.price) : 'FREE'}</p>
-                    <div class="mt-auto w-full">
-                    ${isPurchased || p.price <= 0 ? 
-                        `<a href="${p.file_url}" target="_blank" download class="myanmar-btn w-full block"><i class="fas fa-download mr-2"></i>DOWNLOAD</a>` :
-                        `<button onclick="initiatePurchase('${p.id}')" class="myanmar-btn w-full"><i class="fas fa-shopping-cart mr-2"></i>PURCHASE</button>`
-                    }
+        ::-webkit-scrollbar-thumb:hover {
+            background: var(--gradient-2);
+        }
+
+        /* Utility Classes */
+        .hidden { display: none !important; }
+        
+        .fade-in { 
+            animation: fadeIn 0.8s ease-out;
+        }
+        
+        .slide-up { 
+            animation: slideUp 0.6s ease-out;
+        }
+
+        @keyframes fadeIn {
+            from { 
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to { 
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        @keyframes slideUp {
+            from { 
+                transform: translateY(100px);
+                opacity: 0;
+            }
+            to { 
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 9997;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .overlay.active {
+            opacity: 1;
+            visibility: visible;
+        }
+
+        /* Image Styles */
+        .image-premium {
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .image-premium:hover {
+            transform: scale(1.05);
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.4);
+        }
+
+        /* Loading States */
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-top: 2px solid #ffffff;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+
+        /* Social Icons */
+        .social-icon {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            color: white;
+            text-decoration: none;
+            transition: all 0.3s ease;
+            backdrop-filter: blur(10px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px) scale(1.1);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+        }
+
+        .social-icon.telegram { background: linear-gradient(135deg, #0088cc, #004466); }
+        .social-icon.youtube { background: linear-gradient(135deg, #ff0000, #cc0000); }
+        .social-icon.viber { background: linear-gradient(135deg, #665cac, #443388); }
+        .social-icon.wechat { background: linear-gradient(135deg, #7bb32e, #5a8822); }
+
+        /* File Upload Styling */
+        .file-upload {
+            position: relative;
+            display: inline-block;
+            cursor: pointer;
+        }
+
+        .file-upload input[type="file"] {
+            position: absolute;
+            opacity: 0;
+            width: 100%;
+            height: 100%;
+            cursor: pointer;
+        }
+
+        .file-upload-label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            border: 2px dashed rgba(255, 255, 255, 0.3);
+            border-radius: 15px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .file-upload:hover .file-upload-label {
+            border-color: var(--primary);
+            background: rgba(255, 255, 255, 0.1);
+            color: white;
+        }
+    </style>
+</head>
+<body>
+    <!-- OPPERGAMING Loading Screen -->
+    <div id="loadingScreen" class="loading-screen">
+        <div class="loading-text">
+            <span class="loading-letter" style="animation-delay: 0.1s;">O</span>
+            <span class="loading-letter" style="animation-delay: 0.2s;">P</span>
+            <span class="loading-letter" style="animation-delay: 0.3s;">P</span>
+            <span class="loading-letter" style="animation-delay: 0.4s;">E</span>
+            <span class="loading-letter" style="animation-delay: 0.5s;">R</span>
+            <span class="loading-letter" style="animation-delay: 0.6s;">G</span>
+            <span class="loading-letter" style="animation-delay: 0.7s;">A</span>
+            <span class="loading-letter" style="animation-delay: 0.8s;">M</span>
+            <span class="loading-letter" style="animation-delay: 0.9s;">I</span>
+            <span class="loading-letter" style="animation-delay: 1.0s;">N</span>
+            <span class="loading-letter" style="animation-delay: 1.1s;">G</span>
+        </div>
+        <div class="loading-subtitle">Premium Gaming Experience</div>
+        <div class="loading-progress"></div>
+    </div>
+
+    <!-- Main App Container -->
+    <div id="app" class="hidden min-h-screen">
+        <!-- Authentication Container -->
+        <div id="authContainer" class="min-h-screen flex items-center justify-center p-6">
+            <!-- Login Page -->
+            <div id="loginPage" class="w-full max-w-md">
+                <div class="glass-morphism p-10 fade-in floating">
+                    <div class="text-center mb-10">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-gamepad text-white text-3xl"></i>
+                        </div>
+                        <h1 class="text-4xl font-bold neon-text mb-4">MMR GAMING</h1>
+                        <p class="text-white text-opacity-80 text-lg">Premium Gaming Platform</p>
+                        <div class="w-20 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-4 rounded-full"></div>
                     </div>
-                </div>`;
-            }).join('');
-        } else {
-            container.innerHTML = `<p class="text-center text-text-secondary col-span-full">No admin products available.</p>`;
+                    
+                    <form id="loginForm" class="space-y-6">
+                        <div>
+                            <input type="email" id="loginEmail" class="form-control-premium" placeholder="Gmail လိပ်စာ" required>
+                        </div>
+                        <div>
+                            <input type="password" id="loginPassword" class="form-control-premium" placeholder="လျှို့ဝှက်နံပါတ်" required>
+                        </div>
+                        <button type="submit" class="btn-premium w-full text-lg py-4">
+                            <span id="loginBtnText">ဝင်ရောက်မည်</span>
+                            <i id="loginLoader" class="fas fa-spinner fa-spin hidden ml-3"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-8">
+                        <p class="text-white text-opacity-70">အကောင့်မရှိသေးလား? 
+                            <a href="#" id="showRegister" class="text-blue-300 hover:text-blue-100 font-semibold transition-colors">စာရင်းသွင်းမည်</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Register Page -->
+            <div id="registerPage" class="w-full max-w-md hidden">
+                <div class="glass-morphism p-10 fade-in floating">
+                    <div class="text-center mb-10">
+                        <div class="w-20 h-20 mx-auto mb-6 bg-gradient-to-br from-purple-500 to-pink-600 rounded-full flex items-center justify-center">
+                            <i class="fas fa-user-plus text-white text-3xl"></i>
+                        </div>
+                        <h1 class="text-4xl font-bold neon-text mb-4">MMR Gaming</h1>
+                        <p class="text-white text-opacity-80 text-lg">အကောင့်အသစ်ဖွင့်မည်</p>
+                        <div class="w-20 h-1 bg-gradient-to-r from-purple-500 to-pink-500 mx-auto mt-4 rounded-full"></div>
+                    </div>
+                    
+                    <form id="registerForm" class="space-y-6">
+                        <div>
+                            <input type="text" id="registerName" class="form-control-premium" placeholder="အမည်အပြည့်အစုံ" required>
+                        </div>
+                        <div>
+                            <input type="text" id="registerUsername" class="form-control-premium" placeholder="အသုံးပြုသူအမည်" required>
+                        </div>
+                        <div>
+                            <input type="email" id="registerEmail" class="form-control-premium" placeholder="Gmail လိပ်စာ" required>
+                        </div>
+                        <div>
+                            <input type="password" id="registerPassword" class="form-control-premium" placeholder="လျှို့ဝှက်နံပါတ်" required>
+                        </div>
+                        <div class="flex items-center">
+                            <input type="checkbox" id="agreeTerms" class="mr-3 w-5 h-5" required>
+                            <label for="agreeTerms" class="text-white text-opacity-80">စည်းမျဥ်းများကို လက်ခံပါသည်</label>
+                        </div>
+                        <button type="submit" class="btn-premium w-full text-lg py-4">
+                            <span id="registerBtnText">အကောင့်ဖွင့်မည်</span>
+                            <i id="registerLoader" class="fas fa-spinner fa-spin hidden ml-3"></i>
+                        </button>
+                    </form>
+                    
+                    <div class="text-center mt-8">
+                        <p class="text-white text-opacity-70">အကောင့်ရှိပြီးသားလား? 
+                            <a href="#" id="showLogin" class="text-purple-300 hover:text-purple-100 font-semibold transition-colors">ဝင်ရောက်မည်</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dashboard Container -->
+        <div id="dashboardContainer" class="hidden">
+            <!-- Header -->
+            <header class="glass-morphism m-4 p-6">
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center space-x-4">
+                        <button id="menuBtn" class="text-white hover:text-blue-300 transition-colors p-2">
+                            <i class="fas fa-bars text-2xl"></i>
+                        </button>
+                        <div class="flex items-center space-x-3">
+                            <div class="w-12 h-12 bg-gradient-to-br from-blue-500 to-purple-600 rounded-full flex items-center justify-center">
+                                <i class="fas fa-gamepad text-white text-xl"></i>
+                            </div>
+                            <h1 class="text-2xl font-bold neon-text">MMR GAMING SHOP</h1>
+                        </div>
+                    </div>
+                    <div class="flex items-center space-x-4">
+                        <div class="flex items-center space-x-3">
+                            <img id="userAvatar" class="w-12 h-12 rounded-full border-2 border-white shadow-lg cursor-pointer image-premium" 
+                                 src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2NjdlZWEiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" 
+                                 alt="Profile">
+                            <span id="headerUsername" class="text-white font-semibold hidden sm:block">User</span>
+                        </div>
+                        <button id="logoutBtn" class="btn-danger px-4 py-2 text-white rounded-xl font-medium transition-all hover:transform hover:scale-105">
+                            <i class="fas fa-sign-out-alt mr-2"></i>
+                            <span class="hidden sm:inline">ထွက်မည်</span>
+                        </button>
+                    </div>
+                </div>
+            </header>
+
+            <!-- Sidebar -->
+            <div class="sidebar-modern" id="sidebar">
+                <div class="p-8">
+                    <div class="flex items-center mb-12">
+                        <img id="sidebarAvatar" class="w-16 h-16 rounded-full border-3 border-blue-400 mr-4 image-premium" 
+                             src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2NjdlZWEiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" 
+                             alt="Profile">
+                        <div>
+                            <h3 id="sidebarUsername" class="font-bold text-white text-xl">User</h3>
+                            <p class="text-blue-300 text-sm">Premium Gamer</p>
+                        </div>
+                    </div>
+                    
+                    <nav class="space-y-3">
+                        <a href="#" class="sidebar-item active" data-page="home">
+                            <i class="fas fa-home w-6 text-xl mr-4"></i>
+                            <span class="text-lg">ပင်မစာမျက်နှာ</span>
+                        </a>
+                        <a href="#" class="sidebar-item" data-page="news">
+                            <i class="fas fa-newspaper w-6 text-xl mr-4"></i>
+                            <span class="text-lg">သတင်းများ</span>
+                        </a>
+                        <a href="#" class="sidebar-item" data-page="shop">
+                            <i class="fas fa-store w-6 text-xl mr-4"></i>
+                            <span class="text-lg">ဈေးကွက်</span>
+                        </a>
+                        <a href="#" class="sidebar-item" data-page="history">
+                            <i class="fas fa-history w-6 text-xl mr-4"></i>
+                            <span class="text-lg">ဝယ်ယူမှုမှတ်တမ်း</span>
+                        </a>
+                        <a href="#" class="sidebar-item" data-page="profile">
+                            <i class="fas fa-user w-6 text-xl mr-4"></i>
+                            <span class="text-lg">ကိုယ်ရေးကိုယ်တာ</span>
+                        </a>
+                        <a href="#" class="sidebar-item" data-page="about">
+                            <i class="fas fa-info-circle w-6 text-xl mr-4"></i>
+                            <span class="text-lg">အကြောင်းအရာ</span>
+                        </a>
+                    </nav>
+                </div>
+            </div>
+
+            <!-- Overlay -->
+            <div class="overlay" id="overlay"></div>
+
+            <!-- Main Content -->
+            <main class="p-6">
+                <!-- Home Page -->
+                <div id="homePage" class="page fade-in">
+                    <h2 class="text-4xl font-bold text-white mb-10 text-center neon-text">Featured Games</h2>
+                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-8" id="productGrid">
+                        <!-- Sample Products -->
+                        <div class="product-card">
+                            <div class="relative">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMzAwIiBoZWlnaHQ9IjIwMCIgdmlld0JveD0iMCAwIDMwMCAyMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIzMDAiIGhlaWdodD0iMjAwIiBmaWxsPSIjNjY3ZWVhIi8+Cjx0ZXh0IHg9IjE1MCIgeT0iMTAwIiB0ZXh0LWFuY2hvcj0ibWlkZGxlIiBmaWxsPSJ3aGl0ZSIgZm9udC1zaXplPSIyMCIgZm9udC1mYW1pbHk9IkFyaWFsIj5HYW1lIEljb248L3RleHQ+Cjwvc3ZnPgo=" 
+                                     class="w-full h-48 object-cover" alt="Game">
+                                <div class="absolute top-4 right-4">
+                                    <span class="status-badge status-approved">လက်ရှိရရှိ</span>
+                                </div>
+                            </div>
+                            <div class="p-6 relative z-10">
+                                <h3 class="text-white font-bold text-lg mb-2">Sample Game APK</h3>
+                                <p class="text-white text-opacity-70 text-sm mb-4">အရမ်းကောင်းတဲ့ Game လေးတခုပါ</p>
+                                <div class="flex items-center justify-between">
+                                    <span class="text-2xl font-bold text-white">၅၀၀၀ ကျပ်</span>
+                                    <button class="btn-premium px-4 py-2 text-sm">ဝယ်ယူမည်</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center col-span-full py-16">
+                            <i class="fas fa-gamepad text-6xl text-white text-opacity-50 mb-4 floating"></i>
+                            <p class="text-white text-opacity-70 text-xl">နောက်ထပ် Games များ မကြာမီ...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- News Page -->
+                <div id="newsPage" class="page hidden">
+                    <h2 class="text-4xl font-bold text-white mb-10 text-center neon-text">Gaming News</h2>
+                    <div class="space-y-8" id="newsGrid">
+                        <!-- Sample News -->
+                        <div class="glass-card p-8">
+                            <div class="flex items-start space-x-6">
+                                <img src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iMTUwIiBoZWlnaHQ9IjEwMCIgdmlld0JveD0iMCAwIDE1MCAxMDAiIGZpbGw9Im5vbmUiIHhtbG5zPSJodHRwOi8vd3d3LnczLm9yZy8yMDAwL3N2ZyI+CjxyZWN0IHdpZHRoPSIxNTAiIGhlaWdodD0iMTAwIiBmaWxsPSIjNzY0YmEyIi8+Cjx0ZXh0IHg9Ijc1IiB5PSI1NSIgdGV4dC1hbmNob3I9Im1pZGRsZSIgZmlsbD0id2hpdGUiIGZvbnQtc2l6ZT0iMTQiIGZvbnQtZmFtaWx5PSJBcmlhbCI+TmV3czwvdGV4dD4KPC9zdmc+Cg==" 
+                                     class="w-32 h-20 object-cover rounded-xl image-premium" alt="News">
+                                <div class="flex-1">
+                                    <h3 class="text-white font-bold text-xl mb-3">MMR Gaming Shop ကို မိတ်ဆက်ပါသည်!</h3>
+                                    <p class="text-white text-opacity-80 mb-4">မြန်မာနိုင်ငံအတွက် အကောင်းဆုံး Gaming Platform တခုဖြစ်ပါတယ်။ APK Games နှင့် Game Accounts များကို ဝယ်ယူနိုင်ပါသည်။</p>
+                                    <div class="flex items-center justify-between">
+                                        <span class="text-blue-300 text-sm">2024 ခုနှစ်</span>
+                                        <button class="btn-premium px-4 py-2 text-sm">ပိုမိုကြည့်ရှုမည်</button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="text-center py-16">
+                            <i class="fas fa-newspaper text-6xl text-white text-opacity-50 mb-4 floating"></i>
+                            <p class="text-white text-opacity-70 text-xl">နောက်ထပ် သတင်းများ မကြာမီ...</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Shop Page -->
+                <div id="shopPage" class="page hidden">
+                    <h2 class="text-4xl font-bold text-white mb-10 text-center neon-text">Become a Seller</h2>
+                    <div id="sellerContent">
+                        <!-- KYC Not Started -->
+                        <div id="kycNotStarted" class="flex items-center justify-center min-h-96">
+                            <div class="glass-morphism p-12 text-center max-w-2xl">
+                                <i class="fas fa-store text-8xl text-blue-300 mb-8 floating"></i>
+                                <h3 class="text-3xl font-bold text-white mb-6">ရောင်းချသူဖြစ်လိုသလား?</h3>
+                                <p class="text-white text-opacity-80 mb-8 text-lg leading-relaxed">
+                                    KYC verification ပြုလုပ်ပီး ကျွန်တော်တို့ရဲ့ platform မှာ သင့်ရဲ့ games တွေကို ရောင်းချနိုင်ပါသည်။ 
+                                    ဝင်ငွေရရှိနိုင်ပီး Myanmar Gaming Community ကို အကူအညီပေးနိုင်ပါသည်။
+                                </p>
+                                <button id="startKycBtn" class="btn-premium text-xl px-10 py-4">
+                                    <i class="fas fa-id-card mr-3"></i>
+                                    KYC စတင်မည်
+                                </button>
+                            </div>
+                        </div>
+
+                        <!-- KYC Pending -->
+                        <div id="kycPending" class="hidden flex items-center justify-center min-h-96">
+                            <div class="glass-morphism p-12 text-center max-w-2xl">
+                                <i class="fas fa-clock text-8xl text-yellow-400 mb-8 floating"></i>
+                                <h3 class="text-3xl font-bold text-white mb-6">KYC စစ်ဆေးနေဆဲ</h3>
+                                <p class="text-white text-opacity-80 mb-8 text-lg leading-relaxed">
+                                    သင့်ရဲ့ KYC verification ကို admin တွေက စစ်ဆေးနေပါတယ်။ အတည်ပြုပြီးရင် seller features တွေကို သုံးနိုင်ပါပြီ။
+                                </p>
+                                <div class="status-badge status-pending text-lg px-6 py-3">စစ်ဆေးနေဆဲ</div>
+                            </div>
+                        </div>
+
+                        <!-- KYC Approved - Seller Dashboard -->
+                        <div id="sellerDashboard" class="hidden">
+                            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mb-10">
+                                <div class="glass-card p-8 text-center">
+                                    <i class="fas fa-box text-4xl text-blue-400 mb-4"></i>
+                                    <h3 class="text-xl font-bold text-white mb-2">ကုန်ပစ္စည်းများ</h3>
+                                    <p class="text-3xl font-bold text-white" id="sellerProductCount">0</p>
+                                </div>
+                                <div class="glass-card p-8 text-center">
+                                    <i class="fas fa-shopping-cart text-4xl text-green-400 mb-4"></i>
+                                    <h3 class="text-xl font-bold text-white mb-2">အမှာစာများ</h3>
+                                    <p class="text-3xl font-bold text-white" id="sellerOrderCount">0</p>
+                                </div>
+                                <div class="glass-card p-8 text-center">
+                                    <i class="fas fa-money-bill-wave text-4xl text-yellow-400 mb-4"></i>
+                                    <h3 class="text-xl font-bold text-white mb-2">ဝင်ငွေ</h3>
+                                    <p class="text-3xl font-bold text-white" id="sellerEarnings">0 ကျပ်</p>
+                                </div>
+                            </div>
+
+                            <div class="flex justify-between items-center mb-8">
+                                <h3 class="text-2xl font-bold text-white">ကျွန်တော့် ကုန်ပစ္စည်းများ</h3>
+                                <button id="addProductBtn" class="btn-premium px-6 py-3">
+                                    <i class="fas fa-plus mr-2"></i>
+                                    ကုန်ပစ္စည်းအသစ်ထည့်မည်
+                                </button>
+                            </div>
+
+                            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="sellerProducts">
+                                <div class="text-center py-16 col-span-full">
+                                    <i class="fas fa-plus-circle text-6xl text-white text-opacity-50 mb-4"></i>
+                                    <p class="text-white text-opacity-70 text-xl">ပထမဆုံး ကုန်ပစ္စည်းကို ထည့်ပါ</p>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- History Page -->
+                <div id="historyPage" class="page hidden">
+                    <h2 class="text-4xl font-bold text-white mb-10 text-center neon-text">Purchase History</h2>
+                    <div class="space-y-6" id="orderHistory">
+                        <div class="text-center py-16">
+                            <i class="fas fa-history text-6xl text-white text-opacity-50 mb-4 floating"></i>
+                            <p class="text-white text-opacity-70 text-xl">ဝယ်ယူမှုမှတ်တမ်း မရှိသေးပါ</p>
+                            <p class="text-white text-opacity-50">ပထမဆုံး ကုန်ပစ္စည်းကို ဝယ်ယူကြည့်ပါ</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Profile Page -->
+                <div id="profilePage" class="page hidden">
+                    <h2 class="text-4xl font-bold text-white mb-10 text-center neon-text">My Profile</h2>
+                    <div class="max-w-4xl mx-auto">
+                        <div class="glass-morphism p-10">
+                            <div class="text-center mb-10">
+                                <div class="relative inline-block">
+                                    <img id="profileImage" class="w-32 h-32 rounded-full border-4 border-white shadow-xl mx-auto image-premium" 
+                                         src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiM2NjdlZWEiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" 
+                                         alt="Profile">
+                                    <label for="profileImageUpload" class="absolute -bottom-2 -right-2 bg-blue-500 text-white rounded-full p-3 cursor-pointer hover:bg-blue-600 transition-all shadow-lg">
+                                        <i class="fas fa-camera"></i>
+                                    </label>
+                                    <input type="file" id="profileImageUpload" class="hidden" accept="image/*">
+                                </div>
+                            </div>
+                            
+                            <div class="grid md:grid-cols-2 gap-10">
+                                <!-- Profile Form -->
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-6">ကိုယ်ရေးကိုယ်တာအချက်အလက်</h3>
+                                    <form id="profileForm" class="space-y-6">
+                                        <div>
+                                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">အမည်အပြည့်အစုံ</label>
+                                            <input type="text" id="profileName" class="form-control-premium" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">အသုံးပြုသူအမည်</label>
+                                            <input type="text" id="profileUsername" class="form-control-premium" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">Gmail</label>
+                                            <input type="email" id="profileEmail" class="form-control-premium" required>
+                                        </div>
+                                        <div>
+                                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">လျှို့ဝှက်နံပါတ်အသစ်</label>
+                                            <input type="password" id="profilePassword" class="form-control-premium" placeholder="မပြောင်းလဲလိုပါက ဗလာထားပါ">
+                                        </div>
+                                        <button type="submit" class="btn-premium w-full text-lg py-4">
+                                            <i class="fas fa-save mr-3"></i>
+                                            အချက်အလက်များကို သိမ်းမည်
+                                        </button>
+                                    </form>
+                                </div>
+
+                                <!-- KYC Status -->
+                                <div>
+                                    <h3 class="text-2xl font-bold text-white mb-6">KYC အခြေအနေ</h3>
+                                    <div id="kycStatusCard" class="glass-card p-8">
+                                        <div class="text-center py-8">
+                                            <i class="fas fa-id-card text-6xl text-blue-300 mb-6 floating"></i>
+                                            <h4 class="text-xl font-bold text-white mb-4">KYC လုပ်ထုံးလုပ်နည်း</h4>
+                                            <p class="text-white text-opacity-80 mb-6">ရောင်းချသူဖြစ်ရန်အတွက် KYC စစ်ဆေးခြင်းပြုလုပ်ပါ</p>
+                                            <button id="kycBtn" class="btn-premium px-6 py-3">
+                                                <i class="fas fa-id-card mr-2"></i>
+                                                KYC စတင်မည်
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- About Page -->
+                <div id="aboutPage" class="page hidden">
+                    <h2 class="text-4xl font-bold text-white mb-10 text-center neon-text">About MMR Gaming</h2>
+                    <div class="max-w-6xl mx-auto">
+                        <div class="glass-morphism p-12">
+                            <div class="text-center mb-16">
+                                <i class="fas fa-gamepad text-8xl text-blue-300 mb-8 floating"></i>
+                                <h1 class="text-5xl font-bold neon-text mb-6">MMR GAMING SHOP</h1>
+                                <p class="text-white text-opacity-80 text-2xl mb-8">Premium Gaming Platform for Myanmar</p>
+                                <div class="w-32 h-1 bg-gradient-to-r from-blue-500 to-purple-500 mx-auto mt-6 rounded-full"></div>
+                            </div>
+                            
+                            <div class="text-white text-opacity-80 space-y-10 text-lg leading-relaxed">
+                                <p class="text-center text-2xl font-semibold">
+                                    မြန်မာနိုင်ငံအတွက် ရေးဆွဲထားသော Premium Gaming Platform တခုဖြစ်ပါသည်။
+                                </p>
+                                
+                                <div class="grid md:grid-cols-2 gap-12 mt-16">
+                                    <div class="glass-card p-8">
+                                        <h3 class="text-2xl font-bold text-white mb-6">
+                                            <i class="fas fa-star text-yellow-400 mr-4"></i>
+                                            ကျွန်တော်တို့ရဲ့ ဝန်ဆောင်မှုများ
+                                        </h3>
+                                        <ul class="space-y-4">
+                                            <li class="flex items-center">
+                                                <i class="fas fa-mobile-alt text-blue-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">APK Games & Applications</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-user-circle text-green-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">Game Accounts ရောင်းဝယ်ခြင်း</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-coins text-yellow-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">In-game Currency</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-headset text-purple-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">24/7 Customer Support</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    
+                                    <div class="glass-card p-8">
+                                        <h3 class="text-2xl font-bold text-white mb-6">
+                                            <i class="fas fa-shield-alt text-green-400 mr-4"></i>
+                                            ကျွန်တော်တို့ကို ဘာကြောင့်ရွေးချယ်ရမလဲ
+                                        </h3>
+                                        <ul class="space-y-4">
+                                            <li class="flex items-center">
+                                                <i class="fas fa-check-circle text-green-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">လုံခြုံသော ငွေကြေးအရောင်းအဝယ်</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-bolt text-yellow-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">လျင်မြန်သော ဝန်ဆောင်မှု</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-users text-blue-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">ယုံကြည်စိတ်ချရသော Community</span>
+                                            </li>
+                                            <li class="flex items-center">
+                                                <i class="fas fa-money-bill-wave text-green-400 mr-4 text-xl"></i>
+                                                <span class="text-lg">သင့်လျော်သော ဈေးနှုန်း</span>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            
+                            <div id="contactInfo" class="mt-16 p-8 glass-card">
+                                <h3 class="text-2xl font-bold text-white mb-8 text-center">ဆက်သွယ်ရန်</h3>
+                                <div class="grid md:grid-cols-2 gap-8">
+                                    <div class="space-y-4">
+                                        <div class="flex items-center">
+                                            <i class="fas fa-map-marker-alt text-red-400 mr-4 text-xl"></i>
+                                            <span class="text-lg">မြန်မာနိုင်ငံ</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-envelope text-blue-400 mr-4 text-xl"></i>
+                                            <span class="text-lg">contact@mmrgamingshop.com</span>
+                                        </div>
+                                        <div class="flex items-center">
+                                            <i class="fas fa-phone text-green-400 mr-4 text-xl"></i>
+                                            <span class="text-lg">09-XXX-XXX-XXX</span>
+                                        </div>
+                                    </div>
+                                    <div class="flex justify-center space-x-6">
+                                        <a href="#" class="social-icon telegram">
+                                            <i class="fab fa-telegram text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="social-icon youtube">
+                                            <i class="fab fa-youtube text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="social-icon viber">
+                                            <i class="fab fa-viber text-2xl"></i>
+                                        </a>
+                                        <a href="#" class="social-icon wechat">
+                                            <i class="fab fa-weixin text-2xl"></i>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+
+        <!-- Modals -->
+        <!-- Product Detail Modal -->
+        <div id="productModal" class="modal-premium">
+            <div class="modal-content max-w-4xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold text-white neon-text">ကုန်ပစ္စည်းအသေးစိတ်</h3>
+                    <button class="modal-close text-white hover:text-red-300 transition-colors">
+                        <i class="fas fa-times text-3xl"></i>
+                    </button>
+                </div>
+                <div id="productModalContent">
+                    <!-- Product details will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- Purchase Modal -->
+        <div id="purchaseModal" class="modal-premium">
+            <div class="modal-content max-w-2xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold text-white neon-text">ဝယ်ယူမည်</h3>
+                    <button class="modal-close text-white hover:text-red-300 transition-colors">
+                        <i class="fas fa-times text-3xl"></i>
+                    </button>
+                </div>
+                <div id="purchaseModalContent">
+                    <!-- Purchase form will be loaded here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- KYC Modal -->
+        <div id="kycModal" class="modal-premium">
+            <div class="modal-content max-w-4xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold text-white neon-text">KYC Verification</h3>
+                    <button class="modal-close text-white hover:text-red-300 transition-colors">
+                        <i class="fas fa-times text-3xl"></i>
+                    </button>
+                </div>
+                <form id="kycForm" class="space-y-8">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">အမည်အပြည့်အစုံ</label>
+                            <input type="text" name="fullName" class="form-control-premium" required>
+                        </div>
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">မွေးသက္ကရာဇ်</label>
+                            <input type="date" name="dateOfBirth" class="form-control-premium" required>
+                        </div>
+                    </div>
+                    
+                    <div>
+                        <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">မှတ်ပုံတင်အမျိုးအစား</label>
+                        <select name="documentType" class="form-control-premium" required>
+                            <option value="">ရွေးချယ်ပါ</option>
+                            <option value="nrc">မှတ်ပုံတင်</option>
+                            <option value="passport">နိုင်ငံကူးလက်မှတ်</option>
+                        </select>
+                    </div>
+
+                    <div id="nrcFields" class="hidden grid md:grid-cols-3 gap-4">
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">ပြည်နယ်/တိုင်း</label>
+                            <input type="text" name="nrcState" class="form-control-premium" placeholder="၁၂">
+                        </div>
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">မြို့နယ်</label>
+                            <input type="text" name="nrcTownship" class="form-control-premium" placeholder="ဗဟန">
+                        </div>
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">နံပါတ်</label>
+                            <input type="text" name="nrcNumber" class="form-control-premium" placeholder="123456">
+                        </div>
+                    </div>
+
+                    <div id="passportFields" class="hidden">
+                        <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">နိုင်ငံကူးလက်မှတ်နံပါတ်</label>
+                        <input type="text" name="passportNumber" class="form-control-premium" placeholder="MA1234567">
+                    </div>
+
+                    <div>
+                        <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">လိပ်စာအပြည့်အစုံ</label>
+                        <textarea name="address" rows="3" class="form-control-premium" required></textarea>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="file-upload">
+                            <input type="file" name="documentFront" accept="image/*" required>
+                            <div class="file-upload-label">
+                                <i class="fas fa-upload text-2xl mr-3"></i>
+                                <span>မှတ်ပုံတင် ရှေ့ဘက်</span>
+                            </div>
+                        </div>
+                        <div class="file-upload">
+                            <input type="file" name="documentBack" accept="image/*">
+                            <div class="file-upload-label">
+                                <i class="fas fa-upload text-2xl mr-3"></i>
+                                <span>မှတ်ပုံတင် နောက်ဘက်</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="file-upload">
+                        <input type="file" name="selfieWithDocument" accept="image/*" required>
+                        <div class="file-upload-label">
+                            <i class="fas fa-camera text-2xl mr-3"></i>
+                            <span>မှတ်ပုံတင်နှင့်အတူ Selfie ပုံ</span>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4 pt-8 border-t border-white border-opacity-20">
+                        <button type="button" class="modal-close px-8 py-4 bg-gray-600 text-white rounded-xl font-medium hover:bg-gray-700">
+                            မလုပ်တော့ပါ
+                        </button>
+                        <button type="submit" class="btn-premium px-8 py-4">
+                            <span id="kycSubmitText">KYC တင်သွင်းမည်</span>
+                            <i id="kycSubmitLoader" class="fas fa-spinner fa-spin hidden ml-3"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <!-- Add Product Modal -->
+        <div id="addProductModal" class="modal-premium">
+            <div class="modal-content max-w-4xl">
+                <div class="flex justify-between items-center mb-8">
+                    <h3 class="text-3xl font-bold text-white neon-text">ကုန်ပစ္စည်းအသစ်ထည့်မည်</h3>
+                    <button class="modal-close text-white hover:text-red-300 transition-colors">
+                        <i class="fas fa-times text-3xl"></i>
+                    </button>
+                </div>
+                <form id="addProductForm" class="space-y-8">
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">ကုန်ပစ္စည်းအမည်</label>
+                            <input type="text" name="name" class="form-control-premium" required>
+                        </div>
+                        <div>
+                            <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">အမျိုးအစား</label>
+                            <select name="productType" class="form-control-premium" required>
+                                <option value="">ရွေးချယ်ပါ</option>
+                                <option value="apk">APK ဖိုင်</option>
+                                <option value="game_account">Game Account</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div>
+                        <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">စျေးနှုန်း (MMK)</label>
+                        <input type="number" name="price" class="form-control-premium" min="0" required>
+                    </div>
+
+                    <div>
+                        <label class="block text-white text-opacity-80 mb-3 text-lg font-semibold">ဖော်ပြချက်</label>
+                        <textarea name="description" rows="4" class="form-control-premium" required></textarea>
+                    </div>
+
+                    <div id="apkFileField" class="hidden">
+                        <div class="file-upload">
+                            <input type="file" name="apkFile" accept=".apk">
+                            <div class="file-upload-label">
+                                <i class="fas fa-android text-2xl mr-3"></i>
+                                <span>APK ဖိုင်ရွေးပါ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="grid md:grid-cols-2 gap-6">
+                        <div class="file-upload">
+                            <input type="file" name="iconImage" accept="image/*" required>
+                            <div class="file-upload-label">
+                                <i class="fas fa-image text-2xl mr-3"></i>
+                                <span>Icon ပုံ</span>
+                            </div>
+                        </div>
+                        <div class="file-upload">
+                            <input type="file" name="galleryImages" accept="image/*" multiple>
+                            <div class="file-upload-label">
+                                <i class="fas fa-images text-2xl mr-3"></i>
+                                <span>Gallery ပုံများ</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="flex justify-end space-x-4 pt-8 border-t border-white border-opacity-20">
+                        <button type="button" class="modal-close px-8 py-4 bg-gray-600 text-white rounded-xl font-medium hover:bg-gray-700">
+                            မလုပ်တော့ပါ
+                        </button>
+                        <button type="submit" class="btn-premium px-8 py-4">
+                            <span id="addProductSubmitText">ကုန်ပစ္စည်းထည့်မည်</span>
+                            <i id="addProductSubmitLoader" class="fas fa-spinner fa-spin hidden ml-3"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Supabase Configuration
+        const SUPABASE_URL = 'https://rliwdosxsbauwxkayjoa.supabase.co';
+        const SUPABASE_ANON_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJsaXdkb3N4c2JhdXd4a2F5am9hIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NTQxMDA2NjIsImV4cCI6MjA2OTY3NjY2Mn0.uDvU9eX3Cy--D9l6daGaO2QMpn1YnxMJYVlbaeIgHu4';
+        
+        let supabase;
+        let currentUser = null;
+        let userSession = null;
+
+        // Initialize Supabase (if configured)
+        if (SUPABASE_URL && SUPABASE_ANON_KEY && SUPABASE_URL !== 'YOUR_SUPABASE_URL') {
+            supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         }
-    } catch (e) {
-        console.error("Error loading admin products:", e);
-        container.innerHTML = `<p class="text-center text-accent-red col-span-full">Failed to load products.</p>`;
-    }
-}
 
-async function loadMiProfile() {
-    const p = state.userProfile;
-    if (!p) return;
-    document.getElementById('mi-profile-picture').src = p.profile_picture || 'https://via.placeholder.com/100';
-    document.getElementById('mi-display-name').textContent = p.display_name;
-    document.getElementById('mi-username').textContent = `@${p.username}`;
-    document.getElementById('mi-key-text').value = p.key_text;
-    document.getElementById('mi-account-status').value = p.account_status.toUpperCase();
-    document.getElementById('mi-account-status').className = `app-input w-full status-${p.account_status}`;
-}
+        // DOM Elements
+        const loadingScreen = document.getElementById('loadingScreen');
+        const app = document.getElementById('app');
+        const authContainer = document.getElementById('authContainer');
+        const dashboardContainer = document.getElementById('dashboardContainer');
+        const sidebar = document.getElementById('sidebar');
+        const overlay = document.getElementById('overlay');
+        const menuBtn = document.getElementById('menuBtn');
 
-async function loadMyPurchasedAdminProducts() {
-    const container = document.getElementById('my-purchased-products-list');
-    container.innerHTML = `<div class="loading-spinner mx-auto col-span-full"></div>`;
-    try {
-        const { data, error } = await state.supabase.rpc('get_user_orders', { p_user_id: state.userProfile.id, p_order_type: 'admin_product' });
-        if (error) throw error;
-        
-        const approvedOrders = data.filter(o => o.status === 'approved');
-
-        if (approvedOrders.length > 0) {
-            container.innerHTML = approvedOrders.map(o => `
-            <div class="app-card p-4">
-                <p class="font-semibold">${o.product_name}</p>
-                <p class="text-sm text-text-secondary">${utils.formatPrice(o.amount)} on ${new Date(o.created_at).toLocaleDateString()}</p>
-                <p class="text-accent-green font-bold">Status: ${o.status.toUpperCase()}</p>
-            </div>
-            `).join('');
-        } else {
-            container.innerHTML = `<p class="text-text-secondary col-span-full">You have not purchased any admin products yet.</p>`;
+        // Show notification
+        function showNotification(message, type = 'info') {
+            const notification = document.createElement('div');
+            notification.className = `notification notification-${type}`;
+            notification.innerHTML = `
+                <div class="flex items-center justify-between">
+                    <div class="flex items-center">
+                        <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'times-circle' : type === 'warning' ? 'exclamation-triangle' : 'info-circle'} mr-3"></i>
+                        <span>${message}</span>
+                    </div>
+                    <button onclick="this.parentElement.parentElement.remove()" class="ml-4 text-white hover:text-gray-300">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+            `;
+            document.body.appendChild(notification);
+            
+            setTimeout(() => {
+                if (notification.parentElement) {
+                    notification.remove();
+                }
+            }, 5000);
         }
-    } catch(e) {
-        console.error("Error loading purchased products:", e);
-        container.innerHTML = `<p class="text-accent-red col-span-full">Could not load purchases.</p>`;
-    }
-}
 
-async function loadAboutData() {
-    const container = document.getElementById('about-content');
-    container.innerHTML = `<div class="loading-spinner mx-auto"></div>`;
-    try {
-        const { data, error } = await state.supabase.rpc('get_about_info');
-        if (error) throw error;
-        const info = data[0];
-        container.innerHTML = `
-            <p><strong>Contact:</strong> ${info.contact_name}</p>
-            <p><strong>Phone:</strong> ${info.phone_number}</p>
-            <p><strong>Email:</strong> ${info.email}</p>
-            <div class="flex flex-wrap gap-4 mt-4">
-              ${info.telegram_link ? `<a href="${info.telegram_link}" class="myanmar-btn" target="_blank"><i class="fab fa-telegram mr-2"></i>Telegram</a>` : ''}
-              ${info.facebook_link ? `<a href="${info.facebook_link}" class="myanmar-btn" target="_blank"><i class="fab fa-facebook mr-2"></i>Facebook</a>` : ''}
-            </div>
-        `;
-    } catch (e) { container.innerHTML = `<p class="text-accent-red">Could not load about info.</p>`}
-}
+        // Loading Screen Animation
+        function hideLoadingScreen() {
+            setTimeout(() => {
+                loadingScreen.style.opacity = '0';
+                loadingScreen.style.transform = 'translateY(-100%)';
+                setTimeout(() => {
+                    loadingScreen.style.display = 'none';
+                    app.classList.remove('hidden');
+                    checkAuthStatus();
+                }, 1000);
+            }, 4000);
+        }
 
-async function loadChatMessages() {
-    const container = document.getElementById('chat-messages');
-    container.innerHTML = `<p class="text-center text-text-secondary">Chat feature is under development.</p>`;
-}
-async function loadSupportMessages() {
-    const container = document.getElementById('support-messages');
-    container.innerHTML = `<p class="text-center text-text-secondary">Support feature is under development.</p>`;
-}
+        // Authentication
+        function checkAuthStatus() {
+            // Check for stored user session
+            const storedUser = localStorage.getItem('mmr_user');
+            const storedSession = localStorage.getItem('mmr_session');
+            
+            if (storedUser && storedSession) {
+                currentUser = JSON.parse(storedUser);
+                userSession = storedSession;
+                showDashboard();
+            } else {
+                showAuth();
+            }
+        }
 
-// ===================================================================================
-// USER ACTIONS
-// ===================================================================================
-async function viewNewsDetails(newsId) {
-    utils.showLoading(true);
-    try {
-        await state.supabase.rpc('increment_news_views', { p_news_id: newsId });
-        const { data, error } = await state.supabase.from('news').select('*').eq('id', newsId).single();
-        if (error) throw error;
+        function showAuth() {
+            authContainer.classList.remove('hidden');
+            dashboardContainer.classList.add('hidden');
+        }
 
-        document.getElementById('news-modal-content').innerHTML = `
-            <h3 class="text-xl font-bold">${data.title}</h3>
-            <p class="text-sm text-text-secondary mb-4">Views: ${data.views}</p>
-            <p class="whitespace-pre-wrap">${data.content}</p>
-        `;
-        document.getElementById('news-modal').classList.remove('hidden');
-    } catch(e) {
-        utils.showNotification('Error fetching news details.', 'error');
-    } finally {
-        utils.showLoading(false);
-    }
-}
+        function showDashboard() {
+            authContainer.classList.add('hidden');
+            dashboardContainer.classList.remove('hidden');
+            updateUserInfo();
+            loadDashboardData();
+        }
 
-async function initiatePurchase(productId) {
-    utils.showLoading(true);
-    try {
-        const { data: product, error } = await state.supabase.from('admin_products').select('*').eq('id', productId).single();
-        if (error) throw error;
+        function updateUserInfo() {
+            if (currentUser) {
+                document.getElementById('headerUsername').textContent = currentUser.username || currentUser.name;
+                document.getElementById('sidebarUsername').textContent = currentUser.username || currentUser.name;
+                
+                // Update profile form
+                document.getElementById('profileName').value = currentUser.name || '';
+                document.getElementById('profileUsername').value = currentUser.username || '';
+                document.getElementById('profileEmail').value = currentUser.email || '';
+                
+                // Update avatars if profile image exists
+                if (currentUser.profile_image) {
+                    const avatars = ['userAvatar', 'sidebarAvatar', 'profileImage'];
+                    avatars.forEach(id => {
+                        const img = document.getElementById(id);
+                        if (img) img.src = currentUser.profile_image;
+                    });
+                }
+            }
+        }
 
-        state.selectedPurchase.product = product;
-        
-        const { data: methods, error: methodError } = await state.supabase.rpc('get_payment_methods');
-        if (methodError) throw methodError;
-        
-        const paymentModalContent = document.getElementById('payment-modal-content');
-        paymentModalContent.innerHTML = `
-            <h3 class="text-xl font-semibold">${product.product_name}</h3>
-            <p class="text-accent-green font-bold text-lg">${utils.formatPrice(product.price)}</p>
-            <h4 class="font-semibold mt-4">Select Payment Method</h4>
-            <div class="space-y-2">
-            ${methods.map(m => `
-                <label class="block p-2 border border-border-color rounded-md hover:bg-secondary-bg">
-                    <input type="radio" name="payment_method" value="${m.id}" onchange="state.selectedPurchase.paymentMethodId = '${m.id}'">
-                    <span class="ml-2">${m.method_name} (${m.account_info})</span>
-                     ${m.qr_code_image ? `<img src="${m.qr_code_image}" class="w-24 h-24 mt-2 rounded-md" alt="QR Code">` : ''}
-                </label>
-            `).join('')}
-            </div>
-            <label class="block mt-4">Upload Receipt</label>
-            <input type="file" id="receipt-upload" class="app-input w-full" accept="image/*">
-            <button onclick="submitPurchase()" class="myanmar-btn w-full mt-4">SUBMIT ORDER</button>
-        `;
-        document.getElementById('payment-modal').classList.remove('hidden');
-    } catch(e) {
-        utils.showNotification('Error preparing purchase.', 'error');
-        console.error(e);
-    } finally {
-        utils.showLoading(false);
-    }
-}
-
-async function submitPurchase() {
-    const { product, paymentMethodId } = state.selectedPurchase;
-    const receiptFile = document.getElementById('receipt-upload').files[0];
-
-    if (!paymentMethodId) return utils.showNotification('Please select a payment method.', 'warning');
-    if (!receiptFile) return utils.showNotification('Please upload a payment receipt.', 'warning');
-
-    utils.showLoading(true);
-    try {
-        const filePath = `receipts/${state.userProfile.id}/${Date.now()}`;
-        const { error: uploadError } = await state.supabase.storage.from('receipts').upload(filePath, receiptFile);
-        if (uploadError) throw uploadError;
-        const { data: urlData } = state.supabase.storage.from('receipts').getPublicUrl(filePath);
-
-        const { data, error } = await state.supabase.rpc('create_order_enhanced', {
-            p_buyer_id: state.userProfile.id,
-            p_order_type: 'admin_product',
-            p_product_id: product.id,
-            p_payment_method_id: paymentMethodId,
-            p_amount: product.price,
-            p_receipt_image: urlData.publicUrl
+        // Login Form
+        document.getElementById('loginForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const email = document.getElementById('loginEmail').value;
+            const password = document.getElementById('loginPassword').value;
+            const loginBtn = document.getElementById('loginBtnText');
+            const loginLoader = document.getElementById('loginLoader');
+            
+            // Show loading
+            loginBtn.textContent = 'စောင့်ပါ...';
+            loginLoader.classList.remove('hidden');
+            
+            try {
+                // Simulate login for demo
+                if (email && password) {
+                    // Mock user data
+                    currentUser = {
+                        id: 'user_123',
+                        name: 'Test User',
+                        username: 'testuser',
+                        email: email,
+                        kyc_status: 'pending',
+                        is_seller: false
+                    };
+                    
+                    userSession = 'mock_session_token';
+                    
+                    // Store in localStorage
+                    localStorage.setItem('mmr_user', JSON.stringify(currentUser));
+                    localStorage.setItem('mmr_session', userSession);
+                    
+                    showNotification('ဝင်ရောက်မှုအောင်မြင်ပါသည်!', 'success');
+                    showDashboard();
+                } else {
+                    throw new Error('Invalid credentials');
+                }
+            } catch (error) {
+                showNotification('Gmail သို့မဟုတ် Password မှားနေပါသည်', 'error');
+            } finally {
+                loginBtn.textContent = 'ဝင်ရောက်မည်';
+                loginLoader.classList.add('hidden');
+            }
         });
-        
-        if (error) throw error;
-        
-        const result = data[0];
-        if (!result.success) throw new Error(result.message);
-        
-        utils.showNotification('Order submitted successfully! It is now pending approval.', 'success');
-        closeModal('payment-modal');
-        loadAdminProducts();
 
-    } catch(e) {
-        console.error("Error submitting purchase:", e);
-        utils.showNotification(e.message, 'error');
-    } finally {
-        utils.showLoading(false);
-    }
-}
+        // Register Form
+        document.getElementById('registerForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const name = document.getElementById('registerName').value;
+            const username = document.getElementById('registerUsername').value;
+            const email = document.getElementById('registerEmail').value;
+            const password = document.getElementById('registerPassword').value;
+            const agreeTerms = document.getElementById('agreeTerms').checked;
+            
+            const registerBtn = document.getElementById('registerBtnText');
+            const registerLoader = document.getElementById('registerLoader');
+            
+            if (!agreeTerms) {
+                showNotification('စည်းမျဉ်းများကို လက်ခံရပါမည်', 'warning');
+                return;
+            }
+            
+            // Show loading
+            registerBtn.textContent = 'စောင့်ပါ...';
+            registerLoader.classList.remove('hidden');
+            
+            try {
+                // Simulate registration for demo
+                if (name && username && email && password) {
+                    showNotification('အကောင့်ဖွင့်ခြင်းအောင်မြင်ပါသည်! ကျေးဇူးပြု၍ Login ဝင်ပါ', 'success');
+                    showLoginPage();
+                } else {
+                    throw new Error('အချက်အလက်များ မပြည့်စုံပါ');
+                }
+            } catch (error) {
+                showNotification('အကောင့်ဖွင့်ရာတွင် ပြဿနာရှိပါသည်', 'error');
+            } finally {
+                registerBtn.textContent = 'အကောင့်ဖွင့်မည်';
+                registerLoader.classList.add('hidden');
+            }
+        });
 
-async function updateProfile() {
-    const newPicFile = document.getElementById('mi-new-profile-picture').files[0];
-    if(!newPicFile) {
-        utils.showNotification("Please select a new profile picture to update.", "info");
-        return;
-    }
-
-    utils.showLoading(true);
-    try {
-        let profilePictureUrl = state.userProfile.profile_picture;
-        if (newPicFile) {
-            const filePath = `profiles/${state.userProfile.id}/${Date.now()}`;
-            const { error: uploadError } = await state.supabase.storage.from('profiles').upload(filePath, newPicFile);
-            if (uploadError) throw uploadError;
-            const { data: urlData } = state.supabase.storage.from('profiles').getPublicUrl(filePath);
-            profilePictureUrl = urlData.publicUrl;
+        // Navigation
+        function showLoginPage() {
+            document.getElementById('loginPage').classList.remove('hidden');
+            document.getElementById('registerPage').classList.add('hidden');
         }
 
-        const { data, error } = await state.supabase.rpc('update_user_profile', {
-            p_user_id: state.userProfile.id,
-            p_profile_picture: profilePictureUrl
+        function showRegisterPage() {
+            document.getElementById('loginPage').classList.add('hidden');
+            document.getElementById('registerPage').classList.remove('hidden');
+        }
+
+        // Page Navigation
+        function showPage(pageId) {
+            // Hide all pages
+            document.querySelectorAll('.page').forEach(page => {
+                page.classList.add('hidden');
+            });
+            
+            // Show selected page
+            document.getElementById(pageId).classList.remove('hidden');
+            
+            // Update sidebar active state
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            document.querySelector(`[data-page="${pageId.replace('Page', '')}"]`).classList.add('active');
+            
+            // Close sidebar on mobile
+            closeSidebar();
+            
+            // Load page-specific data
+            loadPageData(pageId);
+        }
+
+        function loadPageData(pageId) {
+            switch(pageId) {
+                case 'homePage':
+                    loadProducts();
+                    break;
+                case 'newsPage':
+                    loadNews();
+                    break;
+                case 'shopPage':
+                    loadSellerPage();
+                    break;
+                case 'historyPage':
+                    loadOrderHistory();
+                    break;
+                case 'profilePage':
+                    loadProfileData();
+                    break;
+                case 'aboutPage':
+                    loadAboutPage();
+                    break;
+            }
+        }
+
+        function loadDashboardData() {
+            loadProducts();
+        }
+
+        // Sample data loading functions
+        function loadProducts() {
+            // This would normally fetch from your database
+            console.log('Loading products...');
+        }
+
+        function loadNews() {
+            console.log('Loading news...');
+        }
+
+        function loadSellerPage() {
+            if (currentUser && currentUser.kyc_status === 'approved') {
+                document.getElementById('kycNotStarted').classList.add('hidden');
+                document.getElementById('kycPending').classList.add('hidden');
+                document.getElementById('sellerDashboard').classList.remove('hidden');
+            } else if (currentUser && currentUser.kyc_status === 'pending') {
+                document.getElementById('kycNotStarted').classList.add('hidden');
+                document.getElementById('kycPending').classList.remove('hidden');
+                document.getElementById('sellerDashboard').classList.add('hidden');
+            } else {
+                document.getElementById('kycNotStarted').classList.remove('hidden');
+                document.getElementById('kycPending').classList.add('hidden');
+                document.getElementById('sellerDashboard').classList.add('hidden');
+            }
+        }
+
+        function loadOrderHistory() {
+            console.log('Loading order history...');
+        }
+
+        function loadProfileData() {
+            updateUserInfo();
+        }
+
+        function loadAboutPage() {
+            console.log('Loading about page...');
+        }
+
+        // Sidebar Functions
+        function toggleSidebar() {
+            sidebar.classList.toggle('active');
+            overlay.classList.toggle('active');
+        }
+
+        function closeSidebar() {
+            sidebar.classList.remove('active');
+            overlay.classList.remove('active');
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).classList.add('active');
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).classList.remove('active');
+        }
+
+        // Logout
+        function logout() {
+            localStorage.removeItem('mmr_user');
+            localStorage.removeItem('mmr_session');
+            currentUser = null;
+            userSession = null;
+            showNotification('ထွက်ခြင်းအောင်မြင်ပါသည်', 'success');
+            showAuth();
+        }
+
+        // Event Listeners
+        document.addEventListener('DOMContentLoaded', function() {
+            // Auth page switching
+            document.getElementById('showRegister').addEventListener('click', (e) => {
+                e.preventDefault();
+                showRegisterPage();
+            });
+            
+            document.getElementById('showLogin').addEventListener('click', (e) => {
+                e.preventDefault();
+                showLoginPage();
+            });
+            
+            // Sidebar navigation
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.addEventListener('click', (e) => {
+                    e.preventDefault();
+                    const page = e.currentTarget.dataset.page + 'Page';
+                    showPage(page);
+                });
+            });
+            
+            // Menu button
+            menuBtn.addEventListener('click', toggleSidebar);
+            overlay.addEventListener('click', closeSidebar);
+            
+            // Logout button
+            document.getElementById('logoutBtn').addEventListener('click', logout);
+            
+            // Modal close buttons
+            document.querySelectorAll('.modal-close').forEach(btn => {
+                btn.addEventListener('click', (e) => {
+                    e.target.closest('.modal-premium').classList.remove('active');
+                });
+            });
+            
+            // KYC buttons
+            document.querySelectorAll('#kycBtn, #startKycBtn').forEach(btn => {
+                btn.addEventListener('click', () => openModal('kycModal'));
+            });
+            
+            // Add product button
+            document.getElementById('addProductBtn')?.addEventListener('click', () => {
+                openModal('addProductModal');
+            });
+            
+            // Document type change
+            document.querySelector('select[name="documentType"]')?.addEventListener('change', (e) => {
+                const nrcFields = document.getElementById('nrcFields');
+                const passportFields = document.getElementById('passportFields');
+                
+                if (e.target.value === 'nrc') {
+                    nrcFields.classList.remove('hidden');
+                    passportFields.classList.add('hidden');
+                } else if (e.target.value === 'passport') {
+                    nrcFields.classList.add('hidden');
+                    passportFields.classList.remove('hidden');
+                } else {
+                    nrcFields.classList.add('hidden');
+                    passportFields.classList.add('hidden');
+                }
+            });
+            
+            // Product type change
+            document.querySelector('select[name="productType"]')?.addEventListener('change', (e) => {
+                const apkField = document.getElementById('apkFileField');
+                if (e.target.value === 'apk') {
+                    apkField.classList.remove('hidden');
+                } else {
+                    apkField.classList.add('hidden');
+                }
+            });
+            
+            // Start loading screen
+            hideLoadingScreen();
         });
-        if(error) throw error;
 
-        utils.showNotification("Profile updated successfully!", "success");
-        state.userProfile.profile_picture = profilePictureUrl;
-        loadMiProfile();
-
-    } catch(e) {
-        console.error("Error updating profile", e);
-        utils.showNotification("Failed to update profile.", "error");
-    } finally {
-        utils.showLoading(false);
-    }
-}
-
-async function sendChatMessage() {
-     utils.showNotification('Chat feature is under development.', 'info');
-}
-async function sendSupportMessage() {
-     utils.showNotification('Support feature is under development.', 'info');
-}
-
-
-// ===================================================================================
-// REALTIME SUBSCRIPTIONS
-// ===================================================================================
-function setupRealtimeSubscriptions() {
-    state.realtimeChannels.forEach(channel => state.supabase.removeChannel(channel));
-    state.realtimeChannels = [];
-    
-    const newsChannel = state.supabase.channel('public:news')
-        .on('postgres_changes', { event: '*', schema: 'public', table: 'news' }, payload => {
-            if (state.currentSection === 'news') loadNewsData();
-        }).subscribe();
-    state.realtimeChannels.push(newsChannel);
-
-    const productsChannel = state.supabase.channel('public:admin_products')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'admin_products' }, payload => {
-          if (state.currentSection === 'products') loadAdminProducts();
-          if (state.currentSection === 'home') loadDashboardData();
-      }).subscribe();
-    state.realtimeChannels.push(productsChannel);
-
-    const ordersChannel = state.supabase.channel('public:orders')
-      .on('postgres_changes', { event: '*', schema: 'public', table: 'orders', filter: `buyer_id=eq.${state.userProfile.id}` }, payload => {
-          if (state.currentSection === 'products') loadAdminProducts(); // to update purchase status
-          if (state.currentSection === 'mi') loadMyPurchasedAdminProducts();
-      }).subscribe();
-    state.realtimeChannels.push(ordersChannel);
-}
-</script>
+        // Mobile responsive adjustments
+        window.addEventListener('resize', () => {
+            if (window.innerWidth >= 768) {
+                closeSidebar();
+            }
+        });
+    </script>
 </body>
 </html>
