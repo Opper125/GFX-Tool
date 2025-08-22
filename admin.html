@@ -256,7 +256,6 @@
             border-radius: 20px;
             background: linear-gradient(145deg, rgba(59, 130, 246, 0.05), rgba(139, 92, 246, 0.05));
             transition: all 0.3s ease;
-            cursor: pointer;
         }
         
         .upload-area:hover {
@@ -264,163 +263,7 @@
             background: linear-gradient(145deg, rgba(59, 130, 246, 0.1), rgba(139, 92, 246, 0.1));
         }
         
-        .upload-area.dragover {
-            border-color: #3b82f6;
-            background: linear-gradient(145deg, rgba(59, 130, 246, 0.15), rgba(139, 92, 246, 0.15));
-            transform: scale(1.02);
-        }
-        
-        .file-preview {
-            margin-top: 15px;
-            display: flex;
-            flex-wrap: wrap;
-            gap: 10px;
-        }
-        
-        .file-preview-item {
-            position: relative;
-            background: rgba(59, 130, 246, 0.1);
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 10px;
-            padding: 10px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            color: #333;
-        }
-        
-        .file-preview-item .remove-file {
-            position: absolute;
-            right: -5px;
-            top: -5px;
-            background: #ef4444;
-            color: #fff;
-            border: none;
-            border-radius: 50%;
-            width: 20px;
-            height: 20px;
-            cursor: pointer;
-            font-size: 12px;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-        
-        .multi-file-upload {
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-        
-        .file-type-section {
-            border: 1px solid rgba(59, 130, 246, 0.3);
-            border-radius: 15px;
-            padding: 20px;
-            background: rgba(59, 130, 246, 0.05);
-        }
-        
-        .file-type-title {
-            color: #3b82f6;
-            font-weight: 600;
-            margin-bottom: 15px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        
-        .image-gallery {
-            display: grid;
-            grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
-            gap: 10px;
-            margin-top: 15px;
-        }
-        
-        .gallery-item {
-            position: relative;
-            aspect-ratio: 1;
-            border-radius: 10px;
-            overflow: hidden;
-            border: 2px solid rgba(59, 130, 246, 0.3);
-            cursor: pointer;
-        }
-        
-        .gallery-item img, .gallery-item video {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-        }
-        
         .hidden { display: none !important; }
-        
-        .responsive-table {
-            overflow-x: auto;
-        }
-        
-        /* Responsive Design */
-        @media (max-width: 768px) {
-            .sidebar {
-                position: fixed;
-                left: -280px;
-                top: 0;
-                width: 280px;
-                height: 100vh;
-                z-index: 1000;
-                transition: left 0.3s ease;
-            }
-            
-            .sidebar.active {
-                left: 0;
-            }
-            
-            .main-content {
-                margin-left: 0 !important;
-            }
-            
-            .stat-card {
-                margin-bottom: 15px;
-            }
-            
-            .form-input {
-                font-size: 16px; /* Prevent zoom on iOS */
-            }
-            
-            .modal-content {
-                width: 95%;
-                margin: 10px;
-                max-height: 90vh;
-                overflow-y: auto;
-            }
-            
-            .table-container {
-                max-height: 400px;
-            }
-            
-            .file-type-section {
-                padding: 15px;
-            }
-            
-            .image-gallery {
-                grid-template-columns: repeat(auto-fill, minmax(80px, 1fr));
-            }
-        }
-        
-        @media (max-width: 480px) {
-            .stat-card {
-                padding: 15px;
-            }
-            
-            .modal-content {
-                padding: 20px;
-            }
-            
-            .upload-area {
-                padding: 20px;
-            }
-            
-            .file-type-section {
-                padding: 10px;
-            }
-        }
     </style>
 </head>
 <body>
@@ -439,7 +282,7 @@
                 <div>
                     <label class="block text-sm font-semibold text-gray-700 mb-2">
                         <i class="fas fa-envelope mr-2 text-blue-500"></i>
-                        အီးမေးလ်
+                        အီးမေးလ်လိပ်စာ
                     </label>
                     <input type="email" id="adminEmail" required 
                            class="form-input w-full px-4 py-3" placeholder="admin@example.com">
@@ -451,11 +294,11 @@
                         စကားဝှက်
                     </label>
                     <input type="password" id="adminPassword" required 
-                           class="form-input w-full px-4 py-3" placeholder="စကားဝှက်">
+                           class="form-input w-full px-4 py-3" placeholder="••••••••">
                 </div>
                 
                 <button type="submit" class="w-full btn-primary py-3 rounded-xl font-semibold">
-                    <span id="loginBtnText">ဝင်ရောက်ရန်</span>
+                    <span id="loginBtnText">ဝင်ရောက်မည်</span>
                     <div id="loginLoading" class="loading-spinner hidden ml-2"></div>
                 </button>
             </form>
@@ -465,12 +308,9 @@
     <!-- Admin Dashboard -->
     <div id="adminDashboard" class="hidden">
         <!-- Header -->
-        <header class="glass-effect border-b border-white/20 sticky top-0 z-50">
+        <header class="glass-effect border-b border-white/20">
             <div class="flex items-center justify-between px-6 py-4">
                 <div class="flex items-center space-x-4">
-                    <button id="mobileMenuBtn" class="md:hidden text-white hover:text-gray-300">
-                        <i class="fas fa-bars text-xl"></i>
-                    </button>
                     <i class="fas fa-gamepad text-3xl text-white"></i>
                     <h1 class="text-2xl font-bold text-white">MMR GAMING SHOP - Admin</h1>
                 </div>
@@ -478,11 +318,11 @@
                 <div class="flex items-center space-x-4">
                     <div class="flex items-center space-x-2">
                         <div class="w-3 h-3 bg-green-400 rounded-full animate-pulse"></div>
-                        <span class="text-sm text-white/80 hidden sm:inline">အွန်လိုင်း</span>
+                        <span class="text-sm text-white/80">အွန်လိုင်း</span>
                     </div>
                     <button id="logoutBtn" class="flex items-center space-x-2 px-4 py-2 bg-red-500 hover:bg-red-600 text-white rounded-lg transition-all duration-300">
                         <i class="fas fa-sign-out-alt"></i>
-                        <span class="hidden sm:inline">ထွက်ရန်</span>
+                        <span>ထွက်မည်</span>
                     </button>
                 </div>
             </div>
@@ -490,11 +330,11 @@
 
         <div class="flex">
             <!-- Sidebar -->
-            <aside id="sidebar" class="sidebar w-64 min-h-screen p-4">
+            <aside class="sidebar w-64 min-h-screen p-4">
                 <nav class="space-y-2">
                     <a href="#" class="sidebar-item active flex items-center space-x-3 px-4 py-3 text-white" data-page="dashboard">
                         <i class="fas fa-tachometer-alt w-5"></i>
-                        <span>ပင်မစာမျက်နှာ</span>
+                        <span>ဒက်ရှ်ဘုတ်</span>
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 text-white" data-page="users">
                         <i class="fas fa-users w-5"></i>
@@ -506,11 +346,11 @@
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 text-white" data-page="orders">
                         <i class="fas fa-shopping-cart w-5"></i>
-                        <span>မှာယူမှုများ</span>
+                        <span>အမှာစာများ</span>
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 text-white" data-page="payments">
                         <i class="fas fa-credit-card w-5"></i>
-                        <span>ငွေပေးချေမှု</span>
+                        <span>ငွေပေးချေမှုများ</span>
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 text-white" data-page="kyc">
                         <i class="fas fa-id-card w-5"></i>
@@ -522,78 +362,75 @@
                     </a>
                     <a href="#" class="sidebar-item flex items-center space-x-3 px-4 py-3 text-white" data-page="about">
                         <i class="fas fa-info-circle w-5"></i>
-                        <span>အကြောင်း</span>
+                        <span>အကြောင်းအရာ</span>
                     </a>
                 </nav>
             </aside>
 
-            <!-- Mobile Overlay -->
-            <div id="mobileOverlay" class="md:hidden fixed inset-0 bg-black bg-opacity-50 z-40 hidden"></div>
-
             <!-- Main Content -->
-            <main class="flex-1 p-4 md:p-6 main-content" style="margin-left: 0;">
+            <main class="flex-1 p-6">
                 <!-- Dashboard Page -->
                 <div id="dashboardPage" class="page-content">
-                    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 md:gap-6 mb-8">
-                        <div class="stat-card p-4 md:p-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 mb-8">
+                        <div class="stat-card p-6">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-600">စုစုပေါင်း အသုံးပြုသူ</p>
-                                    <p id="totalUsers" class="text-2xl md:text-3xl font-bold text-gray-900">0</p>
+                                    <p class="text-sm font-medium text-gray-600">စုစုပေါင်း အသုံးပြုသူများ</p>
+                                    <p id="totalUsers" class="text-3xl font-bold text-gray-900">0</p>
                                 </div>
-                                <div class="w-10 h-10 md:w-12 md:h-12 bg-blue-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-users text-blue-600 text-lg md:text-xl"></i>
+                                <div class="w-12 h-12 bg-blue-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-users text-blue-600 text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="stat-card p-4 md:p-6">
+                        <div class="stat-card p-6">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-600">စုစုပေါင်း ကုန်ပစ္စည်း</p>
-                                    <p id="totalProducts" class="text-2xl md:text-3xl font-bold text-gray-900">0</p>
+                                    <p class="text-sm font-medium text-gray-600">စုစုပေါင်း ကုန်ပစ္စည်းများ</p>
+                                    <p id="totalProducts" class="text-3xl font-bold text-gray-900">0</p>
                                 </div>
-                                <div class="w-10 h-10 md:w-12 md:h-12 bg-green-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-box text-green-600 text-lg md:text-xl"></i>
+                                <div class="w-12 h-12 bg-green-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-box text-green-600 text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="stat-card p-4 md:p-6">
+                        <div class="stat-card p-6">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-600">စုစုပေါင်း မှာယူမှု</p>
-                                    <p id="totalOrders" class="text-2xl md:text-3xl font-bold text-gray-900">0</p>
+                                    <p class="text-sm font-medium text-gray-600">စုစုပေါင်း အမှာစာများ</p>
+                                    <p id="totalOrders" class="text-3xl font-bold text-gray-900">0</p>
                                 </div>
-                                <div class="w-10 h-10 md:w-12 md:h-12 bg-yellow-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-shopping-cart text-yellow-600 text-lg md:text-xl"></i>
+                                <div class="w-12 h-12 bg-yellow-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-shopping-cart text-yellow-600 text-xl"></i>
                                 </div>
                             </div>
                         </div>
                         
-                        <div class="stat-card p-4 md:p-6">
+                        <div class="stat-card p-6">
                             <div class="flex items-center justify-between">
                                 <div>
-                                    <p class="text-sm font-medium text-gray-600">စောင့်ဆိုင်း KYC</p>
-                                    <p id="pendingKyc" class="text-2xl md:text-3xl font-bold text-gray-900">0</p>
+                                    <p class="text-sm font-medium text-gray-600">စောင့်ဆိုင်းနေသော KYC</p>
+                                    <p id="pendingKyc" class="text-3xl font-bold text-gray-900">0</p>
                                 </div>
-                                <div class="w-10 h-10 md:w-12 md:h-12 bg-purple-100 rounded-full flex items-center justify-center">
-                                    <i class="fas fa-id-card text-purple-600 text-lg md:text-xl"></i>
+                                <div class="w-12 h-12 bg-purple-100 rounded-full flex items-center justify-center">
+                                    <i class="fas fa-id-card text-purple-600 text-xl"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                     
-                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 md:gap-6">
-                        <div class="neo-card p-4 md:p-6">
-                            <h3 class="text-lg font-semibold mb-4">လတ်တလော မှာယူမှုများ</h3>
-                            <div id="recentOrders" class="space-y-3 max-h-96 overflow-y-auto">
+                    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                        <div class="neo-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">လတ်တလော အမှာစာများ</h3>
+                            <div id="recentOrders" class="space-y-3">
                                 <!-- Recent orders will be populated here -->
                             </div>
                         </div>
                         
-                        <div class="neo-card p-4 md:p-6">
-                            <h3 class="text-lg font-semibold mb-4">ရောင်းအားစာရင်း</h3>
+                        <div class="neo-card p-6">
+                            <h3 class="text-lg font-semibold mb-4">ရောင်းအားကိန်းဂဏန်း</h3>
                             <canvas id="salesChart" style="height: 300px;"></canvas>
                         </div>
                     </div>
@@ -601,80 +438,76 @@
 
                 <!-- Users Management Page -->
                 <div id="usersPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">အသုံးပြုသူများ</h2>
-                            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
+                    <div class="neo-card p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">အသုံးပြုသူများ စီမံခန့်ခွဲမှု</h2>
+                            <div class="flex space-x-3">
                                 <input type="text" id="userSearchInput" placeholder="ရှာဖွေရန်..." 
-                                       class="form-input px-4 py-2 w-full sm:w-auto">
+                                       class="form-input px-4 py-2">
                                 <button id="refreshUsersBtn" class="btn-primary px-4 py-2 rounded-lg">
                                     <i class="fas fa-refresh"></i>
                                 </button>
                             </div>
                         </div>
                         
-                        <div class="responsive-table">
-                            <div class="table-container">
-                                <table class="w-full min-w-full">
-                                    <thead class="bg-gray-50 sticky top-0">
-                                        <tr>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အသုံးပြုသူ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အီးမေးလ်</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KYC အခြေအနေ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
-                                        <!-- Users will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အမည်</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အီးမေးလ်</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">KYC အခြေအနေ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်များ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="usersTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Users will be populated here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
                 <!-- Products Management Page -->
                 <div id="productsPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6 mb-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">ကုန်ပစ္စည်းများ</h2>
-                            <button id="addProductBtn" class="btn-primary px-4 md:px-6 py-2 rounded-lg w-full sm:w-auto">
-                                <i class="fas fa-plus mr-2"></i>ကုန်ပစ္စည်း ထည့်ရန်
+                    <div class="neo-card p-6 mb-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">ကုန်ပစ္စည်းများ စီမံခန့်ခွဲမှု</h2>
+                            <button id="addProductBtn" class="btn-primary px-6 py-2 rounded-lg">
+                                <i class="fas fa-plus mr-2"></i>ကုန်ပစ္စည်း အသစ်ထည့်မည်
                             </button>
                         </div>
                         
-                        <div class="responsive-table">
-                            <div class="table-container">
-                                <table class="w-full min-w-full">
-                                    <thead class="bg-gray-50 sticky top-0">
-                                        <tr>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ပုံ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">နာမည်</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အမျိုးအစား</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">စျေးနှုန်း</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="productsTableBody" class="bg-white divide-y divide-gray-200">
-                                        <!-- Products will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အမည်</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ရောင်းသူ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">စျေးနှုန်း</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အခြေအနေ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်များ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="productsTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Products will be populated here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
                 <!-- Orders Management Page -->
                 <div id="ordersPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">မှာယူမှုများ</h2>
-                            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
-                                <select id="orderStatusFilter" class="form-input px-4 py-2 w-full sm:w-auto">
-                                    <option value="">အားလုံး စိစစ်ရန်</option>
-                                    <option value="pending">စောင့်ဆိုင်းနေသည်</option>
+                    <div class="neo-card p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">အမှာစာများ စီမံခန့်ခွဲမှု</h2>
+                            <div class="flex space-x-3">
+                                <select id="orderStatusFilter" class="form-input px-4 py-2">
+                                    <option value="">အခြေအနေ အားလုံး</option>
+                                    <option value="pending">စောင့်ဆိုင်းနေသော</option>
                                     <option value="approved">အတည်ပြုပြီး</option>
-                                    <option value="rejected">ငြင်းပယ်ခံရ</option>
+                                    <option value="rejected">ငြင်းပယ်ပြီး</option>
                                 </select>
                                 <button id="refreshOrdersBtn" class="btn-primary px-4 py-2 rounded-lg">
                                     <i class="fas fa-refresh"></i>
@@ -682,39 +515,37 @@
                             </div>
                         </div>
                         
-                        <div class="responsive-table">
-                            <div class="table-container">
-                                <table class="w-full min-w-full">
-                                    <thead class="bg-gray-50 sticky top-0">
-                                        <tr>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">မှာယူသူ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ကုန်ပစ္စည်း</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ပမာဏ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အခြေအနေ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ပြေစာ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="ordersTableBody" class="bg-white divide-y divide-gray-200">
-                                        <!-- Orders will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ဝယ်သူ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ကုန်ပစ္စည်း</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">တန်ဖိုး</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အခြေအနေ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">ရက်စွဲ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်များ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="ordersTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- Orders will be populated here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
                 <!-- Payment Methods Page -->
                 <div id="paymentsPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6 mb-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">ငွေပေးချေမှုနည်းလမ်းများ</h2>
-                            <button id="addPaymentBtn" class="btn-primary px-4 md:px-6 py-2 rounded-lg w-full sm:w-auto">
-                                <i class="fas fa-plus mr-2"></i>ငွေပေးချေမှု ထည့်ရန်
+                    <div class="neo-card p-6 mb-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">ငွေပေးချေမှုနည်းလမ်းများ</h2>
+                            <button id="addPaymentBtn" class="btn-primary px-6 py-2 rounded-lg">
+                                <i class="fas fa-plus mr-2"></i>နည်းလမ်း အသစ်ထည့်မည်
                             </button>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="paymentMethodsGrid">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="paymentMethodsGrid">
                             <!-- Payment methods will be populated here -->
                         </div>
                     </div>
@@ -722,15 +553,15 @@
 
                 <!-- KYC Verification Page -->
                 <div id="kycPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">KYC အတည်ပြုမှုများ</h2>
-                            <div class="flex flex-col sm:flex-row space-y-2 sm:space-y-0 sm:space-x-3 w-full sm:w-auto">
-                                <select id="kycStatusFilter" class="form-input px-4 py-2 w-full sm:w-auto">
-                                    <option value="">အားလုံး စိစစ်ရန်</option>
-                                    <option value="pending">စောင့်ဆိုင်းနေသည်</option>
+                    <div class="neo-card p-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">KYC အတည်ပြုမှုများ</h2>
+                            <div class="flex space-x-3">
+                                <select id="kycStatusFilter" class="form-input px-4 py-2">
+                                    <option value="">အခြေအနေ အားလုံး</option>
+                                    <option value="pending">စောင့်ဆိုင်းနေသော</option>
                                     <option value="approved">အတည်ပြုပြီး</option>
-                                    <option value="rejected">ငြင်းပယ်ခံရ</option>
+                                    <option value="rejected">ငြင်းပယ်ပြီး</option>
                                 </select>
                                 <button id="refreshKycBtn" class="btn-primary px-4 py-2 rounded-lg">
                                     <i class="fas fa-refresh"></i>
@@ -738,38 +569,36 @@
                             </div>
                         </div>
                         
-                        <div class="responsive-table">
-                            <div class="table-container">
-                                <table class="w-full min-w-full">
-                                    <thead class="bg-gray-50 sticky top-0">
-                                        <tr>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အသုံးပြုသူ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အမည်အပြည့်စုံ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">စာရွက်အမျိုးအစား</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အခြေအနေ</th>
-                                            <th class="px-3 md:px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody id="kycTableBody" class="bg-white divide-y divide-gray-200">
-                                        <!-- KYC records will be populated here -->
-                                    </tbody>
-                                </table>
-                            </div>
+                        <div class="table-container">
+                            <table class="w-full">
+                                <thead class="bg-gray-50">
+                                    <tr>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အမည်</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အသုံးပြုသူ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">စာရွက်စာတမ်း</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">အခြေအနေ</th>
+                                        <th class="px-6 py-3 text-left text-xs font-medium text-gray-500 uppercase tracking-wider">လုပ်ဆောင်ချက်များ</th>
+                                    </tr>
+                                </thead>
+                                <tbody id="kycTableBody" class="bg-white divide-y divide-gray-200">
+                                    <!-- KYC records will be populated here -->
+                                </tbody>
+                            </table>
                         </div>
                     </div>
                 </div>
 
                 <!-- News Management Page -->
                 <div id="newsPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6 mb-6">
-                        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between mb-6 gap-4">
-                            <h2 class="text-xl md:text-2xl font-bold text-gray-800">သတင်းများ</h2>
-                            <button id="addNewsBtn" class="btn-primary px-4 md:px-6 py-2 rounded-lg w-full sm:w-auto">
-                                <i class="fas fa-plus mr-2"></i>သတင်း ထည့်ရန်
+                    <div class="neo-card p-6 mb-6">
+                        <div class="flex items-center justify-between mb-6">
+                            <h2 class="text-2xl font-bold text-gray-800">သတင်းများ စီမံခန့်ခွဲမှု</h2>
+                            <button id="addNewsBtn" class="btn-primary px-6 py-2 rounded-lg">
+                                <i class="fas fa-plus mr-2"></i>သတင်း အသစ်ထည့်မည်
                             </button>
                         </div>
                         
-                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6" id="newsGrid">
+                        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6" id="newsGrid">
                             <!-- News items will be populated here -->
                         </div>
                     </div>
@@ -777,11 +606,11 @@
 
                 <!-- About Management Page -->
                 <div id="aboutPage" class="page-content hidden">
-                    <div class="neo-card p-4 md:p-6">
-                        <h2 class="text-xl md:text-2xl font-bold text-gray-800 mb-6">အကြောင်း စီမံခန့်ခွဲမှု</h2>
+                    <div class="neo-card p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">အကြောင်းအရာ စီမံခန့်ခွဲမှု</h2>
                         
                         <form id="aboutForm" class="space-y-6">
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">ခေါင်းစဉ်</label>
                                     <input type="text" id="aboutTitle" class="form-input w-full px-4 py-3" required>
@@ -807,7 +636,7 @@
                                 <textarea id="aboutContent" class="form-input w-full px-4 py-3" rows="5" required></textarea>
                             </div>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Telegram Link</label>
                                     <input type="url" id="aboutTelegram" class="form-input w-full px-4 py-3">
@@ -818,7 +647,7 @@
                                 </div>
                             </div>
                             
-                            <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                            <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                                 <div>
                                     <label class="block text-sm font-medium text-gray-700 mb-2">Viber Link</label>
                                     <input type="url" id="aboutViber" class="form-input w-full px-4 py-3">
@@ -829,8 +658,8 @@
                                 </div>
                             </div>
                             
-                            <button type="submit" class="btn-primary px-6 md:px-8 py-3 rounded-lg w-full sm:w-auto">
-                                <i class="fas fa-save mr-2"></i>သိမ်းဆည်းရန်
+                            <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
+                                <i class="fas fa-save mr-2"></i>သိမ်းဆည်းမည်
                             </button>
                         </form>
                     </div>
@@ -843,26 +672,26 @@
     <!-- Add Product Modal -->
     <div id="addProductModal" class="modal fixed inset-0 z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="modal-content max-w-4xl w-full max-h-screen overflow-y-auto p-4 md:p-8">
+            <div class="modal-content max-w-4xl w-full max-h-screen overflow-y-auto p-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">ကုန်ပစ္စည်း ထည့်ရန်</h3>
+                    <h3 class="text-2xl font-bold text-gray-800">ကုန်ပစ္စည်း အသစ်ထည့်မည်</h3>
                     <button class="modal-close text-gray-400 hover:text-gray-600 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
                 </div>
                 
                 <form id="addProductForm" class="space-y-6">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4 md:gap-6">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">ကုန်ပစ္စည်းအမည်</label>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ကုန်ပစ္စည်း အမည်</label>
                             <input type="text" name="name" required class="form-input w-full px-4 py-3">
                         </div>
                         <div>
-                            <label class="block text-sm font-medium text-gray-700 mb-2">အမျိုးအစား</label>
-                            <select name="product_type" class="form-input w-full px-4 py-3" required onchange="handleProductTypeChange(this.value)">
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ကုန်ပစ္စည်း အမျိုးအစား</label>
+                            <select name="product_type" class="form-input w-full px-4 py-3" required>
                                 <option value="">ရွေးချယ်ပါ</option>
                                 <option value="apk">APK ဖိုင်</option>
-                                <option value="game_account">Game Account</option>
+                                <option value="game_account">ဂိမ်းအကောင့်</option>
                             </select>
                         </div>
                     </div>
@@ -877,67 +706,31 @@
                         <textarea name="description" rows="4" class="form-input w-full px-4 py-3"></textarea>
                     </div>
                     
-                    <div class="multi-file-upload">
-                        <div class="file-type-section">
-                            <div class="file-type-title">
-                                <i class="fas fa-image"></i>
-                                Icon ပုံ (လိုအပ်သည်)
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ကုန်ပစ္စည်း ပုံ</label>
+                            <div class="upload-area p-6 text-center cursor-pointer">
+                                <input type="file" name="icon_image" accept="image/*" class="hidden">
+                                <i class="fas fa-cloud-upload-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">ပုံတင်ရန် ကလစ်နှိပ်ပါ</p>
                             </div>
-                            <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="icon">
-                                <input type="file" name="icon_image" accept="image/*" class="hidden" required>
-                                <i class="fas fa-cloud-upload-alt text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-gray-600">Icon ပုံရွေးရန် နှိပ်ပါ</p>
-                            </div>
-                            <div class="file-preview" id="icon-preview"></div>
                         </div>
-                        
-                        <div class="file-type-section">
-                            <div class="file-type-title">
-                                <i class="fas fa-images"></i>
-                                Gallery ပုံများ (ရွေးချယ်ရန်)
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">APK ဖိုင် (APK အမျိုးအစားမှာသာ)</label>
+                            <div class="upload-area p-6 text-center cursor-pointer">
+                                <input type="file" name="apk_file" accept=".apk" class="hidden">
+                                <i class="fas fa-mobile-alt text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">APK ဖိုင်တင်ရန် ကလစ်နှိပ်ပါ</p>
                             </div>
-                            <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="gallery">
-                                <input type="file" name="gallery_images" accept="image/*" class="hidden" multiple>
-                                <i class="fas fa-images text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-gray-600">Gallery ပုံများရွေးရန် နှိပ်ပါ</p>
-                            </div>
-                            <div class="file-preview" id="gallery-preview"></div>
-                        </div>
-                        
-                        <div id="apk-files-section" class="file-type-section" style="display: none;">
-                            <div class="file-type-title">
-                                <i class="fas fa-file-archive"></i>
-                                APK/ZIP/Files
-                            </div>
-                            <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="files">
-                                <input type="file" name="product_files" class="hidden" multiple accept=".apk,.zip,.rar,.7z">
-                                <i class="fas fa-file-archive text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-gray-600">APK/ZIP ဖိုင်များရွေးရန် နှိပ်ပါ</p>
-                            </div>
-                            <div class="file-preview" id="files-preview"></div>
-                        </div>
-                        
-                        <div class="file-type-section">
-                            <div class="file-type-title">
-                                <i class="fas fa-video"></i>
-                                Video ဖိုင် (ရွေးချယ်ရန်)
-                            </div>
-                            <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="video">
-                                <input type="file" name="product_video" accept="video/*" class="hidden">
-                                <i class="fas fa-video text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-gray-600">Video ဖိုင်ရွေးရန် နှိပ်ပါ</p>
-                                <p class="text-xs text-gray-500">အများဆုံး 50MB</p>
-                            </div>
-                            <div class="file-preview" id="video-preview"></div>
                         </div>
                     </div>
                     
-                    <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
-                        <button type="button" class="modal-close px-4 md:px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
-                            ပိတ်ရန်
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="modal-close px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                            ပိတ်မည်
                         </button>
-                        <button type="submit" class="btn-primary px-6 md:px-8 py-3 rounded-lg">
-                            <span>ထည့်ရန်</span>
+                        <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
+                            <span>သိမ်းဆည်းမည်</span>
                             <div class="loading-spinner hidden ml-2"></div>
                         </button>
                     </div>
@@ -949,9 +742,9 @@
     <!-- Add News Modal -->
     <div id="addNewsModal" class="modal fixed inset-0 z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="modal-content max-w-4xl w-full max-h-screen overflow-y-auto p-4 md:p-8">
+            <div class="modal-content max-w-4xl w-full max-h-screen overflow-y-auto p-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">သတင်း ထည့်ရန်</h3>
+                    <h3 class="text-2xl font-bold text-gray-800">သတင်း အသစ်ထည့်မည်</h3>
                     <button class="modal-close text-gray-400 hover:text-gray-600 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
@@ -959,50 +752,41 @@
                 
                 <form id="addNewsForm" class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">ခေါင်းစဉ်</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">သတင်း ခေါင်းစဉ်</label>
                         <input type="text" name="title" required class="form-input w-full px-4 py-3">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">အကြောင်းအရာ</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">သတင်း အကြောင်းအရာ</label>
                         <textarea name="content" rows="6" required class="form-input w-full px-4 py-3"></textarea>
                     </div>
                     
-                    <div class="multi-file-upload">
-                        <div class="file-type-section">
-                            <div class="file-type-title">
-                                <i class="fas fa-video"></i>
-                                Video ဖိုင် (50MB အောက်)
-                            </div>
-                            <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="news-video">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ဗီဒီယို (50MB အထိ)</label>
+                            <div class="upload-area p-6 text-center cursor-pointer">
                                 <input type="file" name="video" accept="video/mp4" class="hidden">
-                                <i class="fas fa-video text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-gray-600">Video ဖိုင်ရွေးရန် နှိပ်ပါ</p>
+                                <i class="fas fa-video text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">ဗီဒီယိုတင်ရန် ကလစ်နှိပ်ပါ</p>
                                 <p class="text-xs text-gray-500">အများဆုံး 50MB</p>
                             </div>
-                            <div class="file-preview" id="news-video-preview"></div>
                         </div>
-                        
-                        <div class="file-type-section">
-                            <div class="file-type-title">
-                                <i class="fas fa-images"></i>
-                                ပုံများ (အများအပြား)
-                            </div>
-                            <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="news-images">
+                        <div>
+                            <label class="block text-sm font-medium text-gray-700 mb-2">ပုံများ</label>
+                            <div class="upload-area p-6 text-center cursor-pointer">
                                 <input type="file" name="images" accept="image/*" multiple class="hidden">
-                                <i class="fas fa-images text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                                <p class="text-gray-600">ပုံများရွေးရန် နှိပ်ပါ</p>
+                                <i class="fas fa-images text-3xl text-gray-400 mb-2"></i>
+                                <p class="text-gray-600">ပုံများတင်ရန် ကလစ်နှိပ်ပါ</p>
                             </div>
-                            <div class="file-preview" id="news-images-preview"></div>
                         </div>
                     </div>
                     
-                    <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
-                        <button type="button" class="modal-close px-4 md:px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
-                            ပိတ်ရန်
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="modal-close px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                            ပိတ်မည်
                         </button>
-                        <button type="submit" class="btn-primary px-6 md:px-8 py-3 rounded-lg">
-                            <span>ထည့်ရန်</span>
+                        <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
+                            <span>သိမ်းဆည်းမည်</span>
                             <div class="loading-spinner hidden ml-2"></div>
                         </button>
                     </div>
@@ -1014,9 +798,9 @@
     <!-- Add Payment Method Modal -->
     <div id="addPaymentModal" class="modal fixed inset-0 z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="modal-content max-w-2xl w-full p-4 md:p-8">
+            <div class="modal-content max-w-2xl w-full p-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">ငွေပေးချေမှု ထည့်ရန်</h3>
+                    <h3 class="text-2xl font-bold text-gray-800">ငွေပေးချေမှုနည်းလမ်း အသစ်ထည့်မည်</h3>
                     <button class="modal-close text-gray-400 hover:text-gray-600 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
@@ -1024,12 +808,12 @@
                 
                 <form id="addPaymentForm" class="space-y-6">
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">နည်းလမ်းအမည်</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">နည်းလမ်း အမည်</label>
                         <input type="text" name="name" required class="form-input w-full px-4 py-3">
                     </div>
                     
                     <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">အချက်အလက်များ</label>
+                        <label class="block text-sm font-medium text-gray-700 mb-2">အကောင့် အချက်အလက်</label>
                         <input type="text" name="details" required class="form-input w-full px-4 py-3">
                     </div>
                     
@@ -1040,20 +824,19 @@
                     
                     <div>
                         <label class="block text-sm font-medium text-gray-700 mb-2">QR Code ပုံ</label>
-                        <div class="upload-area p-4 md:p-6 text-center cursor-pointer" data-upload-type="qr">
+                        <div class="upload-area p-6 text-center cursor-pointer">
                             <input type="file" name="qr_code" accept="image/*" required class="hidden">
-                            <i class="fas fa-qrcode text-2xl md:text-3xl text-gray-400 mb-2"></i>
-                            <p class="text-gray-600">QR Code ပုံရွေးရန် နှိပ်ပါ</p>
+                            <i class="fas fa-qrcode text-3xl text-gray-400 mb-2"></i>
+                            <p class="text-gray-600">QR Code ပုံတင်ရန် ကလစ်နှိပ်ပါ</p>
                         </div>
-                        <div class="file-preview" id="qr-preview"></div>
                     </div>
                     
-                    <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4">
-                        <button type="button" class="modal-close px-4 md:px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
-                            ပိတ်ရန်
+                    <div class="flex justify-end space-x-4">
+                        <button type="button" class="modal-close px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                            ပိတ်မည်
                         </button>
-                        <button type="submit" class="btn-primary px-6 md:px-8 py-3 rounded-lg">
-                            <span>ထည့်ရန်</span>
+                        <button type="submit" class="btn-primary px-8 py-3 rounded-lg">
+                            <span>သိမ်းဆည်းမည်</span>
                             <div class="loading-spinner hidden ml-2"></div>
                         </button>
                     </div>
@@ -1065,9 +848,9 @@
     <!-- View KYC Modal -->
     <div id="viewKycModal" class="modal fixed inset-0 z-50 hidden">
         <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="modal-content max-w-6xl w-full max-h-screen overflow-y-auto p-4 md:p-8">
+            <div class="modal-content max-w-6xl w-full max-h-screen overflow-y-auto p-8">
                 <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">KYC အသေးစิတ်ကြည့်ရှုရန်</h3>
+                    <h3 class="text-2xl font-bold text-gray-800">KYC အတည်ပြုမှု စစ်ဆေးရန်</h3>
                     <button class="modal-close text-gray-400 hover:text-gray-600 text-2xl">
                         <i class="fas fa-times"></i>
                     </button>
@@ -1077,34 +860,16 @@
                     <!-- KYC details will be populated here -->
                 </div>
                 
-                <div class="flex flex-col sm:flex-row justify-end space-y-2 sm:space-y-0 sm:space-x-4 pt-6 border-t">
-                    <button id="rejectKycBtn" class="px-4 md:px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
-                        <i class="fas fa-times mr-2"></i>ငြင်းပယ်ရန်
+                <div class="flex justify-end space-x-4 pt-6 border-t">
+                    <button id="rejectKycBtn" class="px-6 py-3 bg-red-500 text-white rounded-lg hover:bg-red-600 transition-colors">
+                        <i class="fas fa-times mr-2"></i>ငြင်းပယ်မည်
                     </button>
-                    <button id="approveKycBtn" class="px-4 md:px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
-                        <i class="fas fa-check mr-2"></i>အတည်ပြုရန်
+                    <button id="approveKycBtn" class="px-6 py-3 bg-green-500 text-white rounded-lg hover:bg-green-600 transition-colors">
+                        <i class="fas fa-check mr-2"></i>အတည်ပြုမည်
                     </button>
-                    <button class="modal-close px-4 md:px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
-                        ပိတ်ရန်
+                    <button class="modal-close px-6 py-3 bg-gray-300 text-gray-700 rounded-lg hover:bg-gray-400 transition-colors">
+                        ပိတ်မည်
                     </button>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- View Receipt Modal -->
-    <div id="viewReceiptModal" class="modal fixed inset-0 z-50 hidden">
-        <div class="flex items-center justify-center min-h-screen p-4">
-            <div class="modal-content max-w-2xl w-full p-4 md:p-8">
-                <div class="flex items-center justify-between mb-6">
-                    <h3 class="text-xl md:text-2xl font-bold text-gray-800">ငွေလွှဲပြေစာ ကြည့်ရှုရန်</h3>
-                    <button class="modal-close text-gray-400 hover:text-gray-600 text-2xl">
-                        <i class="fas fa-times"></i>
-                    </button>
-                </div>
-                
-                <div id="receiptContent" class="text-center">
-                    <!-- Receipt image will be populated here -->
                 </div>
             </div>
         </div>
@@ -1122,7 +887,7 @@
         
         const supabase = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
         
-        // Admin credentials
+        // Admin credentials (hardcoded as requested)
         const ADMIN_CREDENTIALS = {
             email: 'opper@opper.com',
             password: '155872'
@@ -1131,23 +896,17 @@
         // Global variables
         let currentUser = null;
         let salesChart = null;
-        let uploadedFiles = {};
-        let currentKycId = null;
         
         // DOM Elements
         const loginPage = document.getElementById('loginPage');
         const adminDashboard = document.getElementById('adminDashboard');
         const adminLoginForm = document.getElementById('adminLoginForm');
         const logoutBtn = document.getElementById('logoutBtn');
-        const mobileMenuBtn = document.getElementById('mobileMenuBtn');
-        const mobileOverlay = document.getElementById('mobileOverlay');
-        const sidebar = document.getElementById('sidebar');
         
         // Initialize app
         document.addEventListener('DOMContentLoaded', function() {
             checkAdminAuth();
             initializeEventListeners();
-            setupFileUploadAreas();
         });
         
         // Check if admin is already logged in
@@ -1159,7 +918,6 @@
                     if (session.email === ADMIN_CREDENTIALS.email) {
                         currentUser = session;
                         showDashboard();
-                        loadDashboardData();
                         return;
                     }
                 } catch (error) {
@@ -1179,218 +937,467 @@
         function showDashboard() {
             loginPage.classList.add('hidden');
             adminDashboard.classList.remove('hidden');
+            loadDashboardData();
+            initializeChart();
         }
         
+        // Initialize event listeners
         function initializeEventListeners() {
-            // Auth form listener
-            if (adminLoginForm) {
-                adminLoginForm.addEventListener('submit', handleAdminLogin);
-            }
+            // Login form
+            adminLoginForm.addEventListener('submit', handleAdminLogin);
             
             // Logout button
-            if (logoutBtn) {
-                logoutBtn.addEventListener('click', handleLogout);
-            }
-            
-            // Mobile menu
-            if (mobileMenuBtn) {
-                mobileMenuBtn.addEventListener('click', toggleMobileMenu);
-            }
-            
-            if (mobileOverlay) {
-                mobileOverlay.addEventListener('click', closeMobileMenu);
-            }
+            logoutBtn.addEventListener('click', handleLogout);
             
             // Sidebar navigation
             document.querySelectorAll('.sidebar-item').forEach(item => {
-                item.addEventListener('click', handleSidebarNavigation);
+                item.addEventListener('click', handleSidebarClick);
             });
             
             // Modal close buttons
             document.querySelectorAll('.modal-close').forEach(btn => {
-                btn.addEventListener('click', closeModals);
+                btn.addEventListener('click', closeAllModals);
             });
             
             // Add buttons
-            document.getElementById('addProductBtn')?.addEventListener('click', showAddProductModal);
-            document.getElementById('addNewsBtn')?.addEventListener('click', showAddNewsModal);
-            document.getElementById('addPaymentBtn')?.addEventListener('click', showAddPaymentModal);
+            document.getElementById('addProductBtn')?.addEventListener('click', () => openModal('addProductModal'));
+            document.getElementById('addPaymentBtn')?.addEventListener('click', () => openModal('addPaymentModal'));
+            document.getElementById('addNewsBtn')?.addEventListener('click', () => openModal('addNewsModal'));
             
-            // Form submissions
+            // Forms
             document.getElementById('addProductForm')?.addEventListener('submit', handleAddProduct);
-            document.getElementById('addNewsForm')?.addEventListener('submit', handleAddNews);
             document.getElementById('addPaymentForm')?.addEventListener('submit', handleAddPayment);
-            document.getElementById('aboutForm')?.addEventListener('submit', handleAboutUpdate);
-            
-            // KYC buttons
-            document.getElementById('approveKycBtn')?.addEventListener('click', () => handleKycDecision('approved'));
-            document.getElementById('rejectKycBtn')?.addEventListener('click', () => handleKycDecision('rejected'));
+            document.getElementById('addNewsForm')?.addEventListener('submit', handleAddNews);
+            document.getElementById('aboutForm')?.addEventListener('submit', handleUpdateAbout);
             
             // Refresh buttons
             document.getElementById('refreshUsersBtn')?.addEventListener('click', loadUsers);
             document.getElementById('refreshOrdersBtn')?.addEventListener('click', loadOrders);
-            document.getElementById('refreshKycBtn')?.addEventListener('click', loadKycVerifications);
+            document.getElementById('refreshKycBtn')?.addEventListener('click', loadKycRequests);
             
-            // Filters
-            document.getElementById('orderStatusFilter')?.addEventListener('change', loadOrders);
-            document.getElementById('kycStatusFilter')?.addEventListener('change', loadKycVerifications);
+            // Upload areas
+            document.querySelectorAll('.upload-area').forEach(area => {
+                area.addEventListener('click', () => {
+                    const fileInput = area.querySelector('input[type="file"]');
+                    fileInput?.click();
+                });
+            });
         }
         
-        // Admin login
+        // Handle admin login
         async function handleAdminLogin(e) {
             e.preventDefault();
             
-            const email = document.getElementById('adminEmail').value.trim();
+            const email = document.getElementById('adminEmail').value;
             const password = document.getElementById('adminPassword').value;
-            const loginBtn = document.getElementById('loginBtnText');
-            const loginLoading = document.getElementById('loginLoading');
             
-            if (!email || !password) {
-                showNotification('အီးမေးလ်နှင့် စကားဝှက်ထည့်ပါ', 'error');
-                return;
-            }
+            setLoading('loginBtnText', 'loginLoading', true, 'ဝင်ရောက်နေသည်...');
             
             try {
-                loginBtn.textContent = 'ဝင်နေသည်...';
-                loginLoading.classList.remove('hidden');
-                
-                // Check credentials
-                if (email !== ADMIN_CREDENTIALS.email || password !== ADMIN_CREDENTIALS.password) {
-                    throw new Error('အီးမေးလ် သို့မဟုတ် စကားဝှက် မမှန်ကန်ပါ');
+                if (email === ADMIN_CREDENTIALS.email && password === ADMIN_CREDENTIALS.password) {
+                    const session = {
+                        email: email,
+                        loginTime: new Date().toISOString()
+                    };
+                    
+                    localStorage.setItem('mmr_admin_session', JSON.stringify(session));
+                    currentUser = session;
+                    
+                    showNotification('အောင်မြင်စွာ ဝင်ရောက်ပါပြီ', 'success');
+                    showDashboard();
+                } else {
+                    throw new Error('အီးမေးလ် သို့မဟုတ် စကားဝှက် မှားနေပါသည်');
                 }
-                
-                // Store session
-                const session = { email, loginTime: new Date().toISOString() };
-                localStorage.setItem('mmr_admin_session', JSON.stringify(session));
-                currentUser = session;
-                
-                showNotification('အကောင့်ဝင်ခြင်း အောင်မြင်ပါသည်', 'success');
-                showDashboard();
-                await loadDashboardData();
-                
             } catch (error) {
                 console.error('Login failed:', error);
-                showNotification(error.message || 'အကောင့်ဝင်ခြင်း မအောင်မြင်ပါ', 'error');
+                showNotification(error.message, 'error');
             } finally {
-                loginBtn.textContent = 'ဝင်ရောက်ရန်';
-                loginLoading.classList.add('hidden');
+                setLoading('loginBtnText', 'loginLoading', false, 'ဝင်ရောက်မည်');
             }
         }
         
-        async function handleLogout() {
-            try {
-                localStorage.removeItem('mmr_admin_session');
-                currentUser = null;
-                showLogin();
-                showNotification('အကောင့်ထွက်ခြင်း အောင်မြင်ပါသည်', 'success');
-            } catch (error) {
-                console.error('Logout failed:', error);
-            }
+        // Handle logout
+        function handleLogout() {
+            localStorage.removeItem('mmr_admin_session');
+            currentUser = null;
+            showLogin();
+            showNotification('အောင်မြင်စွာ ထွက်ခွါပါပြီ', 'warning');
         }
         
-        // Mobile menu functions
-        function toggleMobileMenu() {
-            sidebar.classList.toggle('active');
-            mobileOverlay.classList.toggle('hidden');
-        }
-        
-        function closeMobileMenu() {
-            sidebar.classList.remove('active');
-            mobileOverlay.classList.add('hidden');
-        }
-        
-        // Sidebar navigation
-        function handleSidebarNavigation(e) {
+        // Handle sidebar navigation
+        function handleSidebarClick(e) {
             e.preventDefault();
             
-            const page = e.currentTarget.getAttribute('data-page');
-            if (page) {
-                showPage(page);
-                
-                // Update active sidebar item
-                document.querySelectorAll('.sidebar-item').forEach(item => {
-                    item.classList.remove('active');
-                });
-                e.currentTarget.classList.add('active');
-                
-                // Close mobile menu
-                closeMobileMenu();
-            }
-        }
-        
-        function showPage(pageName) {
-            // Hide all pages
-            document.querySelectorAll('.page-content').forEach(page => {
-                page.classList.add('hidden');
-            });
+            const page = this.getAttribute('data-page');
             
-            // Show selected page
-            const targetPage = document.getElementById(pageName + 'Page');
-            if (targetPage) {
-                targetPage.classList.remove('hidden');
-                loadPageData(pageName);
+            // Update active sidebar item
+            document.querySelectorAll('.sidebar-item').forEach(item => {
+                item.classList.remove('active');
+            });
+            this.classList.add('active');
+            
+            // Show corresponding page
+            document.querySelectorAll('.page-content').forEach(content => {
+                content.classList.add('hidden');
+            });
+            document.getElementById(page + 'Page')?.classList.remove('hidden');
+            
+            // Load page data
+            switch(page) {
+                case 'dashboard':
+                    loadDashboardData();
+                    break;
+                case 'users':
+                    loadUsers();
+                    break;
+                case 'products':
+                    loadProducts();
+                    break;
+                case 'orders':
+                    loadOrders();
+                    break;
+                case 'payments':
+                    loadPaymentMethods();
+                    break;
+                case 'kyc':
+                    loadKycRequests();
+                    break;
+                case 'news':
+                    loadNews();
+                    break;
+                case 'about':
+                    loadAboutData();
+                    break;
             }
         }
         
-        async function loadPageData(pageName) {
-            try {
-                switch (pageName) {
-                    case 'dashboard':
-                        await loadDashboardData();
-                        break;
-                    case 'users':
-                        await loadUsers();
-                        break;
-                    case 'products':
-                        await loadProducts();
-                        break;
-                    case 'orders':
-                        await loadOrders();
-                        break;
-                    case 'payments':
-                        await loadPaymentMethods();
-                        break;
-                    case 'kyc':
-                        await loadKycVerifications();
-                        break;
-                    case 'news':
-                        await loadNews();
-                        break;
-                    case 'about':
-                        await loadAboutData();
-                        break;
-                }
-            } catch (error) {
-                console.error(`Error loading ${pageName} data:`, error);
-            }
-        }
-        
-        // Dashboard data loading
+        // Data loading functions
         async function loadDashboardData() {
             try {
                 // Load statistics
                 const [usersResult, productsResult, ordersResult, kycResult] = await Promise.all([
-                    supabase.from('users').select('id', { count: 'exact' }),
-                    supabase.from('products').select('id', { count: 'exact' }).eq('is_active', true),
-                    supabase.from('orders').select('id', { count: 'exact' }),
-                    supabase.from('kyc_verifications').select('id', { count: 'exact' }).eq('status', 'pending')
+                    supabase.from('users').select('id', { count: 'exact', head: true }),
+                    supabase.from('products').select('id', { count: 'exact', head: true }),
+                    supabase.from('orders').select('id', { count: 'exact', head: true }),
+                    supabase.from('kyc_verifications').select('id', { count: 'exact', head: true }).eq('status', 'pending')
                 ]);
                 
-                // Update statistics
                 document.getElementById('totalUsers').textContent = usersResult.count || 0;
                 document.getElementById('totalProducts').textContent = productsResult.count || 0;
                 document.getElementById('totalOrders').textContent = ordersResult.count || 0;
                 document.getElementById('pendingKyc').textContent = kycResult.count || 0;
                 
                 // Load recent orders
-                await loadRecentOrders();
-                
-                // Load sales chart
-                await loadSalesChart();
+                loadRecentOrders();
                 
             } catch (error) {
-                console.error('Error loading dashboard data:', error);
-                showNotification('Dashboard ရယူခြင်း မအောင်မြင်ပါ', 'error');
+                console.error('Failed to load dashboard data:', error);
+                showNotification('ဒေတာများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadUsers() {
+            try {
+                const { data: users, error } = await supabase
+                    .from('users')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const tbody = document.getElementById('usersTableBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = users?.map(user => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <img class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold" 
+                                     src="${user.profile_image || ''}" 
+                                     alt="${user.name}"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="h-10 w-10 rounded-full bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white font-bold hidden">
+                                    ${user.name.charAt(0).toUpperCase()}
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${user.name}</div>
+                                    <div class="text-sm text-gray-500">${user.username}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">${user.email}</td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="status-${user.kyc_status}">${getStatusText(user.kyc_status)}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button onclick="viewUser('${user.id}')" class="text-blue-600 hover:text-blue-900">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                            <button onclick="deleteUser('${user.id}')" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="4" class="text-center py-8 text-gray-500">အသုံးပြုသူများ မရှိသေးပါ</td></tr>';
+                
+            } catch (error) {
+                console.error('Failed to load users:', error);
+                showNotification('အသုံးပြုသူများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadProducts() {
+            try {
+                const { data: products, error } = await supabase
+                    .from('products')
+                    .select(`
+                        *,
+                        users(name, username)
+                    `)
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const tbody = document.getElementById('productsTableBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = products?.map(product => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <div class="flex items-center">
+                                <img class="h-10 w-10 rounded-lg object-cover" 
+                                     src="${product.icon_image || ''}" 
+                                     alt="${product.name}"
+                                     onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';">
+                                <div class="h-10 w-10 rounded-lg bg-gradient-to-r from-blue-500 to-purple-600 flex items-center justify-center text-white hidden">
+                                    <i class="fas fa-${product.product_type === 'apk' ? 'mobile-alt' : 'gamepad'}"></i>
+                                </div>
+                                <div class="ml-4">
+                                    <div class="text-sm font-medium text-gray-900">${product.name}</div>
+                                    <div class="text-sm text-gray-500">${product.product_type}</div>
+                                </div>
+                            </div>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${product.users?.name || 'Admin'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${formatPrice(product.price)} Ks
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="status-${product.status || 'active'}">${getStatusText(product.status || 'active')}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button onclick="approveProduct('${product.id}')" class="text-green-600 hover:text-green-900">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="rejectProduct('${product.id}')" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-times"></i>
+                            </button>
+                            <button onclick="deleteProduct('${product.id}')" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="5" class="text-center py-8 text-gray-500">ကုန်ပစ္စည်းများ မရှိသေးပါ</td></tr>';
+                
+            } catch (error) {
+                console.error('Failed to load products:', error);
+                showNotification('ကုန်ပစ္စည်းများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadOrders() {
+            try {
+                const { data: orders, error } = await supabase
+                    .from('orders')
+                    .select(`
+                        *,
+                        buyer:users!buyer_id(name, email),
+                        product:products(name, price)
+                    `)
+                    .order('ordered_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const tbody = document.getElementById('ordersTableBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = orders?.map(order => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${order.buyer?.name || 'N/A'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${order.product?.name || 'N/A'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${formatPrice(order.amount)} Ks
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="status-${order.status}">${getStatusText(order.status)}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${formatDate(order.ordered_at)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button onclick="approveOrder('${order.id}')" class="text-green-600 hover:text-green-900">
+                                <i class="fas fa-check"></i>
+                            </button>
+                            <button onclick="rejectOrder('${order.id}')" class="text-red-600 hover:text-red-900">
+                                <i class="fas fa-times"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="6" class="text-center py-8 text-gray-500">အမှာစာများ မရှိသေးပါ</td></tr>';
+                
+            } catch (error) {
+                console.error('Failed to load orders:', error);
+                showNotification('အမှာစာများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadKycRequests() {
+            try {
+                const { data: kycRequests, error } = await supabase
+                    .from('kyc_verifications')
+                    .select(`
+                        *,
+                        users(name, email)
+                    `)
+                    .order('submitted_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const tbody = document.getElementById('kycTableBody');
+                if (!tbody) return;
+                
+                tbody.innerHTML = kycRequests?.map(kyc => `
+                    <tr class="hover:bg-gray-50">
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${kyc.full_name}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${kyc.users?.name || 'N/A'}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm text-gray-900">
+                            ${getDocumentTypeText(kyc.document_type)}
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap">
+                            <span class="status-${kyc.status}">${getStatusText(kyc.status)}</span>
+                        </td>
+                        <td class="px-6 py-4 whitespace-nowrap text-sm font-medium space-x-2">
+                            <button onclick="viewKyc('${kyc.id}')" class="text-blue-600 hover:text-blue-900">
+                                <i class="fas fa-eye"></i>
+                            </button>
+                        </td>
+                    </tr>
+                `).join('') || '<tr><td colspan="5" class="text-center py-8 text-gray-500">KYC တောင်းဆိုများ မရှိသေးပါ</td></tr>';
+                
+            } catch (error) {
+                console.error('Failed to load KYC requests:', error);
+                showNotification('KYC တောင်းဆိုများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadPaymentMethods() {
+            try {
+                const { data: paymentMethods, error } = await supabase
+                    .from('payment_methods')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const grid = document.getElementById('paymentMethodsGrid');
+                if (!grid) return;
+                
+                grid.innerHTML = paymentMethods?.map(method => `
+                    <div class="neo-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold">${method.name}</h3>
+                            <button onclick="deletePaymentMethod('${method.id}')" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-600 mb-2">${method.details}</p>
+                        ${method.description ? `<p class="text-sm text-gray-500 mb-4">${method.description}</p>` : ''}
+                        ${method.qr_code ? `
+                            <div class="text-center">
+                                <img src="${method.qr_code}" alt="QR Code" class="w-32 h-32 mx-auto rounded-lg">
+                            </div>
+                        ` : ''}
+                    </div>
+                `).join('') || '<div class="col-span-full text-center py-8 text-gray-500">ငွေပေးချေမှုနည်းလမ်းများ မရှိသေးပါ</div>';
+                
+            } catch (error) {
+                console.error('Failed to load payment methods:', error);
+                showNotification('ငွေပေးချေမှုနည်းလမ်းများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadNews() {
+            try {
+                const { data: news, error } = await supabase
+                    .from('news')
+                    .select('*')
+                    .order('created_at', { ascending: false });
+                
+                if (error) throw error;
+                
+                const grid = document.getElementById('newsGrid');
+                if (!grid) return;
+                
+                grid.innerHTML = news?.map(item => `
+                    <div class="neo-card p-6">
+                        <div class="flex items-center justify-between mb-4">
+                            <h3 class="text-lg font-semibold truncate">${item.title}</h3>
+                            <button onclick="deleteNews('${item.id}')" class="text-red-500 hover:text-red-700">
+                                <i class="fas fa-trash"></i>
+                            </button>
+                        </div>
+                        <p class="text-gray-600 text-sm line-clamp-3 mb-4">${item.content}</p>
+                        <div class="flex items-center justify-between text-sm text-gray-500">
+                            <span>${formatDate(item.created_at)}</span>
+                            <span class="status-${item.is_published ? 'approved' : 'pending'}">
+                                ${item.is_published ? 'ထုတ်ပြန်ပြီး' : 'မထုတ်ပြန်သေး'}
+                            </span>
+                        </div>
+                    </div>
+                `).join('') || '<div class="col-span-full text-center py-8 text-gray-500">သတင်းများ မရှိသေးပါ</div>';
+                
+            } catch (error) {
+                console.error('Failed to load news:', error);
+                showNotification('သတင်းများ ရယူ၍မရပါ', 'error');
+            }
+        }
+        
+        async function loadAboutData() {
+            try {
+                const { data: about, error } = await supabase
+                    .from('about')
+                    .select('*')
+                    .single();
+                
+                if (error && error.code !== 'PGRST116') throw error;
+                
+                if (about) {
+                    document.getElementById('aboutTitle').value = about.title || '';
+                    document.getElementById('aboutContent').value = about.content || '';
+                    document.getElementById('aboutAddress').value = about.address || '';
+                    document.getElementById('aboutPhone').value = about.phone || '';
+                    document.getElementById('aboutEmail').value = about.email || '';
+                    
+                    if (about.social_links) {
+                        document.getElementById('aboutTelegram').value = about.social_links.telegram || '';
+                        document.getElementById('aboutYoutube').value = about.social_links.youtube || '';
+                        document.getElementById('aboutViber').value = about.social_links.viber || '';
+                        document.getElementById('aboutWechat').value = about.social_links.wechat || '';
+                    }
+                }
+            } catch (error) {
+                console.error('Failed to load about data:', error);
+                showNotification('အကြောင်းအရာ ရယူ၍မရပါ', 'error');
             }
         }
         
@@ -1400,536 +1407,465 @@
                     .from('orders')
                     .select(`
                         *,
-                        products(name, icon_image),
-                        users!orders_buyer_id_fkey(name, username)
+                        buyer:users!buyer_id(name),
+                        product:products(name, price)
                     `)
                     .order('ordered_at', { ascending: false })
                     .limit(5);
-                    
+                
                 if (error) throw error;
                 
-                const recentOrdersContainer = document.getElementById('recentOrders');
-                if (!recentOrdersContainer) return;
+                const container = document.getElementById('recentOrders');
+                if (!container) return;
                 
-                if (!orders || orders.length === 0) {
-                    recentOrdersContainer.innerHTML = '<p class="text-gray-500 text-center">မှာယူမှုများ မရှိပါ</p>';
-                    return;
-                }
-                
-                recentOrdersContainer.innerHTML = orders.map(order => `
+                container.innerHTML = orders?.map(order => `
                     <div class="flex items-center justify-between p-3 bg-gray-50 rounded-lg">
-                        <div class="flex items-center space-x-3">
-                            <div class="w-10 h-10 rounded-lg overflow-hidden">
-                                ${order.products?.icon_image ? 
-                                    `<img src="$${order.products.icon_image}" alt="$${order.products.name}" class="w-full h-full object-cover">` :
-                                    '<div class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white"><i class="fas fa-gamepad"></i></div>'
-                                }
-                            </div>
-                            <div>
-                                <p class="font-medium text-sm">${order.products?.name || 'ကုန်ပစ္စည်း'}</p>
-                                <p class="text-xs text-gray-500">${order.users?.name || order.users?.username || 'မသိ'}</p>
-                            </div>
+                        <div>
+                            <p class="font-medium text-gray-900">${order.buyer?.name || 'N/A'}</p>
+                            <p class="text-sm text-gray-600">${order.product?.name || 'N/A'}</p>
                         </div>
                         <div class="text-right">
-                            <p class="font-bold text-sm">${formatPrice(order.amount)} K</p>
-                            <span class="status-$${order.status} text-xs">$${getOrderStatusText(order.status)}</span>
+                            <p class="font-medium text-gray-900">${formatPrice(order.amount)} Ks</p>
+                            <p class="text-sm status-${order.status}">${getStatusText(order.status)}</p>
                         </div>
                     </div>
-                `).join('');
+                `).join('') || '<p class="text-gray-500 text-center">လတ်တလော အမှာစာများ မရှိပါ</p>';
                 
             } catch (error) {
-                console.error('Error loading recent orders:', error);
+                console.error('Failed to load recent orders:', error);
             }
         }
         
-        async function loadSalesChart() {
+        // Form handlers
+        async function handleAddProduct(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const productData = {
+                name: formData.get('name'),
+                product_type: formData.get('product_type'),
+                price: parseFloat(formData.get('price')),
+                description: formData.get('description'),
+                is_admin_product: true,
+                status: 'approved'
+            };
+            
             try {
-                const ctx = document.getElementById('salesChart');
-                if (!ctx) return;
-                
-                // Get sales data for the last 7 days
-                const sevenDaysAgo = new Date();
-                sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
-                
-                const { data: salesData, error } = await supabase
-                    .from('orders')
-                    .select('ordered_at, amount')
-                    .eq('status', 'approved')
-                    .gte('ordered_at', sevenDaysAgo.toISOString());
-                    
-                if (error) throw error;
-                
-                // Process data for chart
-                const last7Days = [];
-                const sales = [];
-                
-                for (let i = 6; i >= 0; i--) {
-                    const date = new Date();
-                    date.setDate(date.getDate() - i);
-                    const dateStr = date.toISOString().split('T')[0];
-                    last7Days.push(date.toLocaleDateString('my-MM', { month: 'short', day: 'numeric' }));
-                    
-                    const daySales = salesData
-                        .filter(order => order.ordered_at.startsWith(dateStr))
-                        .reduce((sum, order) => sum + parseFloat(order.amount), 0);
-                    
-                    sales.push(daySales / 1000); // Convert to thousands
-                }
-                
-                // Destroy existing chart if exists
-                if (salesChart) {
-                    salesChart.destroy();
-                }
-                
-                // Create new chart
-                salesChart = new Chart(ctx, {
-                    type: 'line',
-                    data: {
-                        labels: last7Days,
-                        datasets: [{
-                            label: 'ရောင်းအား (K MMK)',
-                            data: sales,
-                            borderColor: 'rgb(59, 130, 246)',
-                            backgroundColor: 'rgba(59, 130, 246, 0.1)',
-                            tension: 0.4,
-                            fill: true
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        maintainAspectRatio: false,
-                        plugins: {
-                            legend: {
-                                display: false
-                            }
-                        },
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                ticks: {
-                                    callback: function(value) {
-                                        return value + 'K';
-                                    }
-                                }
-                            }
-                        }
-                    }
-                });
-                
-            } catch (error) {
-                console.error('Error loading sales chart:', error);
-            }
-        }
-        
-        // Users management
-        async function loadUsers() {
-            try {
-                const searchTerm = document.getElementById('userSearchInput')?.value.toLowerCase() || '';
-                
-                let query = supabase
-                    .from('users')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-                
-                if (searchTerm) {
-                    query = query.or(`name.ilike.%$${searchTerm}%,username.ilike.%$${searchTerm}%,email.ilike.%${searchTerm}%`);
-                }
-                
-                const { data: users, error } = await query;
-                
-                if (error) throw error;
-                
-                const usersTableBody = document.getElementById('usersTableBody');
-                if (!usersTableBody) return;
-                
-                if (!users || users.length === 0) {
-                    usersTableBody.innerHTML = '<tr><td colspan="4" class="text-center py-8 text-gray-500">အသုံးပြုသူများ မရှิပါ</td></tr>';
-                    return;
-                }
-                
-                usersTableBody.innerHTML = users.map(user => `
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-3 md:px-6 py-4">
-                            <div class="flex items-center">
-                                <div class="w-8 h-8 md:w-10 md:h-10 rounded-full overflow-hidden mr-3">
-                                    ${user.profile_image ? 
-                                        `<img src="$${user.profile_image}" alt="$${user.name}" class="w-full h-full object-cover">` :
-                                        '<div class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs"><i class="fas fa-user"></i></div>'
-                                    }
-                                </div>
-                                <div>
-                                    <p class="font-medium text-sm">${user.name}</p>
-                                    <p class="text-xs text-gray-500">@${user.username}</p>
-                                </div>
-                            </div>
-                        </td>
-                        <td class="px-3 md:px-6 py-4 text-sm">${user.email}</td>
-                        <td class="px-3 md:px-6 py-4">
-                            <span class="status-$${user.kyc_status} text-xs">$${getKycStatusText(user.kyc_status)}</span>
-                        </td>
-                        <td class="px-3 md:px-6 py-4">
-                            <div class="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-2">
-                                ${user.kyc_status === 'pending' ? `
-                                    <button onclick="viewUserKyc('${user.id}')" class="text-blue-600 hover:text-blue-800 text-xs">
-                                        KYC ကြည့်ရန်
-                                    </button>
-                                ` : ''}
-                                <button onclick="toggleUserBlock('${user.id}', false)" class="text-red-600 hover:text-red-800 text-xs">
-                                    ပိတ်ပင်ရန်
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
-                
-            } catch (error) {
-                console.error('Error loading users:', error);
-                showNotification('အသုံးပြုသူများ ရယူခြင်း မအောင်မြင်ပါ', 'error');
-            }
-        }
-        
-        // Products management
-        async function loadProducts() {
-            try {
-                const { data: products, error } = await supabase
+                const { data, error } = await supabase
                     .from('products')
-                    .select('*')
-                    .order('created_at', { ascending: false });
-                    
+                    .insert([productData])
+                    .select()
+                    .single();
+                
                 if (error) throw error;
                 
-                const productsTableBody = document.getElementById('productsTableBody');
-                if (!productsTableBody) return;
-                
-                if (!products || products.length === 0) {
-                    productsTableBody.innerHTML = '<tr><td colspan="5" class="text-center py-8 text-gray-500">ကုန်ပစ္စည်းများ မရှိပါ</td></tr>';
-                    return;
-                }
-                
-                productsTableBody.innerHTML = products.map(product => `
-                    <tr class="hover:bg-gray-50">
-                        <td class="px-3 md:px-6 py-4">
-                            <div class="w-10 h-10 md:w-12 md:h-12 rounded-lg overflow-hidden">
-                                ${product.icon_image ? 
-                                    `<img src="$${product.icon_image}" alt="$${product.name}" class="w-full h-full object-cover">` :
-                                    '<div class="w-full h-full bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center text-white text-xs"><i class="fas fa-gamepad"></i></div>'
-                                }
-                            </div>
-                        </td>
-                        <td class="px-3 md:px-6 py-4">
-                            <p class="font-medium text-sm">${product.name}</p>
-                            <p class="text-xs text-gray-500 truncate">${product.description || 'ဖော်ပြချက်မရှိ'}</p>
-                        </td>
-                        <td class="px-3 md:px-6 py-4">
-                            <span class="px-2 py-1 bg-blue-100 text-blue-800 rounded-full text-xs">
-                                ${product.product_type === 'apk' ? 'APK' : 'Game Account'}
-                            </span>
-                        </td>
-                        <td class="px-3 md:px-6 py-4 font-bold text-sm">${formatPrice(product.price)} MMK</td>
-                        <td class="px-3 md:px-6 py-4">
-                            <div class="flex flex-col sm:flex-row space-y-1 sm:space-y-0 sm:space-x-2">
-                                <button onclick="editProduct('${product.id}')" class="text-blue-600 hover:text-blue-800 text-xs">
-                                    ပြင်ရန်
-                                </button>
-                                <button onclick="deleteProduct('${product.id}')" class="text-red-600 hover:text-red-800 text-xs">
-                                    ဖျက်ရန်
-                                </button>
-                            </div>
-                        </td>
-                    </tr>
-                `).join('');
+                showNotification('ကုန်ပစ္စည်း အောင်မြင်စွာ ထည့်ပြီးပါပြီ', 'success');
+                closeAllModals();
+                loadProducts();
+                e.target.reset();
                 
             } catch (error) {
-                console.error('Error loading products:', error);
-                showNotification('ကုန်ပစ္စည်းများ ရယူခြင်း မအောင်မြင်ပါ', 'error');
+                console.error('Failed to add product:', error);
+                showNotification('ကုန်ပစ္စည်း ထည့်၍မရပါ', 'error');
             }
         }
         
-        // Continue with remaining functions in next part...
-        
-        // File upload functions
-        function setupFileUploadAreas() {
-            document.addEventListener('click', function(e) {
-                if (e.target.closest('.upload-area')) {
-                    const uploadArea = e.target.closest('.upload-area');
-                    const fileInput = uploadArea.querySelector('input[type="file"]');
-                    if (fileInput) {
-                        fileInput.click();
-                    }
-                }
-            });
+        async function handleAddPayment(e) {
+            e.preventDefault();
             
-            document.addEventListener('change', function(e) {
-                if (e.target.type === 'file' && e.target.closest('.upload-area')) {
-                    handleFileSelection(e.target);
-                }
-            });
+            const formData = new FormData(e.target);
+            const paymentData = {
+                name: formData.get('name'),
+                details: formData.get('details'),
+                description: formData.get('description'),
+                is_admin_method: true
+            };
             
-            // Drag and drop
-            document.addEventListener('dragover', function(e) {
-                if (e.target.closest('.upload-area')) {
-                    e.preventDefault();
-                    e.target.closest('.upload-area').classList.add('dragover');
-                }
-            });
-            
-            document.addEventListener('dragleave', function(e) {
-                if (e.target.closest('.upload-area')) {
-                    e.target.closest('.upload-area').classList.remove('dragover');
-                }
-            });
-            
-            document.addEventListener('drop', function(e) {
-                if (e.target.closest('.upload-area')) {
-                    e.preventDefault();
-                    const uploadArea = e.target.closest('.upload-area');
-                    uploadArea.classList.remove('dragover');
-                    
-                    const fileInput = uploadArea.querySelector('input[type="file"]');
-                    if (fileInput && e.dataTransfer.files.length > 0) {
-                        fileInput.files = e.dataTransfer.files;
-                        handleFileSelection(fileInput);
-                    }
-                }
-            });
-        }
-        
-        function handleFileSelection(input) {
-            const files = Array.from(input.files);
-            const uploadType = input.closest('.upload-area').getAttribute('data-upload-type');
-            const previewContainer = document.getElementById(`${uploadType}-preview`);
-            
-            if (!previewContainer) return;
-            
-            // Store files
-            if (!uploadedFiles[uploadType]) {
-                uploadedFiles[uploadType] = [];
-            }
-            
-            if (input.multiple) {
-                uploadedFiles[uploadType] = uploadedFiles[uploadType].concat(files);
-            } else {
-                uploadedFiles[uploadType] = files;
-            }
-            
-            // Show preview
-            showFilePreview(uploadType, uploadedFiles[uploadType], previewContainer);
-        }
-        
-        function showFilePreview(type, files, container) {
-            container.innerHTML = files.map((file, index) => {
-                const isImage = file.type.startsWith('image/');
-                const isVideo = file.type.startsWith('video/');
+            try {
+                const { data, error } = await supabase
+                    .from('payment_methods')
+                    .insert([paymentData])
+                    .select()
+                    .single();
                 
-                return `
-                    <div class="file-preview-item">
-                        ${isImage ? `
-                            <img src="${URL.createObjectURL(file)}" alt="Preview" class="w-12 h-12 md:w-16 md:h-16 object-cover rounded">
-                        ` : isVideo ? `
-                            <video src="${URL.createObjectURL(file)}" class="w-12 h-12 md:w-16 md:h-16 object-cover rounded" muted></video>
-                        ` : `
-                            <div class="w-12 h-12 md:w-16 md:h-16 bg-gray-600 rounded flex items-center justify-center">
-                                <i class="fas fa-file text-xl"></i>
+                if (error) throw error;
+                
+                showNotification('ငွေပေးချေမှုနည်းလမ်း အောင်မြင်စွာ ထည့်ပြီးပါပြီ', 'success');
+                closeAllModals();
+                loadPaymentMethods();
+                e.target.reset();
+                
+            } catch (error) {
+                console.error('Failed to add payment method:', error);
+                showNotification('ငွေပေးချေမှုနည်းလမ်း ထည့်၍မရပါ', 'error');
+            }
+        }
+        
+        async function handleAddNews(e) {
+            e.preventDefault();
+            
+            const formData = new FormData(e.target);
+            const newsData = {
+                title: formData.get('title'),
+                content: formData.get('content'),
+                is_published: true
+            };
+            
+            try {
+                const { data, error } = await supabase
+                    .from('news')
+                    .insert([newsData])
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                showNotification('သတင်း အောင်မြင်စွာ ထည့်ပြီးပါပြီ', 'success');
+                closeAllModals();
+                loadNews();
+                e.target.reset();
+                
+            } catch (error) {
+                console.error('Failed to add news:', error);
+                showNotification('သတင်း ထည့်၍မရပါ', 'error');
+            }
+        }
+        
+        async function handleUpdateAbout(e) {
+            e.preventDefault();
+            
+            const aboutData = {
+                title: document.getElementById('aboutTitle').value,
+                content: document.getElementById('aboutContent').value,
+                address: document.getElementById('aboutAddress').value,
+                phone: document.getElementById('aboutPhone').value,
+                email: document.getElementById('aboutEmail').value,
+                social_links: {
+                    telegram: document.getElementById('aboutTelegram').value,
+                    youtube: document.getElementById('aboutYoutube').value,
+                    viber: document.getElementById('aboutViber').value,
+                    wechat: document.getElementById('aboutWechat').value
+                }
+            };
+            
+            try {
+                const { data, error } = await supabase
+                    .from('about')
+                    .upsert([aboutData])
+                    .select()
+                    .single();
+                
+                if (error) throw error;
+                
+                showNotification('အကြောင်းအရာ အောင်မြင်စွာ သိမ်းဆည်းပြီးပါပြီ', 'success');
+                
+            } catch (error) {
+                console.error('Failed to update about:', error);
+                showNotification('အကြောင်းအရာ သိမ်းဆည်း၍မရပါ', 'error');
+            }
+        }
+        
+        // Action handlers
+        async function approveProduct(productId) {
+            try {
+                const { error } = await supabase
+                    .from('products')
+                    .update({ status: 'approved' })
+                    .eq('id', productId);
+                
+                if (error) throw error;
+                
+                showNotification('ကုန်ပစ္စည်း အတည်ပြုပြီးပါပြီ', 'success');
+                loadProducts();
+                
+            } catch (error) {
+                console.error('Failed to approve product:', error);
+                showNotification('ကုန်ပစ္စည်း အတည်ပြု၍မရပါ', 'error');
+            }
+        }
+        
+        async function rejectProduct(productId) {
+            try {
+                const { error } = await supabase
+                    .from('products')
+                    .update({ status: 'rejected' })
+                    .eq('id', productId);
+                
+                if (error) throw error;
+                
+                showNotification('ကုန်ပစ္စည်း ငြင်းပယ်ပြီးပါပြီ', 'warning');
+                loadProducts();
+                
+            } catch (error) {
+                console.error('Failed to reject product:', error);
+                showNotification('ကုန်ပစ္စည်း ငြင်းပယ်၍မရပါ', 'error');
+            }
+        }
+        
+        async function approveOrder(orderId) {
+            try {
+                const { error } = await supabase
+                    .from('orders')
+                    .update({ 
+                        status: 'approved',
+                        download_approved: true,
+                        processed_at: new Date().toISOString()
+                    })
+                    .eq('id', orderId);
+                
+                if (error) throw error;
+                
+                showNotification('အမှာစာ အတည်ပြုပြီးပါပြီ', 'success');
+                loadOrders();
+                loadDashboardData();
+                
+            } catch (error) {
+                console.error('Failed to approve order:', error);
+                showNotification('အမှာစာ အတည်ပြု၍မရပါ', 'error');
+            }
+        }
+        
+        async function rejectOrder(orderId) {
+            try {
+                const { error } = await supabase
+                    .from('orders')
+                    .update({ 
+                        status: 'rejected',
+                        processed_at: new Date().toISOString()
+                    })
+                    .eq('id', orderId);
+                
+                if (error) throw error;
+                
+                showNotification('အမှာစာ ငြင်းပယ်ပြီးပါပြီ', 'warning');
+                loadOrders();
+                loadDashboardData();
+                
+            } catch (error) {
+                console.error('Failed to reject order:', error);
+                showNotification('အမှာစာ ငြင်းပယ်၍မရပါ', 'error');
+            }
+        }
+        
+        async function viewKyc(kycId) {
+            try {
+                const { data: kyc, error } = await supabase
+                    .from('kyc_verifications')
+                    .select(`
+                        *,
+                        users(name, email)
+                    `)
+                    .eq('id', kycId)
+                    .single();
+                
+                if (error) throw error;
+                
+                const kycDetails = document.getElementById('kycDetailsContent');
+                kycDetails.innerHTML = `
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <h4 class="font-semibold mb-4">ကိုယ်ရေးကိုယ်တာအချက်အလက်</h4>
+                            <div class="space-y-3">
+                                <p><strong>အမည်:</strong> ${kyc.full_name}</p>
+                                <p><strong>မွေးသက္ကရာဇ်:</strong> ${kyc.date_of_birth}</p>
+                                <p><strong>စာရွက်စာတမ်းအမျိုးအစား:</strong> ${getDocumentTypeText(kyc.document_type)}</p>
+                                <p><strong>လိပ်စာ:</strong> ${kyc.address}</p>
+                                <p><strong>တင်သွင်းသည့်ရက်:</strong> ${formatDate(kyc.submitted_at)}</p>
                             </div>
-                        `}
-                        <div class="flex-1 min-w-0">
-                            <p class="text-sm font-medium truncate">${file.name}</p>
-                            <p class="text-xs text-gray-400">${formatFileSize(file.size)}</p>
                         </div>
-                        <button type="button" class="remove-file" onclick="removeFile('$${type}', $${index})">
-                            <i class="fas fa-times"></i>
-                        </button>
+                        <div>
+                            <h4 class="font-semibold mb-4">စာရွက်စာတမ်းများ</h4>
+                            <div class="space-y-4">
+                                <div>
+                                    <p class="text-sm font-medium mb-2">စာရွက်စာတမ်း (ရှေ့ပိုင်း):</p>
+                                    <img src="${kyc.document_front}" alt="Document Front" class="w-full max-w-xs rounded-lg border">
+                                </div>
+                                ${kyc.document_back ? `
+                                    <div>
+                                        <p class="text-sm font-medium mb-2">စာရွက်စာတမ်း (နောက်ပိုင်း):</p>
+                                        <img src="${kyc.document_back}" alt="Document Back" class="w-full max-w-xs rounded-lg border">
+                                    </div>
+                                ` : ''}
+                                <div>
+                                    <p class="text-sm font-medium mb-2">စာရွက်စာတမ်းနဲ့အတူ ဓာတ်ပုံ:</p>
+                                    <img src="${kyc.selfie_with_document}" alt="Selfie" class="w-full max-w-xs rounded-lg border">
+                                </div>
+                            </div>
+                        </div>
                     </div>
                 `;
-            }).join('');
-        }
-        
-        function removeFile(type, index) {
-            if (uploadedFiles[type]) {
-                uploadedFiles[type].splice(index, 1);
-                const previewContainer = document.getElementById(`${type}-preview`);
-                if (previewContainer) {
-                    showFilePreview(type, uploadedFiles[type], previewContainer);
-                }
+                
+                // Store current KYC ID for approval/rejection
+                document.getElementById('approveKycBtn').onclick = () => approveKyc(kycId);
+                document.getElementById('rejectKycBtn').onclick = () => rejectKyc(kycId);
+                
+                openModal('viewKycModal');
+                
+            } catch (error) {
+                console.error('Failed to load KYC details:', error);
+                showNotification('KYC အချက်အလက်များ ရယူ၍မရပါ', 'error');
             }
         }
         
-        // Product type change handler
-        function handleProductTypeChange(type) {
-            const apkSection = document.getElementById('apk-files-section');
-            if (apkSection) {
-                if (type === 'apk') {
-                    apkSection.style.display = 'block';
-                } else {
-                    apkSection.style.display = 'none';
-                }
+        async function approveKyc(kycId) {
+            try {
+                const { data: kyc, error: kycError } = await supabase
+                    .from('kyc_verifications')
+                    .update({ 
+                        status: 'approved',
+                        reviewed_at: new Date().toISOString()
+                    })
+                    .eq('id', kycId)
+                    .select('user_id')
+                    .single();
+                
+                if (kycError) throw kycError;
+                
+                // Update user to be seller
+                const { error: userError } = await supabase
+                    .from('users')
+                    .update({ 
+                        kyc_status: 'approved',
+                        is_seller: true
+                    })
+                    .eq('id', kyc.user_id);
+                
+                if (userError) throw userError;
+                
+                showNotification('KYC အတည်ပြုပြီးပါပြီ - အသုံးပြုသူသည် ရောင်းသူဖြစ်လာပါပြီ', 'success');
+                closeAllModals();
+                loadKycRequests();
+                loadDashboardData();
+                
+            } catch (error) {
+                console.error('Failed to approve KYC:', error);
+                showNotification('KYC အတည်ပြု၍မရပါ', 'error');
             }
         }
         
-        // Modal functions
-        function showAddProductModal() {
-            const modal = document.getElementById('addProductModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                // Clear form
-                document.getElementById('addProductForm').reset();
-                uploadedFiles = {};
-                document.querySelectorAll('.file-preview').forEach(preview => {
-                    preview.innerHTML = '';
-                });
+        async function rejectKyc(kycId) {
+            try {
+                const { error } = await supabase
+                    .from('kyc_verifications')
+                    .update({ 
+                        status: 'rejected',
+                        reviewed_at: new Date().toISOString()
+                    })
+                    .eq('id', kycId);
+                
+                if (error) throw error;
+                
+                showNotification('KYC ငြင်းပယ်ပြီးပါပြီ', 'warning');
+                closeAllModals();
+                loadKycRequests();
+                loadDashboardData();
+                
+            } catch (error) {
+                console.error('Failed to reject KYC:', error);
+                showNotification('KYC ငြင်းပယ်၍မရပါ', 'error');
             }
         }
         
-        function showAddNewsModal() {
-            const modal = document.getElementById('addNewsModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                // Clear form
-                document.getElementById('addNewsForm').reset();
-                uploadedFiles = {};
-                document.querySelectorAll('.file-preview').forEach(preview => {
-                    preview.innerHTML = '';
-                });
-            }
+        // Utility functions
+        function openModal(modalId) {
+            document.getElementById(modalId)?.classList.remove('hidden');
         }
         
-        function showAddPaymentModal() {
-            const modal = document.getElementById('addPaymentModal');
-            if (modal) {
-                modal.classList.remove('hidden');
-                // Clear form
-                document.getElementById('addPaymentForm').reset();
-                uploadedFiles = {};
-                document.querySelectorAll('.file-preview').forEach(preview => {
-                    preview.innerHTML = '';
-                });
-            }
-        }
-        
-        function closeModals() {
+        function closeAllModals() {
             document.querySelectorAll('.modal').forEach(modal => {
                 modal.classList.add('hidden');
             });
         }
         
-        // Utility functions
-        function formatPrice(price) {
-            return new Intl.NumberFormat('en-US').format(price);
-        }
-        
-        function formatFileSize(bytes) {
-            if (bytes === 0) return '0 Bytes';
-            const k = 1024;
-            const sizes = ['Bytes', 'KB', 'MB', 'GB'];
-            const i = Math.floor(Math.log(bytes) / Math.log(k));
-            return parseFloat((bytes / Math.pow(k, i)).toFixed(2)) + ' ' + sizes[i];
-        }
-        
-        function getOrderStatusText(status) {
-            switch (status) {
-                case 'pending': return 'စောင့်ဆိုင်းနေသည်';
-                case 'approved': return 'အတည်ပြုပြီး';
-                case 'rejected': return 'ငြင်းပယ်ခံရ';
-                default: return status;
-            }
-        }
-        
-        function getKycStatusText(status) {
-            switch (status) {
-                case 'pending': return 'စောင့်ဆိုင်းနေသည်';
-                case 'approved': return 'အတည်ပြုပြီး';
-                case 'rejected': return 'ငြင်းပယ်ခံရ';
-                default: return status;
-            }
-        }
-        
-        function showNotification(message, type = 'info') {
+        function showNotification(message, type = 'success') {
             const notification = document.createElement('div');
-            
-            let bgClass = '';
-            switch (type) {
-                case 'success':
-                    bgClass = 'success-notification';
-                    break;
-                case 'error':
-                    bgClass = 'error-notification';
-                    break;
-                case 'warning':
-                    bgClass = 'warning-notification';
-                    break;
-                default:
-                    bgClass = 'success-notification';
-            }
-            
-            notification.className = `notification ${bgClass}`;
+            notification.className = `notification ${type}-notification`;
             notification.innerHTML = `
-                <span>${message}</span>
-                <button onclick="this.parentElement.remove()" class="ml-4">
-                    <i class="fas fa-times"></i>
-                </button>
+                <div class="flex items-center">
+                    <i class="fas fa-${type === 'success' ? 'check-circle' : type === 'error' ? 'exclamation-circle' : 'exclamation-triangle'} mr-3"></i>
+                    <span>${message}</span>
+                </div>
             `;
             
-            document.body.appendChild(notification);
+            document.getElementById('notificationContainer').appendChild(notification);
             
-            // Auto hide after 5 seconds
             setTimeout(() => {
                 notification.remove();
             }, 5000);
         }
         
-        // Placeholder functions for remaining functionality
-        async function loadOrders() {
-            // Implementation for loading orders
-            console.log('Loading orders...');
+        function setLoading(textId, loaderId, isLoading, text = '') {
+            const textElement = document.getElementById(textId);
+            const loaderElement = document.getElementById(loaderId);
+            
+            if (textElement) {
+                textElement.textContent = isLoading ? text : 'ဝင်ရောက်မည်';
+            }
+            
+            if (loaderElement) {
+                loaderElement.classList.toggle('hidden', !isLoading);
+            }
         }
         
-        async function loadPaymentMethods() {
-            // Implementation for loading payment methods
-            console.log('Loading payment methods...');
+        function formatPrice(price) {
+            return new Intl.NumberFormat('my-MM').format(price);
         }
         
-        async function loadKycVerifications() {
-            // Implementation for loading KYC verifications
-            console.log('Loading KYC verifications...');
+        function formatDate(date) {
+            return new Date(date).toLocaleDateString('my-MM');
         }
         
-        async function loadNews() {
-            // Implementation for loading news
-            console.log('Loading news...');
+        function getStatusText(status) {
+            const statusMap = {
+                'pending': 'စောင့်ဆိုင်းနေသော',
+                'approved': 'အတည်ပြုပြီး',
+                'rejected': 'ငြင်းပယ်ပြီး',
+                'active': 'အသုံးပြုနေသော'
+            };
+            return statusMap[status] || status;
         }
         
-        async function loadAboutData() {
-            // Implementation for loading about data
-            console.log('Loading about data...');
+        function getDocumentTypeText(type) {
+            const typeMap = {
+                'nrc': 'နိုင်ငံသားစီစစ်ရေးကတ်ပြား',
+                'passport': 'နိုင်ငံကူးလက်မှတ်',
+                'driver': 'ယာဉ်မောင်းလိုင်စင်'
+            };
+            return typeMap[type] || type;
         }
         
-        async function handleAddProduct(e) {
-            e.preventDefault();
-            // Implementation for adding product
-            console.log('Adding product...');
-        }
-        
-        async function handleAddNews(e) {
-            e.preventDefault();
-            // Implementation for adding news
-            console.log('Adding news...');
-        }
-        
-        async function handleAddPayment(e) {
-            e.preventDefault();
-            // Implementation for adding payment method
-            console.log('Adding payment method...');
-        }
-        
-        async function handleAboutUpdate(e) {
-            e.preventDefault();
-            // Implementation for updating about
-            console.log('Updating about...');
-        }
-        
-        function handleKycDecision(decision) {
-            // Implementation for KYC decision
-            console.log('KYC decision:', decision);
+        // Initialize Chart
+        function initializeChart() {
+            const ctx = document.getElementById('salesChart')?.getContext('2d');
+            if (!ctx) return;
+            
+            salesChart = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['ဇန်', 'ဖေ', 'မတ်', 'ဧပြီ', 'မေ', 'ဇွန်'],
+                    datasets: [{
+                        label: 'ရောင်းအား',
+                        data: [12, 19, 3, 5, 2, 3],
+                        borderColor: 'rgb(59, 130, 246)',
+                        backgroundColor: 'rgba(59, 130, 246, 0.1)',
+                        tension: 0.4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
         }
     </script>
 </body>
