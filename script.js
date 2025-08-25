@@ -1124,6 +1124,42 @@
             });
         });
 
+        // Initialize Advertisement
+function initializeAds() {
+    const dashboardContainer = document.getElementById('dashboardContainer');
+    const adContainer = document.getElementById('adContainer');
+    
+    // Only initialize ads when in dashboard and not in login/register
+    if (dashboardContainer && !dashboardContainer.classList.contains('hidden')) {
+        // Check if ads are already loaded
+        const existingAd = document.querySelector('#adPlacement script[src*="highperformanceformat.com"]');
+        if (!existingAd) {
+            // Configure ad options
+            window.atOptions = {
+                'key': '8972f565fb2ce3bcc30125e33791174c',
+                'format': 'iframe',
+                'height': 60,
+                'width': 320,
+                'params': {}
+            };
+            
+            // Create and append ad script
+            const adScript = document.createElement('script');
+            adScript.type = 'text/javascript';
+            adScript.src = '//www.highperformanceformat.com/8972f565fb2ce3bcc30125e33791174c/invoke.js';
+            
+            const adPlacement = document.getElementById('adPlacement');
+            if (adPlacement) {
+                // Clear existing content
+                adPlacement.innerHTML = '';
+                adPlacement.appendChild(adScript);
+                
+                // Show ad container
+                adContainer.style.display = 'flex';
+            }
+        }
+    }
+}
         // Additional utility functions for sellers (will be implemented when needed)
         function openAddProductModal() {
             showNotification('ဤ feature ကို မကြာမီ ထည့်သွင်းပေးပါမည်', 'warning');
