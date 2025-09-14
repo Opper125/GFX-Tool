@@ -6,10 +6,8 @@
     <title>MMR GAMING SHOP</title>
     
     <!-- CDN Libraries -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.4.0/css/all.min.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+Myanmar:wght@300;400;500;600;700&family=Orbitron:wght@400;700;900&display=swap" rel="stylesheet">
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
@@ -18,19 +16,11 @@
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <!-- Enhanced Loading Screen -->
+    <!-- Loading Screen -->
     <div id="loadingScreen" class="loading-container">
-        <div class="loading-logo-container">
-            <img src="https://raw.githubusercontent.com/Opper125/onlinefullshop/c231d973ce84d2ac8cc97697de5564ea6e3acf05/MAFIA.png" alt="MMR Gaming Logo" class="loading-logo">
-        </div>
-        <div class="loading-text-glitch" id="loadingText">
-            <span>MMR GAMING</span>
-        </div>
+        <div class="loading-text" id="loadingText"></div>
         <div class="loading-progress">
             <div class="loading-bar"></div>
-        </div>
-        <div class="loading-subtitle">
-            <span class="typing-text">မြန်မာ့ အကောင်းဆုံး Gaming Shop</span>
         </div>
     </div>
 
@@ -39,13 +29,10 @@
         <!-- Auth Container -->
         <div id="authContainer">
             <!-- Login Page -->
-            <div id="loginPage" class="min-h-screen flex items-center justify-center p-4 auth-bg">
-                <div class="neo-glass p-8 w-full max-w-md auth-card">
+            <div id="loginPage" class="min-h-screen flex items-center justify-center p-4">
+                <div class="neo-glass p-8 w-full max-w-md">
                     <div class="text-center mb-8">
-                        <div class="logo-container mb-6">
-                            <img src="https://raw.githubusercontent.com/Opper125/onlinefullshop/c231d973ce84d2ac8cc97697de5564ea6e3acf05/MAFIA.png" alt="MMR Gaming Logo" class="auth-logo">
-                        </div>
-                        <h1 class="logo text-3xl mb-4 font-orbitron">MMR GAMING SHOP</h1>
+                        <h1 class="logo text-3xl mb-4">MMR GAMING SHOP</h1>
                         <p class="text-gray-300">မြန်မာ့ အကောင်းဆုံး Gaming Shop</p>
                     </div>
                     
@@ -66,20 +53,17 @@
                     
                     <div class="text-center mt-6">
                         <p class="text-gray-300">အကောင့်မရှိသေးလား? 
-                            <a href="#" id="showRegister" class="text-cyan-400 hover:text-cyan-300 glow-text">အကောင့်ဖွင့်ရန်</a>
+                            <a href="#" id="showRegister" class="text-cyan-400 hover:text-cyan-300">အကောင့်ဖွင့်ရန်</a>
                         </p>
                     </div>
                 </div>
             </div>
 
             <!-- Register Page -->
-            <div id="registerPage" class="min-h-screen flex items-center justify-center p-4 auth-bg hidden">
-                <div class="neo-glass p-8 w-full max-w-md auth-card">
+            <div id="registerPage" class="min-h-screen flex items-center justify-center p-4 hidden">
+                <div class="neo-glass p-8 w-full max-w-md">
                     <div class="text-center mb-8">
-                        <div class="logo-container mb-6">
-                            <img src="https://raw.githubusercontent.com/Opper125/onlinefullshop/c231d973ce84d2ac8cc97697de5564ea6e3acf05/MAFIA.png" alt="MMR Gaming Logo" class="auth-logo">
-                        </div>
-                        <h1 class="logo text-3xl mb-4 font-orbitron">အကောင့်ဖွင့်ရန်</h1>
+                        <h1 class="logo text-3xl mb-4">အကောင့်ဖွင့်ရန်</h1>
                         <p class="text-gray-300">MMR GAMING SHOP နဲ့ အတူ စတင်လိုက်ပါ</p>
                     </div>
                     
@@ -114,7 +98,7 @@
                     
                     <div class="text-center mt-6">
                         <p class="text-gray-300">အကောင့်ရှိပြီးလား? 
-                            <a href="#" id="showLogin" class="text-cyan-400 hover:text-cyan-300 glow-text">လော့ဂ်အင်</a>
+                            <a href="#" id="showLogin" class="text-cyan-400 hover:text-cyan-300">လော့ဂ်အင်</a>
                         </p>
                     </div>
                 </div>
@@ -123,59 +107,86 @@
 
         <!-- Dashboard Container -->
         <div id="dashboardContainer" class="hidden">
-            <!-- Enhanced Header -->
-            <header class="header enhanced-header">
+            <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
+            <!-- Header -->
+            <header class="header">
                 <div class="flex items-center">
-                    <button id="menuBtn" class="text-cyan-400 hover:text-cyan-300 mr-4 menu-btn">
+                    <button id="menuBtn" class="text-cyan-400 hover:text-cyan-300 mr-4">
                         <i class="fas fa-bars text-xl"></i>
                     </button>
-                    <div class="header-logo-enhanced">
-                        <img src="https://raw.githubusercontent.com/Opper125/onlinefullshop/c231d973ce84d2ac8cc97697de5564ea6e3acf05/MAFIA.png" alt="MMR Gaming Logo" class="header-logo-img">
-                        <div class="logo font-orbitron">MMR GAMING SHOP</div>
-                    </div>
+                    <div class="logo">MMR GAMING SHOP</div>
+                    <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
                 </div>
                 <div class="flex items-center space-x-4">
-                    <img id="userAvatar" class="avatar enhanced-avatar" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMwMGZmODgiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" alt="Profile">
-                    <button id="logoutBtn" class="text-red-400 hover:text-red-300 logout-btn">
+                    <img id="userAvatar" class="avatar" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMwMGZmODgiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" alt="Profile">
+                    <button id="logoutBtn" class="text-red-400 hover:text-red-300">
                         <i class="fas fa-sign-out-alt text-xl"></i>
                     </button>
                 </div>
             </header>
 
-            <!-- Enhanced Navigation Menu -->
-            <nav id="navMenu" class="nav-menu enhanced-nav">
-                <div class="nav-profile mb-8">
+            <!-- Navigation Menu -->
+            <nav id="navMenu" class="nav-menu">
+                <div class="mb-8">
                     <div class="flex items-center mb-6">
-                        <img id="navAvatar" class="avatar enhanced-avatar mr-4" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMwMGZmODgiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" alt="Profile">
+                        <img id="navAvatar" class="avatar mr-4" src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMwMGZmODgiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" alt="Profile">
                         <div>
-                            <h3 id="navUsername" class="text-white font-bold glow-text">User</h3>
+                            <h3 id="navUsername" class="text-white font-bold">User</h3>
                             <p class="text-gray-400 text-sm">MMR Gaming</p>
                         </div>
                     </div>
                 </div>
                 
                 <div class="space-y-2">
-                    <a href="#" class="nav-item active enhanced-nav-item" data-page="home">
+                    <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
+                    <a href="#" class="nav-item active" data-page="home">
                         <i class="fas fa-home"></i>
                         <span>မူလစာမျက်နှာ</span>
                     </a>
-                    <a href="#" class="nav-item enhanced-nav-item" data-page="news">
+                    <a href="#" class="nav-item" data-page="news">
                         <i class="fas fa-newspaper"></i>
                         <span>သတင်းများ</span>
                     </a>
-                    <a href="#" class="nav-item enhanced-nav-item" data-page="shop">
+                    <a href="#" class="nav-item" data-page="shop">
                         <i class="fas fa-store"></i>
                         <span>ဆိုင်ခန်း</span>
                     </a>
-                    <a href="#" class="nav-item enhanced-nav-item" data-page="history">
+                    <a href="#" class="nav-item" data-page="history">
                         <i class="fas fa-history"></i>
                         <span>မှတ်တမ်း</span>
                     </a>
-                    <a href="#" class="nav-item enhanced-nav-item" data-page="profile">
+                    <a href="#" class="nav-item" data-page="profile">
                         <i class="fas fa-user"></i>
                         <span>ပရိုဖိုင်</span>
                     </a>
-                    <a href="#" class="nav-item enhanced-nav-item" data-page="about">
+                    <a href="#" class="nav-item" data-page="about">
                         <i class="fas fa-info-circle"></i>
                         <span>အကြောင်း</span>
                     </a>
@@ -189,19 +200,17 @@
             <main class="content-area">
                 <!-- Home Page -->
                 <div id="homePage" class="page active">
-                    <div class="page-header">
-                        <h2 class="page-title font-orbitron">ထုတ်ကုန်များ</h2>
-                    </div>
-                    <div id="productGrid" class="product-grid enhanced-grid">
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">ထုတ်ကုန်များ</h2>
+                    <div id="productGrid" class="product-grid">
                         <!-- Products will be loaded here -->
                     </div>
+                    
+                    <!-- Advertisement Area (ကြေငြာ မပြစေရ၊ Dashboard ထဲမှာပဲ ပြမယ်) -->
                 </div>
 
                 <!-- News Page -->
                 <div id="newsPage" class="page">
-                    <div class="page-header">
-                        <h2 class="page-title font-orbitron">သတင်းများ</h2>
-                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">သတင်းများ</h2>
                     <div id="newsGrid" class="space-y-6">
                         <!-- News will be loaded here -->
                     </div>
@@ -209,15 +218,23 @@
 
                 <!-- Shop Page -->
                 <div id="shopPage" class="page">
-                    <div class="page-header">
-                        <h2 class="page-title font-orbitron">ဆိုင်ခန်း</h2>
-                    </div>
+                    <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">ဆိုင်ခန်း</h2>
                     <div id="sellerContent">
                         <div class="neo-glass p-8 text-center max-w-md mx-auto">
-                            <div class="text-6xl mb-6 text-cyan-400 pulse">
+                            <div class="text-6xl mb-6 text-cyan-400">
                                 <i class="fas fa-store"></i>
                             </div>
-                            <h3 class="text-2xl font-bold text-white mb-4 font-orbitron">ရောင်းချသူဖြစ်လိုပါသလား?</h3>
+                            <h3 class="text-2xl font-bold text-white mb-4">ရောင်းချသူဖြစ်လိုပါသလား?</h3>
                             <p class="text-gray-300 mb-8">
                                 ကုန်ပစ္စည်းများ ရောင်းချနိုင်ရန် ပထမဦးစွာ KYC ဖြည့်စွက်ရန် လိုအပ်ပါသည်
                             </p>
@@ -228,9 +245,7 @@
 
                 <!-- History Page -->
                 <div id="historyPage" class="page">
-                    <div class="page-header">
-                        <h2 class="page-title font-orbitron">ဝယ်ယူမှု မှတ်တမ်း</h2>
-                    </div>
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">ဝယ်ယူမှု မှတ်တမ်း</h2>
                     <div id="orderHistory" class="space-y-4">
                         <!-- Order history will be loaded here -->
                     </div>
@@ -238,17 +253,25 @@
 
                 <!-- Profile Page -->
                 <div id="profilePage" class="page">
-                    <div class="page-header">
-                        <h2 class="page-title font-orbitron">ပရိုဖိုင်</h2>
-                    </div>
+                    <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">ပရိုဖိုင်</h2>
                     <div class="max-w-2xl mx-auto">
                         <div class="neo-glass p-8">
                             <div class="text-center mb-8">
                                 <div class="relative inline-block">
-                                    <img id="profileImage" class="w-32 h-32 rounded-full border-4 border-cyan-400 mx-auto enhanced-avatar-large" 
+                                    <img id="profileImage" class="w-32 h-32 rounded-full border-4 border-cyan-400 mx-auto" 
                                          src="data:image/svg+xml;base64,PHN2ZyB3aWR0aD0iNDAiIGhlaWdodD0iNDAiIHZpZXdCb3g9IjAgMCA0MCA0MCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIj4KPGNpcmNsZSBjeD0iMjAiIGN5PSIyMCIgcj0iMjAiIGZpbGw9IiMwMGZmODgiLz4KPHN2ZyB3aWR0aD0iMjAiIGhlaWdodD0iMjAiIHZpZXdCb3g9IjAgMCAyNCAyNCIgZmlsbD0ibm9uZSIgeG1sbnM9Imh0dHA6Ly93d3cudzMub3JnLzIwMDAvc3ZnIiB4PSIxMCIgeT0iMTAiPgo8cGF0aCBkPSJNMTIgMTJDMTQuNzYxNCAxMiAxNyA5Ljc2MTQyIDE3IDdDMTcgNC4yMzg1OCAxNC43NjE0IDIgMTIgMkM5LjIzODU4IDIgNyA0LjIzODU4IDcgN0M3IDkuNzYxNDIgOS4yMzg1OCAxMiAxMiAxMloiIGZpbGw9IndoaXRlIi8+CjxwYXRoIGQ9Ik0xMiAxNEM3IDEzLjk5OTYgNSAxNi45OTk2IDUgMjJIMTlDMTkgMTYuOTk5NiAxNyAxMy45OTk2IDEyIDE0WiIgZmlsbD0id2hpdGUiLz4KPHN2Zz4KPHN2Zz4K" 
                                          alt="Profile">
-                                    <label for="profileImageUpload" class="absolute -bottom-2 -right-2 bg-cyan-500 text-white rounded-full p-3 cursor-pointer hover:bg-cyan-600 glow-hover">
+                                    <label for="profileImageUpload" class="absolute -bottom-2 -right-2 bg-cyan-500 text-white rounded-full p-3 cursor-pointer hover:bg-cyan-600">
                                         <i class="fas fa-camera"></i>
                                     </label>
                                     <input type="file" id="profileImageUpload" class="hidden" accept="image/*">
@@ -278,7 +301,7 @@
                             </form>
                             
                             <div class="mt-8" id="kycSection">
-                                <h3 class="text-white font-bold mb-4 text-xl font-orbitron">KYC အခြေအနေ</h3>
+                                <h3 class="text-white font-bold mb-4 text-xl">KYC အခြေအနေ</h3>
                                 <div id="kycStatus" class="p-6 rounded-lg border-2 border-cyan-400 bg-cyan-400 bg-opacity-10">
                                     <!-- KYC status will be shown here -->
                                 </div>
@@ -289,17 +312,25 @@
 
                 <!-- About Page -->
                 <div id="aboutPage" class="page">
-                    <div class="page-header">
-                        <h2 class="page-title font-orbitron">အကြောင်း</h2>
-                    </div>
+                    <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
+                    <h2 class="text-3xl font-bold text-white mb-8 text-center">အကြောင်း</h2>
                     <div class="max-w-4xl mx-auto">
                         <div class="neo-glass p-8">
                             <div class="text-center mb-8">
-                                <div class="about-logo-container mb-6">
-                                    <img src="https://raw.githubusercontent.com/Opper125/onlinefullshop/c231d973ce84d2ac8cc97697de5564ea6e3acf05/MAFIA.png" alt="MMR Gaming Logo" class="about-logo">
+                                <div class="text-6xl mb-6 text-cyan-400">
+                                    <i class="fas fa-gamepad"></i>
                                 </div>
-                                <h1 class="logo text-4xl mb-4 font-orbitron">MMR GAMING SHOP</h1>
-                                <p class="text-gray-300 text-lg glow-text">မြန်မာ့ အကောင်းဆုံး Gaming Shop</p>
+                                <h1 class="logo text-4xl mb-4">MMR GAMING SHOP</h1>
+                                <p class="text-gray-300 text-lg">မြန်မာ့ အကောင်းဆုံး Gaming Shop</p>
                             </div>
                             
                             <div class="text-gray-300 space-y-6 mb-8">
@@ -322,39 +353,38 @@
                             </div>
                             
                             <div class="flex justify-center space-x-4" id="socialLinks">
-                                <a href="#" class="social-icon telegram enhanced-social" title="Telegram">
+                                <a href="#" class="social-icon telegram" title="Telegram">
                                     <i class="fab fa-telegram"></i>
                                 </a>
-                                <a href="#" class="social-icon youtube enhanced-social" title="YouTube">
+                                <a href="#" class="social-icon youtube" title="YouTube">
                                     <i class="fab fa-youtube"></i>
                                 </a>
-                                <a href="#" class="social-icon viber enhanced-social" title="Viber">
+                                <a href="#" class="social-icon viber" title="Viber">
                                     <i class="fab fa-viber"></i>
                                 </a>
-                                <a href="#" class="social-icon wechat enhanced-social" title="WeChat">
+                                <a href="#" class="social-icon wechat" title="WeChat">
                                     <i class="fab fa-weixin"></i>
                                 </a>
                             </div>
                         </div>
                     </div>
                 </div>
-            </main>
-
-            <!-- Enhanced Advertisement Area -->
-            <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center p-4" id="adContainer">
-                <div id="adPlacement" class="ad-enhanced">
-                    <!-- Advertisement content will be loaded here -->
+                
+                <!-- ကြေငြာ နေရာ - Dashboard အောက်ဆုံးမှာပဲ ပြမယ် -->
+                <div class="fixed bottom-0 left-0 right-0 z-50 flex justify-center p-4" id="adContainer">
+                    <!-- အောက်မှာ script က ကြေငြာကို ဒီနေရာမှာ ထည့်မယ် -->
+                    <div id="adPlacement" style="width: 320px; height: 60px; background: rgba(15, 15, 35, 0.9); border-radius: 10px; border: 1px solid rgba(0, 255, 136, 0.3); backdrop-filter: blur(10px);"></div>
                 </div>
-            </div>
+            </main>
         </div>
 
-        <!-- All Modals remain the same but with enhanced styling -->
+        <!-- All Modals remain the same... -->
         <!-- Product Detail Modal -->
-        <div id="productModal" class="cyber-modal enhanced-modal">
-            <div class="modal-content neo-glass">
+        <div id="productModal" class="cyber-modal">
+            <div class="modal-content">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white font-orbitron">ထုတ်ကုန် အသေးစိတ်</h3>
-                    <button class="modal-close text-gray-400 hover:text-white enhanced-close">
+                    <h3 class="text-2xl font-bold text-white">ထုတ်ကုန် အသေးစိတ်</h3>
+                    <button class="modal-close text-gray-400 hover:text-white">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -365,11 +395,11 @@
         </div>
 
         <!-- News Detail Modal -->
-        <div id="newsModal" class="cyber-modal enhanced-modal">
-            <div class="modal-content neo-glass">
+        <div id="newsModal" class="cyber-modal">
+            <div class="modal-content">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white font-orbitron">သတင်း အသေးစိတ်</h3>
-                    <button class="modal-close text-gray-400 hover:text-white enhanced-close">
+                    <h3 class="text-2xl font-bold text-white">သတင်း အသေးစိတ်</h3>
+                    <button class="modal-close text-gray-400 hover:text-white">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -380,11 +410,21 @@
         </div>
 
         <!-- Purchase Modal -->
-        <div id="purchaseModal" class="cyber-modal enhanced-modal">
-            <div class="modal-content neo-glass">
+        <div id="purchaseModal" class="cyber-modal">
+            <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
+            <div class="modal-content">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white font-orbitron">ဝယ်ယူရန်</h3>
-                    <button class="modal-close text-gray-400 hover:text-white enhanced-close">
+                    <h3 class="text-2xl font-bold text-white">ဝယ်ယူရန်</h3>
+                    <button class="modal-close text-gray-400 hover:text-white">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -395,11 +435,11 @@
         </div>
 
         <!-- KYC Modal -->
-        <div id="kycModal" class="cyber-modal enhanced-modal">
-            <div class="modal-content neo-glass">
+        <div id="kycModal" class="cyber-modal">
+            <div class="modal-content">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white font-orbitron">KYC ဖြည့်စွက်ရန်</h3>
-                    <button class="modal-close text-gray-400 hover:text-white enhanced-close">
+                    <h3 class="text-2xl font-bold text-white">KYC ဖြည့်စွက်ရန်</h3>
+                    <button class="modal-close text-gray-400 hover:text-white">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
@@ -450,15 +490,25 @@
         </div>
 
         <!-- Seller Dashboard Modal -->
-        <div id="sellerModal" class="cyber-modal enhanced-modal">
-            <div class="modal-content neo-glass" style="max-width: 800px;">
+        <div id="sellerModal" class="cyber-modal">
+            <div class="modal-content" style="max-width: 800px;">
                 <div class="flex justify-between items-center mb-6">
-                    <h3 class="text-2xl font-bold text-white font-orbitron">ရောင်းချသူ Dashboard</h3>
-                    <button class="modal-close text-gray-400 hover:text-white enhanced-close">
+                    <h3 class="text-2xl font-bold text-white">ရောင်းချသူ Dashboard</h3>
+                    <button class="modal-close text-gray-400 hover:text-white">
                         <i class="fas fa-times text-xl"></i>
                     </button>
                 </div>
                 <div id="sellerDashboard">
+                    <script type="text/javascript">
+	atOptions = {
+		'key' : 'c950542326db4d69e6d90c2873e60c70',
+		'format' : 'iframe',
+		'height' : 50,
+		'width' : 320,
+		'params' : {}
+	};
+</script>
+<script type="text/javascript" src="//www.highperformanceformat.com/c950542326db4d69e6d90c2873e60c70/invoke.js"></script>
                     <!-- Seller dashboard content will be loaded here -->
                 </div>
             </div>
@@ -467,5 +517,48 @@
 
     <!-- JavaScript Files -->
     <script src="script.js"></script>
+    
+    <!-- ကြေငြာ Script - Dashboard ထဲမှာပဲ အလုပ်လုပ်မယ် -->
+    <script type="text/javascript">
+        // ကြေငြာ လုပ်ဆောင်ချက်
+        function initializeAds() {
+            // Dashboard ထဲရောက်မှသာ ကြေငြာ ထည့်မယ်
+            const dashboardContainer = document.getElementById('dashboardContainer');
+            const adContainer = document.getElementById('adContainer');
+            
+            if (dashboardContainer && !dashboardContainer.classList.contains('hidden')) {
+                // ကြေငြာ configuration
+                window.atOptions = {
+                    'key' : '8972f565fb2ce3bcc30125e33791174c',
+                    'format' : 'iframe',
+                    'height' : 60,
+                    'width' : 320,
+                    'params' : {}
+                };
+                
+                // ကြေငြာ script တွဲချိတ်ရန်
+                const adScript = document.createElement('script');
+                adScript.type = 'text/javascript';
+                adScript.src = '//www.highperformanceformat.com/8972f565fb2ce3bcc30125e33791174c/invoke.js';
+                
+                // ကြေငြါ container မှာ ထည့်သွင်းမယ်
+                const adPlacement = document.getElementById('adPlacement');
+                if (adPlacement) {
+                    adPlacement.appendChild(adScript);
+                }
+            }
+        }
+        
+        // Dashboard ပြသသည့်အခါ ကြေငြာများ ပြသရန်
+        document.addEventListener('DOMContentLoaded', function() {
+            // Login အောင်မြင်လျှင် ကြေငြာ ထည့်မယ်
+            setTimeout(function() {
+                const dashboardContainer = document.getElementById('dashboardContainer');
+                if (dashboardContainer && !dashboardContainer.classList.contains('hidden')) {
+                    initializeAds();
+                }
+            }, 2000); // 2 စက္ကန့် နောက်မှ ကြေငြာ load လုပ်မယ်
+        });
+    </script>
 </body>
 </html>
